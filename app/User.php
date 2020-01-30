@@ -36,4 +36,9 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function questions()
+    {
+        return $this->belongsToMany('App\Question', 'user_question')->withPivot('score', 'next_at');
+    }
 }

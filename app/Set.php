@@ -10,4 +10,9 @@ class Set extends Model
     {
         return $this->hasMany('App\Question');
     }
+
+    public function tests()
+    {
+        return $this->hasMany('App\Test');
+    }
 }

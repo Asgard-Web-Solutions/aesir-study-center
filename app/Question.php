@@ -15,4 +15,14 @@ class Question extends Model
     {
         return $this->hasMany('App\Answer');
     }
+
+    public function tests()
+    {
+        return $this->belongsToMany('App\Question', 'test_question');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User', 'user_question');
+    }
 }
