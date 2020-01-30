@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAdminRole extends Migration
+class CreateQuestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class AddAdminRole extends Migration
      */
     public function up()
     {
-        DB::table('roles')->insert([
-            ['name' => 'admin'],
-        ]);
+        Schema::create('questions', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('set_id');
+            $table->text('text');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,6 +28,6 @@ class AddAdminRole extends Migration
      */
     public function down()
     {
-        DB::table('roles')->where('name', '=', 'admin')->delete();
+        Schema::dropIfExists('questions');
     }
 }
