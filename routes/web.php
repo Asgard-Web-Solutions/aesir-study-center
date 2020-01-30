@@ -26,3 +26,4 @@ Route::get('/exams', 'TestController@sets')->name('tests')->middleware('auth');
 Route::get('/exam/{id}', 'TestController@select')->name('select-test')->middleware('auth');
 Route::post('/exam/{id}/start', 'TestController@start')->name('start-test')->middleware('auth');
 Route::get('/test/{id}', 'TestController@test')->name('take-test')->middleware('auth');
+Route::post('/test/{id}', 'TestController@answer')->name('answer')->middleware('auth');
