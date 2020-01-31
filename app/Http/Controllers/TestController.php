@@ -51,6 +51,13 @@ class TestController extends Controller
         }
 
         // Make sure the user has questions left in the pool
+        $questions = DB::table('user_question')->where('set_id', '=', $set->id)->where('next_at', '<=', $now)->get();
+
+        if ($questions->count() < $request->number_questions) {
+            Alert::warning('No more quesitons available. Please come back later.');
+            return redirect()->route('home');
+        }
+
 
         $test = new Test();
         $test->user_id = $user->id;
@@ -75,7 +82,7 @@ class TestController extends Controller
 
         if ($test->ends_at) {
             Alert::toast('Test Completed', 'warning');
-            return redirect()->route('tests');
+            return redirect()->route('home');
         }
 
         if ($test->questions->count() >= $test->num_questions)
@@ -84,18 +91,24 @@ class TestController extends Controller
             $test->end_at = $now;
 
             $questions = $test->questions;
-            $grade = 0;
             $correct = 0;
             foreach($questions as $question) {
-                $correct = $correct + $question->result;
+                $result = DB::table('test_question')
+                    ->where('test_id', '=', $test->id)
+                    ->where('question_id', '=', $question->id)
+                    ->select('result')
+                    ->first();
+
+                $correct = $correct + $result->result;
             }
 
-            //var_dump($correct); die();
-
             $grade = ($correct / $test->num_questions) * 100;
+            $test->result = $grade;
+
+            $test->save();
             
-            Alert::success("Test Completed!<br />" . $grade . "%");
-            return redirect()->route('tests');
+            Alert::success("Test Completed!<br />Your Grade: " . $grade . "%");
+            return redirect()->route('home');
         }
 
         $now = Carbon::now();
@@ -162,32 +175,38 @@ class TestController extends Controller
         // An array to store the answer and all results in to make displaying the correct answer easier
         $testAnswers = array();
         
-        // Get the answer order from the hidden form field
+        // Get the answer order from the hidden form field, but how to sort the answers by that?
+        //$order = explode(',', $request->order);
 
         foreach ($question->answers as $answer) {
             if ($multi) {
 
-                $normalizedAnswer[$answer->id] = array_key_exists($answer->id, $request->answer);
+                $normalizedAnswer[$answer->id] = (array_key_exists($answer->id, $request->answer)) ? 1 : 0;
 
                 if ($answer->correct && ($normalizedAnswer[$answer->id] == 1)) {
                     $correct = $correct + 1;
                     $testAnswers[] = [
+                        'id' => $answer->id,
                         'text' => $answer->text,
                         'correct' => $answer->correct,
                         'gotRight' => 1
                     ];
                 } else {
                     $testAnswers[] = [
+                        'id' => $answer->id,
                         'text' => $answer->text,
                         'correct' => $answer->correct,
                         'gotRight' => 0
                     ];
                 }
             } else {
+                $normalizedAnswer[$answer->id] = ($request->answer == $answer->id) ? 1 : 0;
+
                 if ($answer->correct && ($request->answer == $answer->id)) {
                     $correct = 1;
 
                     $testAnswers[] = [
+                        'id' => $answer->id,
                         'text' => $answer->text,
                         'correct' => $answer->correct,
                         'gotRight' => 1
@@ -195,6 +214,7 @@ class TestController extends Controller
 
                 } else {
                     $testAnswers[] = [
+                        'id' => $answer->id,
                         'text' => $answer->text,
                         'correct' => $answer->correct,
                         'gotRight' => ($request->answer == $answer->id) ? 0 : 1,
@@ -220,9 +240,9 @@ class TestController extends Controller
             if ($result) {
                 $score = $score + 1;
             } else {
-                $score = $score - 2;
-                if ($score < 1) {
-                    $score = 1;
+                $score = $score - 1;
+                if ($score < 0) {
+                    $score = 0;
                 }
             }
 
@@ -236,6 +256,7 @@ class TestController extends Controller
             'test' => $test,
             'question' => $question,
             'answers' => $testAnswers,
+            'normalizedAnswer' => $normalizedAnswer,
             'result' => $result,
             'multi' => $multi,
         ]);
