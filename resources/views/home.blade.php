@@ -5,7 +5,7 @@
             
         <div class="w-full sm:w-10/12 md:w-8/12 m-auto bg-gray-200 rounded-lg">
             <div class="w-full bg-gray-700 rounded-t-lg text-center">
-                <h1 class="text-white text-2xl">Your Tests</h1>
+                <h1 class="text-white text-2xl">Your Test History</h1>
             </div>
 
             <div class="w-full my-2">

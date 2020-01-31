@@ -29,6 +29,10 @@
                                 <a class="no-underline hover:underline text-gray-300 text-sm p-3" href="{{ route('register') }}">{{ __('Register') }}</a>
                             @endif
                         @else
+                            @if ( auth()->user()->hasRole('admin') )
+                                <a href="{{ route('manage-exams') }}" class="text-gray-300 text-sm pr-4">Manage Exams</a>
+                            @endif
+
                             <a href="{{ route('tests') }}" class="text-gray-300 text-sm pr-4">Take Test</a>
 
                             <span class="text-gray-300 text-sm pr-4"><a href="{{ route('home') }}">{{ Auth::user()->name }}</a></span>
@@ -39,7 +43,7 @@
                                     document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                                 {{ csrf_field() }}
-                            </form>
+                            </form>                            
                         @endguest
                     </div>
                 </div>
