@@ -113,9 +113,22 @@ class TestController extends Controller
 
         $now = Carbon::now();
 
-        $question = DB::table('user_question')->where('set_id', '=', $test->set_id)->where('next_at', '<', $now)->get();
-        
-        $question = $question->random(1);
+        $selecting = true;
+        while($selecting) {
+            $question = DB::table('user_question')->where('set_id', '=', $test->set_id)->where('next_at', '<', $now)->get();
+            
+            $question = $question->random(1);
+
+            $previous = DB::table('test_question')
+                ->where('test_id', '=', $test->id)
+                ->where('question_id', '=', $question[0]->question_id)
+                ->first();
+
+            if (!$previous)
+            {
+                $selecting = false;
+            }
+        }
 
         $question = Question::find($question[0]->question_id);
 
