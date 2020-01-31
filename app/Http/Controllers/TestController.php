@@ -41,12 +41,13 @@ class TestController extends Controller
         ]);
 
         $now = new Carbon();
+        $start = $now->subMinutes(2);
 
         // Load all questions to the user questions
         foreach ($set->questions as $question) {
             if (!$user->questions->contains($question))
             {
-                $user->questions()->attach($question->id, ['score' => 0, 'next_at' => $now, 'set_id' => $set->id]);
+                $user->questions()->attach($question->id, ['score' => 0, 'next_at' => $start, 'set_id' => $set->id]);
             }
         }
 
@@ -57,7 +58,6 @@ class TestController extends Controller
             Alert::warning('No more quesitons available. Please come back later.');
             return redirect()->route('home');
         }
-
 
         $test = new Test();
         $test->user_id = $user->id;
@@ -241,8 +241,8 @@ class TestController extends Controller
                 $score = $score + 1;
             } else {
                 $score = $score - 1;
-                if ($score < 0) {
-                    $score = 0;
+                if ($score < config('test.min_score')) {
+                    $score = config('test.min_score');
                 }
             }
 
