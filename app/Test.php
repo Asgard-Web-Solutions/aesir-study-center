@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Test extends Model
@@ -15,4 +16,18 @@ class Test extends Model
     {
         return $this->belongsTo('App\Set');
     }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function getEndAtAttribute($time)
+    {
+        $ended = new Carbon($time);
+        $diff = $ended->diffForHumans();
+
+        return $diff;
+    }
+
 }

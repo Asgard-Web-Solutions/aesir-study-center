@@ -41,4 +41,9 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->belongsToMany('App\Question', 'user_question')->withPivot('score', 'next_at');
     }
+
+    public function tests()
+    {
+        return $this->hasMany('App\Test');
+    }
 }
