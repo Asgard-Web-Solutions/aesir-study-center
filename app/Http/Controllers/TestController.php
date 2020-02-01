@@ -265,6 +265,11 @@ class TestController extends Controller
             $user->questions()->updateExistingPivot($question->id, ['score' => $score, 'next_at' => $next]);
         }
 
+        // refresh the test from db so we can get an accurate question count. Otherwise 
+        // the question number is wrong depending on if this is the intial answer or they
+        // refreshed the page.
+        $test = Test::find($id);
+
         return view('test.answer', [
             'test' => $test,
             'question' => $question,

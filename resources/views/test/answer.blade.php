@@ -10,6 +10,7 @@
 
             <div class="w-full my-2">
                 <div class="w-full">
+                    <h2 class="text-lg p-2"> {{ $test->questions->count() }} / {{ $test->num_questions }}</h2>
                     <p class="p-2 m-2 text-strong text-lg leading-loose text-blue-900">{{ $question->text }}</p>
                         <table class="w-full mt-5">
                             <tr>
@@ -34,7 +35,7 @@
                             @endforeach
                         </table>
                         <div class="w-full text-center p-4">
-                            <a href="{{ route('take-test', $test->id) }}" class="px-3 bg-gray-800 rounded-lg text-white">Next Question</a>
+                            <a href="{{ route('take-test', $test->id) }}" class="px-3 bg-gray-800 rounded-lg text-white text-xl">Next Question</a>
                         </div>
                     </form>
                 </div>

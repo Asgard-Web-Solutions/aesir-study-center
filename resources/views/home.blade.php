@@ -49,5 +49,9 @@
                 </div>
             </div>
         @endif
+
+        <div class="w-full sm:w-10/12 md:w-8/12 m-auto rounded-lg mt-5 text-right">
+            <a href="{{ route('tests') }}" class="px-3 bg-gray-800 rounded-lg text-white">Take A Test</a>
+        </div>
     </div>
 @endsection
