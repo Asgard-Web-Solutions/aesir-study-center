@@ -251,16 +251,16 @@ class TestController extends Controller
             $score = $userScore->score;
 
             if ($result) {
-                $score = $score + 1;
+                $score = $score + config('test.add_score');
             } else {
-                $score = $score - 1;
+                $score = $score - config('test.sub_score');
                 if ($score < config('test.min_score')) {
                     $score = config('test.min_score');
                 }
             }
 
             $now = Carbon::now();
-            $next = $now->addHours((3 * ($score ** 2)));
+            $next = $now->addHours((config('test.hour_multiplier') * ($score ** 2)));
 
             $user->questions()->updateExistingPivot($question->id, ['score' => $score, 'next_at' => $next]);
         }
