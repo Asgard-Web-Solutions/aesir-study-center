@@ -69,15 +69,23 @@ class HomeController extends Controller
                                 ->where('score', '>=', config('test.grade_proficient'))
                                 ->count();
 
-            $average = $average / $tests->count();
+            $total_familiar = DB::table('user_question')
+                                ->where('user_id', '=', $user->id)
+                                ->where('set_id', '=', $set->id)
+                                ->where('score', '>=', config('test.grade_familiar'))
+                                ->count();
+
+
+            $average = round(($average / $tests->count()),1);
             $sets[] = [
                 'name' => $set->name,
                 'id' => $set->id,
                 'average' => $average,
                 'taken' => Test::where('user_id', '=', $user->id)->where('set_id', '=', $set->id)->count(),
                 'last_time' => $last_taken,
-                'mastery' => (($total_mastery / $total_questions) * 100),
-                'proficient' => (($total_proficient / $total_questions) * 100),
+                'mastery' => round((($total_mastery / $total_questions) * 100),1),
+                'proficient' => round((($total_proficient / $total_questions) * 100),1),
+                'familiar' => round((($total_familiar / $total_questions) * 100),1),
             ];
         }
 

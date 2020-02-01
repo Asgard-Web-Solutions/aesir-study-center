@@ -15,6 +15,7 @@
                         <th>Avg Grade Last {{ config('test.count_tests_for_average_score') }}</th>
                         <th>Times Taken</th>
                         <th>Since Last Test</th>
+                        <th>Familiar</th>
                         <th>Proficiency</th>
                         <th>Mastery</th>
                     </tr>
@@ -24,6 +25,7 @@
                             <td class="text-center p-2">{{ $set['average'] }}%</td>
                             <td class="text-center p-2">{{ $set['taken'] }}</td>
                             <td class="text-center p-2">{{ $set['last_time'] }}</td>
+                            <td class="text-center p-2">{{ $set['familiar'] }}%</td>
                             <td class="text-center p-2">{{ $set['proficient'] }}%</td>
                             <td class="text-center p-2">{{ $set['mastery'] }}%</td>
                         </tr>
