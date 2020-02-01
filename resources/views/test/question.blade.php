@@ -10,6 +10,7 @@
 
             <div class="w-full my-2">
                 <div class="w-full">
+                    <h2 class="text-lg p-2"> {{ $test->questions->count() + 1 }} / {{ $test->num_questions }}</h2>
                     <p class="p-2 m-2 text-strong text-lg leading-loose text-blue-900">{{ $question->text }}</p>
                     <form action="{{ route('answer', $test->id) }}" method="post">
                         @csrf
@@ -32,7 +33,7 @@
                             @endforeach
                         </table>
                         <div class="w-full text-center p-4">
-                            <input type="submit" class="px-3 bg-gray-800 rounded-lg text-white" value="Submit Answer">
+                            <input type="submit" class="px-3 bg-gray-800 rounded-lg text-white text-xl" value="Submit Answer">
                         </div>
                     </form>
                 </div>

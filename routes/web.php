@@ -25,6 +25,8 @@ Route::post('/exam/{id}/start', 'TestController@start')->name('start-test')->mid
 Route::get('/test/{id}', 'TestController@test')->name('take-test')->middleware('auth');
 Route::post('/test/{id}', 'TestController@answer')->name('answer')->middleware('auth');
 
+Route::get('/history/{id}', 'HomeController@history')->name('test-history')->middleware('auth');
+
 Route::get('/manage', 'QuestionController@exams')->name('manage-exams')->middleware('auth');
 Route::get('/manage/{id}', 'QuestionController@index')->name('manage-questions')->middleware('auth');
 Route::get('/manage/{id}/add', 'QuestionController@add')->name('add-question')->middleware('auth');
