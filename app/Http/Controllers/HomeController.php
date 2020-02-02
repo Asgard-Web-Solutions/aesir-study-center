@@ -6,6 +6,7 @@ use App\Question;
 use App\Set;
 use App\Test;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -108,6 +109,12 @@ class HomeController extends Controller
                     ->where('set_id', '=', $id)
                     ->orderBy('end_at', 'desc')
                     ->get();
+
+        foreach ($tests as $test) {
+            $start = new Carbon($test->start_at);
+            $diffTime = $start->diffInMinutes($test->getOriginal('end_at'));
+            $test->duration = $diffTime;
+        }
 
         return view('history', [
             'tests' => $tests,
