@@ -12,11 +12,14 @@
                 <div class="w-full">
                     <p class="p-2 m-2 text-strong text-lg leading-loose text-blue-900">{{ $question->text }}</p>
 
-                    <table class="w-full">
+                    <table class="w-full m-2">
                         @foreach ($question->answers as $answer)
                             <tr>
-                                <td>
-                                    @if ($answer->correct) X @endif
+                                <td class="p-2">
+                                    <a href="{{ route('edit-answer', $answer->id) }}"><i class="far fa-edit text-blue-700 hover:text-blue-500"></i></a>
+                                </td>
+                                <td class="p-2">
+                                    @if ($answer->correct) <i class="far fa-check-circle text-green-400"></i> @else &nbsp; @endif
                                 </td>
                                 <td class="p-2 mb-4 w-full">
                                     {{ $answer->text }}
@@ -51,7 +54,9 @@
 
 
                     <div class="m-2 w-full text-center">
-                        <input type="submit" value="Add Answer" class="px-3 bg-gray-800 rounded-lg text-white"> <a href="{{ route('add-question', $question->set->id) }}" class="px-3 bg-gray-400 rounded-lg text-black">Add New Question</a>
+                        <input type="submit" value="Add Answer" class="px-3 bg-gray-800 rounded-lg text-white">
+                        <a href="{{ route('add-question', $question->set->id) }}" class="px-3 bg-gray-400 rounded-lg text-black">Add New Question</a>
+                        <a href="{{ route('manage-questions', $question->set->id) }}" class="px-3 bg-gray-400 rounded-lg text-black">Back to Questions</a>
                     </div>
                 </form>
             </div>
