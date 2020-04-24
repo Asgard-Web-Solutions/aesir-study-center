@@ -17,18 +17,18 @@
                                 <th>Selected</th>
                                 <th>Text</th>
                             </tr>
-                            @foreach ($answers as $answer)
+                            @foreach ($answers as $answer) 
                                 <tr>
                                     <td class="p-2 m-2 mb-4 w-2">
                                         @if ($normalizedAnswer[$answer['id']])
-                                            X
+                                            <i class="fal fa-check-square"></i>
                                         @endif                                 
                                     </td>
                                     <td class="p-2 m-2 mb-4 w-full">
                                         @if ($answer['correct'])
-                                            <span class="text-green-600 font-bold">{{ $answer['text'] }}</span>
+                                            <i class="far fa-check-circle text-green-700"></i> <span class="text-green-600 font-bold">{{ $answer['text'] }}</span>
                                         @else 
-                                            <span class="text-gray-500 line-through">{{ $answer['text'] }}</span>
+                                            <i class="far fa-times-circle text-red-700"></i> <span class="text-gray-500 line-through">{{ $answer['text'] }}</span>
                                         @endif
                                     </td>
                                 </tr>

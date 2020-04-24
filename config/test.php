@@ -11,4 +11,6 @@ return [
     'grade_mastery' => env('GRADE_MASTERY', 8),
     'grade_proficient' => env('GRADE_PROFICIENT', 4),
     'grade_familiar' => env('GRADE_FAMILIAR', 2),
+
+    'target_answers' => env('TARGET_ANSWERS', 4),
 ];

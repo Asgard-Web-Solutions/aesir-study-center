@@ -11,6 +11,8 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/ac81ff684d.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100 h-screen antialiased leading-none">
     <div id="app">

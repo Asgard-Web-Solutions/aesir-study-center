@@ -34,5 +34,9 @@ Route::post('/manage/{id}/add', 'QuestionController@store')->name('save-question
 
 Route::get('/question/{id}', 'QuestionController@answers')->name('manage-answers')->middleware('auth');
 Route::post('/question/{id}/add', 'QuestionController@storeAnswer')->name('save-answers')->middleware('auth');
+Route::get('/answer/{id}/edit', 'QuestionController@editAnswer')->name('edit-answer')->middleware('auth');
+Route::post('/answer/{id}/edit', 'QuestionController@updateAnswer')->name('update-answer')->middleware('auth');
+Route::get('/answer/{id}/delete', 'QuestionController@deleteAnswer')->name('delete-answer')->middleware('auth');
+Route::post('/answer/{id}/delete', 'QuestionController@deleteAnswerConfirm')->name('delete-answer-confirm')->middleware('auth');
 
 Route::post('/exam/add', 'QuestionController@storeExam')->name('save-exam')->middleware('auth');
