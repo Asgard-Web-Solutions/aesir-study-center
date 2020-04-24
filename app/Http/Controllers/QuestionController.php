@@ -14,7 +14,7 @@ class QuestionController extends Controller
     {
         if (!auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
-            return route()->redirect('home');
+            return redirect()->route('home');
         }
 
         $sets = Set::all();
@@ -28,7 +28,7 @@ class QuestionController extends Controller
     {
         if (!auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
-            return route()->redirect('home');
+            return redirect()->route('home');
         }
 
         $set = Set::find($id);
@@ -38,11 +38,12 @@ class QuestionController extends Controller
         ]);
     }
 
+    // Add an question for an exam
     public function add($id)
     {
         if (!auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
-            return route()->redirect('home');
+            return redirect()->route('home');
         }
 
         $set = Set::find($id);
@@ -52,11 +53,12 @@ class QuestionController extends Controller
         ]);
     }
 
+    // Save a question for an exam
     public function store(Request $request, $id)
-    {
+    { 
         if (!auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
-            return route()->redirect('home');
+            return redirect()->route('home');
         }
 
         $set = Set::find($id);
@@ -76,11 +78,12 @@ class QuestionController extends Controller
         return redirect()->route('manage-answers', $question->id);
     }
 
+    // List all answers for a question
     public function answers($id)
     {
         if (!auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
-            return route()->redirect('home');
+            return redirect()->route('home');
         }
 
         $question = Question::find($id);
@@ -90,11 +93,12 @@ class QuestionController extends Controller
         ]);
     }
 
+    // Save an answer to a question
     public function storeAnswer(Request $request, $id)
     {
         if (!auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
-            return route()->redirect('home');
+            return redirect()->route('home');
         }
 
         $question = Question::find($id);
@@ -116,11 +120,77 @@ class QuestionController extends Controller
         return redirect()->route('manage-answers', $question->id);
     }
 
+    public function editAnswer($id)
+    {
+        $answer = Answer::find($id);
+
+        $question = Question::find($answer->question->id);
+
+        return view('manage.editanswer', [
+            'answer' => $answer,
+            'question' => $question,
+        ]);
+    }
+
+    public function updateAnswer(Request $request, $id)
+    {
+        $answer = Answer::find($id);
+
+        $this->validate($request, [
+            'answer' => 'required|string',
+            'correct' => 'required|integer',
+        ]);
+
+        $answer->text = $request->answer;
+        $answer->correct = $request->correct;
+
+        $answer->save();
+        Alert::toast('Answer Updated', 'success');
+
+        return redirect()->route('manage-answers', $answer->question->id);
+    }
+
+    public function deleteAnswer($id)
+    {
+        $answer = Answer::find($id);
+
+        $question = Question::find($answer->question->id);
+
+        return view('manage.deleteanswer', [
+            'answer' => $answer,
+            'question' => $question,
+        ]);
+    }
+
+    public function deleteAnswerConfirm(Request $request, $id)
+    {
+        $answer = Answer::find($id);
+
+        $question = Question::find($answer->question->id);
+
+        $this->validate($request, [
+            'confirm' => 'string',
+        ]);
+
+        if ($request->confirm != "true") {
+            Alert::toast('Something Went Wrong', 'error');
+            return redirect()->route('manage-answers', $question->id);
+        }
+
+        $answer->delete();
+
+        Alert::toast("Answer deleted", 'success');
+
+        return redirect()->route('manage-answers', $question->id);
+    }
+
+
+    // Save a new exam set
     public function storeExam(Request $request)
     {
         if (!auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
-            return route()->redirect('home');
+            return redirect()->route('home');
         }
         
         $this->validate($request, [

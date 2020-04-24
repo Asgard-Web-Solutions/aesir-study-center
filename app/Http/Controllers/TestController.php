@@ -6,6 +6,7 @@ use Alert;
 use App\Question;
 use App\Set;
 use App\Test;
+use App\Answer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -112,8 +113,10 @@ class TestController extends Controller
         }
 
         $now = Carbon::now();
+        $single = false;
 
         $selecting = true;
+
         while($selecting) {
             $question = DB::table('user_question')->where('set_id', '=', $test->set_id)->where('next_at', '<', $now)->get();
             
@@ -132,21 +135,49 @@ class TestController extends Controller
 
         $question = Question::find($question[0]->question_id);
 
-        $answers = $question->answers->shuffle();
+        if ($question->answers->count() > 1) {
+            $answers = $question->answers->shuffle();
+    
+        } else {
+            // There was only one answer, so let's grab some more random ones from the test
+            $single = true;
+            $answers = $question->answers;
+
+            $pool = Question::where('set_id', '=', $question->set_id)->where('id', '!=', $question->id)->get();
+
+            $pool = $pool->shuffle();
+
+            $count = 1;
+
+            foreach ($pool as $q) {
+                $answers->push($q->answers->first());
+                $count = $count + 1;
+
+                if ($count == config('test.target_answers')) {
+                    break;
+                }
+            }
+
+            $answers = $answers->shuffle();
+        }
 
         $correct = 0;
         $order = "";
 
         foreach ($answers as $answer) {
-            $order .= $answer->id . ",";
+            if ($order != "") {
+                $order .= ",";
+            }
 
-            if ($answer->correct) {
+            $order .= $answer->id;
+
+            if (!$single && $answer->correct) {
                 $correct = $correct + 1;
             }
         }
 
         $multi = ($correct > 1) ? 1 : 0;
-
+        
         return view('test.question', [
             'question' => $question,
             'answers' => $answers,
@@ -168,9 +199,12 @@ class TestController extends Controller
 
         $this->validate($request, [
             'question' => 'required|integer',
+            'order' => 'required|string',
         ]);
 
         $question = Question::find($request->question);
+
+        // This is just to see how many correct answers there are for this question
         $correctAnswer = 0;
 
         foreach ($question->answers as $answer) {
@@ -188,9 +222,6 @@ class TestController extends Controller
         // An array to store the answer and all results in to make displaying the correct answer easier
         $testAnswers = array();
         
-        // Get the answer order from the hidden form field, but how to sort the answers by that?
-        //$order = explode(',', $request->order);
-
         foreach ($question->answers as $answer) {
             if ($multi) {
 
@@ -212,6 +243,12 @@ class TestController extends Controller
                         'gotRight' => 0
                     ];
                 }
+            } elseif ($question->answers->count() == 1) {
+                $correct = ($request->answer == $answer->id) ? 1 : 0;
+                
+                // If this is a single answer question, then we don't care if the user marked it as correct or not
+                // We know that there is only one answer so it must be correct
+                $correctAnswer = 1;
             } else {
                 $normalizedAnswer[$answer->id] = ($request->answer == $answer->id) ? 1 : 0;
 
@@ -270,10 +307,35 @@ class TestController extends Controller
         // refreshed the page.
         $test = Test::find($id);
 
+        // Now load the answers in the order that they were shown to the user
+        $aorder = explode(',', $request->order);
+
+        $orderedAnswers = array();
+
+        foreach ($aorder as $answerID) {
+            $answer = Answer::find($answerID);
+
+            if ($question->answers->count() > 1) {
+                $orderedAnswers[] = array(
+                    'id' => $answer->id,
+                    'text' => $answer->text,
+                    'correct' => $answer->correct,
+                );
+            } else {
+                $orderedAnswers[$answer->id] = array(
+                    'id' => $answer->id,
+                    'text' => $answer->text,
+                    'correct' => ($answer->question_id == $question->id) ? 1 : 0,
+                );
+
+                $normalizedAnswer[$answer->id] = ($request->answer == $answer->id) ? 1 : 0;
+            }
+        }
+
         return view('test.answer', [
             'test' => $test,
             'question' => $question,
-            'answers' => $testAnswers,
+            'answers' => $orderedAnswers,
             'normalizedAnswer' => $normalizedAnswer,
             'result' => $result,
             'multi' => $multi,

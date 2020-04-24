@@ -16,6 +16,7 @@
                 <table>
                     @foreach ($set->questions as $question)
                         <tr>
+                            <td class="p-1"><a href="{{ route('manage-answers', $question->id) }}"><i class="far fa-list text-blue-700 hover:text-blue-500"></i></a></td>
                             <td class="p-3">{{ $question->text }}</td>
                             <td class="p-3">{{ $question->answers->count() }}</td>
                         </tr>
