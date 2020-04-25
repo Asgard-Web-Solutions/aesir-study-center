@@ -12,6 +12,7 @@
                 <table class="w-full">
                     <tr>
                         <th>Exam Set</th>
+                        <th>Retake</th>
                         <th>Avg Grade Last {{ config('test.count_tests_for_average_score') }}</th>
                         <th>Times Taken</th>
                         <th>Since Last Test</th>
@@ -22,6 +23,7 @@
                     @foreach ($sets as $set)
                         <tr>
                             <td class="text-center p-2"><a href="{{ route('test-history', $set['id']) }}" class="underline hover:no-underline">{{ $set['name'] }}</a></td>
+                            <td class="text-center p-2"><a href="{{ route('select-test', $set['id']) }}"><i class="far fa-redo text-blue-700 hover:text-blue-500"></i></a></td>
                             <td class="text-center p-2">{{ $set['average'] }}%</td>
                             <td class="text-center p-2">{{ $set['taken'] }}</td>
                             <td class="text-center p-2">{{ $set['last_time'] }}</td>
@@ -101,6 +103,7 @@
                         </div>
 
                         <div class="text-right text-base p-4">
+                            <a href="{{ route('select-test', $set['id']) }}" class="px-3 bg-gray-800 rounded-lg text-white"><i class="far fa-redo text-white hover:text-blue-300 mx-2"></i> Retake Exam</a>
                             <a href="{{ route('test-history', $set['id']) }}" class="px-3 bg-gray-800 rounded-lg text-white">Exam History</a>
                         </div>
 
