@@ -9,17 +9,17 @@ class Test extends Model
 {
     public function questions()
     {
-        return $this->belongsToMany('App\Question', 'test_question');
+        return $this->belongsToMany(\App\Question::class, 'test_question');
     }
 
     public function set()
     {
-        return $this->belongsTo('App\Set');
+        return $this->belongsTo(\App\Set::class);
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(\App\User::class);
     }
 
     public function getEndAtAttribute($time)
@@ -29,5 +29,4 @@ class Test extends Model
 
         return $diff;
     }
-
 }

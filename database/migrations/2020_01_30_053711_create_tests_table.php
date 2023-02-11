@@ -17,7 +17,7 @@ class CreateTestsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->bigInteger('set_id');
-            $table->decimal('result', 4,1);
+            $table->decimal('result', 4, 1);
             $table->integer('num_questions');
             $table->dateTime('start_at')->nullable();
             $table->dateTime('end_at')->nullable();

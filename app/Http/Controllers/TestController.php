@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Alert;
+use App\Answer;
 use App\Question;
 use App\Set;
 use App\Test;
-use App\Answer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +38,7 @@ class TestController extends Controller
         $user = Auth::user();
 
         $this->validate($request, [
-            'number_questions' => 'required|integer|max:' . $set->questions->count(),
+            'number_questions' => 'required|integer|max:'.$set->questions->count(),
         ]);
 
         $now = new Carbon();
@@ -46,8 +46,7 @@ class TestController extends Controller
 
         // Load all questions to the user questions
         foreach ($set->questions as $question) {
-            if (!$user->questions->contains($question))
-            {
+            if (! $user->questions->contains($question)) {
                 $user->questions()->attach($question->id, ['score' => 0, 'next_at' => $start, 'set_id' => $set->id]);
             }
         }
@@ -57,6 +56,7 @@ class TestController extends Controller
 
         if ($questions->count() < $request->number_questions) {
             Alert::warning('No more quesitons available. Please come back later.');
+
             return redirect()->route('home');
         }
 
@@ -78,22 +78,23 @@ class TestController extends Controller
 
         if ($user->id != $test->user_id) {
             Alert::toast('Invalid Test! Don\'t be a hacker.', 'warning');
+
             return redirect()->route('tests');
         }
 
         if ($test->ends_at) {
             Alert::toast('Test Completed', 'warning');
+
             return redirect()->route('home');
         }
 
-        if ($test->questions->count() >= $test->num_questions)
-        {
+        if ($test->questions->count() >= $test->num_questions) {
             $now = Carbon::now();
             $test->end_at = $now;
 
             $questions = $test->questions;
             $correct = 0;
-            foreach($questions as $question) {
+            foreach ($questions as $question) {
                 $result = DB::table('test_question')
                     ->where('test_id', '=', $test->id)
                     ->where('question_id', '=', $question->id)
@@ -107,8 +108,9 @@ class TestController extends Controller
             $test->result = $grade;
 
             $test->save();
-            
-            Alert::success("Test Completed!<br />Your Grade: " . $grade . "%");
+
+            Alert::success('Test Completed!<br />Your Grade: '.$grade.'%');
+
             return redirect()->route('home');
         }
 
@@ -117,9 +119,9 @@ class TestController extends Controller
 
         $selecting = true;
 
-        while($selecting) {
+        while ($selecting) {
             $question = DB::table('user_question')->where('set_id', '=', $test->set_id)->where('next_at', '<', $now)->get();
-            
+
             $question = $question->random(1);
 
             $previous = DB::table('test_question')
@@ -127,8 +129,7 @@ class TestController extends Controller
                 ->where('question_id', '=', $question[0]->question_id)
                 ->first();
 
-            if (!$previous)
-            {
+            if (! $previous) {
                 $selecting = false;
             }
         }
@@ -137,7 +138,6 @@ class TestController extends Controller
 
         if ($question->answers->count() > 1) {
             $answers = $question->answers->shuffle();
-    
         } else {
             // There was only one answer, so let's grab some more random ones from the test
             $single = true;
@@ -162,22 +162,22 @@ class TestController extends Controller
         }
 
         $correct = 0;
-        $order = "";
+        $order = '';
 
         foreach ($answers as $answer) {
-            if ($order != "") {
-                $order .= ",";
+            if ($order != '') {
+                $order .= ',';
             }
 
             $order .= $answer->id;
 
-            if (!$single && $answer->correct) {
+            if (! $single && $answer->correct) {
                 $correct = $correct + 1;
             }
         }
 
         $multi = ($correct > 1) ? 1 : 0;
-        
+
         return view('test.question', [
             'question' => $question,
             'answers' => $answers,
@@ -194,6 +194,7 @@ class TestController extends Controller
 
         if ($user->id != $test->user_id) {
             Alert::toast('Invalid Test! Don\'t be a hacker.', 'warning');
+
             return redirect()->route('tests');
         }
 
@@ -217,14 +218,13 @@ class TestController extends Controller
         $correct = 0;
 
         // An array to store / convert the checkbox answers into so we can compare easier
-        $normalizedAnswer = array();
+        $normalizedAnswer = [];
 
         // An array to store the answer and all results in to make displaying the correct answer easier
-        $testAnswers = array();
-        
+        $testAnswers = [];
+
         foreach ($question->answers as $answer) {
             if ($multi) {
-
                 $normalizedAnswer[$answer->id] = (array_key_exists($answer->id, $request->answer)) ? 1 : 0;
 
                 if ($answer->correct && ($normalizedAnswer[$answer->id] == 1)) {
@@ -233,19 +233,19 @@ class TestController extends Controller
                         'id' => $answer->id,
                         'text' => $answer->text,
                         'correct' => $answer->correct,
-                        'gotRight' => 1
+                        'gotRight' => 1,
                     ];
                 } else {
                     $testAnswers[] = [
                         'id' => $answer->id,
                         'text' => $answer->text,
                         'correct' => $answer->correct,
-                        'gotRight' => 0
+                        'gotRight' => 0,
                     ];
                 }
             } elseif ($question->answers->count() == 1) {
                 $correct = ($request->answer == $answer->id) ? 1 : 0;
-                
+
                 // If this is a single answer question, then we don't care if the user marked it as correct or not
                 // We know that there is only one answer so it must be correct
                 $correctAnswer = 1;
@@ -259,9 +259,8 @@ class TestController extends Controller
                         'id' => $answer->id,
                         'text' => $answer->text,
                         'correct' => $answer->correct,
-                        'gotRight' => 1
+                        'gotRight' => 1,
                     ];
-
                 } else {
                     $testAnswers[] = [
                         'id' => $answer->id,
@@ -276,7 +275,7 @@ class TestController extends Controller
         $result = ($correct == $correctAnswer) ? 1 : 0;
 
         // let's make sure they didn't just refresh the page
-        if (!$test->questions->contains($question)) {
+        if (! $test->questions->contains($question)) {
             $test->questions()->attach($question->id, ['result' => $result]);
 
             $userScore = DB::table('user_question')
@@ -302,7 +301,7 @@ class TestController extends Controller
             $user->questions()->updateExistingPivot($question->id, ['score' => $score, 'next_at' => $next]);
         }
 
-        // refresh the test from db so we can get an accurate question count. Otherwise 
+        // refresh the test from db so we can get an accurate question count. Otherwise
         // the question number is wrong depending on if this is the intial answer or they
         // refreshed the page.
         $test = Test::find($id);
@@ -310,23 +309,23 @@ class TestController extends Controller
         // Now load the answers in the order that they were shown to the user
         $aorder = explode(',', $request->order);
 
-        $orderedAnswers = array();
+        $orderedAnswers = [];
 
         foreach ($aorder as $answerID) {
             $answer = Answer::find($answerID);
 
             if ($question->answers->count() > 1) {
-                $orderedAnswers[] = array(
+                $orderedAnswers[] = [
                     'id' => $answer->id,
                     'text' => $answer->text,
                     'correct' => $answer->correct,
-                );
+                ];
             } else {
-                $orderedAnswers[$answer->id] = array(
+                $orderedAnswers[$answer->id] = [
                     'id' => $answer->id,
                     'text' => $answer->text,
                     'correct' => ($answer->question_id == $question->id) ? 1 : 0,
-                );
+                ];
 
                 $normalizedAnswer[$answer->id] = ($request->answer == $answer->id) ? 1 : 0;
             }
