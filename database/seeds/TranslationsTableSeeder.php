@@ -209,7 +209,7 @@ class TranslationsTableSeeder extends Seeder
     private function arr($par, $id)
     {
         return [
-            'table_name'  => $par[0],
+            'table_name' => $par[0],
             'column_name' => $par[1],
             'foreign_key' => $id,
         ];
@@ -221,7 +221,7 @@ class TranslationsTableSeeder extends Seeder
             'locale' => $lang,
         ]));
 
-        if (!$_t->exists) {
+        if (! $_t->exists) {
             $_t->fill(array_merge(
                 $keys,
                 ['value' => $value]

@@ -12,8 +12,9 @@ class QuestionController extends Controller
 {
     public function exams()
     {
-        if (!auth()->user()->hasRole('admin')) {
+        if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
+
             return redirect()->route('home');
         }
 
@@ -26,8 +27,9 @@ class QuestionController extends Controller
 
     public function index($id)
     {
-        if (!auth()->user()->hasRole('admin')) {
+        if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
+
             return redirect()->route('home');
         }
 
@@ -41,13 +43,14 @@ class QuestionController extends Controller
     // Add an question for an exam
     public function add($id)
     {
-        if (!auth()->user()->hasRole('admin')) {
+        if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
+
             return redirect()->route('home');
         }
 
         $set = Set::find($id);
-        
+
         return view('manage.addq', [
             'set' => $set,
         ]);
@@ -55,14 +58,15 @@ class QuestionController extends Controller
 
     // Save a question for an exam
     public function store(Request $request, $id)
-    { 
-        if (!auth()->user()->hasRole('admin')) {
+    {
+        if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
+
             return redirect()->route('home');
         }
 
         $set = Set::find($id);
-        
+
         $this->validate($request, [
             'question' => 'required|string',
         ]);
@@ -81,8 +85,9 @@ class QuestionController extends Controller
     // List all answers for a question
     public function answers($id)
     {
-        if (!auth()->user()->hasRole('admin')) {
+        if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
+
             return redirect()->route('home');
         }
 
@@ -96,13 +101,14 @@ class QuestionController extends Controller
     // Save an answer to a question
     public function storeAnswer(Request $request, $id)
     {
-        if (!auth()->user()->hasRole('admin')) {
+        if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
+
             return redirect()->route('home');
         }
 
         $question = Question::find($id);
-        
+
         $this->validate($request, [
             'answer' => 'required|string',
             'correct' => 'required|integer',
@@ -172,27 +178,28 @@ class QuestionController extends Controller
             'confirm' => 'string',
         ]);
 
-        if ($request->confirm != "true") {
+        if ($request->confirm != 'true') {
             Alert::toast('Something Went Wrong', 'error');
+
             return redirect()->route('manage-answers', $question->id);
         }
 
         $answer->delete();
 
-        Alert::toast("Answer deleted", 'success');
+        Alert::toast('Answer deleted', 'success');
 
         return redirect()->route('manage-answers', $question->id);
     }
 
-
     // Save a new exam set
     public function storeExam(Request $request)
     {
-        if (!auth()->user()->hasRole('admin')) {
+        if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
+
             return redirect()->route('home');
         }
-        
+
         $this->validate($request, [
             'name' => 'required|string',
             'description' => 'required|string',

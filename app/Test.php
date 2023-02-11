@@ -29,5 +29,4 @@ class Test extends Model
 
         return $diff;
     }
-
 }
