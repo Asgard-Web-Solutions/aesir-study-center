@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
+<html data-theme="fantasy" lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,49 +14,54 @@
 
     <script src="https://kit.fontawesome.com/ac81ff684d.js" crossorigin="anonymous"></script>
 </head>
-<body class="h-screen antialiased leading-none bg-gray-100">
+<body >
     <div id="app">
-        <nav class="py-6 mb-8 bg-blue-900 shadow">
-            <div class="container px-6 mx-auto md:px-0">
-                <div class="flex items-center justify-center">
-                    <div class="mr-6">
-                        <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
-                            {{ config('app.name', 'Laravel') }}
-                        </a>
-                    </div>
-                    <div class="flex-1 text-right">
-                        @guest
-                            <a class="p-3 text-sm text-gray-300 no-underline hover:underline" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            @if (Route::has('register'))
-                                <a class="p-3 text-sm text-gray-300 no-underline hover:underline" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            @endif
-                        @else
-                            @if ( auth()->user()->hasRole('admin') )
-                                <a href="{{ route('manage-exams') }}" class="pr-4 text-sm text-gray-300">Manage Exams</a>
-                            @endif
+        <nav class="navbar bg-base-100 text-primary">
+            <div class="flex-1">
+                <a href="{{ url('/') }}" class="text-xl normal-case btn btn-ghost"">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+            </div>
 
-                            <a href="{{ route('tests') }}" class="pr-4 text-sm text-gray-300">Take Test</a>
+            <div class="flex-none">
+                <ul class="px-1 menu menu-horizontal">
+                    @guest
+                        <li><a href="{{ route('login') }}">{{ __('Login') }}</a></li>
 
-                            <span class="pr-4 text-sm text-gray-300"><a href="{{ route('home') }}">{{ Auth::user()->name }}</a></span>
+                        @if (Route::has('register'))
+                            <li><a href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                        @endif
+                    @else
+                        @if ( auth()->user()->hasRole('admin') )
+                            <li><a href="{{ route('manage-exams') }}">Manage Exams</a></li>
+                        @endif
 
-                            <a href="{{ route('logout') }}"
-                               class="p-3 text-sm text-gray-300 no-underline hover:underline"
-                               onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                {{ csrf_field() }}
-                            </form>                            
-                        @endguest
-                    </div>
-                </div>
+                        <li><a href="{{ route('tests') }}" >Take Test</a></li>
+
+                        <li tabindex="0">
+                            <a>{{ Auth::user()->name }} <i class="fa-regular fa-angle-down"></i></a>
+                            <ul class="p-2 bg-base-200">
+                                <li><a href="{{ route('home') }}">{{ __('Profile') }}</a></li>
+                                <li>
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @endguest
+                </ul>
             </div>
         </nav>
 
-        @include('sweetalert::alert')
+        <main>
+            <br />
+            @include('sweetalert::alert')
 
-        @yield('content')
+            @yield('content')
+        </main>
     </div>
-
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}"></script>
 </body>

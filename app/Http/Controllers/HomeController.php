@@ -110,7 +110,7 @@ class HomeController extends Controller
 
         foreach ($tests as $test) {
             $start = new Carbon($test->start_at);
-            $diffTime = $start->diffInMinutes($test->getOriginal('end_at'));
+            $diffTime = $start->diffInMinutes($test->getAttributes()['end_at']);
             $test->duration = $diffTime;
         }
 
