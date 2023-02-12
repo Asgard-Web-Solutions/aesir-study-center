@@ -1,46 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-center">
-        
-        <div class="w-full sm:w-11/12 md:w-9/12 lg:w-8/12 m-auto bg-gray-200 rounded-lg">
-            <div class="w-full bg-gray-700 rounded-t-lg text-center">
-                <h1 class="text-white text-2xl">{{ $question->set->name }}</h1>
-            </div>
 
-            <div class="w-full my-2">
-                <div class="w-full">
-                    <h2 class="text-lg p-2"> {{ $test->questions->count() }} / {{ $test->num_questions }}</h2>
-                    <p class="p-2 m-2 text-strong text-lg leading-loose text-blue-900">{{ $question->text }}</p>
-                        <table class="w-full mt-5">
-                            <tr>
-                                <th>Selected</th>
-                                <th>Text</th>
-                            </tr>
-                            @foreach ($answers as $answer) 
-                                <tr>
-                                    <td class="p-2 m-2 mb-4 w-2">
-                                        @if ($normalizedAnswer[$answer['id']])
-                                            <i class="fal fa-check-square"></i>
-                                        @endif                                 
-                                    </td>
-                                    <td class="p-2 m-2 mb-4 w-full">
-                                        @if ($answer['correct'])
-                                            <i class="far fa-check-circle text-green-700"></i> <span class="text-green-600 font-bold">{{ $answer['text'] }}</span>
-                                        @else 
-                                            <i class="far fa-times-circle text-red-700"></i> <span class="text-gray-500 line-through">{{ $answer['text'] }}</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
-                        <div class="w-full text-center p-4">
-                            <a href="{{ route('take-test', $test->id) }}" class="px-3 bg-gray-800 rounded-lg text-white text-xl">Next Question</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<h1 class="text-2xl font-bold text-center text-base-content">{{ $question->set->name }}</h1>
+
+<div class="w-1/2 m-auto my-10 shadow-xl card bg-neutral text-neutral-content">
+    <div class="w-full card-body">
+        <div class="items-center w-full text-center">
+            <h2 class="card-title text-accent" style="display: block">Question {{ $test->questions->count() }} of {{ $test->num_questions }}</h2>
         </div>
-        
+
+        <span class="my-5 text-lg text-secondary">{{ $question->text }}</span>
+    
+        <div class="overflow-x-auto">
+            <table class="table w-full my-4 bg-neutral">
+                <tr>
+                    <th>{{ __('Your Answer') }}</th>
+                    <th>{{ __('Answers') }}</th>
+                </tr>
+                
+                @foreach ($answers as $answer)
+                    <tr class="hover">
+                        <td>
+                            @if ($normalizedAnswer[$answer['id']])
+                                <input type="checkbox" checked="checked" disabled class="checkbox checkbox-primary">
+                            @else
+                                <input type="checkbox" disabled class="checkbox checkbox-primary">
+                            @endif
+                        <td>
+                            @if ($answer['correct'])
+                                <i class="text-green-700 far fa-check-circle"></i> <span class="font-bold text-green-600">{{ $answer['text'] }}</span>
+                            @else 
+                                <i class="text-red-700 far fa-times-circle"></i> <span class="text-gray-500 line-through">{{ $answer['text'] }}</span>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+
+        <div class="justify-end w-full my-5 text-right card-action">
+            <a href="{{ route('take-test', $test->id) }}" class="btn btn-primary">{{ __('NEXT QUESTION') }}</a>
+        </div>
+
     </div>
+</div>
 @endsection
