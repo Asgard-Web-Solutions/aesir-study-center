@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 
@@ -37,11 +37,11 @@ class User extends \TCG\Voyager\Models\User
 
     public function questions()
     {
-        return $this->belongsToMany(\App\Question::class, 'user_question')->withPivot('score', 'next_at');
+        return $this->belongsToMany(\App\Models\Question::class, 'user_question')->withPivot('score', 'next_at');
     }
 
     public function tests()
     {
-        return $this->hasMany(\App\Test::class);
+        return $this->hasMany(\App\Models\Test::class);
     }
 }

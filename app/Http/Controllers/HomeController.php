@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Question;
-use App\Set;
-use App\Test;
-use App\User;
+use App\Models\Question;
+use App\Models\Set;
+use App\Models\Test;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

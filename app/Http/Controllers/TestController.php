@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Alert;
-use App\Answer;
-use App\Question;
-use App\Set;
-use App\Test;
+use App\Models\Answer;
+use App\Models\Question;
+use App\Models\Set;
+use App\Models\Test;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
