@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Question;
-use App\Set;
-use App\Test;
-use App\User;
+use App\Models\Question;
+use App\Models\Set;
+use App\Models\Test;
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -35,12 +34,12 @@ class HomeController extends Controller
         $user = User::find($user_id);
 
         $allSets = Set::all();
-        $sets = array();
+        $sets = [];
 
         foreach ($allSets as $set) {
             $tests = Test::where('user_id', '=', $user->id)->where('set_id', '=', $set->id)->orderBy('end_at', 'desc')->limit(config('test.count_tests_for_average_score'))->get();
-            
-            if (!$tests->count()) {
+
+            if (! $tests->count()) {
                 continue;
             }
 
@@ -49,10 +48,10 @@ class HomeController extends Controller
 
             foreach ($tests as $test) {
                 $average = $average + $test->result;
-                
+
                 // Get the timestamp of the last time this was taken. Since we're ordering in desc order,
                 // the first time this loop runs should be the latest time
-                if (!$last_taken) {
+                if (! $last_taken) {
                     $last_taken = $test->end_at;
                 }
             }
@@ -76,17 +75,16 @@ class HomeController extends Controller
                                 ->where('score', '>=', config('test.grade_familiar'))
                                 ->count();
 
-
-            $average = round(($average / $tests->count()),1);
+            $average = round(($average / $tests->count()), 1);
             $sets[] = [
                 'name' => $set->name,
                 'id' => $set->id,
                 'average' => $average,
                 'taken' => Test::where('user_id', '=', $user->id)->where('set_id', '=', $set->id)->count(),
                 'last_time' => $last_taken,
-                'mastery' => round((($total_mastery / $total_questions) * 100),1),
-                'proficient' => round((($total_proficient / $total_questions) * 100),1),
-                'familiar' => round((($total_familiar / $total_questions) * 100),1),
+                'mastery' => round((($total_mastery / $total_questions) * 100), 1),
+                'proficient' => round((($total_proficient / $total_questions) * 100), 1),
+                'familiar' => round((($total_familiar / $total_questions) * 100), 1),
             ];
         }
 
@@ -112,7 +110,7 @@ class HomeController extends Controller
 
         foreach ($tests as $test) {
             $start = new Carbon($test->start_at);
-            $diffTime = $start->diffInMinutes($test->getOriginal('end_at'));
+            $diffTime = $start->diffInMinutes($test->getAttributes()['end_at']);
             $test->duration = $diffTime;
         }
 

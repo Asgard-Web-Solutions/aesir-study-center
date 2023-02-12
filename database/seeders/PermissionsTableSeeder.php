@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use TCG\Voyager\Models\Permission;
 
@@ -20,7 +22,7 @@ class PermissionsTableSeeder extends Seeder
 
         foreach ($keys as $key) {
             Permission::firstOrCreate([
-                'key'        => $key,
+                'key' => $key,
                 'table_name' => null,
             ]);
         }

@@ -1,9 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends \TCG\Voyager\Models\User
@@ -39,11 +37,11 @@ class User extends \TCG\Voyager\Models\User
 
     public function questions()
     {
-        return $this->belongsToMany('App\Question', 'user_question')->withPivot('score', 'next_at');
+        return $this->belongsToMany(\App\Models\Question::class, 'user_question')->withPivot('score', 'next_at');
     }
 
     public function tests()
     {
-        return $this->hasMany('App\Test');
+        return $this->hasMany(\App\Models\Test::class);
     }
 }

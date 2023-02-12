@@ -6,6 +6,7 @@ This is a quick website that I threw together to allow me to study for various u
 * copy .env.example to .env
 * add your database information to .env
 * composer update
+* run php artisan key:generate
 * php artisan voyager:install
 * Register an account
 * php artisan voyager:admin <your registered email address>
