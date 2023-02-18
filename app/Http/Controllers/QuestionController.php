@@ -213,6 +213,6 @@ class QuestionController extends Controller
 
         Alert::toast('Exam Added', 'success');
 
-        return redirect()->route('manage-exams');
+        return redirect()->route('manage-questions', $set->id);
     }
 }
