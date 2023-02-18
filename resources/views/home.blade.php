@@ -4,7 +4,7 @@
 
 <h1 class="text-2xl font-bold text-center text-base-content">{{ __('Your Profile') }}</h1>
 
-<div class="hidden w-full m-auto my-10 shadow-xl sm:block card bg-neutral text-neutral-content">
+<div class="hidden w-full m-auto my-10 shadow-xl xl:w-2/3 sm:block card bg-neutral text-neutral-content">
     <div class="w-full card-body">
         <div class="items-center w-full text-center">
             <h2 class="card-title text-accent" style="display: block">{{ __('Your Test History') }}</h2>
