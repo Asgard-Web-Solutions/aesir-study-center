@@ -1,29 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-center">
+<h1 class="text-2xl font-bold text-center text-base-content">{{ $set->name }}</h1>
 
-        <div class="w-full sm:w-10/12 md:w-8/12 m-auto bg-gray-200 rounded-lg">
-            <div class="w-full bg-gray-700 rounded-t-lg text-center">
-                <h1 class="text-white text-2xl">Select Question to Modify</h1>
-            </div>
+<div class="m-auto my-10 shadow-xl sm:w-full md:w-10/12 card bg-neutral text-neutral-content">
+    <div class="w-full card-body">
+        <div class="items-center w-full text-center">
+            <h2 class="card-title text-accent" style="display: block">{{ __('Test Questions') }}</h2>
+        </div>
 
-
-            <div class="w-full my-2">
-                <div class="w-full text-center m-2 p-3">
-                    <a href="{{ route('add-question', $set->id) }}" class="px-3 bg-gray-800 rounded-lg text-white">Add Question</a>
-                </div>
-                <table>
+        <div class="overflow-x-auto text-base-content">
+            <table class="table w-full my-4 table-zebra table-compact">
+                <thead>
+                    <tr>
+                        <th>{{ __('Question') }}</th>
+                        <th>{{ __('# Answers') }}</th>
+                        <th>{{ __('Action') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach ($set->questions as $question)
                         <tr>
-                            <td class="p-1"><a href="{{ route('manage-answers', $question->id) }}"><i class="far fa-list text-blue-700 hover:text-blue-500"></i></a></td>
-                            <td class="p-3">{{ $question->text }}</td>
-                            <td class="p-3">{{ $question->answers->count() }}</td>
+                            <td>{{ $question->text }}</td>
+                            <td>{{ $question->answers->count() }}</td>
+                            <td><a href="{{ route('manage-answers', $question->id) }}"><i class="fa-solid fa-pen-to-square text-primary" alt="Edit"></i> Edit</a></td>
                         </tr>
                     @endforeach
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
-        
+
     </div>
+</div>
+
+<div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
+    <a href="{{ route('add-question', $set->id) }}" class="btn btn-primary">{{ __('Add Question') }}</a>
+    <a href="{{ route('manage-exams') }}" class="btn btn-secondary">{{ __('Manage Exams') }}</a>
+</div>
 @endsection

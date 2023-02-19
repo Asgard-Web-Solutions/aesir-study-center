@@ -4,7 +4,7 @@
 
 <h1 class="text-2xl font-bold text-center text-base-content">{{ __('Your Profile') }}</h1>
 
-<div class="hidden w-full m-auto my-10 shadow-xl xl:w-2/3 sm:block card bg-neutral text-neutral-content">
+<div class="hidden mx-auto my-10 shadow-xl lg:w-11/12 xl:w-10/12 card sm:block bg-neutral text-neutral-content">
     <div class="w-full card-body">
         <div class="items-center w-full text-center">
             <h2 class="card-title text-accent" style="display: block">{{ __('Your Test History') }}</h2>
@@ -16,8 +16,8 @@
                     <tr>
                         <th>Exam Set</th>
                         <th>Retake</th>
-                        <th>Avg Grade Last {{ config('test.count_tests_for_average_score') }}</th>
-                        <th>Times Taken</th>
+                        <th>Avg Last {{ config('test.count_tests_for_average_score') }}</th>
+                        <th>Taken</th>
                         <th>Since Last Test</th>
                         <th>Familiar</th>
                         <th>Proficiency</th>
