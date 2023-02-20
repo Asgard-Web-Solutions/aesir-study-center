@@ -1,66 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-center">
+    <x-page.header :text="$question->set->name" />
 
-        <div class="w-full sm:w-10/12 md:w-8/12 m-auto bg-gray-200 rounded-lg">
-            <div class="w-full bg-gray-700 rounded-t-lg text-center">
-                <h1 class="text-white text-2xl">Manage {{ $question->set->name }} Questions</h1>
-            </div>
+    <x-card.setup :header="$question->text">
 
-            <div class="w-full my-2">
-                <div class="w-full">
-                    <p class="p-2 m-2 text-strong text-lg leading-loose text-blue-900">{{ $question->text }}</p>
-
-                    <table class="w-full m-2">
-                        @foreach ($question->answers as $answer)
-                            <tr>
-                                <td class="p-2">
-                                    <a href="{{ route('edit-answer', $answer->id) }}"><i class="far fa-edit text-blue-700 hover:text-blue-500"></i></a>
-                                </td>
-                                <td class="p-2">
-                                    @if ($answer->correct) <i class="far fa-check-circle text-green-400"></i> @else &nbsp; @endif
-                                </td>
-                                <td class="p-2 mb-4 w-full">
-                                    {{ $answer->text }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </table>
-                </div>
-            </div>
-
-            <div class="w-full my-2">
-                <form action="{{ route('save-answers', $question->id) }}" method="post">
-                    @csrf
-
-                    <label class="p-2">Answer</label>
-                    <input type="text" name="answer" class="w-full sm:w-7/12 md:w-8/12 p-2">
-                    <select name="correct" class="w-full sm:w-3/12 md:w-2/12 p-2">
-                        <option value="0">WRONG</option>
-                        <option value="1">CORRECT</option>
-                    </select>
-                    @error('answer')
-                        <p class="text-red-700 p-2 text-xs italic mt-4 text-center">
-                            {{ $message }}
-                        </p>
-                    @enderror
-
-                    @error('correct')
-                        <p class="text-red-700 p-2 text-xs italic mt-4 text-center">
-                            {{ $message }}
-                        </p>
-                    @enderror
-
-
-                    <div class="m-2 w-full text-center">
-                        <input type="submit" value="Add Answer" class="px-3 bg-gray-800 rounded-lg text-white">
-                        <a href="{{ route('add-question', $question->set->id) }}" class="px-3 bg-gray-400 rounded-lg text-black">Add New Question</a>
-                        <a href="{{ route('manage-questions', $question->set->id) }}" class="px-3 bg-gray-400 rounded-lg text-black">Back to Questions</a>
-                    </div>
-                </form>
-            </div>
+        <div class="w-full p-2 m-4 mx-auto rounded-md bg-base-100 text-base-content">
+            <table class="table w-full">
+                <thead>
+                    <tr>
+                        <th class="w-1">Action</th>
+                        <th class="w-1">Correct</th>
+                        <th>Answer Text</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($question->answers as $answer)
+                        <tr>
+                            <td>
+                                <a href="{{ route('edit-answer', $answer->id) }}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
+                            </td>
+                            <td>
+                                @if ($answer->correct) <i class="fa-regular fa-square-check text-success"></i> @else <i class="fa-regular fa-square-xmark text-error"></i> @endif
+                            </td>
+                            <td>
+                                {{ $answer->text }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        
-    </div>
+    </x-card.setup>
+
+    <x-card.setup header="Add Answer">
+
+        <form action="{{ route('save-answers', $question->id) }}" method="post">
+            @csrf
+
+            <x-forms.text-box name="answer" label="New Answer" />
+
+            @php
+                $values[0] = "Wrong";
+                $values[1] = "Correct";   
+            @endphp
+            <x-forms.dropdown name="correct" label="Correct Answer?" :values="$values" />
+
+            <x-forms.submit-button text="Add Answer" />
+        </form>
+
+    </x-card.setup>
+    
+    <x-page.actions primary="Add Another Question" :primaryLink="route('add-question', $question->set->id)" secondary="Back to Questions" :secondaryLink="route('manage-questions', $question->set->id)" />
+
 @endsection
