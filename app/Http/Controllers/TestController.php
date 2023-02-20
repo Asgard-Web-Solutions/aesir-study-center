@@ -338,6 +338,7 @@ class TestController extends Controller
             'normalizedAnswer' => $normalizedAnswer,
             'result' => $result,
             'multi' => $multi,
+            'correct' => $correct,
         ]);
     }
 }
