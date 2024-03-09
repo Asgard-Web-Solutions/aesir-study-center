@@ -10,10 +10,8 @@ class MenuItemsTableSeeder extends Seeder
 {
     /**
      * Auto generated seed file.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $menu = Menu::where('name', 'admin')->firstOrFail();
 

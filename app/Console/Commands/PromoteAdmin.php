@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Role;
 use App\Models\User;
+use App\Role;
 use Illuminate\Console\Command;
 
 class PromoteAdmin extends Command
@@ -34,10 +34,8 @@ class PromoteAdmin extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $userEmail = $this->argument('email');
 

@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Database\Factories\UserFactory;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -35,12 +39,19 @@ class User extends \TCG\Voyager\Models\User
         'email_verified_at' => 'datetime',
     ];
 
-    public function questions()
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
+
+
+
+    public function questions(): BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Question::class, 'user_question')->withPivot('score', 'next_at');
     }
 
-    public function tests()
+    public function tests(): HasMany
     {
         return $this->hasMany(\App\Models\Test::class);
     }

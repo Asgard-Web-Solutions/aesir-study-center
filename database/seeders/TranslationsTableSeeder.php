@@ -13,10 +13,8 @@ class TranslationsTableSeeder extends Seeder
 {
     /**
      * Auto generated seed file.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->dataTypesTranslations();
         $this->categoriesTranslations();
@@ -26,10 +24,8 @@ class TranslationsTableSeeder extends Seeder
 
     /**
      * Auto generate Categories Translations.
-     *
-     * @return void
      */
-    private function categoriesTranslations()
+    private function categoriesTranslations(): void
     {
         // Adding translations for 'categories'
         //
@@ -47,10 +43,8 @@ class TranslationsTableSeeder extends Seeder
 
     /**
      * Auto generate DataTypes Translations.
-     *
-     * @return void
      */
-    private function dataTypesTranslations()
+    private function dataTypesTranslations(): void
     {
         // Adding translations for 'display_name_singular'
         //
@@ -113,10 +107,8 @@ class TranslationsTableSeeder extends Seeder
 
     /**
      * Auto generate Pages Translations.
-     *
-     * @return void
      */
-    private function pagesTranslations()
+    private function pagesTranslations(): void
     {
         $page = Page::where('slug', 'hello-world')->firstOrFail();
         if ($page->exists) {
@@ -141,10 +133,8 @@ class TranslationsTableSeeder extends Seeder
 
     /**
      * Auto generate Menus Translations.
-     *
-     * @return void
      */
-    private function menusTranslations()
+    private function menusTranslations(): void
     {
         $_tpl = ['menu_items', 'title'];
         $_item = $this->findMenuItem(__('voyager::seeders.menu_items.dashboard'));

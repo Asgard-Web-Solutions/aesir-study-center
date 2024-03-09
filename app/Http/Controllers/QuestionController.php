@@ -6,7 +6,9 @@ use Alert;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Set;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class QuestionController extends Controller
 {
@@ -57,7 +59,7 @@ class QuestionController extends Controller
     }
 
     // Save a question for an exam
-    public function store(Request $request, $id)
+    public function store(Request $request, $id): RedirectResponse
     {
         if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
@@ -99,7 +101,7 @@ class QuestionController extends Controller
     }
 
     // Save an answer to a question
-    public function storeAnswer(Request $request, $id)
+    public function storeAnswer(Request $request, $id): RedirectResponse
     {
         if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
@@ -126,7 +128,7 @@ class QuestionController extends Controller
         return redirect()->route('manage-answers', $question->id);
     }
 
-    public function editAnswer($id)
+    public function editAnswer($id): View
     {
         $answer = Answer::find($id);
 
@@ -138,7 +140,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function updateAnswer(Request $request, $id)
+    public function updateAnswer(Request $request, $id): RedirectResponse
     {
         $answer = Answer::find($id);
 
@@ -156,7 +158,7 @@ class QuestionController extends Controller
         return redirect()->route('manage-answers', $answer->question->id);
     }
 
-    public function deleteAnswer($id)
+    public function deleteAnswer($id): View
     {
         $answer = Answer::find($id);
 
@@ -168,7 +170,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function deleteAnswerConfirm(Request $request, $id)
+    public function deleteAnswerConfirm(Request $request, $id): RedirectResponse
     {
         $answer = Answer::find($id);
 
@@ -192,7 +194,7 @@ class QuestionController extends Controller
     }
 
     // Save a new exam set
-    public function storeExam(Request $request)
+    public function storeExam(Request $request): RedirectResponse
     {
         if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
