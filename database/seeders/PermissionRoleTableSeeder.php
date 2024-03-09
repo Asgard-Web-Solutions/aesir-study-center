@@ -10,8 +10,6 @@ class PermissionRoleTableSeeder extends Seeder
 {
     /**
      * Auto generated seed file.
-     *
-     * @return void
      */
     public function run(): void
     {

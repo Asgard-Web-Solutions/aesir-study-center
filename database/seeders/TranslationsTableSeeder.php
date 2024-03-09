@@ -13,8 +13,6 @@ class TranslationsTableSeeder extends Seeder
 {
     /**
      * Auto generated seed file.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -26,8 +24,6 @@ class TranslationsTableSeeder extends Seeder
 
     /**
      * Auto generate Categories Translations.
-     *
-     * @return void
      */
     private function categoriesTranslations(): void
     {
@@ -47,8 +43,6 @@ class TranslationsTableSeeder extends Seeder
 
     /**
      * Auto generate DataTypes Translations.
-     *
-     * @return void
      */
     private function dataTypesTranslations(): void
     {
@@ -113,8 +107,6 @@ class TranslationsTableSeeder extends Seeder
 
     /**
      * Auto generate Pages Translations.
-     *
-     * @return void
      */
     private function pagesTranslations(): void
     {
@@ -141,8 +133,6 @@ class TranslationsTableSeeder extends Seeder
 
     /**
      * Auto generate Menus Translations.
-     *
-     * @return void
      */
     private function menusTranslations(): void
     {
