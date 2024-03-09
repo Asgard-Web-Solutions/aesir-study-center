@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Role;
 use App\Models\User;
+use App\Role;
 use Illuminate\Console\Command;
 
 class PromoteAdmin extends Command

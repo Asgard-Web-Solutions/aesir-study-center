@@ -58,22 +58,22 @@ class HomeController extends Controller
 
             $total_questions = Question::where('set_id', '=', $set->id)->count();
             $total_mastery = DB::table('user_question')
-                                ->where('user_id', '=', $user->id)
-                                ->where('set_id', '=', $set->id)
-                                ->where('score', '>=', config('test.grade_mastery'))
-                                ->count();
+                ->where('user_id', '=', $user->id)
+                ->where('set_id', '=', $set->id)
+                ->where('score', '>=', config('test.grade_mastery'))
+                ->count();
 
             $total_proficient = DB::table('user_question')
-                                ->where('user_id', '=', $user->id)
-                                ->where('set_id', '=', $set->id)
-                                ->where('score', '>=', config('test.grade_proficient'))
-                                ->count();
+                ->where('user_id', '=', $user->id)
+                ->where('set_id', '=', $set->id)
+                ->where('score', '>=', config('test.grade_proficient'))
+                ->count();
 
             $total_familiar = DB::table('user_question')
-                                ->where('user_id', '=', $user->id)
-                                ->where('set_id', '=', $set->id)
-                                ->where('score', '>=', config('test.grade_familiar'))
-                                ->count();
+                ->where('user_id', '=', $user->id)
+                ->where('set_id', '=', $set->id)
+                ->where('score', '>=', config('test.grade_familiar'))
+                ->count();
 
             $average = round(($average / $tests->count()), 1);
             $sets[] = [
@@ -104,9 +104,9 @@ class HomeController extends Controller
         $set = Set::find($id);
 
         $tests = Test::where('user_id', '=', $user->id)
-                    ->where('set_id', '=', $id)
-                    ->orderBy('end_at', 'desc')
-                    ->get();
+            ->where('set_id', '=', $id)
+            ->orderBy('end_at', 'desc')
+            ->get();
 
         foreach ($tests as $test) {
             $start = new Carbon($test->start_at);
