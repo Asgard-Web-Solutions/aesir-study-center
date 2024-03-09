@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Database\Factories\UserFactory;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -36,6 +38,13 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
+
+
 
     public function questions(): BelongsToMany
     {
