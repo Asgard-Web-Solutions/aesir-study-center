@@ -37,7 +37,7 @@ class PromoteAdmin extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $userEmail = $this->argument('email');
 

@@ -16,7 +16,7 @@ class TranslationsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->dataTypesTranslations();
         $this->categoriesTranslations();

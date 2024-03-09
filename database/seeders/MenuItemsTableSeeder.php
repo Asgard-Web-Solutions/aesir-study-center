@@ -13,7 +13,7 @@ class MenuItemsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $menu = Menu::where('name', 'admin')->firstOrFail();
 

@@ -10,7 +10,7 @@ class SettingsTableSeeder extends Seeder
     /**
      * Auto generated seed file.
      */
-    public function run()
+    public function run(): void
     {
         $setting = $this->findSetting('site.title');
         if (! $setting->exists) {
