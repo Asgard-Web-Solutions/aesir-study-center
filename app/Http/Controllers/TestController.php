@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 use Alert;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Set;
 use App\Models\Test;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class TestController extends Controller
 {
