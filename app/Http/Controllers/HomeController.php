@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
 use App\Models\Question;
 use App\Models\Set;
 use App\Models\Test;
@@ -27,7 +28,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $user_id = Auth::id();
 
@@ -96,7 +97,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function history($id)
+    public function history($id): View
     {
         $user_id = Auth::id();
 

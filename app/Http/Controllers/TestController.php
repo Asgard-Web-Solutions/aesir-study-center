@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use Alert;
 use App\Models\Answer;
 use App\Models\Question;
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
-    public function sets()
+    public function sets(): View
     {
         $sets = Set::all();
 
@@ -23,7 +25,7 @@ class TestController extends Controller
         ]);
     }
 
-    public function select($id)
+    public function select($id): View
     {
         $set = Set::find($id);
 
@@ -32,7 +34,7 @@ class TestController extends Controller
         ]);
     }
 
-    public function start(Request $request, $id)
+    public function start(Request $request, $id): RedirectResponse
     {
         $set = Set::find($id);
         $user = Auth::user();
