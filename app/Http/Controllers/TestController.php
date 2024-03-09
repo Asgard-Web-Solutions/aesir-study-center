@@ -8,13 +8,15 @@ use App\Models\Question;
 use App\Models\Set;
 use App\Models\Test;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class TestController extends Controller
 {
-    public function sets()
+    public function sets(): View
     {
         $sets = Set::all();
 
@@ -23,7 +25,7 @@ class TestController extends Controller
         ]);
     }
 
-    public function select($id)
+    public function select($id): View
     {
         $set = Set::find($id);
 
@@ -32,7 +34,7 @@ class TestController extends Controller
         ]);
     }
 
-    public function start(Request $request, $id)
+    public function start(Request $request, $id): RedirectResponse
     {
         $set = Set::find($id);
         $user = Auth::user();

@@ -13,10 +13,8 @@ class VoyagerDatabaseSeeder extends Seeder
 
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->seed('DataTypesTableSeeder');
         $this->seed('DataRowsTableSeeder');

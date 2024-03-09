@@ -9,10 +9,8 @@ class MenusTableSeeder extends Seeder
 {
     /**
      * Auto generated seed file.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         Menu::firstOrCreate([
             'name' => 'admin',
