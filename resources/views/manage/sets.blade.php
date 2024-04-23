@@ -46,7 +46,7 @@
                 <label class="label" for="exam_set_name">
                     <span class="label-text text-neutral-content">{{ __('Exam Set Name') }}</span>
                 </label>
-                <input id="exam_set_name" name="name" class="w-full max-w-xs input input-bordered input-primary" type="text">
+                <input id="exam_set_name" name="name" value="{{ old('name', '') }}" class="w-full max-w-xs input input-bordered input-primary" type="text">
             </div>
             @error('name')
                 <div class="my-4 shadow-lg alert alert-error">
@@ -61,7 +61,7 @@
                 <label class="label" for="exam_set_description">
                     <span class="label-text text-neutral-content">{{ __('Exam Set Description') }}</span>
                 </label>
-                <input id="exam_set_description" name="description" class="w-full max-w-xs input input-bordered input-primary" type="text">
+                <input id="exam_set_description" value="{{ old('description', '') }}" name="description" class="w-full max-w-xs input input-bordered input-primary" type="text">
             </div>
             @error('description')
                 <div class="my-4 shadow-lg alert alert-error">

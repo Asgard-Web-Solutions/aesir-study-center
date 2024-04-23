@@ -31,6 +31,8 @@
                 </tbody>
             </table>
         </div>
+        
+        <x-page.actions primary="Edit Question" :primaryLink="route('edit-question', $question->id)"/>
     </x-card.setup>
 
     <x-card.setup header="Add Answer">
@@ -42,9 +44,11 @@
 
             @php
                 $values[0] = "Wrong";
-                $values[1] = "Correct";   
+                $values[1] = "Correct";
+                $selected = ($question->answers->count() > 0) ? 0 : 1;
             @endphp
-            <x-forms.dropdown name="correct" label="Correct Answer?" :values="$values" />
+
+            <x-forms.dropdown name="correct" label="Correct Answer?" :selected="$selected" :values="$values" />
 
             <x-forms.submit-button text="Add Answer" />
         </form>

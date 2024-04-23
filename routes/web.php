@@ -36,6 +36,8 @@ Route::get('/manage', [QuestionController::class, 'exams'])->name('manage-exams'
 Route::get('/manage/{id}', [QuestionController::class, 'index'])->name('manage-questions')->middleware('auth');
 Route::get('/manage/{id}/add', [QuestionController::class, 'add'])->name('add-question')->middleware('auth');
 Route::post('/manage/{id}/add', [QuestionController::class, 'store'])->name('save-question')->middleware('auth');
+Route::get('/manage/{id}/edit', [QuestionController::class, 'edit'])->name('edit-question')->middleware('auth');
+Route::post('/manage/{id}/update', [QuestionController::class, 'update'])->name('update-question')->middleware('auth');
 
 Route::get('/question/{id}', [QuestionController::class, 'answers'])->name('manage-answers')->middleware('auth');
 Route::post('/question/{id}/add', [QuestionController::class, 'storeAnswer'])->name('save-answers')->middleware('auth');

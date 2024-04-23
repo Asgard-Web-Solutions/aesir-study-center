@@ -10,6 +10,11 @@
 
             <x-forms.text-box name="question" label="Question" />
 
+            <x-forms.text-box name="group" label="Question Group" />
+            <div class="m-3">
+                <p class="mx-3 my-3">Question Groups allow you to organize similar questions together. If a question is in a group and only has a single answer, then the incorrect answers on the test will be pulled from the answers of questions with the same Question Group label.</p>
+            </div>
+
             <x-forms.submit-button text="Add Question" />
         </form>
 
