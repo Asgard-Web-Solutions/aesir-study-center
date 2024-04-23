@@ -15,6 +15,7 @@
                     <tr>
                         <th>{{ __('Question') }}</th>
                         <th>{{ __('# Answers') }}</th>
+                        <th>{{ __('Question Group') }}</th>
                         <th>{{ __('Action') }}</th>
                     </tr>
                 </thead>
@@ -23,6 +24,7 @@
                         <tr>
                             <td>{{ $question->text }}</td>
                             <td>{{ $question->answers->count() }}</td>
+                            <td>{{ $question->group }}</td>
                             <td><a href="{{ route('manage-answers', $question->id) }}"><i class="fa-solid fa-pen-to-square text-primary" alt="Edit"></i> Edit</a></td>
                         </tr>
                     @endforeach

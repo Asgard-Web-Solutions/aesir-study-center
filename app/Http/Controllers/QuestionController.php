@@ -77,9 +77,43 @@ class QuestionController extends Controller
 
         $question->set_id = $set->id;
         $question->text = $request->question;
+        $question->group = $request->group;
         $question->save();
 
         Alert::toast('Question Added', 'success');
+
+        return redirect()->route('manage-answers', $question->id);
+    }
+
+    public function edit($id)
+    {
+        if (! auth()->user()->hasRole('admin')) {
+            Alert::toast('Permission Denied', 'warning');
+
+            return redirect()->route('home');
+        }
+
+        $question = Question::find($id);
+
+        return view('manage.editq', [
+            'question' => $question,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        if (! auth()->user()->hasRole('admin')) {
+            Alert::toast('Permission Denied', 'warning');
+
+            return redirect()->route('home');
+        }
+        
+        $question = Question::find($id);
+        $question->text = $request->question;
+        $question->group = $request->group;
+        $question->save();
+
+        Alert::toast('Question Updated', 'success');
 
         return redirect()->route('manage-answers', $question->id);
     }
