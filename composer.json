@@ -13,7 +13,7 @@
         "laravel/tinker": "^2.8",
         "realrashid/sweet-alert": "^6.0",
         "tcg/voyager": "^1.7",
-        "laravel/ui": "^4.2",
+        "laravel/ui": "^4.5",
         "guzzlehttp/guzzle": "^7.2"
     },
     "require-dev": {
