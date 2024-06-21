@@ -9,7 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "laravel/framework": "^10.47",
+        "laravel/framework": "^10.48",
         "laravel/tinker": "^2.8",
         "realrashid/sweet-alert": "^6.0",
         "tcg/voyager": "^1.7",
