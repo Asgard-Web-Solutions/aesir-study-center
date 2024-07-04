@@ -3,6 +3,10 @@
 @section('content')
     <x-page.header :text="$question->set->name" />
 
+    <x-card.main title="Question: {{ $question->text }}">
+        
+    </x-card.main>
+
     <x-card.setup :header="$question->text">
 
         <div class="w-full p-2 m-4 mx-auto rounded-md bg-base-100 text-base-content">

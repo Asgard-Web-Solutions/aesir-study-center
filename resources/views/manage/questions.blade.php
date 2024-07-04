@@ -1,39 +1,34 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('content')
-<h1 class="text-2xl font-bold text-center text-base-content">{{ $set->name }}</h1>
+<h1 class="text-2xl font-bold text-center text-primary">{{ $set->name }}</h1>
 
-<div class="m-auto my-10 shadow-xl sm:w-full md:w-10/12 card bg-neutral text-neutral-content">
-    <div class="w-full card-body">
-        <div class="items-center w-full text-center">
-            <h2 class="card-title text-accent" style="display: block">{{ __('Test Questions') }}</h2>
-        </div>
-
-        <div class="overflow-x-auto text-base-content">
-            <table class="table w-full my-4 table-zebra table-compact">
-                <thead>
+<x-card.main title="Test Questions">
+    <div class="overflow-x-auto text-base-content">
+        <table class="table w-full my-4 table-zebra table-compact">
+            <thead>
+                <tr>
+                    <th class="p-2">{{ __('Question') }}</th>
+                    <th class="hidden p-2 md:table-cell">{{ __('# Answers') }}</th>
+                    <th class="hidden p-2 md:table-cell">{{ __('Question Group') }}</th>
+                    <th class="p-2">{{ __('Action') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($set->questions as $question)
                     <tr>
-                        <th>{{ __('Question') }}</th>
-                        <th>{{ __('# Answers') }}</th>
-                        <th>{{ __('Question Group') }}</th>
-                        <th>{{ __('Action') }}</th>
+                        <td class="p-2">{{ $question->text }}</td>
+                        <td class="hidden p-2 md:table-cell">{{ $question->answers->count() }}</td>
+                        <td class="hidden p-2 md:table-cell">{{ $question->group }}</td>
+                        <td class="p-2">
+                            <x-card.buttons primaryAction="{{ route('manage-answers', $question->id) }}" primaryLabel="Edit"/>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($set->questions as $question)
-                        <tr>
-                            <td>{{ $question->text }}</td>
-                            <td>{{ $question->answers->count() }}</td>
-                            <td>{{ $question->group }}</td>
-                            <td><a href="{{ route('manage-answers', $question->id) }}"><i class="fa-solid fa-pen-to-square text-primary" alt="Edit"></i> Edit</a></td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
+                @endforeach
+            </tbody>
+        </table>
     </div>
-</div>
+</x-card.main>
 
 <div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
     <a href="{{ route('add-question', $set->id) }}" class="btn btn-primary">{{ __('Add Question') }}</a>

@@ -6,5 +6,13 @@ module.exports = {
     './resources/**/*.vue',
   ],
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: ["forest", "light", "dark", "nord"], // Ensure 'nord' is included
+  },
+
+  // darkMode: 'class', // or 'media' if you prefer automatic dark mode based on user preferences
+  // theme: {
+  //   extend: {},
+  // },
   // ...
 }
