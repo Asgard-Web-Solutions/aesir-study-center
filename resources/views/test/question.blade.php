@@ -21,7 +21,7 @@
                             <input type="radio" id="answer-{{ $answer->id }}" class="mr-2 radio radio-primary" name="answer" value="{{ $answer->id }}">
                         @endif
                         <label class="label" for="answer-{{ $answer->id }}">
-                            <span class="label-text">{{ $answer->text }}</span>
+                            <span class="text-primary">{{ $answer->text }}</span>
                         </label>
                     </div>
                 @endforeach

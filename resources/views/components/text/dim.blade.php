@@ -1,3 +1,3 @@
 @props(['label' => null])
 
-<p class="my-1 text-sm text-neutral">@if ($label) {{ $label }} @endif {{ $slot }} </p>
+<p class="my-1 text-sm text-base-content-subtle">@if ($label) {{ $label }} @endif {{ $slot }} </p>
