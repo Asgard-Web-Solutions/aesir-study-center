@@ -226,29 +226,4 @@ class QuestionController extends Controller
 
         return redirect()->route('manage-answers', $question->id);
     }
-
-    // Save a new exam set
-    public function storeExam(Request $request): RedirectResponse
-    {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
-
-            return redirect()->route('home');
-        }
-
-        $this->validate($request, [
-            'name' => 'required|string',
-            'description' => 'required|string',
-        ]);
-
-        $set = new Set();
-
-        $set->name = $request->name;
-        $set->description = $request->description;
-        $set->save();
-
-        Alert::toast('Exam Added', 'success');
-
-        return redirect()->route('manage-questions', $set->id);
-    }
 }
