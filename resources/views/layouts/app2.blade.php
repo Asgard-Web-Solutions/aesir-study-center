@@ -14,32 +14,56 @@
             <div class="container flex items-center justify-between px-4 py-4 mx-auto">
                 <a href="{{ url('/') }}" class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
                 <div class="hidden space-x-4 md:flex">
-                    <a href="{{ route('tests') }}" class="btn btn-ghost">Exam List</a>
-                    <a href="#" class="btn btn-ghost">Features</a>
+                    <x-button.nav href="{{ route('tests') }}">Exam List</x-button.nav>
+                    @if ( auth()->user()->hasRole('admin') )
+                        <x-button.nav href="{{ route('manage-exams') }}">Manage Exams</x-button.nav>
+                    @endif
+                    {{-- <a href="#" class="btn btn-ghost">Features</a>
                     <a href="#" class="btn btn-ghost">Pricing</a>
-                    <a href="#" class="btn btn-ghost">Contact</a>
-                    <div class="dropdown dropdown-end">
-                        <button tabindex="0" class="btn btn-ghost rounded-btn">Theme</button>
-                        {{-- <ul tabindex="0" class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52">
-                            <li><a href="#" onclick="changeTheme('light')">Light</a></li>
-                            <li><a href="#" onclick="changeTheme('dark')">Dark</a></li>
-                            <!-- Add more themes as needed -->
-                        </ul> --}}
-                    </div>
+                    <a href="#" class="btn btn-ghost">Contact</a> --}}
+                    @auth
+                        <div class="dropdown dropdown-end">
+                            <button tabindex="0" class="rounded-full btn btn-secondary">{{ Auth::user()->name }}</button>
+                            <ul tabindex="0" class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52">
+                                <li><a href="{{ route('home') }}">Home</a></li>
+                                <li>
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                    {{ csrf_field() }}
+                                    </form>
+                                </li>
+                                <!-- Add more themes as needed -->
+                            </ul>
+                        </div>
+                    @endauth
+                    @guest
+                        
+                    @endguest
                 </div>
-                <div class="md:hidden">
+                <div class="dropdown dropdown-end md:hidden">
                     <button id="menu-button" class="btn btn-ghost">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
+                    <div tabindex="0" class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52">
+                        <x-button.mobile href="{{ route('tests') }}">Exam List</x-button.mobile>
+                        @if ( auth()->user()->hasRole('admin') )
+                            <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile>
+                        @endif
+
+                        <hr />
+                        @auth
+                            <x-button.mobile href="{{ route('home') }}">Home</x-button.mobile>
+
+                            <a href="{{ route('logout') }}" class="block px-4 py-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                {{ csrf_field() }}
+                            </form>
+                        @endauth
+                    </div>
                 </div>
-            </div>
-            <div id="mobile-menu" class="hidden md:hidden">
-                <a href="{{ route('tests') }}" class="block px-4 py-2">Exam List</a>
-                <a href="#" class="block px-4 py-2">Features</a>
-                <a href="#" class="block px-4 py-2">Pricing</a>
-                <a href="#" class="block px-4 py-2">Contact</a>
+
             </div>
         </nav>
 

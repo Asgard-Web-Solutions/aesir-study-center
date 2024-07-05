@@ -14,7 +14,7 @@
                 @foreach ($question->answers as $answer)
                     <x-table.row>
                         <x-table.cell><x-card.buttons alignButtons="center" secondaryLabel="<i class='fa-solid fa-pen-to-square text-primary'> Edit" secondaryAction="{{ route('edit-answer', $answer->id) }}" /></x-table.cell>
-                        <x-table.cell>@if ($answer->correct) <i class="fa-regular fa-square-check text-success"></i> CORRECT @else <i class="fa-regular fa-square-xmark text-error"></i> INCORRECT @endif</x-table.cell>
+                        <x-table.cell>@if ($answer->correct) <i class="fa-regular fa-square-check text-success"></i> Correct @else <i class="fa-regular fa-square-xmark text-error"></i> Wrong @endif</x-table.cell>
                         <x-table.cell>{{ $answer->text }}</x-table.cell>
                     </x-table.row>
                 @endforeach

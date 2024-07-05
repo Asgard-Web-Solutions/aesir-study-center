@@ -11,13 +11,7 @@
             @if ($correct) CORRECT @else INCORRECT @endif
         </p>
     
-        <div class="p-4 my-4 space-y-4 rounded-lg bg-neutral">
-            <div class="flex items-center p-2 rounded-lg hover:bg-base-200">
-                <div class="flex items-center w-1/2 sm:w-1/4">
-                    <span class="text-base font-medium">{{ __('Your Answer') }}</span>
-                </div>
-            </div>
-    
+        <x-card.mini title="Your Answer">
             @foreach ($answers as $answer)
                 <div class="flex items-center p-2 rounded-lg hover:bg-base-200">
                     <div class="flex items-center w-1/4">
@@ -38,8 +32,7 @@
                     </div>
                 </div>
             @endforeach
-        </div>
-    
+        </x-card.mini>    
     </x-card.main>
             
     <x-page.actions primary="Next Question" :primaryLink="route('take-test', $test->id)" />
