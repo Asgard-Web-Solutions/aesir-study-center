@@ -1,39 +1,28 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('content')
-<h1 class="text-2xl font-bold text-center text-base-content">{{ $set->name }}</h1>
+<h1 class="text-2xl font-bold text-center text-primary">{{ $set->name }}</h1>
 
-<div class="m-auto my-10 shadow-xl sm:w-full md:w-10/12 card bg-neutral text-neutral-content">
-    <div class="w-full card-body">
-        <div class="items-center w-full text-center">
-            <h2 class="card-title text-accent" style="display: block">{{ __('Test Questions') }}</h2>
-        </div>
-
-        <div class="overflow-x-auto text-base-content">
-            <table class="table w-full my-4 table-zebra table-compact">
-                <thead>
-                    <tr>
-                        <th>{{ __('Question') }}</th>
-                        <th>{{ __('# Answers') }}</th>
-                        <th>{{ __('Question Group') }}</th>
-                        <th>{{ __('Action') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($set->questions as $question)
-                        <tr>
-                            <td>{{ $question->text }}</td>
-                            <td>{{ $question->answers->count() }}</td>
-                            <td>{{ $question->group }}</td>
-                            <td><a href="{{ route('manage-answers', $question->id) }}"><i class="fa-solid fa-pen-to-square text-primary" alt="Edit"></i> Edit</a></td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-</div>
+<x-card.main title="Test Questions">
+    <x-table.main>
+        <x-table.head>
+            <x-table.hcell>{{ __('Question') }}</x-table.hcell>
+            <x-table.hcell hideMobile='true'>{{ __('# Answers') }}</x-table.hcell>
+            <x-table.hcell hideMobile='true'>{{ __('Question Group') }}</x-table.hcell>
+            <x-table.hcell>{{ __('Actions') }}</x-table.hcell>
+        </x-table.head>
+        <x-table.body>
+            @foreach ($set->questions as $question)
+                <x-table.row>
+                    <x-table.cell>{{ $question->text }}</x-table.cell>
+                    <x-table.cell hideMobile='true'>{{ $question->answers->count() }}</x-table.cell>
+                    <x-table.cell hideMobile='true'>{{ $question->group }}</x-table.cell>
+                    <x-table.cell><x-card.buttons primaryAction="{{ route('manage-answers', $question->id) }}" primaryLabel="Edit"/></x-table.cell>        
+                </x-table.row>
+            @endforeach
+        </x-table.body>
+    </x-table.main>
+</x-card.main>
 
 <div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
     <a href="{{ route('add-question', $set->id) }}" class="btn btn-primary">{{ __('Add Question') }}</a>

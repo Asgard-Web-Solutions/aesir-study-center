@@ -1,23 +1,19 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('content')
     <x-page.header :text="$set->name" />
 
-    <x-card.setup header="Add Exam Question">
-
+    <x-card.main title="Add Exam Question">
         <form action="{{ route('save-question', $set->id) }}" method="post">
             @csrf
 
-            <x-forms.text-box name="question" label="Question" />
+            <x-form.text name="question" label="Question" />
 
-            <x-forms.text-box name="group" label="Question Group" />
-            <div class="m-3">
-                <p class="mx-3 my-3">Question Groups allow you to organize similar questions together. If a question is in a group and only has a single answer, then the incorrect answers on the test will be pulled from the answers of questions with the same Question Group label.</p>
-            </div>
+            <x-form.text name="group" label="Question Group" helptext="Question Groups allow you to organize similar questions together. If a question is in a group and only has a single answer, then the incorrect answers on the test will be pulled from the answers of questions with the same Question Group label."/>
 
-            <x-forms.submit-button text="Add Question" />
+            <x-card.buttons submitLabel="Add Question" />
         </form>
+    </x-card.main>
 
-    </x-card.setup>
-    <x-page.actions secondary="Back to question List" :secondaryLink="route('manage-questions', $set->id)" />
+    <x-card.buttons secondaryLabel='Return to Question List' secondaryAction="{{ route('manage-questions', $set->id) }}" />
 @endsection

@@ -24,6 +24,8 @@ Route::prefix('admin')->group(function () {
     Voyager::routes();
 });
 
+Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
+
 Route::get('/exams', [TestController::class, 'sets'])->name('tests')->middleware('auth');
 Route::get('/exam/{id}', [TestController::class, 'select'])->name('select-test')->middleware('auth');
 Route::post('/exam/{id}/start', [TestController::class, 'start'])->name('start-test')->middleware('auth');

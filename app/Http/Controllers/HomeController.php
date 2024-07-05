@@ -90,7 +90,7 @@ class HomeController extends Controller
         $incomplete = Test::where('user_id', '=', $user->id)->whereNull('end_at')->get();
 
         return view('home', [
-            'sets' => $sets,
+            'tests' => $sets,
             'incomplete' => $incomplete,
         ]);
     }
@@ -117,5 +117,10 @@ class HomeController extends Controller
             'tests' => $tests,
             'set' => $set,
         ]);
+    }
+
+    public function colors(): View
+    {
+        return view('colors');
     }
 }
