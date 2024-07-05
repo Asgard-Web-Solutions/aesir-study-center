@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\SetController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,4 +49,4 @@ Route::post('/answer/{id}/edit', [QuestionController::class, 'updateAnswer'])->n
 Route::get('/answer/{id}/delete', [QuestionController::class, 'deleteAnswer'])->name('delete-answer')->middleware('auth');
 Route::post('/answer/{id}/delete', [QuestionController::class, 'deleteAnswerConfirm'])->name('delete-answer-confirm')->middleware('auth');
 
-Route::post('/exam/add', [QuestionController::class, 'storeExam'])->name('save-exam')->middleware('auth');
+Route::post('/exam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
