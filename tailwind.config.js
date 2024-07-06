@@ -8,8 +8,7 @@ module.exports = {
   plugins: [require("daisyui")],
   daisyui: {
   },
-
-  // darkMode: 'class', // or 'media' if you prefer automatic dark mode based on user preferences
+  darkMode: 'class', // or 'media' if you prefer automatic dark mode based on user preferences
   // theme: {
   //   extend: {},
   // },

@@ -11,6 +11,43 @@
     <div class="container mx-auto">
         <!-- Navbar -->
         <nav class="rounded-b-lg shadow-md navbar bg-neutral text-neutral-content">
+            <div class="dropdown md:hidden">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                </div>
+                <ul
+                  tabindex="0"
+                  class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    <x-button.mobile href="{{ route('tests') }}">Exam List</x-button.mobile>
+                    @auth
+                        @if ( auth()->user()->hasRole('admin') )
+                            <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile>
+                        @endif
+                    @endauth
+
+                    <hr class="my-2" />
+                    @auth
+                        <x-button.mobile href="{{ route('home') }}">Home</x-button.mobile>
+
+                        <a href="{{ route('logout') }}" class="block px-4 py-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            {{ csrf_field() }}
+                        </form>
+                    @endauth
+                </ul>
+              </div>
+
             <div class="container flex items-center justify-between px-4 py-4 mx-auto">
                 <a href="{{ url('/') }}" class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
                 <div class="hidden space-x-4 md:flex">
@@ -42,42 +79,7 @@
                         
                     @endguest
                 </div>
-                <div class="dropdown md:hidden">
-                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-5 h-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M4 6h16M4 12h16M4 18h7" />
-                      </svg>
-                    </div>
-                    <ul
-                      tabindex="0"
-                      class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                        <x-button.mobile href="{{ route('tests') }}">Exam List</x-button.mobile>
-                        @auth
-                            @if ( auth()->user()->hasRole('admin') )
-                                <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile>
-                            @endif
-                        @endauth
 
-                        <hr />
-                        @auth
-                            <x-button.mobile href="{{ route('home') }}">Home</x-button.mobile>
-
-                            <a href="{{ route('logout') }}" class="block px-4 py-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                {{ csrf_field() }}
-                            </form>
-                        @endauth
-                    </ul>
-                  </div>
               
                 {{-- <div class="dropdown dropdown-end md:hidden">
                     <button id="menu-button" class="btn btn-ghost">
