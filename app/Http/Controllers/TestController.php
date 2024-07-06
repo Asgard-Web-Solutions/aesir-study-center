@@ -13,15 +13,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use App\Enums\Visibility;
 
 class TestController extends Controller
 {
     public function sets(): View
     {
-        $sets = Set::all();
+        $sets = Set::Where('visibility', '=', Visibility::isPublic)->get();
+
+        $privateSets = null;
+
+        if (auth()) {
+            $privateSets = Set::Where('visibility', '=', Visibility::isPrivate)->where('user_id', '=', auth()->user()->id)->get();
+        }
 
         return view('test.select', [
             'sets' => $sets,
+            'privateSets' => $privateSets,
         ]);
     }
 

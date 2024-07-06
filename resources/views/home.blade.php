@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <x-card.main title='Your Tests' size='grid'>
+    <x-card.main title='Your Completed Exams' size='grid'>
         @foreach($tests as $test)
             <x-card.mini :title="$test['name']">
                 <x-text.main label='Recent Average:'><span class="font-bold text-gray-50">{{ $test['average'] }}%</span></x-text.main>
@@ -23,6 +23,6 @@
         </x-card.main>
     @endif
 
-    <x-card.buttons primaryAction="{{ route('tests') }}" primaryLabel="View Public Tests" />
+    <x-card.buttons primaryAction="{{ route('tests') }}" primaryLabel="View Public Exams" />
 
 @endsection

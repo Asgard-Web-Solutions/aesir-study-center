@@ -9,6 +9,7 @@ use App\Models\Set;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Enums\Visibility;
 
 class QuestionController extends Controller
 {
@@ -21,9 +22,11 @@ class QuestionController extends Controller
         }
 
         $sets = Set::all();
+        $visibility = Visibility::cases();
 
         return view('manage.sets', [
             'sets' => $sets,
+            'visibility' => $visibility,
         ]);
     }
 
@@ -36,9 +39,11 @@ class QuestionController extends Controller
         }
 
         $set = Set::find($id);
+        $visibility = Visibility::cases();
 
         return view('manage.questions', [
             'set' => $set,
+            'visibilityOptions' => $visibility,
         ]);
     }
 
