@@ -50,3 +50,4 @@ Route::get('/answer/{id}/delete', [QuestionController::class, 'deleteAnswer'])->
 Route::post('/answer/{id}/delete', [QuestionController::class, 'deleteAnswerConfirm'])->name('delete-answer-confirm')->middleware('auth');
 
 Route::post('/exam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
+Route::post('/exam/{id}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
