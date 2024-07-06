@@ -15,9 +15,11 @@
                 <a href="{{ url('/') }}" class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
                 <div class="hidden space-x-4 md:flex">
                     <x-button.nav href="{{ route('tests') }}">Exam List</x-button.nav>
-                    @if ( auth()->user()->hasRole('admin') )
-                        <x-button.nav href="{{ route('manage-exams') }}">Manage Exams</x-button.nav>
-                    @endif
+                    @auth
+                        @if ( auth()->user()->hasRole('admin') )
+                            <x-button.nav href="{{ route('manage-exams') }}">Manage Exams</x-button.nav>
+                        @endif
+                    @endauth
                     {{-- <a href="#" class="btn btn-ghost">Features</a>
                     <a href="#" class="btn btn-ghost">Pricing</a>
                     <a href="#" class="btn btn-ghost">Contact</a> --}}
@@ -48,9 +50,11 @@
                     </button>
                     <div tabindex="0" class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52">
                         <x-button.mobile href="{{ route('tests') }}">Exam List</x-button.mobile>
-                        @if ( auth()->user()->hasRole('admin') )
-                            <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile>
-                        @endif
+                        @auth
+                            @if ( auth()->user()->hasRole('admin') )
+                                <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile>
+                            @endif
+                        @endauth
 
                         <hr />
                         @auth
@@ -77,7 +81,6 @@
         // function changeTheme(theme) {
         //     document.documentElement.setAttribute('data-theme', theme);
         // }
-
         document.getElementById('menu-button').addEventListener('click', function() {
             var menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
