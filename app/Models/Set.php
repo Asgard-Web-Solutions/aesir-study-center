@@ -16,4 +16,9 @@ class Set extends Model
     {
         return $this->hasMany(\App\Models\Test::class);
     }
+
+    public function groups(): HasMany
+    {
+        return $this->hasMany(\App\Models\Group::class);
+    }
 }

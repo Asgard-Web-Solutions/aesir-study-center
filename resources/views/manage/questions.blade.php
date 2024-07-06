@@ -20,6 +20,27 @@
         </form>
     </x-card.mini>
 
+    <x-card.mini title="Question Groups">
+        <x-table.main>
+            <x-table.head>
+                <x-table.hcell>Name</x-table.hcell>
+                <x-table.hcell># Questions</x-table.hcell>
+                <x-table.hcell>&nbsp;</x-table.hcell>
+            </x-table.head>
+            <x-table.body>
+                @foreach ($set->groups as $group)
+                    <x-table.row>
+                        <x-table.cell>{{ $group->name }}</x-table.cell>
+                        <x-table.cell>{{ $group->questions->count() }}</x-table.cell>
+                        <x-table.cell><x-card.buttons secondaryLabel="Manage Group" secondaryAction="{{ route('group-view', $group) }}" /></x-table.cell>
+                    </x-table.row>
+                @endforeach
+            </x-table.body>
+        </x-table.main>
+        
+        <x-card.buttons primaryLabel="Add a Group" primaryAction="{{ route('group-create', $set) }}" />
+    </x-card.mini>
+
     <x-card.mini title="Test Questions">
         <x-table.main>
             <x-table.head>
@@ -29,7 +50,7 @@
                 <x-table.hcell>{{ __('Actions') }}</x-table.hcell>
             </x-table.head>
             <x-table.body>
-                @foreach ($set->questions as $question)
+                @foreach ($questions as $question)
                     <x-table.row>
                         <x-table.cell>{{ $question->text }}</x-table.cell>
                         <x-table.cell hideMobile='true'>{{ $question->answers->count() }}</x-table.cell>

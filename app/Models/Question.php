@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Question extends Model
 {
+    protected $fillable = [
+        'text',
+        'set_id',
+        'group_id'
+    ];
+
     public function set(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Set::class);
