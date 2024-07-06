@@ -21,11 +21,18 @@ class QuestionController extends Controller
             return redirect()->route('home');
         }
 
-        $sets = Set::all();
+        $sets = Set::Where('user_id', '=', auth()->user()->id)->get();
+
+        $otherPrivateExams = null;
+        if (auth()->user()->hasRole('admin')) {
+            $otherPrivateExams = Set::Where('user_id', '!=', auth()->user()->id)->where('visibility', '=', Visibility::isPrivate)->get();
+        }
+        
         $visibility = Visibility::cases();
 
         return view('manage.sets', [
             'sets' => $sets,
+            'privateExams' => $otherPrivateExams,
             'visibility' => $visibility,
         ]);
     }
@@ -40,10 +47,12 @@ class QuestionController extends Controller
 
         $set = Set::find($id);
         $visibility = Visibility::cases();
+        $questions = Question::where('set_id', $set->id)->where('group_id', 0)->get();
 
         return view('manage.questions', [
             'set' => $set,
             'visibilityOptions' => $visibility,
+            'questions' => $questions,
         ]);
     }
 

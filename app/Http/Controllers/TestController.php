@@ -149,12 +149,12 @@ class TestController extends Controller
         if ($question->answers->count() > 1) {
             $answers = $question->answers->shuffle();
         } else {
-            if ($question->group) {
+            if ($question->group_id) {
                 // There was only one answer, so let's grab some more random ones from the test
                 $single = true;
                 $answers = $question->answers;
 
-                $pool = Question::where('set_id', '=', $question->set_id)->where('group', '=', $question->group)->where('id', '!=', $question->id)->get();
+                $pool = Question::where('set_id', '=', $question->set_id)->where('group_id', '=', $question->group_id)->where('id', '!=', $question->id)->get();
 
                 $pool = $pool->shuffle();
 

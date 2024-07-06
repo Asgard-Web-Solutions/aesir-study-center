@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="forest">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,5 +70,7 @@
             </div>
         </div>
     </div>
+
+    <div class="px-1 px-2 md:px-2 md:px-1" /></body>
 </body>
 </html>
