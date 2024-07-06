@@ -14,14 +14,16 @@
 </x-card.main>
 
 <x-card.main title="Create An Exam">
-    <form action="{{ route('save-exam') }}" method="post">
-        @csrf
+    <x-card.mini>
+        <form action="{{ route('save-exam') }}" method="post">
+            @csrf
 
-        <x-form.text label="Name" name="name" />
-        <x-form.text label="Description" name="description" />
+            <x-form.text label="Name" name="name" />
+            <x-form.text label="Description" name="description" />
 
-        <x-card.buttons submitLabel="Create Exam" />
-    </form>
+            <x-card.buttons submitLabel="Create Exam" />
+        </form>
+    </x-card.mini>
 </x-card.main>
 
 @endsection
