@@ -11,6 +11,10 @@ class Group extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'set_id'
+    ];
+
     public function set(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Set::class);

@@ -24,6 +24,7 @@
                     <x-table.row>
                         <x-table.cell>{{ $question->text }}</x-table.cell>
                         <x-table.cell>{{ $question->answers[0]->text }}</x-table.cell>
+                        <x-table.cell><a href="{{ route('group-edit-question', ['group' => $group, 'question' => $question]) }}" class="text-secondary hover:underline hover:text-primary">Edit</a></x-table.cell>
                     </x-table.row>
                 @endforeach
             </x-table.body>

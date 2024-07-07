@@ -8,13 +8,13 @@
             <form action="{{ route('update-answer', $answer->id) }}" method="post">
                 @csrf
     
-                <x-form.text name="answer" label="Answer" value="{{ $answer->text }}" />
+                <x-form.text name="text" label="Answer" value="{{ old('text', $answer->text) }}" />
     
                 @php
                     $values[0] = "Wrong";
                     $values[1] = "Correct";   
                 @endphp
-                <x-form.dropdown name="correct" label="Correct Answer?" :values="$values" selected="{{ $answer->correct }}" />
+                <x-form.dropdown name="correct" label="Correct Answer?" :values="$values" selected="{{ old('correct', $answer->correct) }}" />
     
                 <x-card.buttons submitLabel="Update Answer" />
             </form>    

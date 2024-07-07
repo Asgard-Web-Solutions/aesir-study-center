@@ -7,9 +7,7 @@
         <form action="{{ route('save-question', $set->id) }}" method="post">
             @csrf
 
-            <x-form.text name="question" label="Question" />
-
-            <x-form.text name="group" label="Question Group" helptext="Question Groups allow you to organize similar questions together. If a question is in a group and only has a single answer, then the incorrect answers on the test will be pulled from the answers of questions with the same Question Group label."/>
+            <x-form.text name="text" label="Question" />
 
             <x-card.buttons submitLabel="Add Question" />
         </form>

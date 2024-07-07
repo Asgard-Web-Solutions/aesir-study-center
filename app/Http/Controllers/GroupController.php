@@ -9,6 +9,7 @@ use App\Models\Question;
 use App\Models\Answer;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateGroupRequest;
+use App\Http\Requests\GroupQuestionRequest;
 
 class GroupController extends Controller
 {
@@ -93,6 +94,35 @@ class GroupController extends Controller
         Alert::toast('Question Added', 'success');
 
         return redirect()->route('group-view', $group->id);
+    }
+
+    public function editQuestion(Group $group, Question $question) {
+        $this->authorize('update', $group);
+
+        return view('group.edit')->with([
+            'group' => $group,
+            'question' => $question,
+        ]);
+    }
+
+    public function updateQuestion(GroupQuestionRequest $request, Group $group, Question $question) {
+        $this->authorize('update', $group);
+        
+        $answer = Answer::where('question_id', $question->id)->first();
+
+        if (!$answer || !$question) {
+            abort(404, 'Resource not found');
+        }
+
+        $question->update([
+            'text' => $request->question,
+        ]);
+
+        $answer->update([
+            'text' => $request->answer,
+        ]);
+
+        return redirect()->route('group-view', $group);
     }
 
     /**

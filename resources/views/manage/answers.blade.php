@@ -4,22 +4,29 @@
     <x-page.header :text="$question->set->name" />
 
     <x-card.main title="Question: {{ $question->text }}">
-        <x-table.main>
-            <x-table.head>
-                <x-table.hcell>{{ __('Action') }}</x-table.hcell>
-                <x-table.hcell>{{ __('Correct') }}</x-table.hcell>
-                <x-table.hcell>{{ __('Answer') }}</x-table.hcell>
-            </x-table.head>
-            <x-table.body>
-                @foreach ($question->answers as $answer)
-                    <x-table.row>
-                        <x-table.cell><x-card.buttons alignButtons="center" secondaryLabel="<i class='fa-solid fa-pen-to-square text-primary'> Edit" secondaryAction="{{ route('edit-answer', $answer->id) }}" /></x-table.cell>
-                        <x-table.cell>@if ($answer->correct) <i class="fa-regular fa-square-check text-success"></i> Correct @else <i class="fa-regular fa-square-xmark text-error"></i> Wrong @endif</x-table.cell>
-                        <x-table.cell>{{ $answer->text }}</x-table.cell>
-                    </x-table.row>
-                @endforeach
-            </x-table.body>
-        </x-table.main>
+        
+        <x-card.mini title="Answers">
+            <x-table.main>
+                <x-table.head>
+                    <x-table.hcell>{{ __('Answer') }}</x-table.hcell>
+                    <x-table.hcell>{{ __('Correct') }}</x-table.hcell>
+                    <x-table.hcell>{{ __('Action') }}</x-table.hcell>
+                </x-table.head>
+                <x-table.body>
+                    @forelse ($question->answers as $answer)
+                        <x-table.row>
+                            <x-table.cell>{{ $answer->text }}</x-table.cell>
+                            <x-table.cell>@if ($answer->correct) <i class="fa-regular fa-square-check text-success"></i> Correct @else <i class="fa-regular fa-square-xmark text-error"></i> Wrong @endif</x-table.cell>
+                            <x-table.cell><x-card.buttons alignButtons="center" secondaryLabel="<i class='fa-solid fa-pen-to-square'> Edit" secondaryAction="{{ route('edit-answer', $answer->id) }}" /></x-table.cell>
+                        </x-table.row>
+                    @empty
+                        <x-table.row>
+                            <td colspan="3" class="text-center">No answers added yet...</td>
+                        </x-table.row>
+                @endforelse
+                </x-table.body>
+            </x-table.main>
+        </x-card.mini>
 
         <br />
 
@@ -27,7 +34,7 @@
             <form action="{{ route('save-answers', $question->id) }}" method="post">
                 @csrf
                 
-                <x-form.text name="answer" label="New Answer" />
+                <x-form.text name="text" label="New Answer" />
 
                 @php
                     $values[0] = "Wrong";

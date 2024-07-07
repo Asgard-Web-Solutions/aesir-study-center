@@ -79,39 +79,23 @@
                         
                     @endguest
                 </div>
-
-              
-                {{-- <div class="dropdown dropdown-end md:hidden">
-                    <button id="menu-button" class="btn btn-ghost">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /> MENU
-                        </svg>
-                    </button>
-                    <div tabindex="0" class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52">
-                        <x-button.mobile href="{{ route('tests') }}">Exam List</x-button.mobile>
-                        @auth
-                            @if ( auth()->user()->hasRole('admin') )
-                                <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile>
-                            @endif
-                        @endauth
-
-                        <hr />
-                        @auth
-                            <x-button.mobile href="{{ route('home') }}">Home</x-button.mobile>
-
-                            <a href="{{ route('logout') }}" class="block px-4 py-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                {{ csrf_field() }}
-                            </form>
-                        @endauth
-                    </div>
-                </div> --}}
-
             </div>
         </nav>
 
         <!-- Main Content -->
         <main class="mt-8">
+            @if ($errors->any())
+                <div class="relative px-4 py-3 mb-4 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
+                    <strong class="font-bold">Whoops! Something went wrong.</strong>
+                    <ul class="mt-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            
             @yield('content')
         </main>
     </div>

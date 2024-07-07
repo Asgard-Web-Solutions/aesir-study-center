@@ -8,10 +8,8 @@
             <form action="{{ route('update-question', $question->id) }}" method="post">
                 @csrf
     
-                <x-form.text name="question" label="Question" value="{{ old('question', $question->text) }}" />
-    
-                <x-form.text name="group" label="Question Group" value="{{ old('group', $question->group) }}" helptext="Question Groups allow you to organize similar questions together. If a question is in a group and only has a single answer, then the incorrect answers on the test will be pulled from the answers of questions with the same Question Group label."/>
-    
+                <x-form.text name="text" label="Question" value="{{ old('text', $question->text) }}" />
+       
                 <x-card.buttons submitLabel="Update Question" />
             </form>    
         </x-card.mini>
