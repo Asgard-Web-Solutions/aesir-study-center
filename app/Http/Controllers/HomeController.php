@@ -74,6 +74,12 @@ class HomeController extends Controller
                 ->where('score', '>=', config('test.grade_familiar'))
                 ->count();
 
+            $total_apprentice = DB::table('user_question')
+                ->where('user_id', '=', $user->id)
+                ->where('score', '>=', config('test.grade_apprentice'))
+                ->where('set_id', '=', $set->id)
+                ->count();
+
             $average = round(($average / $tests->count()), 1);
             $sets[] = [
                 'name' => $set->name,
@@ -84,6 +90,7 @@ class HomeController extends Controller
                 'mastery' => round((($total_mastery / $total_questions) * 100), 1),
                 'proficient' => round((($total_proficient / $total_questions) * 100), 1),
                 'familiar' => round((($total_familiar / $total_questions) * 100), 1),
+                'apprentice' => round((($total_apprentice / $total_questions) * 100), 1),
             ];
         }
 
