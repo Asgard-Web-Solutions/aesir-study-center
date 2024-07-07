@@ -6,7 +6,12 @@
         @foreach($tests as $test)
             <x-card.mini :title="$test['name']">
                 <x-text.main label='Recent Average:'><span class="font-bold text-gray-50">{{ $test['average'] }}%</span></x-text.main>
-                <x-text.dim label='Mastery Level:'>{{ $test['familiar'] }}% / {{ $test['proficient'] }}% / {{ $test['mastery'] }}%</x-text.dim>
+                <div>
+                    <div class="tooltip" data-tip="Mastery: {{ $test['mastery'] }}%"><progress class="w-56 progress progress-accent " value="{{ $test['mastery'] }}" max="100"></progress></div>
+                    <div class="tooltip" data-tip="Proficient: {{ $test['proficient'] }}%"><progress class="w-56 progress progress-secondary " value="{{ $test['proficient'] }}" max="100"></progress></div>
+                    <div class="tooltip" data-tip="Familiar: {{ $test['familiar'] }}%"><progress class="w-56 progress progress-success " value="{{ $test['familiar'] }}" max="100"></progress></div>
+                    <div class="tooltip" data-tip="Apprentice: {{ $test['apprentice'] }}%"><progress class="w-56 progress progress-info" value="{{ $test['apprentice'] }}" max="100"></progress></div>
+                </div>
                 <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}"></x-card.buttons>
             </x-card.mini>
         @endforeach
