@@ -26,7 +26,7 @@ class migrateQuestionGroups extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $questions = Question::where('group', '!=', null)->get();
         $sets = [];
