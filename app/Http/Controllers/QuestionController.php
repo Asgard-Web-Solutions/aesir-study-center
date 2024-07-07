@@ -10,6 +10,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Enums\Visibility;
+use App\Http\Requests\AnswerRequest;
+use App\Http\Requests\QuestionRequest;
 
 class QuestionController extends Controller
 {
@@ -46,6 +48,12 @@ class QuestionController extends Controller
         }
 
         $set = Set::find($id);
+        if (!$set) {
+            Alert::toast('Page Not Found', 'error');
+
+            return redirect()->route('home');
+        }
+
         $visibility = Visibility::cases();
         $questions = Question::where('set_id', $set->id)->where('group_id', 0)->get();
 
@@ -66,6 +74,11 @@ class QuestionController extends Controller
         }
 
         $set = Set::find($id);
+        if (!$set) {
+            Alert::toast('Page Not Found', 'error');
+
+            return redirect()->route('home');
+        }
 
         return view('manage.addq', [
             'set' => $set,
@@ -73,7 +86,7 @@ class QuestionController extends Controller
     }
 
     // Save a question for an exam
-    public function store(Request $request, $id): RedirectResponse
+    public function store(QuestionRequest $request, $id): RedirectResponse
     {
         if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
@@ -82,17 +95,16 @@ class QuestionController extends Controller
         }
 
         $set = Set::find($id);
+        if (!$set) {
+            Alert::toast('Page Not Found', 'error');
 
-        $this->validate($request, [
-            'question' => 'required|string',
-        ]);
+            return redirect()->route('home');
+        }
 
-        $question = new Question();
+        $validatedData = $request->validated();
+        $validatedData['set_id'] = $set->id;
 
-        $question->set_id = $set->id;
-        $question->text = $request->question;
-        $question->group = $request->group;
-        $question->save();
+        $question = Question::create($validatedData);
 
         Alert::toast('Question Added', 'success');
 
@@ -114,7 +126,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(QuestionRequest $request, $id)
     {
         if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
@@ -123,9 +135,7 @@ class QuestionController extends Controller
         }
         
         $question = Question::find($id);
-        $question->text = $request->question;
-        $question->group = $request->group;
-        $question->save();
+        $question->update($request->validated());
 
         Alert::toast('Question Updated', 'success');
 
@@ -142,6 +152,11 @@ class QuestionController extends Controller
         }
 
         $question = Question::find($id);
+        if (!$question) {
+            Alert::toast('Page Not Found', 'error');
+
+            return redirect()->route('home');
+        }
 
         return view('manage.answers', [
             'question' => $question,
@@ -149,7 +164,7 @@ class QuestionController extends Controller
     }
 
     // Save an answer to a question
-    public function storeAnswer(Request $request, $id): RedirectResponse
+    public function storeAnswer(AnswerRequest $request, $id): RedirectResponse
     {
         if (! auth()->user()->hasRole('admin')) {
             Alert::toast('Permission Denied', 'warning');
@@ -158,18 +173,15 @@ class QuestionController extends Controller
         }
 
         $question = Question::find($id);
+        if (!$question) {
+            Alert::toast('Page Not Found', 'error');
 
-        $this->validate($request, [
-            'answer' => 'required|string',
-            'correct' => 'required|integer',
-        ]);
+            return redirect()->route('home');
+        }
 
-        $answer = new Answer();
-
-        $answer->question_id = $question->id;
-        $answer->text = $request->answer;
-        $answer->correct = $request->correct;
-        $answer->save();
+        $validatedData = $request->validated();
+        $validatedData['question_id'] = $question->id;
+        $answer = Answer::create($validatedData);
 
         Alert::toast('Answer Added', 'success');
 
@@ -188,19 +200,13 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function updateAnswer(Request $request, $id): RedirectResponse
+    public function updateAnswer(AnswerRequest $request, $id): RedirectResponse
     {
         $answer = Answer::find($id);
 
-        $this->validate($request, [
-            'answer' => 'required|string',
-            'correct' => 'required|integer',
-        ]);
+        $validatedData = $request->validated();
+        $answer->update($validatedData);
 
-        $answer->text = $request->answer;
-        $answer->correct = $request->correct;
-
-        $answer->save();
         Alert::toast('Answer Updated', 'success');
 
         return redirect()->route('manage-answers', $answer->question->id);
