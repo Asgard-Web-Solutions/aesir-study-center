@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Database\Factories\UserFactory;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -43,8 +43,6 @@ class User extends \TCG\Voyager\Models\User
     {
         return UserFactory::new();
     }
-
-
 
     public function questions(): BelongsToMany
     {
