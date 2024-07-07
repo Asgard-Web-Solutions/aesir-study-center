@@ -4,11 +4,9 @@
 <x-page.header :text="$question->set->name" />
 
     <x-card.main :title="$question->text">
-
-        <x-text.dim>Question {{ $test->questions->count() }} of {{ $test->num_questions }}</x-text.dim>
     
         <p class="my-4 text-lg text-center @if ($correct) text-success @else text-error @endif">
-            @if ($correct) CORRECT @else INCORRECT @endif
+            @if ($correct) Correct @else Incorrect @endif
         </p>
     
         <x-card.mini title="Your Answer">
@@ -32,9 +30,10 @@
                     </div>
                 </div>
             @endforeach
-        </x-card.mini>    
+        </x-card.mini>
+        <x-text.dim>Question {{ $test->questions->count() }} of {{ $test->num_questions }}</x-text.dim>
+        <x-page.actions primary="Next Question" :primaryLink="route('take-test', $test->id)" />
     </x-card.main>
             
-    <x-page.actions primary="Next Question" :primaryLink="route('take-test', $test->id)" />
 
 @endsection
