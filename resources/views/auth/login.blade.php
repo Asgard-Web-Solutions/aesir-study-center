@@ -1,78 +1,49 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('content')
-    <div class="container mx-auto">
-        <div class="flex flex-wrap justify-center">
-            <div class="w-full max-w-sm">
-                <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md">
 
-                    <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
-                        {{ __('Login') }}
-                    </div>
+    <x-card.main title="Login">
+        <x-card.mini>
+            <form class="w-full p-6" method="POST" action="{{ route('login') }}">
+                @csrf
 
-                    <form class="w-full p-6" method="POST" action="{{ route('login') }}">
-                        @csrf
+                <x-form.text name="email" label="Email Address" />
 
-                        <div class="flex flex-wrap mb-6">
-                            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
-                                {{ __('E-Mail Address') }}:
-                            </label>
+                <x-form.text type="password" name="password" label="Password" />
 
-                            <input id="email" type="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('email') border-red-500 @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                <div class="flex mb-6">
+                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
-                            @error('email')
-                                <p class="text-red-500 text-xs italic mt-4">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-
-                        <div class="flex flex-wrap mb-6">
-                            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">
-                                {{ __('Password') }}:
-                            </label>
-
-                            <input id="password" type="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('password') border-red-500 @enderror" name="password" required>
-
-                            @error('password')
-                                <p class="text-red-500 text-xs italic mt-4">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-
-                        <div class="flex mb-6">
-                            <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                            <label class="text-sm text-gray-700 ml-3" for="remember">
-                                {{ __('Remember Me') }}
-                            </label>
-                        </div>
-
-                        <div class="flex flex-wrap items-center">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-gray-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                {{ __('Login') }}
-                            </button>
-
-                            @if (Route::has('password.request'))
-                                <a class="text-sm text-blue-500 hover:text-blue-700 whitespace-no-wrap no-underline ml-auto" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <p class="w-full text-xs text-center text-gray-700 mt-8 -mb-4">
-                                    {{ __("Don't have an account?") }}
-                                    <a class="text-blue-500 hover:text-blue-700 no-underline" href="{{ route('register') }}">
-                                        {{ __('Register') }}
-                                    </a>
-                                </p>
-                            @endif
-                        </div>
-                    </form>
-
+                    <label class="ml-3 text-sm text-gray-700" for="remember">
+                        {{ __('Remember Me') }}
+                    </label>
                 </div>
-            </div>
-        </div>
+
+                <div class="flex flex-wrap items-center">
+                    <button type="submit" class="px-4 py-2 font-bold text-gray-100 bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline">
+                        {{ __('Login') }}
+                    </button>
+
+                    @if (Route::has('password.request'))
+                        <a class="ml-auto text-sm text-blue-500 no-underline whitespace-no-wrap hover:text-blue-700" href="{{ route('password.request') }}">
+                            {{ __('Forgot Your Password?') }}
+                        </a>
+                    @endif
+
+                    @if (Route::has('register'))
+                        <p class="w-full mt-8 -mb-4 text-xs text-center text-gray-700">
+                            {{ __("Don't have an account?") }}
+                            <a class="text-blue-500 no-underline hover:text-blue-700" href="{{ route('register') }}">
+                                {{ __('Register') }}
+                            </a>
+                        </p>
+                    @endif
+                </div>
+
+            </form>
+        </x-card.mini>
+    </x-card.main>
+
+
     </div>
 @endsection

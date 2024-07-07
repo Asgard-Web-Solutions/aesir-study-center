@@ -13,15 +13,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use App\Enums\Visibility;
 
 class TestController extends Controller
 {
     public function sets(): View
     {
-        $sets = Set::all();
+        $sets = Set::Where('visibility', '=', Visibility::isPublic)->get();
+
+        $privateSets = null;
+
+        if (auth()) {
+            $privateSets = Set::Where('visibility', '=', Visibility::isPrivate)->where('user_id', '=', auth()->user()->id)->get();
+        }
 
         return view('test.select', [
             'sets' => $sets,
+            'privateSets' => $privateSets,
         ]);
     }
 
@@ -141,26 +149,28 @@ class TestController extends Controller
         if ($question->answers->count() > 1) {
             $answers = $question->answers->shuffle();
         } else {
-            // There was only one answer, so let's grab some more random ones from the test
-            $single = true;
-            $answers = $question->answers;
+            if ($question->group_id) {
+                // There was only one answer, so let's grab some more random ones from the test
+                $single = true;
+                $answers = $question->answers;
 
-            $pool = Question::where('set_id', '=', $question->set_id)->where('id', '!=', $question->id)->get();
+                $pool = Question::where('set_id', '=', $question->set_id)->where('group_id', '=', $question->group_id)->where('id', '!=', $question->id)->get();
 
-            $pool = $pool->shuffle();
+                $pool = $pool->shuffle();
 
-            $count = 1;
+                $count = 1;
 
-            foreach ($pool as $q) {
-                $answers->push($q->answers->first());
-                $count = $count + 1;
+                foreach ($pool as $q) {
+                    $answers->push($q->answers->first());
+                    $count = $count + 1;
 
-                if ($count == config('test.target_answers')) {
-                    break;
+                    if ($count == config('test.target_answers')) {
+                        break;
+                    }
                 }
-            }
 
-            $answers = $answers->shuffle();
+                $answers = $answers->shuffle();
+            }
         }
 
         $correct = 0;
@@ -340,6 +350,7 @@ class TestController extends Controller
             'normalizedAnswer' => $normalizedAnswer,
             'result' => $result,
             'multi' => $multi,
+            'correct' => $correct,
         ]);
     }
 }
