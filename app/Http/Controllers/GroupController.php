@@ -8,7 +8,7 @@ use App\Models\Set;
 use App\Models\Question;
 use App\Models\Answer;
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateGroupRequest;
+use App\Http\Requests\GroupSettingsRequest;
 use App\Http\Requests\GroupQuestionRequest;
 
 class GroupController extends Controller
@@ -36,7 +36,7 @@ class GroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateGroupRequest $request, Set $set)
+    public function store(GroupSettingsRequest $request, Set $set)
     {
         $this->authorize('update', $set);
 
@@ -136,9 +136,15 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Group $group)
+    public function update(GroupSettingsRequest $request, Group $group)
     {
-        //
+        $this->authorize('update', $group);
+
+        $group->update($request->validated());
+
+        Alert::toast('Group Settings Updated', 'success');
+
+        return redirect()->route('group-view', $group);
     }
 
     /**
