@@ -45,6 +45,10 @@ class User extends \TCG\Voyager\Models\User
     }
 
 
+    public function exams(): HasMany
+    {
+        return $this->hasMany(\App\Models\Set::class);
+    }
 
     public function questions(): BelongsToMany
     {

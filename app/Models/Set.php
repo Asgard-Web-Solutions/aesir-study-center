@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Set extends Model
 {
+    protected $fillable = [
+        'name',
+        'description',
+        'user_id',
+        'visibility',
+    ];
+    
     public function questions(): HasMany
     {
         return $this->hasMany(\App\Models\Question::class);

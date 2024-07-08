@@ -3,9 +3,13 @@
 @section('content')
     <x-page.header :text="$question->set->name" />
 
-    <x-card.main title="Question {{ $test->questions->count() + 1 }}">
-        <div class="w-full mx-auto text-center chat chat-start">
-            <div class="mx-auto chat-bubble chat-bubble-secondary">{{ $question->text }}</div>
+    <x-card.main title="">
+        <div class="w-3/4 mx-auto text-center chat chat-start">
+            <div class="chat-header">
+                Question # {{ $test->questions->count() + 1 }} 
+                <time class="text-xs opacity-50">of {{ $test->num_questions }}</time>
+              </div>            
+            <div class="text-2xl chat-bubble chat-bubble-ghost">{{ $question->text }}</div>
         </div>
         <form action="{{ route('answer', $test->id) }}" method="post">
             <x-card.mini title="Select Answer">
@@ -30,7 +34,6 @@
                 </div>
             
             </x-card.mini>
-            <x-text.dim>Question {{ $test->questions->count() + 1 }} of {{ $test->num_questions }}</x-text.dim>
             <x-card.buttons submitLabel="Submit Answer" />
         </form>
 

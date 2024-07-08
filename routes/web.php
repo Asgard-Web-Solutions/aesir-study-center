@@ -28,6 +28,10 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
 
+Route::get('/exam/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
+Route::post('/exam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
+Route::post('/exam/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
+
 Route::get('/exams', [TestController::class, 'sets'])->name('tests')->middleware('auth');
 Route::get('/exam/{id}', [TestController::class, 'select'])->name('select-test')->middleware('auth');
 Route::post('/exam/{id}/start', [TestController::class, 'start'])->name('start-test')->middleware('auth');
@@ -58,5 +62,3 @@ Route::post('/answer/{id}/edit', [QuestionController::class, 'updateAnswer'])->n
 Route::get('/answer/{id}/delete', [QuestionController::class, 'deleteAnswer'])->name('delete-answer')->middleware('auth');
 Route::post('/answer/{id}/delete', [QuestionController::class, 'deleteAnswerConfirm'])->name('delete-answer-confirm')->middleware('auth');
 
-Route::post('/exam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
-Route::post('/exam/{id}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
