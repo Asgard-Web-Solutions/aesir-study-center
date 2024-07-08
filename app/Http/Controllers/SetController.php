@@ -1,61 +1,46 @@
 <?php
 
 namespace App\Http\Controllers;
+use Alert;
+use App\Models\Set;
+use App\Enums\Visibility;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use App\Models\Set;
-use Alert;
+use App\Http\Requests\ExamSetDataRequest;
 
 class SetController extends Controller
 {
-    // Save a new exam set
-    public function store(Request $request): RedirectResponse
+    public function create()
     {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
+        $this->authorize('create', Set::class);
 
-            return redirect()->route('home');
-        }
+        $visibility = Visibility::cases();
 
-        $this->validate($request, [
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'visibility' => 'required|integer'
+        return view('set.create')->with([
+            'visibility' => $visibility,
         ]);
+    }
 
-        $set = new Set();
+    // Save a new exam set
+    public function store(ExamSetDataRequest $request): RedirectResponse
+    {
+        $this->authorize('create', Set::class);
 
-        $set->name = $request->name;
-        $set->description = $request->description;
-        $set->user_id = auth()->user()->id;
-        $set->visibility = $request->visibility;
-        $set->save();
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = auth()->user()->id;
 
-        Alert::toast('Exam Added', 'success');
+        $set = Set::create($validatedData);
+
+        Alert::toast('Exam Set Created', 'success');
 
         return redirect()->route('manage-questions', $set->id);
     }
 
-    public function update(Request $request, $id):RedirectResponse
+    public function update(ExamSetDataRequest $request, Set $set):RedirectResponse
     {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
+        $this->authorize('update', $set);
 
-            return redirect()->route('home');
-        }
-
-        $this->validate($request, [
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'visibility' => 'required|integer'
-        ]);
-
-        $set = Set::findOrFail($id);
-
-        $set->name = $request->name;
-        $set->description = $request->description;
-        $set->visibility = $request->visibility;
-        $set->save();
+        $set->update($request->validated());
 
         Alert::toast('Exam Updated', 'success');
 

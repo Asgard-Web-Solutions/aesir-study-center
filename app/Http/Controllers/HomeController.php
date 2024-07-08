@@ -96,9 +96,13 @@ class HomeController extends Controller
 
         $incomplete = Test::where('user_id', '=', $user->id)->whereNull('end_at')->get();
 
+        $userSets = Set::where('user_id', $user->id)->get();
+
         return view('home', [
             'tests' => $sets,
             'incomplete' => $incomplete,
+            'user' => $user,
+            'sets' => $userSets,
         ]);
     }
 

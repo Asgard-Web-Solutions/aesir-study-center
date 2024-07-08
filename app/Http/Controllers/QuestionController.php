@@ -41,18 +41,15 @@ class QuestionController extends Controller
 
     public function index($id)
     {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
-
-            return redirect()->route('home');
-        }
-
         $set = Set::find($id);
+
         if (!$set) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');
         }
+
+        $this->authorize('update', $set);
 
         $visibility = Visibility::cases();
         $questions = Question::where('set_id', $set->id)->where('group_id', 0)->get();
@@ -67,18 +64,15 @@ class QuestionController extends Controller
     // Add an question for an exam
     public function add($id)
     {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
-
-            return redirect()->route('home');
-        }
-
         $set = Set::find($id);
+
         if (!$set) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');
         }
+
+        $this->authorize('update', $set);
 
         return view('manage.addq', [
             'set' => $set,
@@ -88,18 +82,15 @@ class QuestionController extends Controller
     // Save a question for an exam
     public function store(QuestionRequest $request, $id): RedirectResponse
     {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
-
-            return redirect()->route('home');
-        }
-
         $set = Set::find($id);
+
         if (!$set) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');
         }
+
+        $this->authorize('update', $set);
 
         $validatedData = $request->validated();
         $validatedData['set_id'] = $set->id;
@@ -113,13 +104,9 @@ class QuestionController extends Controller
 
     public function edit($id)
     {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
-
-            return redirect()->route('home');
-        }
-
         $question = Question::find($id);
+
+        $this->authorize('update', $question);
 
         return view('manage.editq', [
             'question' => $question,
@@ -127,14 +114,11 @@ class QuestionController extends Controller
     }
 
     public function update(QuestionRequest $request, $id)
-    {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
-
-            return redirect()->route('home');
-        }
-        
+    {      
         $question = Question::find($id);
+
+        $this->authorize('update', $question);
+
         $question->update($request->validated());
 
         Alert::toast('Question Updated', 'success');
@@ -145,18 +129,15 @@ class QuestionController extends Controller
     // List all answers for a question
     public function answers($id)
     {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
-
-            return redirect()->route('home');
-        }
-
         $question = Question::find($id);
+        
         if (!$question) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');
         }
+
+        $this->authorize('update', $question);
 
         return view('manage.answers', [
             'question' => $question,
@@ -166,18 +147,15 @@ class QuestionController extends Controller
     // Save an answer to a question
     public function storeAnswer(AnswerRequest $request, $id): RedirectResponse
     {
-        if (! auth()->user()->hasRole('admin')) {
-            Alert::toast('Permission Denied', 'warning');
-
-            return redirect()->route('home');
-        }
-
         $question = Question::find($id);
+
         if (!$question) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');
         }
+
+        $this->authorize('update', $question);
 
         $validatedData = $request->validated();
         $validatedData['question_id'] = $question->id;
@@ -192,6 +170,8 @@ class QuestionController extends Controller
     {
         $answer = Answer::find($id);
 
+        $this->authorize('update', $answer);
+
         $question = Question::find($answer->question->id);
 
         return view('manage.editanswer', [
@@ -203,6 +183,8 @@ class QuestionController extends Controller
     public function updateAnswer(AnswerRequest $request, $id): RedirectResponse
     {
         $answer = Answer::find($id);
+
+        $this->authorize('update', $answer);
 
         $validatedData = $request->validated();
         $answer->update($validatedData);
@@ -216,6 +198,8 @@ class QuestionController extends Controller
     {
         $answer = Answer::find($id);
 
+        $this->authorize('update', $answer);
+
         $question = Question::find($answer->question->id);
 
         return view('manage.deleteanswer', [
@@ -227,6 +211,8 @@ class QuestionController extends Controller
     public function deleteAnswerConfirm(Request $request, $id): RedirectResponse
     {
         $answer = Answer::find($id);
+
+        $this->authorize('update', $answer);
 
         $question = Question::find($answer->question->id);
 

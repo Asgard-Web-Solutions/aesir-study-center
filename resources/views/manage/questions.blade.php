@@ -3,8 +3,8 @@
 @section('content')
 <x-card.main title="{{ $set->name }}">
 
-    <x-card.mini title="Test Settings">
-        <form action="{{ route('update-exam', $set->id) }}" method="POST">
+    <x-card.mini title="Exam Settings">
+        <form action="{{ route('update-exam', $set) }}" method="POST">
             @csrf
             <x-form.text name="name" label="Name" value="{{ $set->name }}" />
             <x-form.text name="description" label="Description" value="{{ $set->description }}" />

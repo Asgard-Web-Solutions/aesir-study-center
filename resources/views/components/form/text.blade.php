@@ -5,7 +5,7 @@
     
     @if ($helptext) <x-text.dim>{{ $helptext }}</x-text.dim> @endif
     
-    <input type="{{ $type }}" id="{{ $name }}" name="{{ $name }}" class="w-full my-2 input @error($name) input-error @else input-primary @enderror" @if ($placeholder) placeholder="{{ $placeholder }}" @endif @if ($value) value="{{ $value }}" @endif>
+    <input type="{{ $type }}" id="{{ $name }}" name="{{ $name }}" class="w-full my-2 input @error($name) input-error @else input-primary @enderror" @if ($placeholder) placeholder="{{ $placeholder }}" @endif @if ($value) value="{{ old($name, $value) }}" @else value="{{ old($name) }}" @endif>
     
     @error($name)
         <p class="mt-1 text-xs text-error">{{ $message }}</p>
