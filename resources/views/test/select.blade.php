@@ -6,7 +6,11 @@
         @foreach ($sets as $set)
             <x-card.mini title='{{ $set->name }}'>
                 <x-text.dim>{{ $set->description }}</x-text.dim>
-                <x-text.dim label='Question Pool:'>{{ $set->questions->count() }}</x-text.dim>
+                
+                <div class="flex w-full p-4 my-3 rounded-md bg-base-100">
+                    <div class="mx-1 badge badge-accent">Questions: {{ $set->questions->count() }}</div>
+                    @if ($set->user )<div class="mx-1 badge badge-secondary">Author: {{ $set->user->name }}</div>@endif
+                </div>
                 <div class="justify-end w-full text-right card-action">
                     <a href="{{ route('select-test', $set->id) }}" class="btn btn-primary">{{ __('TAKE TEST') }}</a>
                 </div>

@@ -4,15 +4,13 @@
     <x-page.header :text="$question->set->name" />
 
     <x-card.main title="">
-        <div class="w-3/4 mx-auto text-center chat chat-start">
-            <div class="chat-header">
-                Question # {{ $test->questions->count() + 1 }} 
-                <time class="text-xs opacity-50">of {{ $test->num_questions }}</time>
-              </div>            
-            <div class="text-2xl chat-bubble chat-bubble-ghost">{{ $question->text }}</div>
-        </div>
+        <x-text.dim>Question # {{ $test->questions->count() + 1 }} <span class="text-xs opacity-50">of {{ $test->num_questions }}</span></x-text.dim>
+        <x-card.mini>
+            <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
+        </x-card.mini>
         <form action="{{ route('answer', $test->id) }}" method="post">
-            <x-card.mini title="Select Answer">
+            <x-text.dim>Select your Answer</x-text.dim>
+            <x-card.mini>
                 
                 @csrf
                 <input type="hidden" name="question" value="{{ $question->id }}">

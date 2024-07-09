@@ -3,7 +3,11 @@
 @section('content')
 <x-page.header :text="$question->set->name" />
 
-    <x-card.main :title="$question->text">
+    <x-card.main>
+        <x-text.dim>Question # {{ $test->questions->count() }} <span class="text-xs opacity-50">of {{ $test->num_questions }}</span></x-text.dim>
+        <x-card.mini>
+            <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
+        </x-card.mini>
     
         <p class="my-4 text-lg text-center @if ($correct) text-success @else text-error @endif">
             @if ($correct) Correct @else Incorrect @endif
@@ -31,7 +35,6 @@
                 </div>
             @endforeach
         </x-card.mini>
-        <x-text.dim>Question {{ $test->questions->count() }} of {{ $test->num_questions }}</x-text.dim>
         <x-page.actions primary="Next Question" :primaryLink="route('take-test', $test->id)" />
     </x-card.main>
             

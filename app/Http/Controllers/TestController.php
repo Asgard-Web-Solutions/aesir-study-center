@@ -146,6 +146,8 @@ class TestController extends Controller
 
         $question = Question::find($question[0]->question_id);
 
+        $answers = null;
+
         if ($question->answers->count() > 1) {
             $answers = $question->answers->shuffle();
         } else {
@@ -170,6 +172,8 @@ class TestController extends Controller
                 }
 
                 $answers = $answers->shuffle();
+            } else {
+                $answers = $question->answers;
             }
         }
 
