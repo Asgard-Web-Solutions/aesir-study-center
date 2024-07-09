@@ -84,8 +84,11 @@ class HomeController extends Controller
             $sets[] = [
                 'name' => $set->name,
                 'id' => $set->id,
+                'author' => ($set->user == null) ? null : $set->user->name,
+                'author_id' => ($set->user == null) ? null : $set->user->id,
                 'average' => $average,
                 'taken' => Test::where('user_id', '=', $user->id)->where('set_id', '=', $set->id)->count(),
+                'total_questions' => $total_questions,
                 'last_time' => $last_taken,
                 'mastery' => round((($total_mastery / $total_questions) * 100), 1),
                 'proficient' => round((($total_proficient / $total_questions) * 100), 1),
