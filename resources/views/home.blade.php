@@ -6,6 +6,10 @@
         @foreach($tests as $test)
             <x-card.mini :title="$test['name']">
                 <x-text.main label='Recent Average:'><span class="font-bold text-neutral-content">{{ $test['average'] }}%</span></x-text.main>
+                <div class="flex w-full p-4 mb-3 rounded-md bg-base-100">
+                    <div class="mx-1 badge badge-accent">Questions: {{ $test['total_questions'] }}</div>
+                    @if ($test['author'] )<div class="mx-1 badge badge-secondary">Author: {{ $test['author'] }}</div>@endif
+                </div>
                 <div class="flex w-full">
                     <div class="w-1/4 text-sm row text-secondary">Mastery:</div><div class="w-3/4"><progress class="w-56 progress progress-accent " value="{{ $test['mastery'] }}" max="100"></progress></div>
                 </div>
@@ -19,10 +23,6 @@
                     <div class="w-1/4 text-sm row text-secondary">Apprentice:</div><div class="w-3/4"><progress class="w-56 progress progress-info " value="{{ $test['apprentice'] }}" max="100"></progress></div>
                 </div>
                 <br />
-                <div class="flex mb-2">
-                    <div class="mx-1 badge badge-accent">Questions: {{ $test['total_questions'] }}</div>
-                    @if ($test['author'] )<div class="mx-1 badge badge-secondary">Author: {{ $test['author'] }}</div>@endif
-                </div>
                 <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}"></x-card.buttons>
             </x-card.mini>
         @endforeach
