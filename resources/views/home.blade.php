@@ -23,6 +23,7 @@
                     <div class="w-1/4 text-sm row text-secondary">Apprentice:</div><div class="w-3/4"><progress class="w-56 progress progress-info " value="{{ $test['apprentice'] }}" max="100"></progress></div>
                 </div>
                 <br />
+                {{-- <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice-start', $test['set']) }}"></x-card.buttons> --}}
                 <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}"></x-card.buttons>
             </x-card.mini>
         @endforeach

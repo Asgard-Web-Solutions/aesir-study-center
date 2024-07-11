@@ -5,6 +5,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\SetController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\PracticeController;
 use Illuminate\Support\Facades\Route;
 
 /*

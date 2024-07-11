@@ -94,6 +94,7 @@ class HomeController extends Controller
                 'proficient' => round((($total_proficient / $total_questions) * 100), 1),
                 'familiar' => round((($total_familiar / $total_questions) * 100), 1),
                 'apprentice' => round((($total_apprentice / $total_questions) * 100), 1),
+                'set' => $set,
             ];
         }
 
