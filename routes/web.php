@@ -5,6 +5,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\SetController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\PracticeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('user-home')->middleware('auth');
 
 Route::prefix('admin')->group(function () {
     Voyager::routes();
@@ -62,3 +64,4 @@ Route::post('/answer/{id}/edit', [QuestionController::class, 'updateAnswer'])->n
 Route::get('/answer/{id}/delete', [QuestionController::class, 'deleteAnswer'])->name('delete-answer')->middleware('auth');
 Route::post('/answer/{id}/delete', [QuestionController::class, 'deleteAnswerConfirm'])->name('delete-answer-confirm')->middleware('auth');
 
+Route::get('/practice/{set}', [PracticeController::class, 'start'])->name('practice-start')->middleware('auth');
