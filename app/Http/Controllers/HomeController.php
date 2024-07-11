@@ -79,6 +79,9 @@ class HomeController extends Controller
                 ->where('score', '>=', config('test.grade_apprentice'))
                 ->where('set_id', '=', $set->id)
                 ->count();
+            
+            // See if there are any incomplete tests for this
+            $incomplete = Test::where('user_id', '=', $user->id)->where('set_id', $set->id)->whereNull('end_at')->first();
 
             $average = round(($average / $tests->count()), 1);
             $sets[] = [
@@ -95,16 +98,14 @@ class HomeController extends Controller
                 'familiar' => round((($total_familiar / $total_questions) * 100), 1),
                 'apprentice' => round((($total_apprentice / $total_questions) * 100), 1),
                 'set' => $set,
+                'incomplete' => $incomplete,
             ];
         }
-
-        $incomplete = Test::where('user_id', '=', $user->id)->whereNull('end_at')->get();
 
         $userSets = Set::where('user_id', $user->id)->get();
 
         return view('home', [
             'tests' => $sets,
-            'incomplete' => $incomplete,
             'user' => $user,
             'sets' => $userSets,
         ]);

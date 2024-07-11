@@ -24,21 +24,14 @@
                 </div>
                 <br />
                 {{-- <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice-start', $test['set']) }}"></x-card.buttons> --}}
-                <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}"></x-card.buttons>
+                @if ($test['incomplete'])
+                    <x-card.buttons primaryLabel="Continue Test" primaryAction="{{ route('take-test', $test['incomplete']->id) }}"></x-card.buttons>
+                @else
+                    <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}"></x-card.buttons>
+                @endif
             </x-card.mini>
         @endforeach
     </x-card.main>
-
-    @if ($incomplete->count())
-        <x-card.main title="Incomplete Exams" size="grid">
-            @foreach($incomplete as $test)
-                <x-card.mini title="{{ $test->set->name }}">
-                    <x-text.main>{{ $test->set->description }}</x-text.main>
-                    <x-card.buttons primaryAction="{{ route('take-test', $test->id) }}" primaryLabel="Continue Test" />
-                </x-card.mini>
-            @endforeach
-        </x-card.main>
-    @endif
 
     <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" secondaryAction="{{ route('tests') }}" secondaryLabel="View Public Exams" />
 
