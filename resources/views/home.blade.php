@@ -6,9 +6,9 @@
         @foreach($tests as $test)
             <x-card.mini :title="$test['name']">
                 <x-text.main label='Recent Average:'><span class="font-bold text-neutral-content">{{ $test['average'] }}%</span></x-text.main>
-                <div class="flex w-full p-4 mb-3 rounded-md bg-base-100">
-                    <div class="mx-1 badge badge-accent">Questions: {{ $test['total_questions'] }}</div>
-                    @if ($test['author'] )<div class="mx-1 badge badge-secondary">Author: {{ $test['author'] }}</div>@endif
+                <div class="block w-full p-4 mb-3 rounded-md md:flex bg-base-100">
+                    <div class="block m-1 md:flex badge badge-accent">Questions: {{ $test['total_questions'] }}</div>
+                    @if ($test['author'] )<div class="block m-1 badge badge-secondary md:flex">Author: {{ $test['author'] }}</div>@endif
                 </div>
                 <div class="flex w-full">
                     <div class="w-1/4 text-sm row text-secondary">Mastery:</div><div class="w-3/4"><progress class="w-56 progress progress-accent " value="{{ $test['mastery'] }}" max="100"></progress></div>
@@ -24,21 +24,14 @@
                 </div>
                 <br />
                 {{-- <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice-start', $test['set']) }}"></x-card.buttons> --}}
-                <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}"></x-card.buttons>
+                @if ($test['incomplete'])
+                    <x-card.buttons primaryLabel="Continue Test" primaryAction="{{ route('take-test', $test['incomplete']->id) }}"></x-card.buttons>
+                @else
+                    <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}"></x-card.buttons>
+                @endif
             </x-card.mini>
         @endforeach
     </x-card.main>
-
-    @if ($incomplete->count())
-        <x-card.main title="Incomplete Exams" size="grid">
-            @foreach($incomplete as $test)
-                <x-card.mini title="{{ $test->set->name }}">
-                    <x-text.main>{{ $test->set->description }}</x-text.main>
-                    <x-card.buttons primaryAction="{{ route('take-test', $test->id) }}" primaryLabel="Continue Test" />
-                </x-card.mini>
-            @endforeach
-        </x-card.main>
-    @endif
 
     <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" secondaryAction="{{ route('tests') }}" secondaryLabel="View Public Exams" />
 
