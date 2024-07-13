@@ -11,16 +11,16 @@
                     @if ($test['author'] )<div class="block m-1 badge badge-secondary md:flex">Author: {{ $test['author'] }}</div>@endif
                 </div>
                 <div class="flex w-full">
-                    <div class="w-1/4 text-sm row text-secondary">Mastery:</div><div class="w-3/4"><progress class="w-56 progress progress-accent " value="{{ $test['mastery'] }}" max="100"></progress></div>
+                    <div class="w-1/4 text-sm row text-secondary">Mastery:</div><div class="w-3/4"><progress class="w-52 progress progress-accent " value="{{ $test['mastery'] }}" max="100"></progress></div>
                 </div>
                 <div class="flex w-full">
-                    <div class="w-1/4 text-sm row text-secondary">Proficient:</div><div class="w-3/4"><progress class="w-56 progress progress-secondary " value="{{ $test['proficient'] }}" max="100"></progress></div>
+                    <div class="w-1/4 text-sm row text-secondary">Proficient:</div><div class="w-3/4"><progress class="w-52 progress progress-secondary " value="{{ $test['proficient'] }}" max="100"></progress></div>
                 </div>
                 <div class="flex w-full">
-                    <div class="w-1/4 text-sm row text-secondary">Familiar:</div><div class="w-3/4"><progress class="w-56 progress progress-success " value="{{ $test['familiar'] }}" max="100"></progress></div>
+                    <div class="w-1/4 text-sm row text-secondary">Familiar:</div><div class="w-3/4"><progress class="w-52 progress progress-success " value="{{ $test['familiar'] }}" max="100"></progress></div>
                 </div>
                 <div class="flex w-full">
-                    <div class="w-1/4 text-sm row text-secondary">Apprentice:</div><div class="w-3/4"><progress class="w-56 progress progress-info " value="{{ $test['apprentice'] }}" max="100"></progress></div>
+                    <div class="w-1/4 text-sm row text-secondary">Apprentice:</div><div class="w-3/4"><progress class="w-52 progress progress-info " value="{{ $test['apprentice'] }}" max="100"></progress></div>
                 </div>
                 <br />
                 {{-- <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice-start', $test['set']) }}"></x-card.buttons> --}}
