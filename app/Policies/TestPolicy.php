@@ -2,12 +2,11 @@
 
 namespace App\Policies;
 
-use App\Enums\Visibility;
-use App\Models\Set;
+use App\Models\Test;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class SetPolicy
+class TestPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -20,13 +19,9 @@ class SetPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Set $set): bool
+    public function view(User $user, Test $test): bool
     {
-        if ($set->visibility == Visibility::isPublic) {
-            return true;
-        }
-
-        return $set->user_id === $user->id;
+        return ($test->user_id == $user->id);
     }
 
     /**
@@ -34,21 +29,21 @@ class SetPolicy
      */
     public function create(User $user): bool
     {
-        return ($user !== null);
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Set $set): bool
+    public function update(User $user, Test $test): bool
     {
-        return $set->user_id === $user->id;
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Set $set): bool
+    public function delete(User $user, Test $test): bool
     {
         //
     }
@@ -56,7 +51,7 @@ class SetPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Set $set): bool
+    public function restore(User $user, Test $test): bool
     {
         //
     }
@@ -64,7 +59,7 @@ class SetPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Set $set): bool
+    public function forceDelete(User $user, Test $test): bool
     {
         //
     }
