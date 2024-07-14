@@ -24,17 +24,6 @@ class PracticeControllerTest extends TestCase
         $response->assertSee(route('practice-start', $set));
     }
 
-    /** @test */
-    public function practice_start_page_loads() {
-        $user = $this->CreateUserAndAuthenticate();
-        $set = $this->CreateSet();
-
-        $response = $this->get(route('practice-start', $set));
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertViewIs('practice.start');
-    }
-
     // Going to the start page redirects to a configuration page if there is no configuration saved for this ExamSet
     /** @test */
     public function practice_start_redirects_to_practice_config_if_no_db_data() {
