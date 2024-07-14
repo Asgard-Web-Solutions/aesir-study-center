@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Visibility;
 use App\Models\Set;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -21,7 +22,11 @@ class SetPolicy
      */
     public function view(User $user, Set $set): bool
     {
-        //
+        if ($set->visibility == Visibility::isPublic) {
+            return true;
+        }
+
+        return $set->user_id === $user->id;
     }
 
     /**
