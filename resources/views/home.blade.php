@@ -57,9 +57,11 @@
                 <x-card.buttons primaryAction="{{ route('select-test', $set->id) }}" primaryLabel="Start Test" secondaryAction="{{ route('manage-questions', $set->id) }}" secondaryLabel="Manage Exam" />
             </x-card.mini>
         @empty
-            You have not created an exam yet. Create one?
+            <x-card.mini>
+                <x-text.main>You have not created an exam yet. Create one?</x-text.main>
 
-            <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" />
+                <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" />
+            </x-card.mini>
         @endforelse
     </x-card.main>
 
