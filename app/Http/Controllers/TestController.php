@@ -91,7 +91,8 @@ class TestController extends Controller
         $user = Auth::user();
         $set = Set::find($test->set_id);
 
-        $this->authorize('view', $set);
+        $this->authorize('view', $test);
+        // $this->authorize('view', $set);
 
         if ($user->id != $test->user_id) {
             Alert::toast('Invalid Test! Don\'t be a hacker.', 'warning');
@@ -214,9 +215,8 @@ class TestController extends Controller
     {
         $test = Test::find($id);
         $user = Auth::user();
-        $set = Set::find($test->set_id);
 
-        $this->authorize('view', $set);
+        $this->authorize('view', $test);
 
         if ($user->id != $test->user_id) {
             Alert::toast('Invalid Test! Don\'t be a hacker.', 'warning');
