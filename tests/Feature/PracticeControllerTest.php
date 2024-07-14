@@ -5,11 +5,12 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
+use Laravel\Pennant\Feature;
 use Tests\TestCase;
 
 class PracticeControllerTest extends TestCase
 {
-    // Disabled test because we're not working on this quite yet
+    /** @test **/
     public function default_page_has_link_to_practice() {
         $user = $this->CreateUserAndAuthenticate();
         $set = $this->CreateSet();
@@ -23,7 +24,7 @@ class PracticeControllerTest extends TestCase
         $response->assertSee(route('practice-start', $set));
     }
 
-    // Disabled 
+    /** @test */
     public function practice_start_page_loads() {
         $user = $this->CreateUserAndAuthenticate();
         $set = $this->CreateSet();
@@ -35,6 +36,28 @@ class PracticeControllerTest extends TestCase
     }
 
     // Going to the start page redirects to a configuration page if there is no configuration saved for this ExamSet
+    /** @test */
+    public function practice_start_redirects_to_practice_config_if_no_db_data() {
+        $user = $this->CreateUserAndAuthenticate();
+        $set = $this->CreateSet();
+
+        $response = $this->get(route('practice-start', $set));
+
+        $response->assertRedirect(route('practice-config', $set));
+    }
+
+    /** @test */
+    public function practice_config_page_loads()
+    {
+        $user = $this->CreateUserAndAuthenticate();
+        $set = $this->CreateSet();
+
+        $response = $this->get(route('practice-config', $set));
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertViewIs('practice.config');
+        $response->assertSee(route('practice-config-update', $set));
+    }
 
     // Going to the start page starts the practice session if the configuration is already set
 

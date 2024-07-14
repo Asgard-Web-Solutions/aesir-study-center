@@ -23,12 +23,17 @@
                     <div class="w-1/4 text-sm row text-secondary">Apprentice:</div><div class="w-3/4"><progress class="w-52 progress progress-info " value="{{ $test['apprentice'] }}" max="100"></progress></div>
                 </div>
                 <br />
-                {{-- <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice-start', $test['set']) }}"></x-card.buttons> --}}
-                @if ($test['incomplete'])
-                    <x-card.buttons primaryLabel="Continue Test" primaryAction="{{ route('take-test', $test['incomplete']->id) }}"></x-card.buttons>
+                
+                @php
+                    $primaryLabel = ($test['incomplete']) ? 'Continue Test' : 'Retake Test';
+                    $primaryAction = ($test['incomplete']) ? route('take-test', $test['incomplete']) : route('select-test', $test['id']);
+                @endphp
+
+                @feature('flash-cards')
+                    <x-card.buttons primaryLabel="{{ $primaryLabel }}" primaryAction="{{ $primaryAction }}" secondaryLabel="Practice" secondaryAction="{{ route('practice-start', $test['set']) }}"></x-card.buttons>
                 @else
-                    <x-card.buttons primaryLabel='Retake Test' primaryAction="{{ route('select-test', $test['id']) }}"></x-card.buttons>
-                @endif
+                    <x-card.buttons primaryLabel="{{ $primaryLabel }}" primaryAction="{{ $primaryAction }}"></x-card.buttons>
+                @endfeature
             </x-card.mini>
         @endforeach
     </x-card.main>
@@ -52,9 +57,11 @@
                 <x-card.buttons primaryAction="{{ route('select-test', $set->id) }}" primaryLabel="Start Test" secondaryAction="{{ route('manage-questions', $set->id) }}" secondaryLabel="Manage Exam" />
             </x-card.mini>
         @empty
-            You have not created an exam yet. Create one?
+            <x-card.mini>
+                <x-text.main>You have not created an exam yet. Create one?</x-text.main>
 
-            <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" />
+                <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" />
+            </x-card.mini>
         @endforelse
     </x-card.main>
 

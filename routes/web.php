@@ -7,6 +7,7 @@ use App\Http\Controllers\SetController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PracticeController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,3 +66,5 @@ Route::get('/answer/{id}/delete', [QuestionController::class, 'deleteAnswer'])->
 Route::post('/answer/{id}/delete', [QuestionController::class, 'deleteAnswerConfirm'])->name('delete-answer-confirm')->middleware('auth');
 
 Route::get('/practice/{set}', [PracticeController::class, 'start'])->name('practice-start')->middleware('auth');
+Route::get('/practice/{set}/config', [PracticeController::class, 'config'])->name('practice-config')->middleware('auth');
+Route::post('/practice/{set}/config', [PracticeController::class, 'configUpdate'])->name('practice-config-update')->middleware('auth');
