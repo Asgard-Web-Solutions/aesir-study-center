@@ -6,6 +6,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\SetController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
@@ -27,6 +28,10 @@ Route::get('/home', [HomeController::class, 'index'])->name('user-home')->middle
 
 Route::prefix('admin')->group(function () {
     Voyager::routes();
+});
+
+Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware('auth')->group(function () {
+    Route::get('/', 'index')->name('index');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
