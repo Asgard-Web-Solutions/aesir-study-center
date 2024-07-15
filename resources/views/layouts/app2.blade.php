@@ -35,7 +35,7 @@
                             <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile>
                         @endif
                     @endauth
-                    <x-button.mobile href="https://community.jonzenor.com/index.php">Forums & Help</x-button.mobile>
+                    <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.mobile>
 
                     <hr class="my-2" />
                     @auth
@@ -58,7 +58,7 @@
                             <x-button.nav href="{{ route('manage-exams') }}">Manage Exams</x-button.nav>
                         @endif
                     @endauth
-                    <x-button.nav href="https://community.jonzenor.com/index.php">Forums & Help</x-button.nav>
+                    <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
 
                     {{-- <a href="#" class="btn btn-ghost">Features</a>
                     <a href="#" class="btn btn-ghost">Pricing</a>
