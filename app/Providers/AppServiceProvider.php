@@ -32,5 +32,17 @@ class AppServiceProvider extends ServiceProvider
     
             return false;
         });
+
+        feature::define('profile-test-manager', function() {
+            if (app()->environment(['local', 'testing'])) {
+                return true;
+            }
+    
+            if (env('FEATURE_FLAG_PROFILE_TEST_MANAGER')) {
+                return true;
+            }
+    
+            return false;
+        });
     }
 }

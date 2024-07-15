@@ -22,7 +22,7 @@ class SetPolicy
      */
     public function view(User $user, Set $set): bool
     {
-        if ($set->visibility == Visibility::isPublic) {
+        if ($set->visibility == Visibility::isPublic->value) {
             return true;
         }
 
