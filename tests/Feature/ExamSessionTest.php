@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Question;
 use DB;
 use Tests\TestCase;
 
@@ -17,10 +18,23 @@ class ExamSessionTest extends TestCase
     public function validate_that_pages_load_correctly($route, $method, $status, $view) {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
+        
+        if ($route == 'test') {
+            DB::table('exam_sessions')->insert([
+                'user_id' => $user->id,
+                'set_id' => $exam->id,
+                'question_count' => 2,
+                'questions_array' => '[7,4]',
+                'current_question' => 1
+            ]);
+        }
+
         $route = 'exam-session.' . $route;
 
         if ($method == 'get') {
             $response = $this->get(route($route, $exam));
+        } else {
+            dd($method);
         }
 
         $response->assertStatus($status);
@@ -237,7 +251,31 @@ class ExamSessionTest extends TestCase
         $response->assertRedirect(route('exam-session.test', $session->id));
     }
 
+    /** @test */
+    public function test_page_loads_appropriate_question() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        DB::table('exam_sessions')->insert([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+            'question_count' => 2,
+            'questions_array' => '[7,4]',
+            'current_question' => 1,
+        ]);
+
+        $response = $this->get(route('exam-session.test', $exam));
+
+        $question = Question::find('4');
+        $response->assertSee($question->text);
+    }
+
     // If going to "start" while a test is in progress, go to test question
+
+    // TODO: Validate that the answer is correct
+
+    // TODO: Move the Question index to the next element on submit
+
+    // TODO: When the last element has been reached, end the test
 
     // TODO: Finalize the ExamSession at the end of the test
 

@@ -1,14 +1,13 @@
 @extends('layouts.app2')
 
 @section('content')
-    {{-- <x-page.header :text="$question->set->name" />
 
-    <x-card.main title="">
-        <x-text.dim>Question # {{ $test->questions->count() + 1 }} <span class="text-xs opacity-50">of {{ $test->num_questions }}</span></x-text.dim>
+    <x-card.main title="{{ $examSet->name }}">
+        <x-text.dim>Question # {{ $examSet->questions->count() + 1 }} <span class="text-xs opacity-50">of {{ $examSet->question_count }}</span></x-text.dim>
         <x-card.mini>
             <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
         </x-card.mini>
-        <form action="{{ route('answer', $test->id) }}" method="post">
+        <form action="{{ route('answer', $examSet->id) }}" method="post">
             <x-text.dim>Select your Answer</x-text.dim>
             <x-card.mini>
                 
@@ -35,6 +34,6 @@
             <x-card.buttons submitLabel="Submit Answer" />
         </form>
 
-    </x-card.main> --}}
+    </x-card.main>
 
 @endsection
