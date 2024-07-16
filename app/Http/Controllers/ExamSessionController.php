@@ -10,7 +10,10 @@ class ExamSessionController extends Controller
 {
     public function start(Set $examSet) {
 
-        
+        // Track that the user has taken this exam if they haven't before
         $examSet->records()->syncWithoutDetaching(auth()->user()->id);
+
+        // Create a new instance of this test
+        $examSet->sessions()->attach(auth()->user()->id);
     }
 }

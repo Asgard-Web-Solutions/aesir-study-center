@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('mastery_familiar_count')->nullable();
             $table->integer('mastery_proficient_count')->nullable();
             $table->integer('mastery_mastered_count')->nullable();
+            $table->date('last_completed')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

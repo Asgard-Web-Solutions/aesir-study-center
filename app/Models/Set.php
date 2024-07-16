@@ -45,4 +45,9 @@ class Set extends Model
     {
         return $this->belongsToMany(\App\Models\User::class, 'exam_records', 'user_id', 'set_id');
     }
+
+    public function sessions(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'exam_sessions', 'user_id', 'set_id');
+    }
 }

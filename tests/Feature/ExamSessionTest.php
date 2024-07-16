@@ -8,7 +8,21 @@ use Tests\TestCase;
 
 class ExamSessionTest extends TestCase
 {
-    // TODO: Create an ExamSession when a user starts a new instance of a test
+    // DONE: Create an ExamSession when a user starts a new instance of a test
+    /** @test */
+    public function exam_session_created_when_first_taking_an_exam() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $data = [
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+        ];
+
+        $this->assertDatabaseHas('exam_sessions', $data);
+    }
 
     // TODO: Update the ExamSession when moving to a new question
 
