@@ -19,7 +19,17 @@ class ExamSessionController extends Controller
 
         if (!$session->count()) {
             // Create a new instance of this test
-            $session = $examSet->sessions()->attach(auth()->user()->id);
+            $examSet->sessions()->attach(auth()->user()->id);
+
+            return redirect()->route('exam-session.configure', $examSet);
         }
+    }
+
+    public function configure(Set $examSet) {
+        $this->authorize('view', $examSet);
+
+        return view('exam_session.configure')->with([
+            'examSet' => $examSet,
+        ]);
     }
 }
