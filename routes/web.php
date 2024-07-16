@@ -7,6 +7,7 @@ use App\Http\Controllers\SetController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ExamSessionController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
@@ -32,6 +33,10 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware('auth')->group(function () {
     Route::get('/', 'index')->name('index');
+});
+
+Route::prefix('ExamSession')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
+    Route::get('/{set}/start', 'start')->name('start');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
