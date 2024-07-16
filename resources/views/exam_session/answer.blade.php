@@ -7,33 +7,35 @@
         <x-card.mini>
             <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
         </x-card.mini>
-        <form action="{{ route('answer', $examSet->id) }}" method="post">
-            <x-text.dim>Select your Answer</x-text.dim>
-            <x-card.mini>
-                
-                @csrf
-                <input type="hidden" name="question" value="{{ $question->id }}">
-                <input type="hidden" name="order" value="{{ $order }}">
-        
-                <div class="my-4 space-y-4">
-                    @foreach ($answers as $answer)
-                        <div class="flex items-center">
-                            @if ($multi)
-                                <input type="checkbox" id="answer-{{ $answer->id }}" class="max-w-lg text-primary-content radio radio-primary" name="answer[{{ $answer->id }}]">
-                            @else
-                                <input type="radio" id="answer-{{ $answer->id }}" class="max-w-lg text-primary-content radio radio-primary" name="answer" value="{{ $answer->id }}">
-                            @endif
-                            <label class="label" for="answer-{{ $answer->id }}">
-                                <span class="text-primary">{{ $answer->text }}</span>
-                            </label>
-                        </div>
-                    @endforeach
+    
+        <p class="my-4 text-lg text-center @if ($correct) text-success @else text-error @endif">
+            @if ($correct) Correct @else Incorrect @endif
+        </p>
+    
+        <x-card.mini title="Your Answer">
+            @foreach ($answers as $answer)
+                <div class="flex items-center p-2 rounded-lg hover:bg-base-200">
+                    <div class="flex items-center w-1/4">
+                        @if ($normalizedAnswer[$answer['id']])
+                            <input type="checkbox" checked="checked" disabled class="mr-2 checkbox checkbox-primary">
+                        @else
+                            <input type="checkbox" disabled class="mr-2 checkbox checkbox-primary">
+                        @endif
+                    </div>
+                    <div class="flex items-center w-3/4">
+                        @if ($answer['correct'])
+                            <i class="mr-2 fa-regular fa-square-check text-success"></i>
+                            <span class="font-bold text-success">{{ $answer['text'] }}</span>
+                        @else
+                            <i class="mr-2 fa-regular fa-square-xmark text-error"></i>
+                            <span class="text-gray-500 line-through">{{ $answer['text'] }}</span>
+                        @endif
+                    </div>
                 </div>
-            
-            </x-card.mini>
-            <x-card.buttons submitLabel="Submit Answer" />
-        </form>
-
+            @endforeach
+        </x-card.mini>
+        <x-page.actions primary="Next Question" :primaryLink="route('exam-session.test', $examSet->id)" />
     </x-card.main>
+            
 
 @endsection

@@ -19,18 +19,9 @@ class ExamSessionTest extends TestCase
     public function validate_that_pages_load_correctly($route, $method, $status, $view) {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
         $data = array();
         
-        if ($route == 'test') {
-            DB::table('exam_sessions')->insert([
-                'user_id' => $user->id,
-                'set_id' => $exam->id,
-                'question_count' => 2,
-                'questions_array' => '[7,4]',
-                'current_question' => 1
-            ]);
-        }
-
         if ($route == 'answer') {
             $data = [
                 'answer-1' => 1,
@@ -369,6 +360,8 @@ class ExamSessionTest extends TestCase
 
     // TODO: Show a history of exam sessions that you have taken for an exam
 
+    // TODO: Record a detail history of each question in a session, for paid users, so they can replay their exams later
+
 
     //** ========== HELPER FUNCTIONS ========== */
     public function getExamConfigurationFormData() {
@@ -425,7 +418,7 @@ class ExamSessionTest extends TestCase
         return [
             ['test', 'get', Response::HTTP_OK, 'test'],
             ['configure', 'get', Response::HTTP_OK, 'configure'],
-            // ['answer', 'post', Response::HTTP_OK, 'answer'],
+            ['answer', 'post', Response::HTTP_OK, 'answer'],
         ];
     }
 }

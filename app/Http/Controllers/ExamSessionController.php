@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\ExamSessionConfigurationRequest;
 use App\Models\Question;
+use App\Models\Answer;
 
 class ExamSessionController extends Controller
 {
@@ -64,14 +65,11 @@ class ExamSessionController extends Controller
         return redirect()->route('exam-session.test', $session->id);
     }
 
-    public function test(Set $set) {
+    public function test(Set $examSet) {
 
-        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $set->id)->where('date_completed', null)->first();
-
-        // Make sure the session belongs to this user
+        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
 
         $arrayData = json_decode($session->questions_array);
-        $examSet = Set::find($session->set_id);
         $question = Question::find($arrayData[$session->current_question]);
 
         // Generate the list of answers for this question
@@ -136,6 +134,7 @@ class ExamSessionController extends Controller
             'order' => 'required|string',
         ]);
 
+        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
         $question = Question::find($request->question);
 
         $correctAnswer = 0;
@@ -180,6 +179,7 @@ class ExamSessionController extends Controller
 
                 // If this is a single answer question, then we don't care if the user marked it as correct or not
                 // We know that there is only one answer so it must be correct
+                // Later this is going to be a "fill in the blank" type question
                 $correctAnswer = 1;
             } else {
                 $normalizedAnswer[$answer->id] = ($request->answer == $answer->id) ? 1 : 0;
@@ -207,39 +207,34 @@ class ExamSessionController extends Controller
         $result = ($correct == $correctAnswer) ? 1 : 0;
 
         // let's make sure they didn't just refresh the page
-        if (! $test->questions->contains($question)) {
-            $test->questions()->attach($question->id, ['result' => $result]);
+        // if (! $test->questions->contains($question)) {
+        //     $test->questions()->attach($question->id, ['result' => $result]);
 
-            $userScore = DB::table('user_question')
-                ->where('user_id', '=', $user->id)
-                ->where('question_id', '=', $question->id)
-                ->select('score')
-                ->first();
+        //     $userScore = DB::table('user_question')
+        //         ->where('user_id', '=', $user->id)
+        //         ->where('question_id', '=', $question->id)
+        //         ->select('score')
+        //         ->first();
 
-            $score = $userScore->score;
+        //     $score = $userScore->score;
 
-            if ($result) {
-                $score = $score + config('test.add_score');
-            } else {
-                $score = $score - config('test.sub_score');
-                if ($score < config('test.min_score')) {
-                    $score = config('test.min_score');
-                }
-            }
+        //     if ($result) {
+        //         $score = $score + config('test.add_score');
+        //     } else {
+        //         $score = $score - config('test.sub_score');
+        //         if ($score < config('test.min_score')) {
+        //             $score = config('test.min_score');
+        //         }
+        //     }
 
-            $now = Carbon::now();
-            $next = $now->addHours((config('test.hour_multiplier') * ($score ** 2)));
+        //     $now = Carbon::now();
+        //     $next = $now->addHours((config('test.hour_multiplier') * ($score ** 2)));
 
-            $user->questions()->updateExistingPivot($question->id, ['score' => $score, 'next_at' => $next]);
-        }
-
-        // refresh the test from db so we can get an accurate question count. Otherwise
-        // the question number is wrong depending on if this is the intial answer or they
-        // refreshed the page.
-        $test = Test::find($id);
+        //     $user->questions()->updateExistingPivot($question->id, ['score' => $score, 'next_at' => $next]);
+        // }
 
         // Now load the answers in the order that they were shown to the user
-        $aorder = explode(',', $request->order);
+        $aorder = json_decode($request->order);
 
         $orderedAnswers = [];
 
@@ -263,14 +258,15 @@ class ExamSessionController extends Controller
             }
         }
 
-        return view('test.answer', [
-            'test' => $test,
+        return view('exam_session.answer', [
             'question' => $question,
             'answers' => $orderedAnswers,
             'normalizedAnswer' => $normalizedAnswer,
             'result' => $result,
             'multi' => $multi,
             'correct' => $correct,
+            'examSet' => $examSet,
+            'session' => $session,
         ]);
 
         return view('exam_session.answer');
