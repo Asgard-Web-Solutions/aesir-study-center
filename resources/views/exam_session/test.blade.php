@@ -7,7 +7,7 @@
         <x-card.mini>
             <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
         </x-card.mini>
-        <form action="{{ route('answer', $examSet->id) }}" method="post">
+        <form action="{{ route('exam-session.answer', $examSet) }}" method="post">
             <x-text.dim>Select your Answer</x-text.dim>
             <x-card.mini>
                 

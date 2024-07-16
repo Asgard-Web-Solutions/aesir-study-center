@@ -64,8 +64,9 @@ class ExamSessionController extends Controller
         return redirect()->route('exam-session.test', $session->id);
     }
 
-    public function test($sessionId) {
-        $session = DB::table('exam_sessions')->where('id', $sessionId)->first();
+    public function test(Set $set) {
+
+        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $set->id)->where('date_completed', null)->first();
 
         // Make sure the session belongs to this user
 
@@ -73,7 +74,7 @@ class ExamSessionController extends Controller
         $examSet = Set::find($session->set_id);
         $question = Question::find($arrayData[$session->current_question]);
 
-        // Generate the answers for this question
+        // Generate the list of answers for this question
         $answers = null;
         $single = null;
 
@@ -107,14 +108,10 @@ class ExamSessionController extends Controller
         }
 
         $correct = 0;
-        $order = '';
+        $order = array();
 
         foreach ($answers as $answer) {
-            if ($order != '') {
-                $order .= ',';
-            }
-
-            $order .= $answer->id;
+            $order[] = $answer->id;
 
             if (! $single && $answer->correct) {
                 $correct = $correct + 1;
@@ -128,12 +125,153 @@ class ExamSessionController extends Controller
             'answers' => $answers,
             'multi' => $multi,
             'examSet' => $examSet,
-            'order' => $order,
+            'order' => json_encode($order),
             'session' => $session,
         ]);
     }
 
-    public function answer() {
+    public function answer(Request $request, Set $examSet) {
+        $this->validate($request, [
+            'question' => 'required|integer',
+            'order' => 'required|string',
+        ]);
+
+        $question = Question::find($request->question);
+
+        $correctAnswer = 0;
+        $correct = 0;
+
+        foreach ($question->answers as $answer) {
+            if ($answer->correct) {
+                $correctAnswer = $correctAnswer + 1;
+            }
+        }
+
+        $multi = ($correctAnswer > 1) ? 1 : 0;
+
+        // An array to store / convert the checkbox answers into so we can compare easier
+        $normalizedAnswer = [];
+
+        // An array to store the answer and all results in to make displaying the answers easier
+        $testAnswers = [];
+
+        foreach ($question->answers as $answer) {
+            if ($multi) {
+                $normalizedAnswer[$answer->id] = (array_key_exists($answer->id, $request->answer)) ? 1 : 0;
+
+                if ($answer->correct && ($normalizedAnswer[$answer->id] == 1)) {
+                    $correct = $correct + 1;
+                    $testAnswers[] = [
+                        'id' => $answer->id,
+                        'text' => $answer->text,
+                        'correct' => $answer->correct,
+                        'gotRight' => 1,
+                    ];
+                } else {
+                    $testAnswers[] = [
+                        'id' => $answer->id,
+                        'text' => $answer->text,
+                        'correct' => $answer->correct,
+                        'gotRight' => 0,
+                    ];
+                }
+            } elseif ($question->answers->count() == 1) {
+                $correct = ($request->answer == $answer->id) ? 1 : 0;
+
+                // If this is a single answer question, then we don't care if the user marked it as correct or not
+                // We know that there is only one answer so it must be correct
+                $correctAnswer = 1;
+            } else {
+                $normalizedAnswer[$answer->id] = ($request->answer == $answer->id) ? 1 : 0;
+
+                if ($answer->correct && ($request->answer == $answer->id)) {
+                    $correct = 1;
+
+                    $testAnswers[] = [
+                        'id' => $answer->id,
+                        'text' => $answer->text,
+                        'correct' => $answer->correct,
+                        'gotRight' => 1,
+                    ];
+                } else {
+                    $testAnswers[] = [
+                        'id' => $answer->id,
+                        'text' => $answer->text,
+                        'correct' => $answer->correct,
+                        'gotRight' => ($request->answer == $answer->id) ? 0 : 1,
+                    ];
+                }
+            }
+        }
+
+        $result = ($correct == $correctAnswer) ? 1 : 0;
+
+        // let's make sure they didn't just refresh the page
+        if (! $test->questions->contains($question)) {
+            $test->questions()->attach($question->id, ['result' => $result]);
+
+            $userScore = DB::table('user_question')
+                ->where('user_id', '=', $user->id)
+                ->where('question_id', '=', $question->id)
+                ->select('score')
+                ->first();
+
+            $score = $userScore->score;
+
+            if ($result) {
+                $score = $score + config('test.add_score');
+            } else {
+                $score = $score - config('test.sub_score');
+                if ($score < config('test.min_score')) {
+                    $score = config('test.min_score');
+                }
+            }
+
+            $now = Carbon::now();
+            $next = $now->addHours((config('test.hour_multiplier') * ($score ** 2)));
+
+            $user->questions()->updateExistingPivot($question->id, ['score' => $score, 'next_at' => $next]);
+        }
+
+        // refresh the test from db so we can get an accurate question count. Otherwise
+        // the question number is wrong depending on if this is the intial answer or they
+        // refreshed the page.
+        $test = Test::find($id);
+
+        // Now load the answers in the order that they were shown to the user
+        $aorder = explode(',', $request->order);
+
+        $orderedAnswers = [];
+
+        foreach ($aorder as $answerID) {
+            $answer = Answer::find($answerID);
+
+            if ($question->answers->count() > 1) {
+                $orderedAnswers[] = [
+                    'id' => $answer->id,
+                    'text' => $answer->text,
+                    'correct' => $answer->correct,
+                ];
+            } else {
+                $orderedAnswers[$answer->id] = [
+                    'id' => $answer->id,
+                    'text' => $answer->text,
+                    'correct' => ($answer->question_id == $question->id) ? 1 : 0,
+                ];
+
+                $normalizedAnswer[$answer->id] = ($request->answer == $answer->id) ? 1 : 0;
+            }
+        }
+
+        return view('test.answer', [
+            'test' => $test,
+            'question' => $question,
+            'answers' => $orderedAnswers,
+            'normalizedAnswer' => $normalizedAnswer,
+            'result' => $result,
+            'multi' => $multi,
+            'correct' => $correct,
+        ]);
 
         return view('exam_session.answer');
     }
