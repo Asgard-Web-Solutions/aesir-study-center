@@ -43,11 +43,11 @@ class Set extends Model
     // User that took this exam set
     public function records(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\User::class, 'exam_records', 'user_id', 'set_id');
+        return $this->belongsToMany(\App\Models\User::class, 'exam_records', 'set_id', 'user_id');
     }
 
     public function sessions(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\User::class, 'exam_sessions', 'user_id', 'set_id');
+        return $this->belongsToMany(\App\Models\User::class, 'exam_sessions', 'set_id', 'user_id')->withPivot('date_completed');
     }
 }

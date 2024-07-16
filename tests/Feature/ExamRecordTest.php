@@ -45,6 +45,37 @@ class ExamRecordTest extends TestCase
     }
 
     // TODO: Make sure the user has permission to run this exam before starting (start page)
+    /** @test */
+    public function user_can_start_their_own_private_exam() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /** @test */
+    public function other_users_cannot_start_private_exams() {
+        $examOwner = $this->CreateUser();
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 0]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /** @test */
+    public function other_users_can_start_public_exams() {
+        $examOwner = $this->CreateUser();
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 1]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
 
     // TODO: Add Mastery Progress to the exam record
 
