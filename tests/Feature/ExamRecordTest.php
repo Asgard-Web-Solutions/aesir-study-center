@@ -38,7 +38,6 @@ class ExamRecordTest extends TestCase
 
         DB::table('exam_records')->insert($data);
 
-
         $response = $this->get(route('exam-session.start', $exam));
 
         $this->assertDatabaseCount('exam_records', 1);

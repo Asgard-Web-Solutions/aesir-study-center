@@ -10,6 +10,27 @@ use Tests\TestCase;
 
 class ExamSessionTest extends TestCase
 {
+    /** 
+     * @test
+     * @dataProvider dataProviderExamSessionPages
+     */
+    public function validate_that_pages_load_correctly($route, $method, $status, $view) {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $route = 'exam-session.' . $route;
+
+        if ($method == 'get') {
+            $response = $this->get(route($route, $exam));
+        }
+
+        $response->assertStatus($status);
+
+        if ($status == Response::HTTP_OK) {
+            $view = 'exam_session.' . $view;
+            $response->assertViewIs($view);
+        }
+    }
+
     // DONE: Create an ExamSession when a user starts a new instance of a test
     /**  */
     public function exam_session_created_when_first_taking_an_exam() {
@@ -59,17 +80,6 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_configuration_page_loads() {
-        $user = $this->CreateUserAndAuthenticate();
-        $exam = $this->CreateSet();
-
-        $response = $this->get(route('exam-session.configure', $exam));
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertViewIs('exam_session.configure');
-    }
-
-    /** @test */
     public function exam_configuration_page_not_allowed_for_private_exams() {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
@@ -101,7 +111,7 @@ class ExamSessionTest extends TestCase
         $response->assertSee($exam->name);
     }
 
-    // TODO: Store configuration for this exam
+    // DONE: Store configuration for this exam
     /** @test */
     public function exam_configuration_saves_to_database() {
         $user = $this->CreateUserAndAuthenticate();
@@ -142,8 +152,9 @@ class ExamSessionTest extends TestCase
         ];
 
         $response = $this->post(route('exam-session.store', $exam), $data);
+        $session = DB::table('exam_sessions')->where('set_id', $exam->id)->where('user_id', $user->id)->first();
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertRedirect(route('exam-session.test', $session->id));
     }
 
     // DONE: Validate data
@@ -154,19 +165,79 @@ class ExamSessionTest extends TestCase
     public function exam_save_validates_data($field, $value) {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-
-        $data = [
-            'question_count' => 1,
-        ];
-
+        $data = $this->getExamConfigurationFormData();
         $data[$field] = $value;
 
         $response = $this->post(route('exam-session.store', $exam), $data);
 
         $response->assertSessionHasErrors($field);
     }
+
+    /** @test */
+    public function exam_save_makes_entries_of_each_question_for_the_user() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $data = $this->getExamConfigurationFormData();
+
+        $response = $this->post(route('exam-session.store', $exam), $data);
+
+        $validateData = [
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+            'question_id' => $exam->questions[0]->id,
+        ];
+
+        $this->assertDatabaseHas('user_question', $validateData);
+    }
+
+    /** @test */
+    public function exam_save_sets_list_of_questions() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $data = $this->getExamConfigurationFormData();
+        $question_count = 3;
+        $data['question_count'] = $question_count;
+
+        $response = $this->post(route('exam-session.store', $exam), $data);
+
+        $pivotRecord = \DB::table('exam_sessions')
+            ->where('user_id', $user->id)
+            ->where('set_id', $exam->id)
+            ->first();
+
+        $validateData = [
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+            'current_question' => 0,
+        ];
+        
+        $this->assertDatabaseHas('exam_sessions', $validateData);
     
+        // Assert that the pivot record exists
+        $this->assertNotNull($pivotRecord);
+
+        // Decode the JSON field
+        $questionsArray = json_decode($pivotRecord->questions_array, true);
+
+        // Assert that the questions_array has exactly 3 elements
+        $this->assertIsArray($questionsArray);
+        $this->assertCount($question_count, $questionsArray);
+    }
+            
     // TODO: Start the actual exam
+    /** @test */
+    public function redirected_to_test_page_after_saving_data() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $data = $this->getExamConfigurationFormData();
+
+        $response = $this->post(route('exam-session.store', $exam), $data);
+
+        $session = DB::table('exam_sessions')->where('set_id', $exam->id)->where('user_id', $user->id)->first();
+        $response->assertRedirect(route('exam-session.test', $session->id));
+    }
+
+    // If going to "start" while a test is in progress, go to test question
 
     // TODO: Finalize the ExamSession at the end of the test
 
@@ -180,6 +251,13 @@ class ExamSessionTest extends TestCase
     // TODO: Show a history of exam sessions that you have taken for an exam
 
 
+    //** ========== HELPER FUNCTIONS ========== */
+    public function getExamConfigurationFormData() {
+        return [
+            'question_count' => 1,
+        ];
+    }
+
     //** ========== DATA PROVIDERS ========== */
     public static function dataProviderForExamSessionStoreFormInvalidData()
     {
@@ -189,6 +267,19 @@ class ExamSessionTest extends TestCase
             ['question_count', '-1'],
             ['question_count', '0'],
             ['question_count', '101'],
+        ];
+    }
+
+    public static function dataProviderExamSessionPages() {
+        /**
+         * Route Name
+         * Method
+         * Expected Status
+         * View
+         */
+        return [
+            ['test', 'get', Response::HTTP_OK, 'test'],
+            ['configure', 'get', Response::HTTP_OK, 'configure'],
         ];
     }
 

@@ -48,6 +48,6 @@ class Set extends Model
 
     public function sessions(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\User::class, 'exam_sessions', 'set_id', 'user_id')->withPivot('date_completed');
+        return $this->belongsToMany(\App\Models\User::class, 'exam_sessions', 'set_id', 'user_id')->withPivot('date_completed', 'questions_array');
     }
 }

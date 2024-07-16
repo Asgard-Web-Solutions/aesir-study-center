@@ -4,13 +4,14 @@ namespace Tests;
 
 use App\Models\Set;
 use App\Models\Question;
+use Illuminate\Database\Eloquent\Collection;
 
 trait CreateQuestion
 {
-    public function CreateQuestion($attributes = []): Question
+    public function CreateQuestion($attributes = []): Collection
     {
-        $question = Question::factory()->create($attributes);
+        $questions = Question::factory()->count(10)->create($attributes);
 
-        return $question;
+        return $questions;
     }
 }
