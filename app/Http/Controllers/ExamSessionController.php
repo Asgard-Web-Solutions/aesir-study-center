@@ -129,6 +129,7 @@ class ExamSessionController extends Controller
             'multi' => $multi,
             'examSet' => $examSet,
             'order' => $order,
+            'session' => $session,
         ]);
     }
 }

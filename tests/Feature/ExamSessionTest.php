@@ -238,7 +238,7 @@ class ExamSessionTest extends TestCase
         $this->assertCount($question_count, $questionsArray);
     }
             
-    // TODO: Start the actual exam
+    // DONE: Start the actual exam
     /** @test */
     public function redirected_to_test_page_after_saving_data() {
         $user = $this->CreateUserAndAuthenticate();
@@ -270,6 +270,24 @@ class ExamSessionTest extends TestCase
     }
 
     // If going to "start" while a test is in progress, go to test question
+
+    // DONE: Validate that we see the current question number on the question page
+    // DONE: Validate that we see the total number of questions on the question page
+    public function test_page_shows_correct_question_numbers() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        DB::table('exam_sessions')->insert([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+            'question_count' => 5,
+            'questions_array' => '[7,4]',
+            'current_question' => 1,
+        ]);
+
+        $response = $this->get(route('exam-session.test', $exam));
+
+        $response->assertSeeInOrder(['Question', '#', '2', 'of',  '5', 'Select']);
+    }
 
     // TODO: Validate that the answer is correct
 
