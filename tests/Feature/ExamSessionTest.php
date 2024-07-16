@@ -18,6 +18,7 @@ class ExamSessionTest extends TestCase
     public function validate_that_pages_load_correctly($route, $method, $status, $view) {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
+        $data = array();
         
         if ($route == 'test') {
             DB::table('exam_sessions')->insert([
@@ -29,12 +30,18 @@ class ExamSessionTest extends TestCase
             ]);
         }
 
+        if ($route == 'answer') {
+            $data = [
+                'answer-1' => 1,
+            ];
+        }
+
         $route = 'exam-session.' . $route;
 
         if ($method == 'get') {
             $response = $this->get(route($route, $exam));
         } else {
-            dd($method);
+            $response = $this->post(route($route, $exam), $data);
         }
 
         $response->assertStatus($status);
@@ -336,6 +343,7 @@ class ExamSessionTest extends TestCase
         return [
             ['test', 'get', Response::HTTP_OK, 'test'],
             ['configure', 'get', Response::HTTP_OK, 'configure'],
+            ['answer', 'post', Response::HTTP_OK, 'answer'],
         ];
     }
 

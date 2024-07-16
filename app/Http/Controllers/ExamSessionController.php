@@ -132,4 +132,9 @@ class ExamSessionController extends Controller
             'session' => $session,
         ]);
     }
+
+    public function answer() {
+
+        return view('exam_session.answer');
+    }
 }
