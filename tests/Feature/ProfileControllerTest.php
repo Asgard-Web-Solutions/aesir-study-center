@@ -20,4 +20,7 @@ class ProfileControllerTest extends TestCase
         $response->assertViewIs('profile.index');
     }
 
+    // TODO: Display ExamRecords on the new profile page
+
+    // TODO: Display mastery data on the profile page
 }
