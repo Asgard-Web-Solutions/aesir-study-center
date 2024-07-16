@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Set;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\ExamSessionConfigurationRequest;
 
 class ExamSessionController extends Controller
 {
@@ -18,9 +19,6 @@ class ExamSessionController extends Controller
         $session = $examSet->sessions()->wherePivot('date_completed', null)->get();
 
         if (!$session->count()) {
-            // Create a new instance of this test
-            $examSet->sessions()->attach(auth()->user()->id);
-
             return redirect()->route('exam-session.configure', $examSet);
         }
     }
@@ -31,5 +29,12 @@ class ExamSessionController extends Controller
         return view('exam_session.configure')->with([
             'examSet' => $examSet,
         ]);
+    }
+
+    public function store(ExamSessionConfigurationRequest $request, Set $examSet) {
+        $this->authorize('view', $examSet);
+
+        // Create a new instance of this test
+        $examSet->sessions()->attach(auth()->user()->id, ['question_count' => $request->question_count]);
     }
 }

@@ -38,6 +38,7 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
 Route::prefix('ExamSession')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/configure', 'configure')->name('configure');
+    Route::post('/{set}/store', 'store')->name('store');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');

@@ -102,7 +102,70 @@ class ExamSessionTest extends TestCase
     }
 
     // TODO: Store configuration for this exam
+    /** @test */
+    public function exam_configuration_saves_to_database() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
 
+        $data = [
+            'question_count' => 1,
+        ];
+
+        $response = $this->post(route('exam-session.store', $exam), $data);
+
+        $this->assertDatabaseHas('exam_sessions', $data);
+    }
+
+    /** @test */
+    public function exam_save_page_not_allowed_for_private_exams() {
+        $examOwner = $this->CreateUser();
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 0]);
+
+        $data = [
+            'question_count' => 1,
+        ];
+
+        $response = $this->post(route('exam-session.store', $exam), $data);
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /** @test */
+    public function exam_save_page_is_allowed_for_public_exams() {
+        $examOwner = $this->CreateUser();
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 1]);
+
+        $data = [
+            'question_count' => 1,
+        ];
+
+        $response = $this->post(route('exam-session.store', $exam), $data);
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    // DONE: Validate data
+    /** 
+     * @test 
+     * @dataProvider dataProviderForExamSessionStoreFormInvalidData
+     * */
+    public function exam_save_validates_data($field, $value) {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+
+        $data = [
+            'question_count' => 1,
+        ];
+
+        $data[$field] = $value;
+
+        $response = $this->post(route('exam-session.store', $exam), $data);
+
+        $response->assertSessionHasErrors($field);
+    }
+    
     // TODO: Start the actual exam
 
     // TODO: Finalize the ExamSession at the end of the test
@@ -115,4 +178,18 @@ class ExamSessionTest extends TestCase
     // TODO: Track Mastery Progress for this session after each question
 
     // TODO: Show a history of exam sessions that you have taken for an exam
+
+
+    //** ========== DATA PROVIDERS ========== */
+    public static function dataProviderForExamSessionStoreFormInvalidData()
+    {
+        return [
+            ['question_count', ''],
+            ['question_count', 'absdefa'],
+            ['question_count', '-1'],
+            ['question_count', '0'],
+            ['question_count', '101'],
+        ];
+    }
+
 }
