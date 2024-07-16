@@ -44,7 +44,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseCount('exam_records', 1);
     }
 
-    // TODO: Make sure the user has permission to run this exam before starting (start page)
+    // DONE: Make sure the user has permission to run this exam before starting (start page)
     /** @test */
     public function user_can_start_their_own_private_exam() {
         $user = $this->CreateUserAndAuthenticate();
@@ -77,9 +77,12 @@ class ExamRecordTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
 
-    // TODO: Add Mastery Progress to the exam record
-
     // TODO: When a user completes an exam, update the exam record stats
+
+
+
+    
+    // TODO: Add Mastery Progress to the exam record
 
     // TODO: Write a command to generate/update the ExamRecord for a single user or all users
 

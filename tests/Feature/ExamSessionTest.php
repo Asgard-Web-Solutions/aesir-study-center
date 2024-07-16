@@ -46,11 +46,20 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseCount('exam_sessions', 1);
     }
 
+    // TODO: Exam Configuration Page Loads when starting a new session
+
+    // TODO: Store configuration for this exam
+
+    // TODO: Start the actual exam
+
+    // TODO: Finalize the ExamSession at the end of the test
+
+
+
+    
     // TODO: Update the ExamSession when moving to a new question
 
     // TODO: Track Mastery Progress for this session after each question
-
-    // TODO: Finalize the ExamSession at the end of the test
 
     // TODO: Show a history of exam sessions that you have taken for an exam
 }
