@@ -327,24 +327,46 @@ class ExamSessionTest extends TestCase
     }
 
     // TODO: Validate that the answer is correct
+    /** @test */
     public function answer_page_responds_for_correct_answer() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->startExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
+        $incorrectAnswer = $this->getQuestionAnswer($question, 0);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
 
         $data = [
-            'answer-' . $correctAnswer->id => $correctAnswer->id,
+            'answer' => $correctAnswer->id,
             'question' => $question->id,
-            'order' => '1,2',
+            'order' => json_encode([$incorrectAnswer->id, $correctAnswer->id]),
         ];
 
         $response = $this->post(route('exam-session.answer', $exam), $data);
 
-        $response->assertSee('Correct');
+        $response->assertSeeInOrder([$question->text, 'text-success', 'Correct', 'Your Answer']);
     }
 
+    /** @test */
+    public function answer_page_responds_for_incorrect_answer() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $incorrectAnswer = $this->getQuestionAnswer($question, 0);
+        $correctAnswer = $this->getQuestionAnswer($question, 1);
+
+        $data = [
+            'answer' => $incorrectAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$incorrectAnswer->id, $correctAnswer->id]),
+        ];
+
+        $response = $this->post(route('exam-session.answer', $exam), $data);
+
+        $response->assertSeeInOrder([$question->text, 'text-error', 'Incorrect', 'Your Answer']);
+    }
+    
     // TODO: Move the Question index to the next element on submit
 
     // TODO: When the last element has been reached, end the test
