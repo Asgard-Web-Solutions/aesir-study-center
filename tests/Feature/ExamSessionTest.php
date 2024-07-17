@@ -566,7 +566,7 @@ class ExamSessionTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->startExamSession($user, $exam);
-        $updateSession['current_question'] = ($session->question_count - 1);
+        $updateSession['current_question'] = ($session->question_count);
         $updateSession['correct_answers'] = $session->question_count;
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
@@ -580,7 +580,7 @@ class ExamSessionTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->startExamSession($user, $exam);
-        $updateSession['current_question'] = ($session->question_count - 1);
+        $updateSession['current_question'] = ($session->question_count);
         $updateSession['correct_answers'] = $session->question_count;
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
@@ -612,7 +612,7 @@ class ExamSessionTest extends TestCase
         $updateSession['correct_answers'] = $numCorrect;
         $updateSession['incorrect_answers'] = $numIncorrect;
         $updateSession['question_count'] = $numCorrect + $numIncorrect;
-        $updateSession['current_question'] = $updateSession['question_count'] - 1;
+        $updateSession['current_question'] = $updateSession['question_count'];
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
         $response = $this->get(route('exam-session.summary', $exam));
@@ -641,6 +641,7 @@ class ExamSessionTest extends TestCase
     }
     
     // TODO: Display the grade and number of right and wrong answers
+    /** @test */
     public function summary_page_shows_result_data() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -707,7 +708,7 @@ class ExamSessionTest extends TestCase
     }
 
     public function completeExamSession($session) {
-        $updateSession['current_question'] = $session->question_count - 1;
+        $updateSession['current_question'] = $session->question_count;
         $updateSession['correct_answers'] = ceil($session->question_count / 2);
         $updateSession['incorrect_answers'] = floor($session->question_count / 2);
         $updateSession['date_completed'] = Carbon::now();

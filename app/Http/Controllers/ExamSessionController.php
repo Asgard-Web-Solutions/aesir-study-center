@@ -68,17 +68,14 @@ class ExamSessionController extends Controller
         // Create a new instance of this test
         $examSet->sessions()->attach(auth()->user()->id, ['question_count' => $request->question_count, 'questions_array' => json_encode($questionArray), 'current_question' => 0]);
 
-        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
-
-        return redirect()->route('exam-session.test', $session->id);
+        return redirect()->route('exam-session.test', $examSet->id);
     }
 
     public function test(Set $examSet) {
-
         $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
 
         // If the last question was answered, complete the session
-        if (($session->current_question) == ($session->question_count -1)) {
+        if (($session->current_question) == ($session->question_count)) {
             return redirect()->route('exam-session.summary', $examSet);
         }
 
@@ -310,7 +307,7 @@ class ExamSessionController extends Controller
             ->first();
     
         // Make sure the exam has been completed
-        if (($session->current_question) != ($session->question_count -1)) {
+        if (($session->current_question) != ($session->question_count)) {
             return redirect()->route('exam-session.test', $examSet);
         }
 
