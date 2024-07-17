@@ -135,6 +135,17 @@ class ExamSessionTest extends TestCase
         $response->assertSee($exam->name);
     }
 
+    /** @test */
+    public function exam_start_page_redirects_to_test_if_session_already_exists() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $response->assertRedirect(route('exam-session.test', $exam));
+    }
+
     // DONE: Store configuration for this exam
     /** @test */
     public function exam_configuration_saves_to_database() {
@@ -654,7 +665,7 @@ class ExamSessionTest extends TestCase
 
 
 
-    
+
 
    // TODO: Show a history of exam sessions that you have taken for an exam (Basic results (grade only) for free accounts)
 

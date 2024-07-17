@@ -24,6 +24,8 @@ class ExamSessionController extends Controller
 
         if (!$session->count()) {
             return redirect()->route('exam-session.configure', $examSet);
+        } else {
+            return redirect()->route('exam-session.test', $examSet);
         }
     }
 
@@ -316,6 +318,9 @@ class ExamSessionController extends Controller
         $updateSession['grade'] = round(($session->correct_answers / $session->question_count) * 100);
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
-        return view('exam-session.summary');
+        return view('exam-session.summary')->with([
+            'examSet' => $examSet,
+            'session' => $session,
+        ]);
     }
 }

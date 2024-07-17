@@ -1,3 +1,9 @@
-<div>
-    <!-- Very little is needed to make a happy life. - Marcus Aurelius -->
-</div>
+@extends('layouts.app2')
+
+@section('content')
+
+    <x-card.main title="{{ $examSet->name }}">
+        
+    </x-card.main>            
+
+@endsection
