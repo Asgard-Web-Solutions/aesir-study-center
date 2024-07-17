@@ -456,14 +456,20 @@ class ExamSessionTest extends TestCase
     }
 
     // TODO: Update the mastery level of the questions
+    /** @test */
+    public function answering_questions_correctly_updates_question_mastery() {
+        
+    }
 
     // TODO: Track the mastery increase of the questions?
-
+    
     // TODO: When the last element has been reached, end the test
-
+    
     // TODO: Display the grade and number of right and wrong answers
-
+    
     // TODO: Finalize the ExamSession at the end of the test
+    
+    // TODO: The start page redirects to the test if it's already in progress
 
 
 

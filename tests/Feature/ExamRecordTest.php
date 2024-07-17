@@ -51,7 +51,7 @@ class ExamRecordTest extends TestCase
 
         $response = $this->get(route('exam-session.start', $exam));
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertRedirect(route('exam-session.configure', $exam));
     }
 
     /** @test */
@@ -73,7 +73,7 @@ class ExamRecordTest extends TestCase
 
         $response = $this->get(route('exam-session.start', $exam));
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertRedirect(route('exam-session.configure', $exam));
     }
 
     // TODO: When a user completes an exam, update the exam record stats
@@ -82,5 +82,14 @@ class ExamRecordTest extends TestCase
     // TODO: Write a command to generate/update the ExamRecord for a single user or all users
     
     
-    // TODO: Add Mastery Progress to the exam recordß
+    // TODO: Add Mastery Progress to the exam record
+
+
+    /** ========== HELPER FUNCTIONS ========== */
+    public function getExamConfigurationFormData() {
+        return [
+            'question_count' => 1,
+        ];
+    }
+
 }
