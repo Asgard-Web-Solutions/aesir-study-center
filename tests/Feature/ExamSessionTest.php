@@ -568,7 +568,7 @@ class ExamSessionTest extends TestCase
         $updateSession['correct_answers'] = $session->question_count;
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
-        $response = $this->get(route('exam-session.test', $exam));
+        $response = $this->get(route('exam-session.summary', $exam));
 
         $updatedSession = DB::table('exam_sessions')->where('id', $session->id)->first();
         $this->assertNotNull($updatedSession->date_completed);

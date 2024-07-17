@@ -298,7 +298,17 @@ class ExamSessionController extends Controller
         return view('exam-session.answer');
     }
 
-    public function summary() {
+    public function summary(Set $examSet) {
+        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
+
+        // Make sure the exam has been completed
+        if (($session->current_question) != ($session->question_count -1)) {
+            // Deal with this momentarily
+        }
+
+        $updateSession['date_completed'] = Carbon::now();
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
         return view('exam-session.summary');
     }
 }
