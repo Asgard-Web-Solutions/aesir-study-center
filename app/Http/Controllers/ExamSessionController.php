@@ -30,7 +30,7 @@ class ExamSessionController extends Controller
     public function configure(Set $examSet) {
         $this->authorize('view', $examSet);
 
-        return view('exam_session.configure')->with([
+        return view('exam-session.configure')->with([
             'examSet' => $examSet,
         ]);
     }
@@ -129,7 +129,7 @@ class ExamSessionController extends Controller
 
         $multi = ($correct > 1) ? 1 : 0;
 
-        return view('exam_session.test')->with([
+        return view('exam-session.test')->with([
             'question' => $question,
             'answers' => $answers,
             'multi' => $multi,
@@ -284,7 +284,7 @@ class ExamSessionController extends Controller
             }
         }
 
-        return view('exam_session.answer', [
+        return view('exam-session.answer', [
             'question' => $question,
             'answers' => $orderedAnswers,
             'normalizedAnswer' => $normalizedAnswer,
@@ -295,6 +295,10 @@ class ExamSessionController extends Controller
             'session' => $session,
         ]);
 
-        return view('exam_session.answer');
+        return view('exam-session.answer');
+    }
+
+    public function summary() {
+        return view('exam-session.summary');
     }
 }

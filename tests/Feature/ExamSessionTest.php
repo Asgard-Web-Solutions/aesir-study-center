@@ -43,7 +43,7 @@ class ExamSessionTest extends TestCase
         $response->assertStatus($status);
 
         if ($status == Response::HTTP_OK) {
-            $view = 'exam_session.' . $view;
+            $view = 'exam-session.' . $view;
             $response->assertViewIs($view);
         }
     }
@@ -558,6 +558,21 @@ class ExamSessionTest extends TestCase
 
         $response->assertRedirect(route('exam-session.summary', $exam));
     }
+
+    /** @test */
+    public function session_end_time_is_set_when_test_is_complete() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $updateSession['current_question'] = ($session->question_count - 1);
+        $updateSession['correct_answers'] = $session->question_count;
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $response = $this->get(route('exam-session.test', $exam));
+
+        $updatedSession = DB::table('exam_sessions')->where('id', $session->id)->first();
+        $this->assertNotNull($updatedSession->date_completed);
+    }
     
     // TODO: Display the grade and number of right and wrong answers
     
@@ -652,6 +667,7 @@ class ExamSessionTest extends TestCase
             ['test', 'get', Response::HTTP_OK, 'test'],
             ['configure', 'get', Response::HTTP_OK, 'configure'],
             ['answer', 'post', Response::HTTP_OK, 'answer'],
+            ['summary', 'get', Response::HTTP_OK, 'summary'],
         ];
     }
 }
