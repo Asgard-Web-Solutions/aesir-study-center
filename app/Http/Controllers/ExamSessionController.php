@@ -75,6 +75,11 @@ class ExamSessionController extends Controller
 
         $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
 
+        // If the last question was answered, complete the session
+        if (($session->current_question) == ($session->question_count -1)) {
+            return redirect()->route('exam-session.summary', $examSet);
+        }
+
         $arrayData = json_decode($session->questions_array);
         $question = Question::find($arrayData[$session->current_question]);
 

@@ -260,17 +260,11 @@ class ExamSessionTest extends TestCase
     public function test_page_loads_appropriate_question() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        DB::table('exam_sessions')->insert([
-            'user_id' => $user->id,
-            'set_id' => $exam->id,
-            'question_count' => 2,
-            'questions_array' => '[7,4]',
-            'current_question' => 1,
-        ]);
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
 
         $response = $this->get(route('exam-session.test', $exam));
 
-        $question = Question::find('4');
         $response->assertSee($question->text);
     }
 
@@ -459,7 +453,7 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
-    // TODO: Update the mastery level of the questions
+    // DONE: Update the mastery level of the questions
     /** @test */
     public function answering_questions_correctly_updates_question_mastery() {
         $user = $this->CreateUserAndAuthenticate();
@@ -549,9 +543,21 @@ class ExamSessionTest extends TestCase
         $verifyData['score'] = config('test.min_score');
         $this->assertDatabaseHas('user_question', $verifyData);
     }
-    // TODO: Track the mastery increase of the questions?
     
     // TODO: When the last element has been reached, end the test
+    /** @test */
+    public function test_page_goes_to_summary_if_the_test_is_over() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $updateSession['current_question'] = ($session->question_count - 1);
+        $updateSession['correct_answers'] = $session->question_count;
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $response = $this->get(route('exam-session.test', $exam));
+
+        $response->assertRedirect(route('exam-session.summary', $exam));
+    }
     
     // TODO: Display the grade and number of right and wrong answers
     
@@ -596,6 +602,16 @@ class ExamSessionTest extends TestCase
                 'next_at' => Carbon::now(),
             ]);
         }
+
+        return $session;
+    }
+
+    public function completeExamSession($session) {
+        $session->correct_answers = ceil($session->question_count / 2);
+        $session->incorrect_answers = floor($session->question_count / 2);
+        $session->date_completed = Carbon::now();
+
+        DB::table('exam_sessions')->where('id', $session->id)->update($session);
 
         return $session;
     }

@@ -41,6 +41,7 @@ Route::prefix('ExamSession')->name('exam-session.')->controller(ExamSessionContr
     Route::post('/{set}/store', 'store')->name('store');
     Route::get('/{set}/test', 'test')->name('test');
     Route::post('/{set}/answer', 'answer')->name('answer');
+    Route::get('/{set}/summary', 'summary')->name('summary');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
