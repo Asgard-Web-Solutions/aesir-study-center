@@ -47,12 +47,13 @@ class ExamSessionTest extends TestCase
     }
 
     // DONE: Create an ExamSession when a user starts a new instance of a test
-    /**  */
+    /** @test */
     public function exam_session_created_when_first_taking_an_exam() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
+        $data = $this->getExamConfigurationFormData();
 
-        $response = $this->get(route('exam-session.start', $exam));
+        $response = $this->post(route('exam-session.store', $exam), $data);
 
         $data = [
             'user_id' => $user->id,
@@ -62,18 +63,19 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('exam_sessions', $data);
     }
 
-    /**  */
+    /** @test */
     public function exam_session_is_not_created_when_an_exam_is_already_in_progress() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
+        $data = $this->getExamConfigurationFormData();
 
-        $data = [
+        $preTestData = [
             'user_id' => $user->id,
             'set_id' => $exam->id,
         ];
-        DB::table('exam_sessions')->insert($data);
+        DB::table('exam_sessions')->insert($preTestData);
 
-        $response = $this->get(route('exam-session.start', $exam));
+        $response = $this->post(route('exam-session.store', $exam), $data);
 
         $data = [
             'user_id' => $user->id,

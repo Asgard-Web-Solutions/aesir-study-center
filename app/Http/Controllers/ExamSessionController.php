@@ -38,6 +38,12 @@ class ExamSessionController extends Controller
     public function store(ExamSessionConfigurationRequest $request, Set $examSet) {
         $this->authorize('view', $examSet);
 
+        // See if there is already an exam in progress
+        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
+        if ($session) {
+            return redirect()->route('exam-session.test', $examSet);
+        }
+
         // Initiate questions for the user
         $user = User::find(auth()->user()->id);
         $now = new Carbon();
