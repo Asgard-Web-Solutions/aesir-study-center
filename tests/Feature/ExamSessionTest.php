@@ -5,8 +5,10 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Config;
 use App\Models\Question;
 use App\Models\Answer;
+use Carbon\Carbon;
 use DB;
 use Tests\TestCase;
 
@@ -460,9 +462,93 @@ class ExamSessionTest extends TestCase
     // TODO: Update the mastery level of the questions
     /** @test */
     public function answering_questions_correctly_updates_question_mastery() {
-        
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $correctAnswer = $this->getQuestionAnswer($question, 1);
+        Config::set('add_score', 1);
+
+        $submitData = [
+            'answer' => $correctAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$correctAnswer->id]),
+        ];
+
+        $verifyData = [
+            'user_id' => $user->id,
+            'question_id' => $question->id,
+            'set_id' => $exam->id,
+            'score' => 5,
+        ];
+
+        DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($verifyData);
+
+        $response = $this->post(route('exam-session.answer', $exam), $submitData);
+
+        $verifyData['score'] = $verifyData['score'] + config('add_score');
+        unset($verifyData['next_at']);
+        $this->assertDatabaseHas('user_question', $verifyData);
     }
 
+    /** @test */
+    public function answering_questions_incorrectly_updates_question_mastery() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $incorrectAnswer = $this->getQuestionAnswer($question, 0);
+        Config::set('test.sub_score', 1);
+
+        $submitData = [
+            'answer' => $incorrectAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$incorrectAnswer->id]),
+        ];
+
+        $verifyData = [
+            'user_id' => $user->id,
+            'question_id' => $question->id,
+            'set_id' => $exam->id,
+            'score' => 5,
+        ];
+
+        DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($verifyData);
+
+        $response = $this->post(route('exam-session.answer', $exam), $submitData);
+
+        $verifyData['score'] = $verifyData['score'] - config('test.sub_score');
+        $this->assertDatabaseHas('user_question', $verifyData);
+    }
+    
+    /** @test */
+    public function answering_questions_incorrectly_keeps_mastery_at_a_minimum() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $incorrectAnswer = $this->getQuestionAnswer($question, 0);
+        Config::set('test.sub_score', 5);
+        Config::set('test.min_score', 2);
+
+        $submitData = [
+            'answer' => $incorrectAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$incorrectAnswer->id]),
+        ];
+
+        $verifyData = [
+            'question_id' => $question->id,
+            'score' => 3,
+        ];
+
+        DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($verifyData);
+
+        $response = $this->post(route('exam-session.answer', $exam), $submitData);
+
+        $verifyData['score'] = config('test.min_score');
+        $this->assertDatabaseHas('user_question', $verifyData);
+    }
     // TODO: Track the mastery increase of the questions?
     
     // TODO: When the last element has been reached, end the test
@@ -499,6 +585,18 @@ class ExamSessionTest extends TestCase
         ]);
 
         $session = DB::table('exam_sessions')->where('user_id', $user->id)->where('set_id', $exam->id)->where('date_completed', null)->first();
+
+        $questions = Question::where('set_id', $exam->id)->get();
+        foreach ($questions as $question) {
+            DB::table('user_question')->insert([
+                'user_id' => $user->id,
+                'set_id' => $exam->id,
+                'question_id' => $question->id,
+                'score' => 2,
+                'next_at' => Carbon::now(),
+            ]);
+        }
+
         return $session;
     }
 

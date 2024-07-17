@@ -218,6 +218,15 @@ class ExamSessionController extends Controller
             'incorrect_answers' => ($result == 0) ? $session->incorrect_answers + 1 : $session->incorrect_answers,
         ]);
 
+        $userQuestion = DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->first();
+        
+        $updatedScore = ($result == 1) ? $userQuestion->score + config('test.add_score') : $userQuestion->score - config('test.sub_score');
+        $updatedScore = ($updatedScore < config('test.min_score')) ? config('test.min_score') : $updatedScore;
+
+        DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
+            'score' => $updatedScore
+        ]);
+
         // let's make sure they didn't just refresh the page
         // if (! $test->questions->contains($question)) {
         //     $test->questions()->attach($question->id, ['result' => $result]);
