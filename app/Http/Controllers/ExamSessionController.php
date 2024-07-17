@@ -303,7 +303,7 @@ class ExamSessionController extends Controller
 
         // Make sure the exam has been completed
         if (($session->current_question) != ($session->question_count -1)) {
-            // Deal with this momentarily
+            return redirect()->route('exam-session.test', $examSet);
         }
 
         $updateSession['date_completed'] = Carbon::now();

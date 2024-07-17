@@ -24,6 +24,11 @@ class ExamSessionTest extends TestCase
         $session = $this->startExamSession($user, $exam);
         $data = array();
         
+        if ($route == 'summary') {
+            $session = $this->completeExamSession($session);
+            DB::table('exam_sessions')->where('id', $session->id)->update(['date_completed' => null]);
+        }
+
         if ($route == 'answer') {
             $data = [
                 'answer-1' => 1,
@@ -544,7 +549,7 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('user_question', $verifyData);
     }
     
-    // TODO: When the last element has been reached, end the test
+    // DONE: When the last element has been reached, end the test
     /** @test */
     public function test_page_goes_to_summary_if_the_test_is_over() {
         $user = $this->CreateUserAndAuthenticate();
@@ -573,10 +578,21 @@ class ExamSessionTest extends TestCase
         $updatedSession = DB::table('exam_sessions')->where('id', $session->id)->first();
         $this->assertNotNull($updatedSession->date_completed);
     }
-    
-    // TODO: Display the grade and number of right and wrong answers
+
+    /** @test */
+    public function going_to_the_summary_page_during_a_test_redirects_to_the_test() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $response->assertRedirect(route('exam-session.test', $exam));
+    }
     
     // TODO: Finalize the ExamSession at the end of the test
+    
+    // TODO: Display the grade and number of right and wrong answers
     
     // TODO: The start page redirects to the test if it's already in progress
 
@@ -622,11 +638,13 @@ class ExamSessionTest extends TestCase
     }
 
     public function completeExamSession($session) {
-        $session->correct_answers = ceil($session->question_count / 2);
-        $session->incorrect_answers = floor($session->question_count / 2);
-        $session->date_completed = Carbon::now();
+        $updateSession['current_question'] = $session->question_count - 1;
+        $updateSession['correct_answers'] = ceil($session->question_count / 2);
+        $updateSession['incorrect_answers'] = floor($session->question_count / 2);
+        $updateSession['date_completed'] = Carbon::now();
 
-        DB::table('exam_sessions')->where('id', $session->id)->update($session);
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+        $session = DB::table('exam_sessions')->where('id', $session->id)->first();
 
         return $session;
     }
