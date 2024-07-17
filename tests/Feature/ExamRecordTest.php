@@ -78,6 +78,9 @@ class ExamRecordTest extends TestCase
 
     // TODO: When a user completes an exam, update the exam record stats
 
+    // TODO: Count how many times the user has taken this exam
+
+    
     
     // TODO: Write a command to generate/update the ExamRecord for a single user or all users
     

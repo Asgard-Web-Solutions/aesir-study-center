@@ -614,12 +614,36 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('exam_sessions', $validateData);
     }
 
-    // TODO: Finalize the ExamSession at the end of the test
+    // DONE: Finalize the ExamSession at the end of the test
+    
+    // DONE: Going to the summary page loads the latest test session summary
+    /** @test */
+    public function summary_page_loads_latest_completed_test_if_no_active_test_sessions() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $session = $this->completeExamSession($session);
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
     
     // TODO: Display the grade and number of right and wrong answers
-    
-    // TODO: Going to the summary page loads the latest test session summary
-    
+    public function summary_page_shows_result_data() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $session = $this->completeExamSession($session);
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertSee($session->grade);
+        $response->assertSeeInOrder(['Correct', $session->correct_answers]);
+        $response->assertSeeInOrder(['Incorrect', $session->incorrect_answers]);
+    }
+
     // TODO: The start page redirects to the test if it's already in progress
 
 

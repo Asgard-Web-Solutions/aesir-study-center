@@ -299,8 +299,14 @@ class ExamSessionController extends Controller
     }
 
     public function summary(Set $examSet) {
-        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
-
+        // Get the session with a null date_completed first, else get the latest date_completed record
+        $session = DB::table('exam_sessions')
+            ->where('user_id', auth()->user()->id)
+            ->where('set_id', $examSet->id)
+            ->orderByRaw('date_completed IS NULL DESC')
+            ->orderByDesc('date_completed')
+            ->first();
+    
         // Make sure the exam has been completed
         if (($session->current_question) != ($session->question_count -1)) {
             return redirect()->route('exam-session.test', $examSet);
