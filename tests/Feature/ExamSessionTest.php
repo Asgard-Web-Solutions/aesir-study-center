@@ -646,7 +646,15 @@ class ExamSessionTest extends TestCase
 
     // TODO: The start page redirects to the test if it's already in progress
 
+    // TODO: Track the mastery status increases for this exam session
 
+    // TODO: Show the mastery satus increase on the answer page
+
+    // TODO: Show the mastery status increase count on the summary page
+
+
+
+    
 
    // TODO: Show a history of exam sessions that you have taken for an exam (Basic results (grade only) for free accounts)
 

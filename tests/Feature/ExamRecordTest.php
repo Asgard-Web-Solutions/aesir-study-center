@@ -76,17 +76,17 @@ class ExamRecordTest extends TestCase
         $response->assertRedirect(route('exam-session.configure', $exam));
     }
 
-    // TODO: When a user completes an exam, update the exam record stats
+    // TODO: When a user completes an exam, update the exam record stats (latest grade, times taken, last completed)
 
-    // TODO: Count how many times the user has taken this exam
+    // TODO: Add Mastery Progress to the exam record
 
-    
+    // TODO: Completing an exam updates the mastery progress of the record
+
+
     
     // TODO: Write a command to generate/update the ExamRecord for a single user or all users
     
     
-    // TODO: Add Mastery Progress to the exam record
-
 
     /** ========== HELPER FUNCTIONS ========== */
     public function getExamConfigurationFormData() {
