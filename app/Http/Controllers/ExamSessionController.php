@@ -72,10 +72,15 @@ class ExamSessionController extends Controller
     }
 
     public function test(Set $examSet) {
-        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
+        $session = DB::table('exam_sessions')
+            ->where('user_id', auth()->user()->id)
+            ->where('set_id', $examSet->id)
+            ->orderByRaw('date_completed IS NULL DESC')
+            ->orderByDesc('date_completed')
+            ->first();
 
         // If the last question was answered, complete the session
-        if (($session->current_question) == ($session->question_count)) {
+        if (($session->date_completed) || ($session->current_question == $session->question_count)) {
             return redirect()->route('exam-session.summary', $examSet);
         }
 
