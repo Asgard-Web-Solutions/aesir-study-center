@@ -307,6 +307,7 @@ class ExamSessionController extends Controller
         }
 
         $updateSession['date_completed'] = Carbon::now();
+        $updateSession['grade'] = round(($session->correct_answers / $session->question_count) * 100);
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
         return view('exam-session.summary');

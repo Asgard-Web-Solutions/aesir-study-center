@@ -589,10 +589,36 @@ class ExamSessionTest extends TestCase
 
         $response->assertRedirect(route('exam-session.test', $exam));
     }
-    
+
+    /** 
+     * @test 
+     * @dataProvider dataProviderSessionScoreCalculations
+     * */
+    public function summary_calculates_the_score($numCorrect, $numIncorrect, $grade) {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $updateSession['correct_answers'] = $numCorrect;
+        $updateSession['incorrect_answers'] = $numIncorrect;
+        $updateSession['question_count'] = $numCorrect + $numIncorrect;
+        $updateSession['current_question'] = $updateSession['question_count'] - 1;
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $validateData = [
+            'id' => $session->id,
+            'grade' => $grade
+        ];
+
+        $this->assertDatabaseHas('exam_sessions', $validateData);
+    }
+
     // TODO: Finalize the ExamSession at the end of the test
     
     // TODO: Display the grade and number of right and wrong answers
+    
+    // TODO: Going to the summary page loads the latest test session summary
     
     // TODO: The start page redirects to the test if it's already in progress
 
@@ -686,6 +712,23 @@ class ExamSessionTest extends TestCase
             ['configure', 'get', Response::HTTP_OK, 'configure'],
             ['answer', 'post', Response::HTTP_OK, 'answer'],
             ['summary', 'get', Response::HTTP_OK, 'summary'],
+        ];
+    }
+
+    public static function dataProviderSessionScoreCalculations() {
+        /** 
+         * # Right
+         * # Wrong
+         * Expected score as integer
+         */
+        return [
+            [10, 0, 100],
+            [0, 10, 0],
+            [5, 5, 50],
+            [7, 3, 70],
+            [7, 2, 78], // Round Up 77.77
+            [2, 4, 33], // Round Down 33.33
+            [6, 5, 55], // Round up at the border 54.54
         ];
     }
 }
