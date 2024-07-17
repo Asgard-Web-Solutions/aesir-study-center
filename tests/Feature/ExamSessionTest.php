@@ -369,7 +369,7 @@ class ExamSessionTest extends TestCase
         $response->assertSeeInOrder([$question->text, 'text-error', 'Incorrect', 'Your Answer']);
     }
     
-    // TODO: Move the Question index to the next element on submit
+    // DONE: Move the Question index to the next element on submit
     /** @test */
     public function the_session_index_is_moved_after_question_is_answered() {
         $user = $this->CreateUserAndAuthenticate();
@@ -426,37 +426,38 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
-        /** @test */
-        public function answer_page_increments_session_incorrect_answer_count() {
-            $user = $this->CreateUserAndAuthenticate();
-            $exam = $this->CreateSet();
-            $session = $this->startExamSession($user, $exam);
-            $question = $this->getCurrentExamSessionQuestion($session);
-            $incorrectAnswer = $this->getQuestionAnswer($question, 0);
-            $correctAnswer = $this->getQuestionAnswer($question, 1);
-            $correctAnswerCount = $session->correct_answers;
-            $incorrectAnswerCount = $session->incorrect_answers;
-    
-            $data = [
-                'answer' => $incorrectAnswer->id,
-                'question' => $question->id,
-                'order' => json_encode([$incorrectAnswer->id, $correctAnswer->id]),
-            ];
-    
-            $response = $this->post(route('exam-session.answer', $exam), $data);
-    
-            $verifyData = [
-                'user_id' => $user->id,
-                'set_id' => $exam->id,
-                'incorrect_answers' => ($incorrectAnswerCount + 1),
-                'correct_answers' => ($correctAnswerCount),
-            ];
-            
-            $this->assertDatabaseHas('exam_sessions', $verifyData);
-        }
-    
+    /** @test */
+    public function answer_page_increments_session_incorrect_answer_count() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $incorrectAnswer = $this->getQuestionAnswer($question, 0);
+        $correctAnswer = $this->getQuestionAnswer($question, 1);
+        $correctAnswerCount = $session->correct_answers;
+        $incorrectAnswerCount = $session->incorrect_answers;
+
+        $data = [
+            'answer' => $incorrectAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$incorrectAnswer->id, $correctAnswer->id]),
+        ];
+
+        $response = $this->post(route('exam-session.answer', $exam), $data);
+
+        $verifyData = [
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+            'incorrect_answers' => ($incorrectAnswerCount + 1),
+            'correct_answers' => ($correctAnswerCount),
+        ];
+        
+        $this->assertDatabaseHas('exam_sessions', $verifyData);
+    }
 
     // TODO: When the last element has been reached, end the test
+
+    // TODO: Display the grade and number of right and wrong answers
 
     // TODO: Finalize the ExamSession at the end of the test
 
