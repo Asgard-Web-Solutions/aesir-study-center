@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('mastery_mastered_change')->default(0);
             $table->json('questions_array')->nullable();
             $table->integer('current_question')->nullable();
+            $table->integer('correct_answers')->default(0);
+            $table->integer('incorrect_answers')->default(0);
             $table->decimal('grade', 4, 1)->default(0.0);
             $table->date('date_completed')->nullable();
             $table->timestamps();

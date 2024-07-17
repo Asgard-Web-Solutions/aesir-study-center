@@ -279,10 +279,12 @@ class ExamSessionTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->startExamSession($user, $exam);
+        $questionNumber = $session->current_question + 1;
+        $totalQuestions = $session->question_count;
 
         $response = $this->get(route('exam-session.test', $exam));
 
-        $response->assertSeeInOrder(['Question', '#', '2', 'of',  '5', 'Select']);
+        $response->assertSeeInOrder(['Question', '#', $questionNumber, 'of',  $totalQuestions, 'Select']);
     }
 
     /** @test */
@@ -326,7 +328,7 @@ class ExamSessionTest extends TestCase
         $response->assertSee($answer4->text);
     }
 
-    // TODO: Validate that the answer is correct
+    // DONE: Validate that the answer is correct
     /** @test */
     public function answer_page_responds_for_correct_answer() {
         $user = $this->CreateUserAndAuthenticate();
@@ -368,6 +370,91 @@ class ExamSessionTest extends TestCase
     }
     
     // TODO: Move the Question index to the next element on submit
+    /** @test */
+    public function the_session_index_is_moved_after_question_is_answered() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $incorrectAnswer = $this->getQuestionAnswer($question, 0);
+        $correctAnswer = $this->getQuestionAnswer($question, 1);
+        $currentCount = $session->current_question;
+
+        $data = [
+            'answer' => $correctAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$incorrectAnswer->id, $correctAnswer->id]),
+        ];
+
+        $response = $this->post(route('exam-session.answer', $exam), $data);
+
+        $verifyData = [
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+            'current_question' => ($currentCount + 1)
+        ];
+        
+        $this->assertDatabaseHas('exam_sessions', $verifyData);
+    }
+
+    /** @test */
+    public function answer_page_increments_session_correct_answer_count() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $incorrectAnswer = $this->getQuestionAnswer($question, 0);
+        $correctAnswer = $this->getQuestionAnswer($question, 1);
+        $correctAnswerCount = $session->correct_answers;
+        $incorrectAnswerCount = $session->incorrect_answers;
+
+        $data = [
+            'answer' => $correctAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$incorrectAnswer->id, $correctAnswer->id]),
+        ];
+
+        $response = $this->post(route('exam-session.answer', $exam), $data);
+
+        $verifyData = [
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+            'correct_answers' => ($correctAnswerCount + 1),
+            'incorrect_answers' => ($incorrectAnswerCount),
+        ];
+        
+        $this->assertDatabaseHas('exam_sessions', $verifyData);
+    }
+
+        /** @test */
+        public function answer_page_increments_session_incorrect_answer_count() {
+            $user = $this->CreateUserAndAuthenticate();
+            $exam = $this->CreateSet();
+            $session = $this->startExamSession($user, $exam);
+            $question = $this->getCurrentExamSessionQuestion($session);
+            $incorrectAnswer = $this->getQuestionAnswer($question, 0);
+            $correctAnswer = $this->getQuestionAnswer($question, 1);
+            $correctAnswerCount = $session->correct_answers;
+            $incorrectAnswerCount = $session->incorrect_answers;
+    
+            $data = [
+                'answer' => $incorrectAnswer->id,
+                'question' => $question->id,
+                'order' => json_encode([$incorrectAnswer->id, $correctAnswer->id]),
+            ];
+    
+            $response = $this->post(route('exam-session.answer', $exam), $data);
+    
+            $verifyData = [
+                'user_id' => $user->id,
+                'set_id' => $exam->id,
+                'incorrect_answers' => ($incorrectAnswerCount + 1),
+                'correct_answers' => ($correctAnswerCount),
+            ];
+            
+            $this->assertDatabaseHas('exam_sessions', $verifyData);
+        }
+    
 
     // TODO: When the last element has been reached, end the test
 
@@ -397,8 +484,10 @@ class ExamSessionTest extends TestCase
             'user_id' => $user->id,
             'set_id' => $exam->id,
             'question_count' => 5,
-            'questions_array' => '[7,4]',
-            'current_question' => 1,
+            'questions_array' => '[7,4,2,5,1]',
+            'current_question' => 0,
+            'correct_answers' => 0,
+            'incorrect_answers' => 0,
         ]);
 
         $session = DB::table('exam_sessions')->where('user_id', $user->id)->where('set_id', $exam->id)->where('date_completed', null)->first();

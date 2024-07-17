@@ -137,16 +137,16 @@ class ExamSessionController extends Controller
         $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
         $question = Question::find($request->question);
 
-        $correctAnswer = 0;
+        $correctAnswersCount = 0;
         $correct = 0;
 
         foreach ($question->answers as $answer) {
             if ($answer->correct) {
-                $correctAnswer = $correctAnswer + 1;
+                $correctAnswersCount = $correctAnswersCount + 1;
             }
         }
 
-        $multi = ($correctAnswer > 1) ? 1 : 0;
+        $multi = ($correctAnswersCount > 1) ? 1 : 0;
 
         // An array to store / convert the checkbox answers into so we can compare easier
         $normalizedAnswer = [];
@@ -180,7 +180,7 @@ class ExamSessionController extends Controller
                 // If this is a single answer question, then we don't care if the user marked it as correct or not
                 // We know that there is only one answer so it must be correct
                 // Later this is going to be a "fill in the blank" type question
-                $correctAnswer = 1;
+                $correctAnswersCount = 1;
             } else {
                 $normalizedAnswer[$answer->id] = ($request->answer == $answer->id) ? 1 : 0;
 
@@ -204,7 +204,13 @@ class ExamSessionController extends Controller
             }
         }
 
-        $result = ($correct == $correctAnswer) ? 1 : 0;
+        $result = ($correct == $correctAnswersCount) ? 1 : 0;
+
+        DB::table('exam_sessions')->where('id', $session->id)->update([
+            'current_question' => $session->current_question +1,
+            'correct_answers' => ($result == 1) ? $session->correct_answers + 1 : $session->correct_answers,
+            'incorrect_answers' => ($result == 0) ? $session->incorrect_answers + 1 : $session->incorrect_answers,
+        ]);
 
         // let's make sure they didn't just refresh the page
         // if (! $test->questions->contains($question)) {
