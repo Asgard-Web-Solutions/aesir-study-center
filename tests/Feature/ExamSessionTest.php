@@ -455,6 +455,10 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
+    // TODO: Update the mastery level of the questions
+
+    // TODO: Track the mastery increase of the questions?
+
     // TODO: When the last element has been reached, end the test
 
     // TODO: Display the grade and number of right and wrong answers
@@ -463,12 +467,7 @@ class ExamSessionTest extends TestCase
 
 
 
-
-    // TODO: Update the ExamSession when moving to a new question
-
-    // TODO: Track Mastery Progress for this session after each question
-
-    // TODO: Show a history of exam sessions that you have taken for an exam
+   // TODO: Show a history of exam sessions that you have taken for an exam (Basic results (grade only) for free accounts)
 
     // TODO: Record a detail history of each question in a session, for paid users, so they can replay their exams later
 
