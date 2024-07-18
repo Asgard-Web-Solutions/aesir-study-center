@@ -317,6 +317,7 @@ class ExamSessionController extends Controller
             'correct' => $correct,
             'examSet' => $examSet,
             'session' => $session,
+            'userQuestionStats' => $userQuestion,
         ]);
 
         return view('exam-session.answer');

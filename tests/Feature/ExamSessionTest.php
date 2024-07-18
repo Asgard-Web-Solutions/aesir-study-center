@@ -731,6 +731,26 @@ class ExamSessionTest extends TestCase
     }
 
     // TODO: Show the mastery satus increase on the answer page
+    /** @test */
+    public function mastery_increase_shows_on_answer_page() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $correctAnswer = $this->getQuestionAnswer($question, 1); // Get the correct answer for this question
+
+        $updateData['score'] = config('test.grade_familiar'); 
+        DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($updateData);
+
+        $submitData = [
+            'answer' => $correctAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$correctAnswer->id]),
+        ];
+        $response = $this->post(route('exam-session.answer', $exam), $submitData);
+
+        $response->assertSee('+1');
+    }
 
     // TODO: Show the mastery status increase count on the summary page
     // Show the progress level of the current level (as in a small bar that fills up)
