@@ -13,5 +13,10 @@ return [
     'grade_familiar' => env('GRADE_FAMILIAR', 3),
     'grade_apprentice' => env('GRADE_APPRENTICE', 1),
 
+    'color_mastered' => 'accent',
+    'color_proficient' => 'secondary',
+    'color_familiar' => 'success',
+    'color_apprentice' => 'info',
+
     'target_answers' => env('TARGET_ANSWERS', 4),
 ];

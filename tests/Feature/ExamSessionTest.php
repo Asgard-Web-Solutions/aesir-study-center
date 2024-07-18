@@ -696,6 +696,40 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
+    // TODO: Prevent answer page from updating info if the question was already answered
+    /** @test */
+    public function answer_page_does_not_double_count_answer() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $correctAnswer = $this->getQuestionAnswer($question, 1);
+
+        $newQuestionNumber = $session->current_question + 1;
+        $numCorrect = $session->correct_answers + 1;
+        $updateData = [
+            'current_question' => $newQuestionNumber,
+            'correct_answers' => $numCorrect,
+        ];
+        
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateData);
+
+        $submitData = [
+            'answer' => $correctAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$correctAnswer->id]),
+        ];
+
+        $response = $this->post(route('exam-session.answer', $exam), $submitData);
+
+        $verifyData = [
+            'id' => $session->id,
+            'correct_answers' => $numCorrect,
+            'current_question' => $newQuestionNumber,
+        ];
+        $this->assertDatabaseHas('exam_sessions', $verifyData);
+    }
+
     // TODO: Show the mastery satus increase on the answer page
 
     // TODO: Show the mastery status increase count on the summary page
