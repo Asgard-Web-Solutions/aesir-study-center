@@ -640,7 +640,7 @@ class ExamSessionTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
     
-    // TODO: Display the grade and number of right and wrong answers
+    // DONE: Display the grade and number of right and wrong answers
     /** @test */
     public function summary_page_shows_result_data() {
         $user = $this->CreateUserAndAuthenticate();

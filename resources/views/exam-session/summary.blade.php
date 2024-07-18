@@ -3,6 +3,9 @@
 @section('content')
 
     <x-card.main title="{{ $examSet->name }} - Summary">
+
+    </x-card.main>
+    <x-card.main title="Latest Test Info">
         <x-card.mini>
             <div class="w-1/2 mx-auto shadow stats">
                 <div class="stat">
