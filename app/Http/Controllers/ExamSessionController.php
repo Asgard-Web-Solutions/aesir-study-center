@@ -155,24 +155,14 @@ class ExamSessionController extends Controller
         $recordAnswer = true;
         $questionArray = json_decode($session->questions_array);
         if (($session->current_question == $session->question_count) || ($questionArray[$session->current_question] != $question->id)) {
+            // We have already recorded the results of this question, so let's not record it again.
             $recordAnswer = false;
         }
 
-        $correctAnswersCount = 0;
         $correct = 0;
-
-        foreach ($question->answers as $answer) {
-            if ($answer->correct) {
-                $correctAnswersCount = $correctAnswersCount + 1;
-            }
-        }
-
-        $multi = ($correctAnswersCount > 1) ? 1 : 0;
-
-        // An array to store / convert the checkbox answers into so we can compare easier
+        $correctAnswersCount = $this->determineCorrectAnswerCount($question);
+        $multi = ($correctAnswersCount > 1) ? 1 : 0; // Is this a question with multiple correct answers?L
         $normalizedAnswer = [];
-
-        // An array to store the answer and all results in to make displaying the answers easier
         $testAnswers = [];
 
         foreach ($question->answers as $answer) {
@@ -290,33 +280,6 @@ class ExamSessionController extends Controller
             DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
         }
 
-        // let's make sure they didn't just refresh the page
-        // if (! $test->questions->contains($question)) {
-        //     $test->questions()->attach($question->id, ['result' => $result]);
-
-        //     $userScore = DB::table('user_question')
-        //         ->where('user_id', '=', $user->id)
-        //         ->where('question_id', '=', $question->id)
-        //         ->select('score')
-        //         ->first();
-
-        //     $score = $userScore->score;
-
-        //     if ($result) {
-        //         $score = $score + config('test.add_score');
-        //     } else {
-        //         $score = $score - config('test.sub_score');
-        //         if ($score < config('test.min_score')) {
-        //             $score = config('test.min_score');
-        //         }
-        //     }
-
-        //     $now = Carbon::now();
-        //     $next = $now->addHours((config('test.hour_multiplier') * ($score ** 2)));
-
-        //     $user->questions()->updateExistingPivot($question->id, ['score' => $score, 'next_at' => $next]);
-        // }
-
         // Now load the answers in the order that they were shown to the user
         $aorder = json_decode($request->order);
 
@@ -401,5 +364,17 @@ class ExamSessionController extends Controller
         $session = DB::table('exam_sessions')->where('id', $sessionId)->first();
         
         return $session;
+    }
+
+    private function determineCorrectAnswerCount($question) {
+        $correctAnswersCount = 0;
+
+        foreach ($question->answers as $answer) {
+            if ($answer->correct) {
+                $correctAnswersCount = $correctAnswersCount + 1;
+            }
+        }
+
+        return $correctAnswersCount;
     }
 }
