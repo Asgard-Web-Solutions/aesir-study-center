@@ -221,12 +221,6 @@ class ExamSessionController extends Controller
 
         $result = ($correct == $correctAnswersCount) ? 1 : 0;
 
-        DB::table('exam_sessions')->where('id', $session->id)->update([
-            'current_question' => $session->current_question +1,
-            'correct_answers' => ($result == 1) ? $session->correct_answers + 1 : $session->correct_answers,
-            'incorrect_answers' => ($result == 0) ? $session->incorrect_answers + 1 : $session->incorrect_answers,
-        ]);
-
         $userQuestion = DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->first();
         
         $updatedScore = ($result == 1) ? $userQuestion->score + config('test.add_score') : $userQuestion->score - config('test.sub_score');
@@ -235,6 +229,59 @@ class ExamSessionController extends Controller
         DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
             'score' => $updatedScore
         ]);
+
+        // Update mastery for leveled up questions
+        $updateMastery = array();
+        if ($result == 1) {
+            switch($updatedScore) {
+                case config('test.grade_apprentice'):
+                    $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change + 1;
+                    break;
+
+                case config('test.grade_familiar'):
+                    $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change + 1;
+                    break;
+
+                case config('test.grade_proficient'):
+                    $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change + 1;
+                    break;
+
+                case config('test.grade_mastered'):
+                    $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change + 1;
+                    break;
+            }
+        } else {
+            switch($updatedScore) {
+                case (config('test.grade_apprentice') - 1):
+                    $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change - 1;
+                    break;
+
+                case (config('test.grade_familiar') - 1):
+                    $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change - 1;
+                    break;
+
+                case (config('test.grade_proficient') - 1):
+                    $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change - 1;
+                    break;
+
+                case (config('test.grade_mastered') - 1):
+                    $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change - 1;
+                    break;
+            }
+        }
+
+        $updateSession = [
+            'current_question' => $session->current_question +1,
+            'correct_answers' => ($result == 1) ? $session->correct_answers + 1 : $session->correct_answers,
+            'incorrect_answers' => ($result == 0) ? $session->incorrect_answers + 1 : $session->incorrect_answers,
+        ];
+
+        if (count($updateMastery)) {
+            $updateSession = array_merge($updateSession, $updateMastery);
+        }
+
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
 
         // let's make sure they didn't just refresh the page
         // if (! $test->questions->contains($question)) {

@@ -57,10 +57,10 @@ class HomeController extends Controller
             }
 
             $total_questions = Question::where('set_id', '=', $set->id)->count();
-            $total_mastery = DB::table('user_question')
+            $total_mastered = DB::table('user_question')
                 ->where('user_id', '=', $user->id)
                 ->where('set_id', '=', $set->id)
-                ->where('score', '>=', config('test.grade_mastery'))
+                ->where('score', '>=', config('test.grade_mastered'))
                 ->count();
 
             $total_proficient = DB::table('user_question')
@@ -94,7 +94,7 @@ class HomeController extends Controller
                 'taken' => Test::where('user_id', '=', $user->id)->where('set_id', '=', $set->id)->count(),
                 'total_questions' => $total_questions,
                 'last_time' => $last_taken,
-                'mastery' => round((($total_mastery / $total_questions) * 100), 1),
+                'mastery' => round((($total_mastered / $total_questions) * 100), 1),
                 'proficient' => round((($total_proficient / $total_questions) * 100), 1),
                 'familiar' => round((($total_familiar / $total_questions) * 100), 1),
                 'apprentice' => round((($total_apprentice / $total_questions) * 100), 1),

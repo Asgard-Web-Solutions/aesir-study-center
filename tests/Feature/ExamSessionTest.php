@@ -656,9 +656,45 @@ class ExamSessionTest extends TestCase
         $response->assertSeeInOrder(['Incorrect', $session->incorrect_answers]);
     }
 
-    // TODO: The start page redirects to the test if it's already in progress
-
     // TODO: Track the mastery status increases for this exam session
+    /** 
+     * @test 
+     * @dataProvider dataProviderMasteryUpdate
+     * */
+    public function mastery_status_is_tracked_for_correct_answers($masteryLevel) {
+        Config::set('test.grade_apprentice', 1);
+        Config::set('test.grade_familiar', 1);
+        Config::set('test.grade_proficient', 1);
+        Config::set('test.grade_mastered', 1);
+        Config::set('test.add_score', 1);
+        Config::set('test.grade_' . $masteryLevel, 5);
+
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $correctAnswer = $this->getQuestionAnswer($question, 1); // Get the correct answer for this question
+        
+        $updateData['score'] = 4; // Set this to one below the required mastery level
+        DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($updateData);
+
+        $submitData = [
+            'answer' => $correctAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$correctAnswer->id]),
+        ];
+        $response = $this->post(route('exam-session.answer', $exam), $submitData);
+        
+        $verifyData = [
+            'id' => $session->id,
+            'mastery_apprentice_change' => 0,
+            'mastery_familiar_change' => 0,
+            'mastery_proficient_change' => 0,
+            'mastery_mastered_change' => 0
+        ];
+        $verifyData['mastery_' . $masteryLevel . '_change'] = 1;
+        $this->assertDatabaseHas('exam_sessions', $verifyData);
+    }
 
     // TODO: Show the mastery satus increase on the answer page
 
@@ -773,6 +809,18 @@ class ExamSessionTest extends TestCase
             [7, 2, 78], // Round Up 77.77
             [2, 4, 33], // Round Down 33.33
             [6, 5, 55], // Round up at the border 54.54
+        ];
+    }
+
+    public static function dataProviderMasteryUpdate() {
+        /** 
+         * Mastery Level
+         */
+        return [
+            ['mastered'],
+            ['proficient'],
+            ['familiar'],
+            ['apprentice'],
         ];
     }
 }
