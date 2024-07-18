@@ -656,7 +656,7 @@ class ExamSessionTest extends TestCase
         $response->assertSeeInOrder(['Incorrect', $session->incorrect_answers]);
     }
 
-    // TODO: Track the mastery status increases for this exam session
+    // DONE: Track the mastery status increases for this exam session
     /** 
      * @test 
      * @dataProvider dataProviderMasteryUpdate
@@ -674,7 +674,7 @@ class ExamSessionTest extends TestCase
         $session = $this->startExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $correctAnswer = $this->getQuestionAnswer($question, 1); // Get the correct answer for this question
-        
+
         $updateData['score'] = 4; // Set this to one below the required mastery level
         DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($updateData);
 
@@ -699,6 +699,10 @@ class ExamSessionTest extends TestCase
     // TODO: Show the mastery satus increase on the answer page
 
     // TODO: Show the mastery status increase count on the summary page
+    // Show the progress level of the current level (as in a small bar that fills up)
+    // Maybe show a +1 / -1 next to the level if a level up/down did not happen
+    // Show a badge if a level up happened
+    // Show a badge if a level down happened
 
 
 
