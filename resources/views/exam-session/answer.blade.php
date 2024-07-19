@@ -44,10 +44,19 @@
         </x-card.mini>
 
         <x-card.mini title="Your Mastery">
-
-            <ul class="w-1/4 timeline timeline-vertical">
+            <ul class="w-1/2 timeline timeline-vertical">
                 @for ($i = (config('test.grade_mastered')); $i > 0; $i --)
                     <li>
+                        @if ($i == $userQuestionStats->score)
+                            <div class="timeline-start">
+                                @if ($correct)
+                                    <div class="badge badge-secondary">Mastery: + {{ config('test.add_score') }}</div>
+                                @else
+                                    <div class="badge badge-secondary">Mastery: - {{ config('test.sub_score') }}</div>
+                                @endif
+                            </div>
+                        @endif
+
                         @if ($i < (config('test.grade_mastered')))
                             <hr @if ($userQuestionStats->score > $i) class="bg-primary" @endif />
                         @endif
@@ -61,23 +70,25 @@
                             </div>
                         @endif
                             @if ( $i == config('test.grade_mastered') )
-                                <div class="timeline-end timeline-box">
+                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_mastered')) text-{{ config('test.color_mastered') }} @else text-neutral @endif">
                                     Mastered
                                 </div>
                             @elseif ( $i == config('test.grade_proficient') )
-                                <div class="timeline-end timeline-box">
+                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_proficient')) text-{{ config('test.color_proficient') }} @else text-neutral @endif">
                                     Proficient
                                 </div>
                             @elseif ( $i == config('test.grade_familiar') )
-                                <div class="timeline-end timeline-box">
+                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_familiar')) text-{{ config('test.color_familiar') }} @else text-neutral @endif">
                                     Familiar
                                 </div>
                             @elseif ( $i == config('test.grade_apprentice') )
-                                <div class="timeline-end timeline-box">
+                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_apprentice')) text-{{ config('test.color_apprentice') }} @else text-neutral @endif">
                                     Apprentice
                                 </div>
                             @else
-                                <div class="timeline-end">&nbsp;</div>
+                                <div class="timeline-end">
+                                    &nbsp;
+                                </div>
                             @endif
                         @if ($i > 1)
                             <hr @if ($userQuestionStats->score >= $i) class="bg-primary" @endif />

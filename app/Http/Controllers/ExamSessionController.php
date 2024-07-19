@@ -307,6 +307,7 @@ class ExamSessionController extends Controller
 
         // Get an updated copy of the session
         $session = $this->getSessionById($session->id);
+        $userQuestion = DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->first();
 
         return view('exam-session.answer', [
             'question' => $question,

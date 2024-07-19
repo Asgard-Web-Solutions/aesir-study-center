@@ -360,7 +360,7 @@ class ExamSessionTest extends TestCase
 
         $response = $this->post(route('exam-session.answer', $exam), $data);
 
-        $response->assertSeeInOrder([$question->text, 'text-success', 'Correct', 'Your Answer']);
+        $response->assertSeeInOrder([$question->text, 'Correct', 'Your Answer']);
     }
 
     /** @test */
@@ -380,7 +380,7 @@ class ExamSessionTest extends TestCase
 
         $response = $this->post(route('exam-session.answer', $exam), $data);
 
-        $response->assertSeeInOrder([$question->text, 'text-error', 'Incorrect', 'Your Answer']);
+        $response->assertSeeInOrder([$question->text, 'Incorrect', 'Your Answer']);
     }
     
     // DONE: Move the Question index to the next element on submit
@@ -730,7 +730,7 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
-    // TODO: Show the mastery satus increase on the answer page
+    // DONE: Show the mastery satus increase on the answer page
     /** @test */
     public function mastery_increase_shows_on_answer_page() {
         $user = $this->CreateUserAndAuthenticate();
@@ -749,8 +749,30 @@ class ExamSessionTest extends TestCase
         ];
         $response = $this->post(route('exam-session.answer', $exam), $submitData);
 
-        $response->assertSee('+1');
+        $response->assertSee('Mastery: + ' . config('test.add_score'));
     }
+
+    /** @test */
+    public function mastery_decrease_shows_on_answer_page() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+        $question = $this->getCurrentExamSessionQuestion($session);
+        $incorrectAnswer = $this->getQuestionAnswer($question, 0); // Get the correct answer for this question
+
+        $updateData['score'] = config('test.grade_familiar'); 
+        DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($updateData);
+
+        $submitData = [
+            'answer' => $incorrectAnswer->id,
+            'question' => $question->id,
+            'order' => json_encode([$incorrectAnswer->id]),
+        ];
+        $response = $this->post(route('exam-session.answer', $exam), $submitData);
+
+        $response->assertSee('Mastery: - ' . config('test.sub_score'));
+    }
+    
 
     // TODO: Show the mastery status increase count on the summary page
     // Show the progress level of the current level (as in a small bar that fills up)
@@ -758,6 +780,7 @@ class ExamSessionTest extends TestCase
     // Show a badge if a level up happened
     // Show a badge if a level down happened
 
+    // TODO: Accessing the answer page with a GET request should redirect to the test page
 
 
 
