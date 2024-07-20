@@ -19,7 +19,7 @@
         <x-card.mini title="Answer Statistics">
               <div class="shadow stats">
                 <div class="stat">
-                  <div class="stat-figure text-success">
+                  <div class="text-2xl stat-figure text-success">
                     <i class="fa-solid fa-file-check"></i>
                   </div>
                   <div class="stat-title">Correct</div>
@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="stat">
-                  <div class="stat-figure text-error">
+                  <div class="text-2xl stat-figure text-error">
                     <i class="fa-solid fa-file-excel"></i>
                   </div>
                   <div class="stat-title">Incorrect</div>
@@ -37,8 +37,8 @@
                 </div>
 
                 <div class="stat">
-                  <div class="stat-figure text-info">
-                    <i class="fa-duotone fa-solid fa-files"></i>
+                  <div class="text-2xl stat-figure text-info">
+                    <i class="fa-solid fa-newspaper"></i>
                   </div>
                   <div class="stat-title">Total Questions</div>
                   <div class="stat-value text-info">{{ $session->question_count }}</div>
