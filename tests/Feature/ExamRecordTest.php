@@ -78,7 +78,7 @@ class ExamRecordTest extends TestCase
         $response->assertRedirect(route('exam-session.configure', $exam));
     }
 
-    // TODO: When a user completes an exam, update the exam record stats (latest grade, times taken, last completed)
+    // DONE: When a user completes an exam, update the exam record stats (latest grade, times taken, last completed)
     /** @test */
     public function exam_updates_times_taken_after_completing_exam() {
         $examOwner = $this->CreateUser();
@@ -164,7 +164,19 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $verifyData);
     }
 
-    // TODO: Add Mastery Progress to the exam record
+    /** @test */
+    public function exam_record_has_last_taken_set_after_completing_a_session() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+        $session = $this->CompleteExamSession($session);
+        DB::table('exam_sessions')->where('id', $session->id)->update(['date_completed' => null]);
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $record = DB::table('exam_records')->where('set_id', $exam->id)->where('user_id', $user->id)->first();
+        $this->assertNotNull($record->last_completed);
+    }
 
     // TODO: Completing an exam updates the mastery progress of the record
 

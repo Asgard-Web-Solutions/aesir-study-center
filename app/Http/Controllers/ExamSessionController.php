@@ -337,7 +337,8 @@ class ExamSessionController extends Controller
         }
 
         if (!$session->date_completed) {
-            $updateSession['date_completed'] = Carbon::now();
+            $dateNow = Carbon::now();
+            $updateSession['date_completed'] = $dateNow;
             $updateSession['grade'] = round(($session->correct_answers / $session->question_count) * 100);
             DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
@@ -357,6 +358,7 @@ class ExamSessionController extends Controller
             DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
                 'times_taken' => $record->times_taken + 1,
                 'recent_average' => $averageTotal / $averageCount,
+                'last_completed' => $dateNow,
             ]);
         }
 
