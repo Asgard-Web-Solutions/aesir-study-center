@@ -153,7 +153,7 @@ class ExamSessionController extends Controller
             'order' => 'required|string',
         ]);
 
-        $session = $this->getInProgressSession($examSet);
+        $session = $this->getInProgressOrLatestSession($examSet);
         $question = Question::find($request->question);
 
         $recordAnswer = true;

@@ -21,11 +21,11 @@ class ExamSessionTest extends TestCase
     public function validate_that_pages_load_correctly($route, $method, $status, $view) {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $data = array();
         
         if ($route == 'summary') {
-            $session = $this->completeExamSession($session);
+            $session = $this->CompleteExamSession($session);
             DB::table('exam_sessions')->where('id', $session->id)->update(['date_completed' => null]);
         }
 
@@ -139,7 +139,7 @@ class ExamSessionTest extends TestCase
     public function exam_start_page_redirects_to_test_if_session_already_exists() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
 
         $response = $this->get(route('exam-session.start', $exam));
 
@@ -276,7 +276,7 @@ class ExamSessionTest extends TestCase
     public function test_page_loads_appropriate_question() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
 
         $response = $this->get(route('exam-session.test', $exam));
@@ -292,7 +292,7 @@ class ExamSessionTest extends TestCase
     public function test_page_shows_correct_question_numbers() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $questionNumber = $session->current_question + 1;
         $totalQuestions = $session->question_count;
 
@@ -305,7 +305,7 @@ class ExamSessionTest extends TestCase
     public function test_page_shows_all_answers_for_a_question() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
         $wrongAnswer = $this->getQuestionAnswer($question, 0);
@@ -320,7 +320,7 @@ class ExamSessionTest extends TestCase
     public function test_page_shows_answers_from_question_group() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $questionGroup = $this->CreateQuestionGroup(['set_id' => $exam->id, 'name' => 'Something']);
         $question1 = $this->CreateQuestion(['set_id' => $exam->id, 'group_id' => $questionGroup->id]);
         $question3 = $this->CreateQuestion(['set_id' => $exam->id, 'group_id' => $questionGroup->id]);
@@ -347,7 +347,7 @@ class ExamSessionTest extends TestCase
     public function answer_page_responds_for_correct_answer() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
@@ -367,7 +367,7 @@ class ExamSessionTest extends TestCase
     public function answer_page_responds_for_incorrect_answer() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
@@ -388,7 +388,7 @@ class ExamSessionTest extends TestCase
     public function the_session_index_is_moved_after_question_is_answered() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
@@ -415,7 +415,7 @@ class ExamSessionTest extends TestCase
     public function answer_page_increments_session_correct_answer_count() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
@@ -444,7 +444,7 @@ class ExamSessionTest extends TestCase
     public function answer_page_increments_session_incorrect_answer_count() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
@@ -474,7 +474,7 @@ class ExamSessionTest extends TestCase
     public function answering_questions_correctly_updates_question_mastery() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
         Config::set('add_score', 1);
@@ -505,7 +505,7 @@ class ExamSessionTest extends TestCase
     public function answering_questions_incorrectly_updates_question_mastery() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0);
         Config::set('test.sub_score', 1);
@@ -535,7 +535,7 @@ class ExamSessionTest extends TestCase
     public function answering_questions_incorrectly_keeps_mastery_at_a_minimum() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0);
         Config::set('test.sub_score', 5);
@@ -565,7 +565,7 @@ class ExamSessionTest extends TestCase
     public function test_page_goes_to_summary_if_the_test_is_over() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $updateSession['current_question'] = ($session->question_count);
         $updateSession['correct_answers'] = $session->question_count;
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
@@ -579,7 +579,7 @@ class ExamSessionTest extends TestCase
     public function session_end_time_is_set_when_test_is_complete() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $updateSession['current_question'] = ($session->question_count);
         $updateSession['correct_answers'] = $session->question_count;
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
@@ -594,7 +594,7 @@ class ExamSessionTest extends TestCase
     public function going_to_the_summary_page_during_a_test_redirects_to_the_test() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
 
         $response = $this->get(route('exam-session.summary', $exam));
 
@@ -608,7 +608,7 @@ class ExamSessionTest extends TestCase
     public function summary_calculates_the_score($numCorrect, $numIncorrect, $grade) {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $updateSession['correct_answers'] = $numCorrect;
         $updateSession['incorrect_answers'] = $numIncorrect;
         $updateSession['question_count'] = $numCorrect + $numIncorrect;
@@ -632,8 +632,8 @@ class ExamSessionTest extends TestCase
     public function summary_page_loads_latest_completed_test_if_no_active_test_sessions() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
-        $session = $this->completeExamSession($session);
+        $session = $this->StartExamSession($user, $exam);
+        $session = $this->CompleteExamSession($session);
 
         $response = $this->get(route('exam-session.summary', $exam));
 
@@ -645,8 +645,8 @@ class ExamSessionTest extends TestCase
     public function summary_page_shows_result_data() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
-        $session = $this->completeExamSession($session);
+        $session = $this->StartExamSession($user, $exam);
+        $session = $this->CompleteExamSession($session);
 
         $response = $this->get(route('exam-session.summary', $exam));
 
@@ -671,7 +671,7 @@ class ExamSessionTest extends TestCase
 
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $correctAnswer = $this->getQuestionAnswer($question, 1); // Get the correct answer for this question
 
@@ -701,7 +701,7 @@ class ExamSessionTest extends TestCase
     public function answer_page_does_not_double_count_answer() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $correctAnswer = $this->getQuestionAnswer($question, 1);
 
@@ -735,7 +735,7 @@ class ExamSessionTest extends TestCase
     public function mastery_increase_shows_on_answer_page() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $correctAnswer = $this->getQuestionAnswer($question, 1); // Get the correct answer for this question
 
@@ -756,7 +756,7 @@ class ExamSessionTest extends TestCase
     public function mastery_decrease_shows_on_answer_page() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0); // Get the correct answer for this question
 
@@ -775,7 +775,6 @@ class ExamSessionTest extends TestCase
     
 
     // TODO: Show the mastery status increase count on the summary page
-    // Show the progress level of the current level (as in a small bar that fills up)
     // Maybe show a +1 / -1 next to the level if a level up/down did not happen
     // Show a badge if a level up happened
     // Show a badge if a level down happened
@@ -785,7 +784,7 @@ class ExamSessionTest extends TestCase
     public function answer_get_request_redirects_to_test_page() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
-        $session = $this->startExamSession($user, $exam);
+        $session = $this->StartExamSession($user, $exam);
 
         $response = $this->get(route('exam-session.answer', $exam));
 
@@ -805,45 +804,6 @@ class ExamSessionTest extends TestCase
         return [
             'question_count' => 1,
         ];
-    }
-
-    public function startExamSession($user, $exam) {
-        DB::table('exam_sessions')->insert([
-            'user_id' => $user->id,
-            'set_id' => $exam->id,
-            'question_count' => 5,
-            'questions_array' => '[7,4,2,5,1]',
-            'current_question' => 0,
-            'correct_answers' => 0,
-            'incorrect_answers' => 0,
-        ]);
-
-        $session = DB::table('exam_sessions')->where('user_id', $user->id)->where('set_id', $exam->id)->where('date_completed', null)->first();
-
-        $questions = Question::where('set_id', $exam->id)->get();
-        foreach ($questions as $question) {
-            DB::table('user_question')->insert([
-                'user_id' => $user->id,
-                'set_id' => $exam->id,
-                'question_id' => $question->id,
-                'score' => 2,
-                'next_at' => Carbon::now(),
-            ]);
-        }
-
-        return $session;
-    }
-
-    public function completeExamSession($session) {
-        $updateSession['current_question'] = $session->question_count;
-        $updateSession['correct_answers'] = ceil($session->question_count / 2);
-        $updateSession['incorrect_answers'] = floor($session->question_count / 2);
-        $updateSession['date_completed'] = Carbon::now();
-
-        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
-        $session = DB::table('exam_sessions')->where('id', $session->id)->first();
-
-        return $session;
     }
 
     public function getCurrentExamSessionQuestion($session) {

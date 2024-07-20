@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('set_id')->constrained()->onDelete('cascade');
-            $table->integer('times_taken')->nullable();
-            $table->decimal('recent_average', 4, 1)->nullable();
-            $table->string('recent_scores')->nullable();
+            $table->integer('times_taken')->default(0);
+            $table->integer('recent_average')->default(0);
             $table->integer('mastery_apprentice_count')->nullable();
             $table->integer('mastery_familiar_count')->nullable();
             $table->integer('mastery_proficient_count')->nullable();
