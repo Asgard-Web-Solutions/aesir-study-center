@@ -2,8 +2,9 @@
 
 @section('content')
 
-    <x-card.buttons primaryLabel="Manage Your Own Exams" primaryAction="{{ route('profile.myexams') }}" secondaryLabel="Public Exams" secondaryAction="{{ route('tests') }}" />
-    <x-card.main title="Your Exams" size="grid">
+    <x-card.buttons primaryLabel="Manage Your Own Exams" primaryAction="{{ route('profile.myexams') }}" secondaryLabel="Find Public Exams" secondaryAction="{{ route('tests') }}" />
+
+    <x-card.main title="Exams You Have Taken" size="grid">
         @forelse ($records as $record)
             <x-card.mini title="{{ $record->name }}">
                 <x-text.main label='Recent Average:'><span class="font-bold text-neutral-content">{{ $record->pivot->recent_average }}%</span></x-text.main>
