@@ -7,6 +7,7 @@ use App\Http\Controllers\SetController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ExamSessionController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
@@ -32,6 +33,18 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware('auth')->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::get('/exams', 'exams')->name('exams');
+    Route::get('/myexams', 'myexams')->name('myexams');
+});
+
+Route::prefix('ExamSession')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
+    Route::get('/{set}/start', 'start')->name('start');
+    Route::get('/{set}/configure', 'configure')->name('configure');
+    Route::post('/{set}/store', 'store')->name('store');
+    Route::get('/{set}/test', 'test')->name('test');
+    Route::post('/{set}/answer', 'answer')->name('answer');
+    Route::get('/{set}/answer', 'answerRedirect')->name('answer');
+    Route::get('/{set}/summary', 'summary')->name('summary');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');

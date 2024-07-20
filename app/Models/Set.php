@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,8 +34,20 @@ class Set extends Model
         return $this->hasMany(\App\Models\Group::class);
     }
 
+    // User that created/owns this exam set
     public function user(): BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class);
+    }
+
+    // User that took this exam set
+    public function records(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'exam_records', 'set_id', 'user_id');
+    }
+
+    public function sessions(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'exam_sessions', 'set_id', 'user_id')->withPivot('date_completed', 'questions_array');
     }
 }

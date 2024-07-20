@@ -33,6 +33,8 @@ class RouteServiceProvider extends ServiceProvider
 
             //
         });
+
+        Route::model('set', \App\Models\Set::class);
     }
 
     /**

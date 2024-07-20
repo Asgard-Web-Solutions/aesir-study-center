@@ -11,6 +11,14 @@
             <x-card.buttons submitLabel="Update Group Settings" />
         </form>
     </x-card.mini>
+</x-card.main>
+
+<div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
+    <a href="{{ route('manage-questions', $group->set->id) }}" class="btn btn-secondary">{{ __('Back to Exam Manager') }}</a>
+</div>
+
+
+<x-card.main>
 
     <x-card.mini title="Group Questions">
         <x-table.main>
