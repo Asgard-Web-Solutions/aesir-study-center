@@ -13,6 +13,14 @@ trait StartExamSession
 {
     public function StartExamSession(User $user, Set $exam)
     {
+        $record = DB::table('exam_records')->where('set_id', $exam->id)->where('user_id', $user->id)->first();
+        if (!$record) {
+            DB::table('exam_records')->insert([
+                'set_id' => $exam->id,
+                'user_id' => $user->id,
+            ]);
+        }
+
         DB::table('exam_sessions')->insert([
             'user_id' => $user->id,
             'set_id' => $exam->id,

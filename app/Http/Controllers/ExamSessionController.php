@@ -336,11 +336,29 @@ class ExamSessionController extends Controller
             return redirect()->route('exam-session.test', $examSet);
         }
 
-        $updateSession['date_completed'] = Carbon::now();
-        $updateSession['grade'] = round(($session->correct_answers / $session->question_count) * 100);
-        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+        if (!$session->date_completed) {
+            $updateSession['date_completed'] = Carbon::now();
+            $updateSession['grade'] = round(($session->correct_answers / $session->question_count) * 100);
+            DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
-        $session = $this->getSessionById($session->id);
+            $session = $this->getSessionById($session->id);
+
+            // Recalculate Exam Record Stats
+            $record = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
+
+            $recentSessions = DB::table('exam_sessions')->where('set_id', $examSet->id)->where('user_id', auth()->user()->id)->orderBy('date_completed', 'desc')->limit(config('count_tests_for_average_score'))->get();
+            $averageCount = 0;
+            $averageTotal = 0;
+            foreach($recentSessions as $recentSession) {
+                $averageCount ++;
+                $averageTotal += $recentSession->grade;
+            }
+
+            DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
+                'times_taken' => $record->times_taken + 1,
+                'recent_average' => $averageTotal / $averageCount,
+            ]);
+        }
 
         return view('exam-session.summary')->with([
             'examSet' => $examSet,
