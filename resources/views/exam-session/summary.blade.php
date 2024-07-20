@@ -42,7 +42,7 @@
     </x-card.main>
 
     <x-card.main>
-      <x-page.actions primary="Start Test" primaryLink="{{ route('exam-session.start', $examSet->id) }}" secondary="Back To Exam Portal" secondaryLink="{{ route('profile.index') }}" />
+      <x-page.actions primary="Start Test" primaryLink="{{ route('exam-session.start', $examSet->id) }}" secondary="Exam Portal" secondaryLink="{{ route('profile.exams') }}" />
     </x-card.main>
 
 

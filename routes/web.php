@@ -33,6 +33,8 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware('auth')->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::get('/exams', 'exams')->name('exams');
+    Route::get('/myexams', 'myexams')->name('myexams');
 });
 
 Route::prefix('ExamSession')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
