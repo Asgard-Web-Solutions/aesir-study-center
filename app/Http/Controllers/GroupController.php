@@ -47,7 +47,7 @@ class GroupController extends Controller
 
         Alert::toast('Question Group Created', 'success');
 
-        return redirect()->route('manage-questions', $set->id);
+        return redirect()->route('group-view', $group->id);
     }
 
     /**

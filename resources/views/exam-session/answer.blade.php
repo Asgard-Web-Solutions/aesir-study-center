@@ -11,10 +11,14 @@
         <x-card.mini>
             <div class="shadow stats">
                 <div class="text-center stat">
-                  <div class="stat-figure text-success">
-                  </div>
-                  <div class="stat-title">You got this answer </div>
-                  <div class="stat-value text-success">@if ($correct) Correct @else Incorrect @endif</div>
+                    <div class="stat-figure text-success">
+                    </div>
+                    <div class="stat-title">You got this answer </div>
+                    @if ($correct)
+                        <div class="stat-value text-success">Correct</div>
+                    @else
+                        <div class="stat-value text-error">Incorrect</div>
+                    @endif
                   <div class="stat-desc"></div>
                 </div>
             </div>
@@ -42,6 +46,8 @@
                 </div>
             @endforeach
         </x-card.mini>
+
+        <x-page.actions primary="Next Question" :primaryLink="route('exam-session.test', $examSet->id)" />
 
         <x-card.mini title="Your Mastery">
             <ul class="w-full md:w-1/2 timeline timeline-vertical">

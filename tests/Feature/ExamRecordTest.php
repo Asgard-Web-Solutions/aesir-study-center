@@ -166,6 +166,43 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
+    public function exam_average_score_is_stored_as_an_integer() {
+        Config::set('count_tests_for_average_score', 5);
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+        $session = $this->CompleteExamSession($session);
+        DB::table('exam_sessions')->where('id', $session->id)->update([
+            'date_completed' => null,
+            'correct_answers' => $session->question_count,
+            'incorrect_answers' => 0,
+            'current_question' => $session->question_count,
+        ]);
+
+        // Generate test data to calculate averages with
+        for ($i = 1; $i <= 2; $i ++) {
+            DB::table('exam_sessions')->insert([
+                'user_id' => $user->id,
+                'set_id' => $exam->id,
+                'question_count' => 2,
+                'current_question' => 2,
+                'correct_answers' => 1,
+                'incorrect_answers' => 1,
+                'grade' => 30,
+                'date_completed' => Carbon::now()
+            ]);
+        }
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $verifyData = [
+            'set_id' => $exam->id,
+            'recent_average' => 53,
+        ];
+        $this->assertDatabaseHas('exam_records', $verifyData);
+    }
+
+    /** @test */
     public function exam_record_has_last_taken_set_after_completing_a_session() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -207,11 +244,30 @@ class ExamRecordTest extends TestCase
             'set_id' => $exam->id,
             'user_id' => $user->id,
             'mastery_mastered_count'    => 1,
-            'mastery_proficient_count'  => 2,
-            'mastery_familiar_count'    => 3,
-            'mastery_apprentice_count'  => 4,
+            'mastery_proficient_count'  => 3,
+            'mastery_familiar_count'    => 6,
+            'mastery_apprentice_count'  => 10,
         ];
         $this->assertDatabaseHas('exam_records', $verifyData);
+    }
+
+    // DONE: Show the mastery level on the summary page
+    /** @test */
+    public function summary_page_shows_the_overall_mastery_progress() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+        $session = $this->CompleteExamSession($session);
+        DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $exam->id)->update([
+            'mastery_mastered_count'    => 1,
+            'mastery_proficient_count'  => 3,
+            'mastery_familiar_count'    => 6,
+            'mastery_apprentice_count'  => 10,
+        ]);
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $response->assertSeeInOrder(['Mastered', 'value', '10', 'Proficient']);
     }
 
     

@@ -348,9 +348,12 @@ class ExamSessionController extends Controller
             $this->calculateExamRecordStats($examSet);
         }
 
+        $examRecord = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
+
         return view('exam-session.summary')->with([
             'examSet' => $examSet,
             'session' => $session,
+            'examRecord' => $examRecord,
         ]);
     }
 
@@ -385,10 +388,19 @@ class ExamSessionController extends Controller
         foreach($questions as $question) {
             if ($question->score >= config('test.grade_mastered')) {
                 $masteryLevelMastered ++;
+                $masteryLevelProficient ++;
+                $masteryLevelFamiliar ++;
+                $masteryLevelApprentice ++;
+
             } elseif ($question->score >= config('test.grade_proficient')) {
                 $masteryLevelProficient ++;
+                $masteryLevelFamiliar ++;
+                $masteryLevelApprentice ++;
+            
             } elseif ($question->score >= config('test.grade_familiar')) {
                 $masteryLevelFamiliar ++;
+                $masteryLevelApprentice ++;
+            
             } elseif ($question->score >= config('test.grade_apprentice')) {
                 $masteryLevelApprentice ++;
             }
@@ -396,7 +408,7 @@ class ExamSessionController extends Controller
 
         DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
             'times_taken' => $record->times_taken + 1,
-            'recent_average' => $averageTotal / $averageCount,
+            'recent_average' => round($averageTotal / $averageCount),
             'last_completed' => $dateNow,
             'mastery_apprentice_count' => $masteryLevelApprentice,
             'mastery_familiar_count' => $masteryLevelFamiliar,

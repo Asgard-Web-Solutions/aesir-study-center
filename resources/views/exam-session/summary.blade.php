@@ -3,8 +3,49 @@
 @section('content')
 
     <x-card.main title="{{ $examSet->name }} - Summary">
-
+      <x-card.mini>
+        <div class="shadow stats">
+          <div class="stat">
+            <div class="text-2xl stat-figure text-secondary">
+              <i class="fa-solid fa-cubes-stacked"></i>
+            </div>
+            <div class="stat-title">Times Taken</div>
+            <div class="stat-value">{{ $examRecord->times_taken }}</div>
+            <div class="stat-desc">Last Taken {{ $examRecord->last_completed }}</div>
+          </div>
+          <div class="stat">
+            <div class="text-2xl stat-figure text-secondary">
+              <i class="fa-solid fa-percent"></i>
+            </div>
+            <div class="stat-title">Average Score</div>
+            <div class="stat-value">{{ $examRecord->recent_average }}%</div>
+            <div class="stat-desc">Based on your last {{ config('test.count_tests_for_average_score') }} Exam Sessions</div>
+          </div>
+        </div>
+        
+      </x-card.mini>
+      <x-card.mini title="Your Mastery Level">
+        
+        <div class="flex w-full">
+          <div class="w-1/4 text-sm row text-{{ config('test.color_mastered') }}">Mastered:</div><div class="w-3/4"><progress class="w-64 progress progress-{{ config('test.color_mastered') }} " value="{{ $examRecord->mastery_mastered_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+        </div>
+        <div class="flex w-full">
+          <div class="w-1/4 text-sm row text-{{ config('test.color_proficient') }}">Proficient:</div><div class="w-3/4"><progress class="w-64 progress progress-{{ config('test.color_proficient') }} " value="{{ $examRecord->mastery_proficient_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+        </div>
+        <div class="flex w-full">
+          <div class="w-1/4 text-sm row text-{{ config('test.color_familiar') }}">Familiar:</div><div class="w-3/4"><progress class="w-64 progress progress-{{ config('test.color_familiar') }} " value="{{ $examRecord->mastery_familiar_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+        </div>
+        <div class="flex w-full">
+          <div class="w-1/4 text-sm row text-{{ config('test.color_apprentice') }}">Apprentice:</div><div class="w-3/4"><progress class="w-64 progress progress-{{ config('test.color_apprentice') }} " value="{{ $examRecord->mastery_apprentice_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+        </div>
+      </x-card.mini>
     </x-card.main>
+
+    <x-card.main>
+      <x-page.actions primary="Start Test" primaryLink="{{ route('exam-session.start', $examSet->id) }}" secondary="Back To Exam Portal" secondaryLink="{{ route('profile.index') }}" />
+    </x-card.main>
+
+
     <x-card.main title="Latest Test Info">
         <x-card.mini>
             <div class="w-1/2 mx-auto shadow stats">
@@ -47,7 +88,6 @@
               </div>
 
             {{-- // TODO: Show mastery stats --}}
-            {{-- // TODO: Button to take the test again // Button to return to dashboard --}}
         </x-card.mini>
     </x-card.main>            
 
