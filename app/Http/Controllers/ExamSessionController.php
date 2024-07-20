@@ -345,26 +345,63 @@ class ExamSessionController extends Controller
             $session = $this->getSessionById($session->id);
 
             // Recalculate Exam Record Stats
-            $record = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
-
-            $recentSessions = DB::table('exam_sessions')->where('set_id', $examSet->id)->where('user_id', auth()->user()->id)->orderBy('date_completed', 'desc')->limit(config('count_tests_for_average_score'))->get();
-            $averageCount = 0;
-            $averageTotal = 0;
-            foreach($recentSessions as $recentSession) {
-                $averageCount ++;
-                $averageTotal += $recentSession->grade;
-            }
-
-            DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
-                'times_taken' => $record->times_taken + 1,
-                'recent_average' => $averageTotal / $averageCount,
-                'last_completed' => $dateNow,
-            ]);
+            $this->calculateExamRecordStats($examSet);
         }
 
         return view('exam-session.summary')->with([
             'examSet' => $examSet,
             'session' => $session,
+        ]);
+    }
+
+
+    /** ========== Public Helper Functions ========== */
+    public function calculateExamRecordStats(Set $examSet, $user = null) {
+        if (!$user) {
+            $user = User::find(auth()->user()->id);
+        }
+
+        $record = DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $examSet->id)->first();
+
+        $recentSessions = DB::table('exam_sessions')->where('set_id', $examSet->id)->where('user_id', $user->id)->orderBy('date_completed', 'desc')->limit(config('count_tests_for_average_score'))->get();
+        $averageCount = 0;
+        $averageTotal = 0;
+        $dateNow = null;
+        foreach($recentSessions as $recentSession) {
+            if (!$dateNow) {
+                $dateNow = $recentSession->date_completed;
+            }
+
+            $averageCount ++;
+            $averageTotal += $recentSession->grade;
+        }
+
+        $masteryLevelMastered = 0;
+        $masteryLevelProficient = 0;
+        $masteryLevelFamiliar = 0;
+        $masteryLevelApprentice = 0;
+        $questions = DB::table('user_question')->where('user_id', $user->id)->where('set_id', $examSet->id)->get();
+        
+        foreach($questions as $question) {
+            if ($question->score >= config('test.grade_mastered')) {
+                $masteryLevelMastered ++;
+            } elseif ($question->score >= config('test.grade_proficient')) {
+                $masteryLevelProficient ++;
+            } elseif ($question->score >= config('test.grade_familiar')) {
+                $masteryLevelFamiliar ++;
+            } elseif ($question->score >= config('test.grade_apprentice')) {
+                $masteryLevelApprentice ++;
+            }
+        }
+
+        DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
+            'times_taken' => $record->times_taken + 1,
+            'recent_average' => $averageTotal / $averageCount,
+            'last_completed' => $dateNow,
+            'mastery_apprentice_count' => $masteryLevelApprentice,
+            'mastery_familiar_count' => $masteryLevelFamiliar,
+            'mastery_proficient_count' => $masteryLevelProficient,
+            'mastery_mastered_count' => $masteryLevelMastered,
         ]);
     }
 

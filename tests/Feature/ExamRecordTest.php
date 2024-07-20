@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Question;
 use Tests\TestCase;
 use Carbon\Carbon;
 use Config;
@@ -178,8 +179,40 @@ class ExamRecordTest extends TestCase
         $this->assertNotNull($record->last_completed);
     }
 
-    // TODO: Completing an exam updates the mastery progress of the record
+    // DONE: Completing an exam updates the mastery progress of the record
+    /** @test */
+    public function exam_record_gets_mastery_progress_calculation() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+        $session = $this->CompleteExamSession($session);
+        DB::table('exam_sessions')->where('id', $session->id)->update(['date_completed' => null]);
+        $questions = Question::where('set_id', $exam->id)->get();
 
+        // 10 questions are generated in the CreateSet() method.
+        $this->setQuestionMasteryLevel($user, $questions[0], config('test.grade_mastered'));
+        $this->setQuestionMasteryLevel($user, $questions[1], config('test.grade_proficient'));
+        $this->setQuestionMasteryLevel($user, $questions[2], config('test.grade_proficient'));
+        $this->setQuestionMasteryLevel($user, $questions[3], config('test.grade_familiar'));
+        $this->setQuestionMasteryLevel($user, $questions[4], config('test.grade_familiar'));
+        $this->setQuestionMasteryLevel($user, $questions[5], config('test.grade_familiar'));
+        $this->setQuestionMasteryLevel($user, $questions[6], config('test.grade_apprentice'));
+        $this->setQuestionMasteryLevel($user, $questions[7], config('test.grade_apprentice'));
+        $this->setQuestionMasteryLevel($user, $questions[8], config('test.grade_apprentice'));
+        $this->setQuestionMasteryLevel($user, $questions[9], config('test.grade_apprentice'));
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $verifyData = [
+            'set_id' => $exam->id,
+            'user_id' => $user->id,
+            'mastery_mastered_count'    => 1,
+            'mastery_proficient_count'  => 2,
+            'mastery_familiar_count'    => 3,
+            'mastery_apprentice_count'  => 4,
+        ];
+        $this->assertDatabaseHas('exam_records', $verifyData);
+    }
 
     
     // TODO: Write a command to generate/update the ExamRecord for a single user or all users
@@ -187,10 +220,13 @@ class ExamRecordTest extends TestCase
     
 
     /** ========== HELPER FUNCTIONS ========== */
-    public function getExamConfigurationFormData() {
+    private function getExamConfigurationFormData() {
         return [
             'question_count' => 1,
         ];
     }
-
+    
+    private function setQuestionMasteryLevel($user, $question, $mastery) {
+        DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update(['score' => $mastery]);
+    }
 }
