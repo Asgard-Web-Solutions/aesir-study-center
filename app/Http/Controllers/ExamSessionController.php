@@ -143,6 +143,10 @@ class ExamSessionController extends Controller
         ]);
     }
 
+    public function answerRedirect(Set $examSet) {
+        return redirect()->route('exam-session.test', $examSet);
+    }
+
     public function answer(Request $request, Set $examSet) {
         $this->validate($request, [
             'question' => 'required|integer',

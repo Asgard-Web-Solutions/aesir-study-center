@@ -781,6 +781,16 @@ class ExamSessionTest extends TestCase
     // Show a badge if a level down happened
 
     // TODO: Accessing the answer page with a GET request should redirect to the test page
+    /** @test */
+    public function answer_get_request_redirects_to_test_page() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->startExamSession($user, $exam);
+
+        $response = $this->get(route('exam-session.answer', $exam));
+
+        $response->assertRedirect(route('exam-session.test', $exam));
+    }
 
 
 
