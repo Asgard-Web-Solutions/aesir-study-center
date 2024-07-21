@@ -25,7 +25,6 @@ use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index'])->name('user-home')->middleware('auth');
 
 Route::prefix('admin')->group(function () {
     Voyager::routes();
