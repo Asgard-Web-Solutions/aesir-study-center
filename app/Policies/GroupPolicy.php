@@ -46,7 +46,7 @@ class GroupPolicy
      */
     public function delete(User $user, Group $group): bool
     {
-        //
+        return ($group->set->user_id == $user->id);
     }
 
     /**

@@ -18,21 +18,24 @@
 </div>
 
 
-<x-card.main>
+<x-card.main size='xl'>
 
     <x-card.mini title="Group Questions">
         <x-table.main>
             <x-table.head>
                 <x-table.hcell>Question</x-table.hcell>
                 <x-table.hcell>Answer</x-table.hcell>
-                <x-table.hcell>&nbsp;</x-table.hcell>
+                <x-table.hcell>Actions</x-table.hcell>
             </x-table.head>
             <x-table.body>
                 @foreach ($questions as $question)
                     <x-table.row>
                         <x-table.cell>{{ $question->text }}</x-table.cell>
                         <x-table.cell>{{ $question->answers[0]->text }}</x-table.cell>
-                        <x-table.cell><a href="{{ route('group-edit-question', ['group' => $group, 'question' => $question]) }}" class="text-secondary hover:underline hover:text-primary">Edit</a></x-table.cell>
+                        <x-table.cell>
+                            <a href="{{ route('group-edit-question', ['group' => $group, 'question' => $question]) }}" class="mx-2 text-xl text-secondary hover:underline hover:text-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="{{ route('group-delete-question', ['group' => $group, 'question' => $question]) }}" class="mx-2 text-xl text-secondary hover:underline hover:text-primary"><i class="fa-solid fa-trash-can"></i></a>
+                        </x-table.cell>
                     </x-table.row>
                 @endforeach
             </x-table.body>

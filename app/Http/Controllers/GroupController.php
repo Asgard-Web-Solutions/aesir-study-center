@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Alert;
+use DB;
 use App\Models\Group;
 use App\Models\Set;
 use App\Models\Question;
@@ -48,6 +49,29 @@ class GroupController extends Controller
         Alert::toast('Question Group Created', 'success');
 
         return redirect()->route('group-view', $group->id);
+    }
+
+    public function deleteQuestion(Group $group, Question $question) {
+        $this->authorize('delete', $group);
+
+        return view('group.delete')->with([
+            'group' => $group,
+            'question' => $question,
+        ]);
+    }
+
+    public function removeQuestion(Request $request, Group $group, Question $question) {
+        $this->authorize('delete', $group);
+
+        DB::table('user_question')->where('question_id', $question->id)->delete();
+        $question->delete();
+
+        session()->flash('alert', [
+            'type' => 'success',
+            'message' => 'Group Question was successfully deleted.'
+        ]);
+
+        return redirect()->route('group-view', $group);
     }
 
     /**

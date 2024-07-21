@@ -74,6 +74,8 @@ Route::post('/questionGroup/{group}/update', [GroupController::class, 'update'])
 Route::post('/questionGroup/{group}/addQuestions', [GroupController::class, 'storeQuestions'])->name('group-store-questions')->middleware('auth');
 Route::get('/questionGroup/{group}/editQuestion/{question}', [GroupController::class, 'editQuestion'])->name('group-edit-question')->middleware('auth');
 Route::post('/questionGroup/{group}/updateQuestion/{question}', [GroupController::class, 'updateQuestion'])->name('group-update-question')->middleware('auth');
+Route::get('/questionGroup/{group}/deleteQuestion/{question}', [GroupController::class, 'deleteQuestion'])->name('group-delete-question')->middleware('auth');
+Route::post('/questionGroup/{group}/removeQuestion/{question}', [GroupController::class, 'removeQuestion'])->name('group-remove-question')->middleware('auth');
 
 Route::get('/question/{id}', [QuestionController::class, 'answers'])->name('manage-answers')->middleware('auth');
 Route::post('/question/{id}/add', [QuestionController::class, 'storeAnswer'])->name('save-answers')->middleware('auth');
