@@ -45,7 +45,7 @@ class ExamSessionController extends Controller
         $this->authorize('view', $examSet);
 
         // See if there is already an exam in progress
-        $session = $this->getInProgressOrLatestSession($examSet);
+        $session = $this->getInProgressSession($examSet);
         if ($session) {
             return redirect()->route('exam-session.test', $examSet);
         }

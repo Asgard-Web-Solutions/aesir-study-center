@@ -791,6 +791,7 @@ class ExamSessionTest extends TestCase
         $response->assertRedirect(route('exam-session.test', $exam));
     }
 
+    // TODO: Write a test for checking that tests start correctly if a completed test already exists
 
 
 
