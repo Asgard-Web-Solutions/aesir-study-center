@@ -66,12 +66,7 @@ class GroupController extends Controller
         DB::table('user_question')->where('question_id', $question->id)->delete();
         $question->delete();
 
-        session()->flash('alert', [
-            'type' => 'success',
-            'message' => 'Group Question was successfully deleted.'
-        ]);
-
-        return redirect()->route('group-view', $group);
+        return redirect()->route('group-view', $group)->with('alert', 'Group Question was successfully deleted');
     }
 
     /**
