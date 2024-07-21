@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Set as ExamSet;
 use Illuminate\Console\Command;
 
-class ReassignExam extends Command
+class ExamAssignUser extends Command
 {
     /**
      * The name and signature of the console command.
