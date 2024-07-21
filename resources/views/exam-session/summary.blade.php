@@ -4,7 +4,7 @@
 
     <x-card.main title="{{ $examSet->name }} - Summary">
       <x-card.mini>
-        <div class="shadow stats">
+        <div class="shadow stats stats-vertical md:stats-horizontal">
           <div class="stat">
             <div class="text-2xl stat-figure text-secondary">
               <i class="fa-solid fa-cubes-stacked"></i>
@@ -27,16 +27,16 @@
       <x-card.mini title="Your Mastery Level">
         
         <div class="flex w-full">
-          <div class="w-1/4 text-sm row text-{{ config('test.color_mastered') }}">Mastered:</div><div class="w-3/4"><progress class="w-64 progress progress-{{ config('test.color_mastered') }} " value="{{ $examRecord->mastery_mastered_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+          <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('test.color_mastered') }}">Mastered:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('test.color_mastered') }} " value="{{ $examRecord->mastery_mastered_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
         </div>
         <div class="flex w-full">
-          <div class="w-1/4 text-sm row text-{{ config('test.color_proficient') }}">Proficient:</div><div class="w-3/4"><progress class="w-64 progress progress-{{ config('test.color_proficient') }} " value="{{ $examRecord->mastery_proficient_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+          <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('test.color_proficient') }}">Proficient:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('test.color_proficient') }} " value="{{ $examRecord->mastery_proficient_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
         </div>
         <div class="flex w-full">
-          <div class="w-1/4 text-sm row text-{{ config('test.color_familiar') }}">Familiar:</div><div class="w-3/4"><progress class="w-64 progress progress-{{ config('test.color_familiar') }} " value="{{ $examRecord->mastery_familiar_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+          <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('test.color_familiar') }}">Familiar:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('test.color_familiar') }} " value="{{ $examRecord->mastery_familiar_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
         </div>
         <div class="flex w-full">
-          <div class="w-1/4 text-sm row text-{{ config('test.color_apprentice') }}">Apprentice:</div><div class="w-3/4"><progress class="w-64 progress progress-{{ config('test.color_apprentice') }} " value="{{ $examRecord->mastery_apprentice_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+          <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('test.color_apprentice') }}">Apprentice:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('test.color_apprentice') }} " value="{{ $examRecord->mastery_apprentice_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
         </div>
       </x-card.mini>
     </x-card.main>
@@ -48,7 +48,7 @@
 
     <x-card.main title="Latest Test Info">
         <x-card.mini>
-            <div class="w-1/2 mx-auto shadow stats">
+            <div class="w-full mx-auto shadow md:w-1/2 stats stats-vertical md:stats-horizontal">
                 <div class="stat">
                   <div class="stat-title text-accent">Grade</div>
                   <div class="stat-value text-primary">{{ $session->grade }}%</div>
@@ -58,7 +58,7 @@
         </x-card.mini>
 
         <x-card.mini title="Answer Statistics">
-              <div class="shadow stats">
+              <div class="shadow stats stats-vertical md:stats-horizontal">
                 <div class="stat">
                   <div class="text-2xl stat-figure text-success">
                     <i class="fa-solid fa-file-check"></i>
