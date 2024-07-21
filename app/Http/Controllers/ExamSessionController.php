@@ -24,7 +24,7 @@ class ExamSessionController extends Controller
             ]);
         }
 
-        $session = $this->getInProgressOrLatestSession($examSet);
+        $session = $this->getInProgressSession($examSet);
 
         if (!$session) {
             return redirect()->route('exam-session.configure', $examSet);
