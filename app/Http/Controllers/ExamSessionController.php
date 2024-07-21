@@ -16,13 +16,17 @@ class ExamSessionController extends Controller
     public function start(Set $examSet) {
         $this->authorize('view', $examSet);
 
-        // Track that the user has taken this exam if they haven't before
-        $examSet->records()->syncWithoutDetaching(auth()->user()->id);
+        $record = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
+        if (!$record) {
+            DB::table('exam_records')->insert([
+                'user_id' => auth()->user()->id,
+                'set_id' => $examSet->id,
+            ]);
+        }
 
-        // Get current test sessions
-        $session = $examSet->sessions()->wherePivot('date_completed', null)->get();
+        $session = $this->getInProgressOrLatestSession($examSet);
 
-        if (!$session->count()) {
+        if (!$session) {
             return redirect()->route('exam-session.configure', $examSet);
         } else {
             return redirect()->route('exam-session.test', $examSet);
@@ -41,7 +45,7 @@ class ExamSessionController extends Controller
         $this->authorize('view', $examSet);
 
         // See if there is already an exam in progress
-        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
+        $session = $this->getInProgressOrLatestSession($examSet);
         if ($session) {
             return redirect()->route('exam-session.test', $examSet);
         }
@@ -72,12 +76,7 @@ class ExamSessionController extends Controller
     }
 
     public function test(Set $examSet) {
-        $session = DB::table('exam_sessions')
-            ->where('user_id', auth()->user()->id)
-            ->where('set_id', $examSet->id)
-            ->orderByRaw('date_completed IS NULL DESC')
-            ->orderByDesc('date_completed')
-            ->first();
+        $session = $this->getInProgressOrLatestSession($examSet);
 
         // If the last question was answered, complete the session
         if (($session->date_completed) || ($session->current_question == $session->question_count)) {
