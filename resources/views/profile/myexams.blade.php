@@ -20,7 +20,7 @@
                         <x-table.cell hideMobile='true'>@if ($exam->visibility) <span class="badge badge-primary">Public</span> @else <span class="badge badge-accent">Private</span> @endif </x-table.cell>
                         <x-table.cell>
                             <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 text-xl link link-primary"><i class="{{ config('icon.take-exam') }}"></i> Take Exam</a>
-                            <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 text-xl link link-secondary"><i class="{{ config('icon.edit-exam') }}"></i></a>
+                            <a href="{{ route('manage-questions', $exam->id) }}" class="mx-2 text-xl link link-secondary"><i class="{{ config('icon.edit-exam') }}"></i></a>
                         </x-table.cell>
                     </x-table.row>
                 @endforeach
