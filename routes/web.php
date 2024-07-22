@@ -8,6 +8,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ExamSessionController;
+use App\Http\Controllers\ExamSetController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
@@ -26,7 +27,11 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/public', [HomeController::class, 'public'])->name('public-exams');
+Route::prefix('Exam')->name('exam.')->controller(ExamSetController::class)->group(function () {
+    Route::get('/public', 'public')->name('public');
+    Route::get('/{set}', 'view')->name('view');
+});
+
 
 Route::prefix('admin')->group(function () {
     Voyager::routes();
@@ -38,7 +43,7 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
     Route::get('/myexams', 'myexams')->name('myexams');
 });
 
-Route::prefix('Exam')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
+Route::prefix('TakeExam')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/configure', 'configure')->name('configure');
     Route::post('/{set}/store', 'store')->name('store');

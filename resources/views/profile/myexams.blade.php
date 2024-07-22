@@ -13,7 +13,7 @@
             <x-table.body>
                 @foreach($exams as $exam)
                     <x-table.row>
-                        <x-table.cell>{{ $exam->name }}</x-table.cell>
+                        <x-table.cell><a href="{{ route('exam.view', $exam) }}" class="link link-primary">{{ $exam->name }}</a></x-table.cell>
                         <x-table.cell>{{ $exam->questions->count() }}</x-table.cell>
                         <x-table.cell>@if ($exam->visibility) <span class="badge badge-primary">Public</span> @else <span class="badge badge-accent">Private</span> @endif </x-table.cell>
                         <x-table.cell>

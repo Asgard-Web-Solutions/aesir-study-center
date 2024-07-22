@@ -33,9 +33,14 @@
                         <x-button.mobile href="{{ route('profile.exams') }}">Your Exams</x-button.mobile>
                         <x-button.mobile href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.mobile>
                     @endauth
-                    <x-button.mobile href="{{ route('public-exams') }}">Public Exams</x-button.mobile>
+                    <x-button.mobile href="{{ route('exam.public') }}">Public Exams</x-button.mobile>
                     <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.mobile>
                     
+                    @guest
+                        <x-button.mobile href="{{ route('login') }}">Login</x-button.mobile>
+                        <x-button.mobile href="{{ route('register') }}">Register</x-button.mobile>
+                    @endguest
+
                     @auth
                         @if ( auth()->user()->hasRole('admin') )
                             {{-- <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile> --}}
@@ -62,7 +67,7 @@
                         <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
                     @endauth
         
-                    <x-button.nav href="{{ route('public-exams') }}">Public Exams</x-button.nav>
+                    <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>
                     <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
 
                     @auth
@@ -70,6 +75,11 @@
                             {{-- <x-button.nav href="{{ route('manage-exams') }}">Manage Exams</x-button.nav> --}}
                         @endif
                     @endauth
+
+                    @guest
+                        <x-button.nav href="{{ route('login') }}">Login</x-button.nav>
+                        <x-button.nav href="{{ route('register') }}">Register</x-button.nav>
+                    @endguest
 
                     {{-- <a href="#" class="btn btn-ghost">Features</a>
                     <a href="#" class="btn btn-ghost">Pricing</a>
@@ -89,9 +99,6 @@
                             </ul>
                         </div>
                     @endauth
-                    @guest
-                        
-                    @endguest
                 </div>
             </div>
         </nav>
