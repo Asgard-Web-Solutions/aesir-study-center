@@ -27,7 +27,7 @@
                 @endif
 
                 @feature('flash-cards')
-                    <x-card.buttons primaryLabel="Take Exam" primaryAction="{{ route('exam-session.start', $record) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice-start', $record) }}"></x-card.buttons>
+                    <x-card.buttons primaryLabel="Take Exam" primaryAction="{{ route('exam-session.start', $record) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice.start', $record) }}"></x-card.buttons>
                 @else
                     <x-card.buttons primaryLabel="Take Exam" primaryAction="{{ route('exam-session.start', $record) }}"></x-card.buttons>
                 @endfeature

@@ -4,7 +4,7 @@
 
     <x-card.main title="Configure your practice settings">
         <x-card.mini>
-            <form action="{{ route('practice-config-update', $set) }}" method="post">
+            <form action="{{ route('practice.begin', $exam) }}" method="post">
                 @csrf
 
                 <x-form.text label="Name" name="name" />
