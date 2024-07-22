@@ -50,6 +50,16 @@ class ProfileControllerTest extends TestCase
 
         $response->assertSee($exam->name);
     }
+
+    /** @test */
+    public function myexams_shows_link_to_create_exam() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $user->id]);
+
+        $response = $this->get(route('profile.myexams'));
+
+        $response->assertSee(route('exam-create'));
+    }
     
     // TODO: Create a profile edit page so users can actually change their name, emsail, and password
     /** @test */

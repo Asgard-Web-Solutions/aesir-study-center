@@ -55,9 +55,9 @@ Route::prefix('TakeExam')->name('exam-session.')->controller(ExamSessionControll
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
 
-Route::get('/oldexam/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
-Route::post('/oldexam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
-Route::post('/oldexam/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
+Route::get('/Exam/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
+Route::post('/Exam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
+Route::post('/Exam/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
 
 Route::get('/oldexam/{id}', [TestController::class, 'select'])->name('select-test')->middleware('auth');
 Route::post('/oldexam/{id}/start', [TestController::class, 'start'])->name('start-test')->middleware('auth');
