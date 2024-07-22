@@ -8,7 +8,7 @@
     <x-card.mini>
         <div class="md:flex">
             <div class="w-full md:w-1/4">
-                <img src="{{ asset('storage/images/CuriousBarnOwl.webp') }}" alt="Curious Barn Owl in a School" class="">
+                <img src="{{ asset('images/CuriousBarnOwl.webp') }}" alt="Curious Barn Owl in a School" class="">
             </div>
             <div class="w-full p-3 md:w-3/4">
                 <x-text.main>Are you tired of traditional study methods that don't work for you?</x-text.main>
@@ -20,7 +20,7 @@
 </x-card.main>
 
 <x-card.main title="Why Choose {{ config('app.name') }}?" size="full">
-    <img src="{{ asset('storage/images/BarnOwlOutside.webp') }}" alt="Barn Owl enjoying itself outside in a forest at the base of a majestic mountain." class="mx-auto" width="512px" />
+    <img src="{{ asset('images/BarnOwlOutside.webp') }}" alt="Barn Owl enjoying itself outside in a forest at the base of a majestic mountain." class="mx-auto" width="512px" />
     
     <x-card.mini title="Personalized Learning Experience">
         <x-text.main>Our platform allows you to create customized exams based on your unique study needs.</x-text.main>
@@ -58,7 +58,7 @@
 </x-card.main>
 
 <x-card.main title="Join the Community" size="full">
-    <img src="{{ asset('storage/images/BarnOwlFamily.webp') }}" alt="Barn Owl enjoying itself outside in a forest at the base of a majestic mountain." class="mx-auto" width="512px" />
+    <img src="{{ asset('images/BarnOwlFamily.webp') }}" alt="Barn Owl enjoying itself outside in a forest at the base of a majestic mountain." class="mx-auto" width="512px" />
     <x-card.mini>
             <x-text.main>Join our growing community of learners who are transforming their study habits with <span class="text-secondary">{{ config('app.name') }}.</span></x-text.main>
             <x-text.main>Whether you're a student, professional, or lifelong learner, our platform provides the tools you need to succeed.</x-text.main>
