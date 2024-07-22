@@ -10,43 +10,39 @@ use Tests\TestCase;
 
 class PracticeControllerTest extends TestCase
 {
-    /** Disabled because I had to move a bunch of this code around **/
-    // TODO: Fix this test
+    /** @test */
     public function default_page_has_link_to_practice() {
         $user = $this->CreateUserAndAuthenticate();
-        $set = $this->CreateSet();
-        $test = $this->TakeTest([
-            'user' => $user->id,
-            'exam' => $set->id,
-        ]);
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
 
         $response = $this->get(route('profile.exams'));
 
-        $response->assertSee(route('practice-start', $set));
+        $response->assertSee(route('practice.start', $exam));
     }
 
     // Going to the start page redirects to a configuration page if there is no configuration saved for this ExamSet
     /** @test */
     public function practice_start_redirects_to_practice_config_if_no_db_data() {
         $user = $this->CreateUserAndAuthenticate();
-        $set = $this->CreateSet();
+        $exam = $this->CreateSet();
 
-        $response = $this->get(route('practice-start', $set));
+        $response = $this->get(route('practice.start', $exam));
 
-        $response->assertRedirect(route('practice-config', $set));
+        $response->assertRedirect(route('practice.config', $exam));
     }
 
     /** @test */
     public function practice_config_page_loads()
     {
         $user = $this->CreateUserAndAuthenticate();
-        $set = $this->CreateSet();
+        $exam = $this->CreateSet(['user_id' => $user->id]);
 
-        $response = $this->get(route('practice-config', $set));
+        $response = $this->get(route('practice.config', $exam));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewIs('practice.config');
-        $response->assertSee(route('practice-config-update', $set));
+        $response->assertSee(route('practice.begin', $exam));
     }
 
     // Going to the start page starts the practice session if the configuration is already set

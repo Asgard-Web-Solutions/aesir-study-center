@@ -53,6 +53,12 @@ Route::prefix('TakeExam')->name('exam-session.')->controller(ExamSessionControll
     Route::get('/{set}/summary', 'summary')->name('summary');
 });
 
+Route::prefix('Practice')->name('practice.')->controller(PracticeController::class)->middleware('auth')->group(function () {
+    Route::get('/{set}/start', 'start')->name('start');
+    Route::get('/{set}/settings', 'settings')->name('settings');
+    Route::post('/{set}/begin', 'begin')->name('begin');
+});
+
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
 
 Route::get('/Exam/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
@@ -90,6 +96,6 @@ Route::post('/answer/{id}/edit', [QuestionController::class, 'updateAnswer'])->n
 Route::get('/answer/{id}/delete', [QuestionController::class, 'deleteAnswer'])->name('delete-answer')->middleware('auth');
 Route::post('/answer/{id}/delete', [QuestionController::class, 'deleteAnswerConfirm'])->name('delete-answer-confirm')->middleware('auth');
 
-Route::get('/practice/{set}', [PracticeController::class, 'start'])->name('practice-start')->middleware('auth');
-Route::get('/practice/{set}/config', [PracticeController::class, 'config'])->name('practice-config')->middleware('auth');
-Route::post('/practice/{set}/config', [PracticeController::class, 'configUpdate'])->name('practice-config-update')->middleware('auth');
+// Route::get('/practice/{set}', [PracticeController::class, 'start'])->name('practice-start')->middleware('auth');
+// Route::get('/practice/{set}/config', [PracticeController::class, 'config'])->name('practice-config')->middleware('auth');
+// Route::post('/practice/{set}/config', [PracticeController::class, 'configUpdate'])->name('practice-config-update')->middleware('auth');
