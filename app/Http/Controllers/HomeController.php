@@ -33,6 +33,15 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function public(): View
+    {
+        $exams = Set::where('visibility', 1)->get();
+
+        return view('home.public')->with([
+            'exams' => $exams,
+        ]);
+    }
+
     public function history($id): View
     {
         $user_id = Auth::id();

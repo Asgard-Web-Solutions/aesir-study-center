@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <x-card.buttons primaryLabel="Manage Your Own Exams" primaryAction="{{ route('profile.myexams') }}" secondaryLabel="Find Public Exams" secondaryAction="{{ route('tests') }}" />
+    <x-card.buttons primaryLabel="Manage Your Own Exams" primaryAction="{{ route('profile.myexams') }}" secondaryLabel="Find Public Exams" secondaryAction="{{ route('public-exams') }}" />
 
     <x-card.main title="Exams You Have Taken" size="grid">
         @forelse ($records as $record)
@@ -36,7 +36,7 @@
             </x-card.mini>
         @empty
             <x-card.mini>
-                <x-text.main>You have not taken a test yet. <a href="{{ route('tests') }}" class="link-primary link">Find a Public Exam</a> or else <a href="{{ route('exam-create') }}">Create Your Own Exams</a>!</x-text.main>
+                <x-text.main>You have not taken a test yet. <a href="{{ route('public-exams') }}" class="link-primary link">Find a Public Exam</a> or else <a href="{{ route('exam-create') }}">Create Your Own Exams</a>!</x-text.main>
             </x-card.mini>
         @endforelse
     </x-card.main>
