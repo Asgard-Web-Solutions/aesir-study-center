@@ -1,9 +1,6 @@
 @extends('layouts.app2')
 
 @section('content')
-
-    <x-card.buttons primaryLabel="Manage Your Own Exams" primaryAction="{{ route('profile.myexams') }}" secondaryLabel="Find Public Exams" secondaryAction="{{ route('public-exams') }}" />
-
     <x-card.main title="Exams You Have Taken" size="grid">
         @forelse ($records as $record)
             <x-card.mini title="{{ $record->name }}">
@@ -41,4 +38,6 @@
         @endforelse
     </x-card.main>
 
+    <br />
+    <x-card.buttons primaryLabel="Manage Your Own Exams" primaryAction="{{ route('profile.myexams') }}" secondaryLabel="Find Public Exams" secondaryAction="{{ route('public-exams') }}" />
 @endsection

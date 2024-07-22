@@ -29,15 +29,18 @@
                 <ul
                   tabindex="0"
                   class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <x-button.mobile href="{{ route('profile.exams') }}">Exams</x-button.mobile>
-                    <x-button.mobile href="{{ route('public-exams') }}">Find Public Exams</x-button.mobile>
-                    <x-button.mobile href="{{ route('profile.myexams') }}">Your Exams</x-button.mobile>
+                    @auth
+                        <x-button.mobile href="{{ route('profile.exams') }}">Your Exams</x-button.mobile>
+                        <x-button.mobile href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.mobile>
+                    @endauth
+                    <x-button.mobile href="{{ route('public-exams') }}">Public Exams</x-button.mobile>
+                    <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.mobile>
+                    
                     @auth
                         @if ( auth()->user()->hasRole('admin') )
-                            <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile>
+                            {{-- <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile> --}}
                         @endif
                     @endauth
-                    <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.mobile>
 
                     <hr class="my-2" />
                     @auth
@@ -54,16 +57,19 @@
             <div class="container flex items-center justify-between px-4 py-4 mx-auto">
                 <a href="{{ url('/') }}" class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
                 <div class="hidden space-x-4 md:flex">
-                    <x-button.nav href="{{ route('profile.exams') }}">Exams</x-button.nav>
-                    <x-button.nav href="{{ route('public-exams') }}">Find Public Exams</x-button.nav>
-                    <x-button.nav href="{{ route('profile.myexams') }}">Your Exams</x-button.nav>
+                    @auth
+                        <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
+                        <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
+                    @endauth
+        
+                    <x-button.nav href="{{ route('public-exams') }}">Public Exams</x-button.nav>
+                    <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
 
                     @auth
                         @if ( auth()->user()->hasRole('admin') )
-                            <x-button.nav href="{{ route('manage-exams') }}">Manage Exams</x-button.nav>
+                            {{-- <x-button.nav href="{{ route('manage-exams') }}">Manage Exams</x-button.nav> --}}
                         @endif
                     @endauth
-                    <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
 
                     {{-- <a href="#" class="btn btn-ghost">Features</a>
                     <a href="#" class="btn btn-ghost">Pricing</a>
