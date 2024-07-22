@@ -8,6 +8,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ExamSessionController;
+use App\Http\Controllers\ExamSetController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
@@ -26,6 +27,12 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::prefix('Exam')->name('exam.')->controller(ExamSetController::class)->group(function () {
+    Route::get('/public', 'public')->name('public');
+    Route::get('/{set}', 'view')->name('view');
+});
+
+
 Route::prefix('admin')->group(function () {
     Voyager::routes();
 });
@@ -36,7 +43,7 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
     Route::get('/myexams', 'myexams')->name('myexams');
 });
 
-Route::prefix('ExamSession')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
+Route::prefix('TakeExam')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/configure', 'configure')->name('configure');
     Route::post('/{set}/store', 'store')->name('store');
@@ -48,13 +55,12 @@ Route::prefix('ExamSession')->name('exam-session.')->controller(ExamSessionContr
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
 
-Route::get('/exam/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
-Route::post('/exam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
-Route::post('/exam/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
+Route::get('/oldexam/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
+Route::post('/oldexam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
+Route::post('/oldexam/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
 
-Route::get('/exams', [TestController::class, 'sets'])->name('tests')->middleware('auth');
-Route::get('/exam/{id}', [TestController::class, 'select'])->name('select-test')->middleware('auth');
-Route::post('/exam/{id}/start', [TestController::class, 'start'])->name('start-test')->middleware('auth');
+Route::get('/oldexam/{id}', [TestController::class, 'select'])->name('select-test')->middleware('auth');
+Route::post('/oldexam/{id}/start', [TestController::class, 'start'])->name('start-test')->middleware('auth');
 Route::get('/test/{id}', [TestController::class, 'test'])->name('take-test')->middleware('auth');
 Route::post('/test/{id}', [TestController::class, 'answer'])->name('answer')->middleware('auth');
 

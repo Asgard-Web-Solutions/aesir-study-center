@@ -20,7 +20,7 @@ class SetPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Set $set): bool
+    public function view(?User $user, Set $set): bool
     {
         if ($set->visibility == Visibility::isPublic->value) {
             return true;

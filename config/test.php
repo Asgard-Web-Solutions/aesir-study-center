@@ -19,4 +19,6 @@ return [
     'color_apprentice' => 'info',
 
     'target_answers' => env('TARGET_ANSWERS', 4),
+
+    'icon_take_exam' => 'fa-sharp-duotone fa-solid fa-head-side-brain',
 ];
