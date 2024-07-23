@@ -79,6 +79,11 @@ class ExamSessionController extends Controller
         }
 
         $arrayData = json_decode($session->questions_array);
+
+        if (!array_key_exists($session->current_question, $arrayData)) {
+            return redirect()->route('exam-session.summary', $examSet);
+        }
+
         $question = Question::find($arrayData[$session->current_question]);
 
         // Generate the list of answers for this question

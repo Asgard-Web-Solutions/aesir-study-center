@@ -23,7 +23,10 @@
 
     <x-card.main>
         <div class="flex w-full">
-            <div class="w-1/2">
+            <div class="w-1/2 text-left">
+                @if ($session->question_index > 0)
+                    <a href="{{ route('practice.previous', $exam) }}" class="btn btn-secondary btn-outline">Previous</a>
+                @endif
             </div>
             <div class="w-1/2 text-right">
                 <a href="{{ route('practice.next', $exam) }}" class="btn btn-primary btn-outline">Next</a>

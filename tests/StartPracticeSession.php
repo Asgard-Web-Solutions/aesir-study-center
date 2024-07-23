@@ -2,20 +2,21 @@
 
 namespace Tests;
 
+use DB;
+use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\Test;
 use App\Models\User;
 use App\Models\Question;
-use DB;
-use Carbon\Carbon;
+use App\Models\ExamPractice;
 
 trait StartPracticeSession
 {
     public function StartPracticeSession(User $user, Set $exam)
     {
-        $record = DB::table('exam_practices')->where('exam_id', $exam->id)->where('user_id', $user->id)->first();
+        $record = ExamPractice::where('exam_id', $exam->id)->where('user_id', $user->id)->first();
         if (!$record) {
-            DB::table('exam_practices')->insert([
+            ExamPractice::create([
                 'exam_id' => $exam->id,
                 'user_id' => $user->id,
                 'question_count' => $exam->questions->count(),
@@ -24,7 +25,7 @@ trait StartPracticeSession
             ]);
         }
 
-        $session = DB::table('exam_practices')->where('user_id', $user->id)->where('exam_id', $exam->id)->first();
+        $session = ExamPractice::where('user_id', $user->id)->where('exam_id', $exam->id)->first();
 
         $questions = Question::where('set_id', $exam->id)->get();
         foreach ($questions as $question) {

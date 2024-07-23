@@ -18,6 +18,12 @@ class PracticeController extends Controller
             abort(404, 'Not found');
         }
 
+        $session = $this->getPracticeSession($exam);
+
+        if ($session) {
+            return redirect()->route('practice.review', $exam);
+        }
+
         ExamFunctions::initiate_questions_for_authed_user($exam);
 
         $questionArray = $exam->questions->pluck('id');
@@ -49,6 +55,11 @@ class PracticeController extends Controller
         $session = $this->getPracticeSession($exam);
 
         $questionArray = json_decode($session->question_order);
+
+        if (!array_key_exists($session->question_index, $questionArray)) {
+            return redirect()->route('practice.done', $exam);
+        }
+
         $question = Question::find($questionArray[$session->question_index]);
         $answers = Answer::where('question_id', $question->id)->where('correct', 1)->get();
 
@@ -56,11 +67,31 @@ class PracticeController extends Controller
             'exam' => $exam,
             'question' => $question,
             'answers' => $answers,
+            'session' => $session,
+        ]);
+    }
+
+    public function done(ExamSet $exam) {
+        
+        $session = $this->getPracticeSession($exam);
+
+        if (!$session) {
+            return redirect()->route('profile.exams');
+        }
+
+        $session->delete();
+
+        return view('practice.done')->with([
+            'exam' => $exam,
         ]);
     }
 
     public function next(ExamSet $exam) {
         $session = $this->getPracticeSession($exam);
+
+        if ($session->question_index >= $session->question_count - 1) {
+            return redirect()->route('practice.done', $exam);
+        }
 
         $session->update([
             'question_index' => $session->question_index + 1,
@@ -68,6 +99,21 @@ class PracticeController extends Controller
 
         return redirect()->route('practice.review', $exam);
     }
+    
+    public function previous(ExamSet $exam) {
+        $session = $this->getPracticeSession($exam);
+
+        if ($session->question_index == 0) {
+            return redirect()->route('practice.review', $exam);
+        }
+
+        $session->update([
+            'question_index' => $session->question_index - 1,
+        ]);
+
+        return redirect()->route('practice.review', $exam);
+    }
+    
 
     /** ========== Helper Functions ========== */
     private function getPracticeSession(ExamSet $exam) {
