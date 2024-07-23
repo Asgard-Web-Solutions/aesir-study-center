@@ -46,7 +46,7 @@ class PracticeController extends Controller
     }
 
     public function review(ExamSet $exam) {
-        $session = DB::table('exam_practices')->where('exam_id', $exam->id)->where('user_id', auth()->user()->id)->first();
+        $session = $this->getPracticeSession($exam);
 
         $questionArray = json_decode($session->question_order);
         $question = Question::find($questionArray[$session->question_index]);
@@ -57,5 +57,22 @@ class PracticeController extends Controller
             'question' => $question,
             'answers' => $answers,
         ]);
+    }
+
+    public function next(ExamSet $exam) {
+        $session = $this->getPracticeSession($exam);
+
+        $session->update([
+            'question_index' => $session->question_index + 1,
+        ]);
+
+        return redirect()->route('practice.review', $exam);
+    }
+
+    /** ========== Helper Functions ========== */
+    private function getPracticeSession(ExamSet $exam) {
+        $session = ExamPractice::where('exam_id', $exam->id)->where('user_id', auth()->user()->id)->first();
+
+        return $session;
     }
 }

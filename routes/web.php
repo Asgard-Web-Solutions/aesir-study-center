@@ -58,6 +58,7 @@ Route::prefix('practice')->name('practice.')->controller(PracticeController::cla
     Route::get('/{set}/settings', 'settings')->name('settings');
     Route::post('/{set}/begin', 'begin')->name('begin');
     Route::get('/{set}/review', 'review')->name('review');
+    Route::get('/{set}/next', 'next')->name('next');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');

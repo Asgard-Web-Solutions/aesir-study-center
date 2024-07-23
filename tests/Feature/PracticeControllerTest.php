@@ -111,6 +111,32 @@ class PracticeControllerTest extends TestCase
         $response->assertSee($answer->text);
     }
 
+    /** @test */
+    public function practice_next_page_increases_index() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $user->id]);
+        $session = $this->StartPracticeSession($user, $exam);
+
+        $response = $this->get(route('practice.next', $exam));
+
+        $verifyData = [
+            'question_index' => $session->question_index + 1,
+        ];
+
+        $this->assertDatabaseHas('exam_practices', $verifyData);
+    }
+
+    /** @test */
+    public function practice_next_page_redirects_to_review_page() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $user->id]);
+        $session = $this->StartPracticeSession($user, $exam);
+
+        $response = $this->get(route('practice.next', $exam));
+
+        $response->assertRedirect(route('practice.review', $exam));
+    }
+
 
     // Going to the start page starts the practice session if the configuration is already set
 

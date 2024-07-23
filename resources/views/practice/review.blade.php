@@ -21,4 +21,14 @@
           
     </x-card.main>
 
+    <x-card.main>
+        <div class="flex w-full">
+            <div class="w-1/2">
+            </div>
+            <div class="w-1/2 text-right">
+                <a href="{{ route('practice.next', $exam) }}" class="btn btn-primary btn-outline">Next</a>
+            </div>
+        </div>
+    </x-card.main>
+
 @endsection
