@@ -22,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Feature::define('flash-cards', function() {
+            return true;
+            
             if (app()->environment(['local', 'testing'])) {
                 return true;
             }
