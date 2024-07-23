@@ -64,6 +64,6 @@
 </x-card.main>
 
 <div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
-    <a href="{{ route('manage-exams') }}" class="btn btn-secondary">{{ __('Manage Exams') }}</a>
+    <a href="{{ route('profile.myexams') }}" class="btn btn-secondary">{{ __('Manage Your Exams') }}</a>
 </div>
 @endsection

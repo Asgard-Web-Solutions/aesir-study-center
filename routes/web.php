@@ -53,17 +53,21 @@ Route::prefix('TakeExam')->name('exam-session.')->controller(ExamSessionControll
     Route::get('/{set}/summary', 'summary')->name('summary');
 });
 
-Route::prefix('Practice')->name('practice.')->controller(PracticeController::class)->middleware('auth')->group(function () {
+Route::prefix('practice')->name('practice.')->controller(PracticeController::class)->middleware('auth')->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/settings', 'settings')->name('settings');
     Route::post('/{set}/begin', 'begin')->name('begin');
+    Route::get('/{set}/review', 'review')->name('review');
+    Route::get('/{set}/next', 'next')->name('next');
+    Route::get('/{set}/previous', 'previous')->name('previous');
+    Route::get('/{set}/done', 'done')->name('done');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
 
-Route::get('/Exam/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
-Route::post('/Exam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
-Route::post('/Exam/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
+Route::get('/ManageExam/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
+Route::post('/ManageExam/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
+Route::post('/ManageExam/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
 
 Route::get('/oldexam/{id}', [TestController::class, 'select'])->name('select-test')->middleware('auth');
 Route::post('/oldexam/{id}/start', [TestController::class, 'start'])->name('start-test')->middleware('auth');

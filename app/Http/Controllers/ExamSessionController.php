@@ -6,10 +6,12 @@ use DB;
 use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Requests\ExamSessionConfigurationRequest;
-use App\Models\Question;
 use App\Models\Answer;
+use App\Models\Question;
+use Illuminate\Http\Request;
+use App\Helpers\ExamFunctions;
+use App\Http\Requests\ExamSessionConfigurationRequest;
+use Illuminate\Support\Facades\Validator;
 
 class ExamSessionController extends Controller
 {
@@ -36,13 +38,40 @@ class ExamSessionController extends Controller
     public function configure(Set $examSet) {
         $this->authorize('view', $examSet);
 
+        $now = Carbon::now();
+        $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
+
+        if ($maxQuestions == 0) {
+            $maxQuestions = $examSet->questions->count();
+        }
+
+        if ($maxQuestions == 0) {
+            return redirect()->route('profile.exams')->with('error', 'This exam has no questions yet');
+        }
+
         return view('exam-session.configure')->with([
             'examSet' => $examSet,
+            'maxQuestions' => $maxQuestions,
         ]);
     }
 
     public function store(ExamSessionConfigurationRequest $request, Set $examSet) {
         $this->authorize('view', $examSet);
+
+        $now = Carbon::now();
+        $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
+
+        if ($maxQuestions == 0) {
+            $maxQuestions = $examSet->questions->count();
+        }
+
+        $request->validate([
+            'question_count' => 'max:' . $maxQuestions,
+        ]);
+
+        if ($request->question_count > $maxQuestions) {
+            return back()->with('error', 'Requested question count exceeds maximum available of ' . $maxQuestions . ' Questions.');
+        }
 
         // See if there is already an exam in progress
         $session = $this->getInProgressSession($examSet);
@@ -51,18 +80,12 @@ class ExamSessionController extends Controller
         }
 
         // Initiate questions for the user
-        $user = User::find(auth()->user()->id);
-        $now = new Carbon();
-        $start = $now->clone()->subMinutes(2);
-
-        foreach ($examSet->questions as $question) {
-            if (! $user->questions->contains($question)) {
-                $user->questions()->attach($question->id, ['score' => 0, 'next_at' => $start, 'set_id' => $examSet->id]);
-            }
-        }
+        ExamFunctions::initiate_questions_for_authed_user($examSet);
+        $now = Carbon::now();
+        $userId = auth()->user()->id;
 
         // Select number of questions requested
-        $questions = DB::table('user_question')->where('user_id', $user->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->get();
+        $questions = DB::table('user_question')->where('user_id', $userId)->where('set_id', $examSet->id)->where('next_at', '<', $now)->get();
 
         // Shuffle and select the appropriate number of questions
         $questions = $questions->random($request->question_count);
@@ -70,7 +93,7 @@ class ExamSessionController extends Controller
         $questionArray = $questions->pluck('question_id');
 
         // Create a new instance of this test
-        $examSet->sessions()->attach(auth()->user()->id, ['question_count' => $request->question_count, 'questions_array' => json_encode($questionArray), 'current_question' => 0]);
+        $examSet->sessions()->attach($userId, ['question_count' => $request->question_count, 'questions_array' => json_encode($questionArray), 'current_question' => 0]);
 
         return redirect()->route('exam-session.test', $examSet->id);
     }
@@ -84,6 +107,11 @@ class ExamSessionController extends Controller
         }
 
         $arrayData = json_decode($session->questions_array);
+
+        if (!array_key_exists($session->current_question, $arrayData)) {
+            return redirect()->route('exam-session.summary', $examSet);
+        }
+
         $question = Question::find($arrayData[$session->current_question]);
 
         // Generate the list of answers for this question
@@ -225,9 +253,11 @@ class ExamSessionController extends Controller
         if ($recordAnswer) {
             $updatedScore = ($result == 1) ? $userQuestion->score + config('test.add_score') : $userQuestion->score - config('test.sub_score');
             $updatedScore = ($updatedScore < config('test.min_score')) ? config('test.min_score') : $updatedScore;
+            $nextAt = Carbon::now()->addHours((config('test.hour_multiplier') * ($updatedScore ** 3)));
 
             DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
-                'score' => $updatedScore
+                'score' => $updatedScore,
+                'next_at' => $nextAt,
             ]);
 
             // Update mastery for leveled up questions

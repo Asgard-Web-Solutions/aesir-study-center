@@ -66,7 +66,7 @@
             @endif
         
             <x-card.mini>
-                <x-card.buttons primaryLabel="Take Exam" primaryAction="{{ route('exam-session.start', $exam) }}" />
+                <x-card.buttons primaryLabel="Take Exam" primaryAction="{{ route('exam-session.start', $exam) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice.start', $exam) }}" />
             </x-card.mini>
     
     </x-card.main>
