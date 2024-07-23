@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ExamFunctions;
 use DB;
 use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Requests\ExamSessionConfigurationRequest;
-use App\Models\Question;
 use App\Models\Answer;
+use App\Models\Question;
+use Illuminate\Http\Request;
+use App\Helpers\ExamFunctions;
+use App\Http\Requests\ExamSessionConfigurationRequest;
+use Illuminate\Support\Facades\Validator;
 
 class ExamSessionController extends Controller
 {
@@ -37,13 +38,39 @@ class ExamSessionController extends Controller
     public function configure(Set $examSet) {
         $this->authorize('view', $examSet);
 
+        $now = Carbon::now();
+        $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
+
+
         return view('exam-session.configure')->with([
             'examSet' => $examSet,
+            'maxQuestions' => $maxQuestions,
         ]);
     }
 
     public function store(ExamSessionConfigurationRequest $request, Set $examSet) {
         $this->authorize('view', $examSet);
+
+        $now = Carbon::now();
+        $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
+
+        $validator = Validator::make($request->all(), [
+            'question_count' => "required|max:{$maxQuestions}",
+        ]);
+
+        // Manually validate something that can't be done easily with the built-in validator
+        $validator->after(function ($validator) use ($request, $maxQuestions) {
+            if ($request->input('question_count') > $maxQuestions) {
+                $validator->errors()->add('question_count', 'Maximum count Question Count is: ' . $maxQuestions);
+            }
+        });
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         // See if there is already an exam in progress
         $session = $this->getInProgressSession($examSet);
@@ -225,9 +252,11 @@ class ExamSessionController extends Controller
         if ($recordAnswer) {
             $updatedScore = ($result == 1) ? $userQuestion->score + config('test.add_score') : $userQuestion->score - config('test.sub_score');
             $updatedScore = ($updatedScore < config('test.min_score')) ? config('test.min_score') : $updatedScore;
+            $nextAt = Carbon::now()->addHours((config('test.hour_multiplier') * ($updatedScore ** 3)));
 
             DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
-                'score' => $updatedScore
+                'score' => $updatedScore,
+                'next_at' => $nextAt,
             ]);
 
             // Update mastery for leveled up questions

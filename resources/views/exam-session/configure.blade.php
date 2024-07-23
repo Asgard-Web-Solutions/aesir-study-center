@@ -9,9 +9,9 @@
             @csrf
 
             @php
-                $questionCount = ($examSet->questions->count() < 10) ? $examSet->questions->count() : 10;
+                $questionCount = ($maxQuestions < 10) ? $maxQuestions : 10;
             @endphp
-            <x-form.text name='question_count' label='How Many Questions?' helptext='Question Pool: {{  $examSet->questions->count() }}' value='{{ $questionCount }}'></x-form.text>
+            <x-form.text name='question_count' label='How Many Questions?' helptext='Available Questions: {{ $maxQuestions }} / Question Pool: {{  $examSet->questions->count() }}' value='{{ $questionCount }}'></x-form.text>
             
             <x-card.buttons submitLabel='Begin Test' />
         </form>
