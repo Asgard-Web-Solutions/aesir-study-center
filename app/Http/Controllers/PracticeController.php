@@ -18,6 +18,8 @@ class PracticeController extends Controller
             abort(404, 'Not found');
         }
 
+        $this->authorize('view', $exam);
+
         $session = $this->getPracticeSession($exam);
 
         if ($session) {
@@ -44,6 +46,9 @@ class PracticeController extends Controller
             abort(404, 'Not found');
         }
 
+        $this->authorize('view', $exam);
+        $this->authorize('create', ExamPractice::class);
+
         $selectMastery = ['All', 'Strong', 'Weak'];
         
         return view('practice.config')->with([
@@ -52,8 +57,11 @@ class PracticeController extends Controller
     }
 
     public function review(ExamSet $exam) {
+        $this->authorize('view', $exam);
+        
         $session = $this->getPracticeSession($exam);
-
+        $this->authorize('view', $session);
+        
         $questionArray = json_decode($session->question_order);
 
         if (!array_key_exists($session->question_index, $questionArray)) {
@@ -72,8 +80,10 @@ class PracticeController extends Controller
     }
 
     public function done(ExamSet $exam) {
+        $this->authorize('view', $exam);
         
         $session = $this->getPracticeSession($exam);
+        $this->authorize('delete', $session);
 
         if (!$session) {
             return redirect()->route('profile.exams');
@@ -87,7 +97,10 @@ class PracticeController extends Controller
     }
 
     public function next(ExamSet $exam) {
+        $this->authorize('view', $exam);
+
         $session = $this->getPracticeSession($exam);
+        $this->authorize('view', $session);
 
         if ($session->question_index >= $session->question_count - 1) {
             return redirect()->route('practice.done', $exam);
@@ -101,7 +114,10 @@ class PracticeController extends Controller
     }
     
     public function previous(ExamSet $exam) {
+        $this->authorize('view', $exam);
+
         $session = $this->getPracticeSession($exam);
+        $this->authorize('view', $session);
 
         if ($session->question_index == 0) {
             return redirect()->route('practice.review', $exam);
