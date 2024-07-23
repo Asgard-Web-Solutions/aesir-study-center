@@ -41,6 +41,13 @@ class ExamSessionController extends Controller
         $now = Carbon::now();
         $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
 
+        if ($maxQuestions == 0) {
+            $maxQuestions = $examSet->questions->count();
+        }
+
+        if ($maxQuestions == 0) {
+            return redirect()->route('profile.exams')->with('error', 'This exam has no questions yet');
+        }
 
         return view('exam-session.configure')->with([
             'examSet' => $examSet,
@@ -54,22 +61,16 @@ class ExamSessionController extends Controller
         $now = Carbon::now();
         $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
 
-        $validator = Validator::make($request->all(), [
-            'question_count' => "required|max:{$maxQuestions}",
+        if ($maxQuestions == 0) {
+            $maxQuestions = $examSet->questions->count();
+        }
+
+        $request->validate([
+            'question_count' => 'max:' . $maxQuestions,
         ]);
 
-        // Manually validate something that can't be done easily with the built-in validator
-        $validator->after(function ($validator) use ($request, $maxQuestions) {
-            if ($request->input('question_count') > $maxQuestions) {
-                $validator->errors()->add('question_count', 'Maximum count Question Count is: ' . $maxQuestions);
-            }
-        });
-
-        // Check if validation fails
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        if ($request->question_count > $maxQuestions) {
+            return back()->with('error', 'Requested question count exceeds maximum available of ' . $maxQuestions . ' Questions.');
         }
 
         // See if there is already an exam in progress
