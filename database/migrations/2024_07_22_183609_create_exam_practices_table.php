@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('exam_id');
+            $table->integer('question_count')->default(0);
             $table->json('question_order')->nullable();
             $table->integer('question_index')->default(0);
             $table->timestamps();

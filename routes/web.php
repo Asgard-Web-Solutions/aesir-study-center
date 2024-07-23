@@ -53,10 +53,11 @@ Route::prefix('TakeExam')->name('exam-session.')->controller(ExamSessionControll
     Route::get('/{set}/summary', 'summary')->name('summary');
 });
 
-Route::prefix('Practice')->name('practice.')->controller(PracticeController::class)->middleware('auth')->group(function () {
+Route::prefix('practice')->name('practice.')->controller(PracticeController::class)->middleware('auth')->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/settings', 'settings')->name('settings');
     Route::post('/{set}/begin', 'begin')->name('begin');
+    Route::get('/{set}/review', 'review')->name('review');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
