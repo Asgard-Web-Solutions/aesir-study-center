@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\SetController;
-use App\Http\Controllers\GroupController;
-use App\Http\Controllers\PracticeController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ExamSessionController;
-use App\Http\Controllers\ExamSetController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SetController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ExamSetController;
+use App\Http\Controllers\ExamSessionController;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
 /*
@@ -33,7 +34,7 @@ Route::prefix('Exam')->name('exam.')->controller(ExamSetController::class)->grou
 });
 
 
-Route::prefix('admin')->group(function () {
+Route::prefix('boyager')->group(function () {
     Voyager::routes();
 });
 
@@ -61,6 +62,10 @@ Route::prefix('practice')->name('practice.')->controller(PracticeController::cla
     Route::get('/{set}/next', 'next')->name('next');
     Route::get('/{set}/previous', 'previous')->name('previous');
     Route::get('/{set}/done', 'done')->name('done');
+});
+
+Route::prefix('admin')->name('admin.')->controller(AdminController::class)->middleware('auth')->group(function () {
+    Route::get('/', 'index')->name('index');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');

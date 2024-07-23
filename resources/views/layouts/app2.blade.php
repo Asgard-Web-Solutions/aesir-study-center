@@ -106,45 +106,44 @@
         <!-- Main Content -->
         <main class="mt-8">
             @if ($errors->any())
-                <div class="relative px-4 py-3 mb-4 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
-                    <strong class="font-bold">Whoops! Something went wrong.</strong>
-                    <ul class="mt-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                @foreach(errors->all() as $error)
+                    <div role="alert" class="alert alert-error">
+                        <i class="fa-solid fa-hexagon-exclamation"></i>
+                        <span>Error! {{ $error }}</span>
+                    </div>
+                @endforeach
+            @endif
+
+            @if (session('error'))
+                @if(is_string(session('error')))
+                    <div role="alert" class="alert alert-error">
+                        <i class="fa-solid fa-hexagon-exclamation"></i>
+                        <strong class="font-bold">Success!</strong>
+                        <p class="mt-1">{{ session('error') }}</p>
+                    </div>
+                @endif
+            @endif
+
+            @if (session('warning'))
+                @if(is_string(session('warning')))
+                    <div role="alert" class="alert alert-warning">
+                        <i class="fa-sharp fa-solid fa-triangle-exclamation"></i>
+                        <strong class="font-bold">Success!</strong>
+                        <p class="mt-1">{{ session('warning') }}</p>
+                    </div>
+                @endif
             @endif
 
             @if (session('alert'))
                 @if(is_string(session('alert')))
-                    <div class="relative px-4 py-3 mb-4 text-green-700 bg-green-100 border border-green-400 rounded" role="alert">
+                    <div role="alert" class="alert alert-info">
+                        <i class="fa-solid fa-circle-exclamation"></i>
                         <strong class="font-bold">Success!</strong>
                         <p class="mt-1">{{ session('alert') }}</p>
                     </div>
                 @endif
             @endif
             
-            <!-- Section to show session error messages -->
-            @if (session('error'))
-                @if(is_string(session('error')))
-                    <div class="relative px-4 py-3 mb-4 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
-                        <strong class="font-bold">Error!</strong>
-                        <p class="mt-1">{{ session('error') }}</p>
-                    </div>
-                @endif
-            @endif
-            
-            <!-- Section to show session warning messages -->
-            @if (session('warning'))
-                @if(is_string(session('warning')))
-                    <div class="relative px-4 py-3 mb-4 text-yellow-700 bg-yellow-100 border border-yellow-400 rounded" role="alert">
-                        <strong class="font-bold">Warning!</strong>
-                        <p class="mt-1">{{ session('warning') }}</p>
-                    </div>
-                @endif
-            @endif
-        
             
             @yield('content')
         </main>
