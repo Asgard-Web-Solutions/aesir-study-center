@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
@@ -19,6 +20,14 @@ class AdminControllerTest extends TestCase
     }
 
     // TODO: Create an ACP page
+    /** @test */
+    public function acp_page_exists() {
+        $this->CreateUserAndAuthenticate();
+
+        $response = $this->get(route('admin.index'));
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
 
     // TODO: Create a User List page
 
