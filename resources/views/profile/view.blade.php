@@ -22,11 +22,13 @@
                     <x-table.hcell>Exam Name</x-table.hcell>
                     <x-table.hcell>Times Taken</x-table.hcell>
                 </x-table.head>
-                @foreach ($records as $exam)
-                    <x-table.row>
-                        <x-table.cell><a href="{{ route('exam.view', $exam) }}" class="link link-secondary">{{ $exam->name }}</a></x-table.cell>
-                        <x-table.cell>{{ $exam->pivot->times_taken }}</x-table.cell>
-                    </x-table.row>
+                @foreach ($user->records as $exam)
+                    @if ($exam->visibility && ($exam->pivot->times_taken > 0))
+                        <x-table.row>
+                            <x-table.cell><a href="{{ route('exam.view', $exam) }}" class="link link-secondary">{{ $exam->name }}</a></x-table.cell>
+                            <x-table.cell>{{ $exam->pivot->times_taken }}</x-table.cell>
+                        </x-table.row>
+                    @endif
                 @endforeach
             </x-table.main>
         </x-card.mini>

@@ -127,6 +127,7 @@ class ProfileControllerTest extends TestCase
         DB::table('exam_records')->insert([
             'user_id' => $user->id,
             'set_id' => $exam->id,
+            'times_taken' => 1,
         ]);
 
         $response = $this->get(route('profile.view', $user));
