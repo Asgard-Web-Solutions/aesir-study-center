@@ -42,6 +42,8 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
     Route::get('/', 'index')->name('index');
     Route::get('/exams', 'exams')->name('exams');
     Route::get('/myexams', 'myexams')->name('myexams');
+    Route::post('/update', 'update')->name('update');
+    Route::post('/changepass', 'changepass')->name('changepass');
 });
 
 Route::prefix('TakeExam')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {

@@ -10,7 +10,7 @@ use Tests\TestCase;
 class ProfileControllerTest extends TestCase
 {
     
-    // TODO: Create an ExamPortal page that shows user ExamRecords
+    // DONE: Create an ExamPortal page that shows user ExamRecords
     /** 
      * @test 
      * @dataProvider pagesDataProvider
@@ -37,10 +37,8 @@ class ProfileControllerTest extends TestCase
 
         $response->assertSee($exam->name);
     }
-
-    // TODO: Portal link shows up in the menu
-    
-    // TODO: Create an ExamManage page that shows the exams that you have created, probably in a list instead of the cards
+   
+    // DONE: Create an ExamManage page that shows the exams that you have created, probably in a list instead of the cards
     /** @test */
     public function myexams_shows_list_of_your_exams() {
         $user = $this->CreateUserAndAuthenticate();
@@ -61,7 +59,7 @@ class ProfileControllerTest extends TestCase
         $response->assertSee(route('exam-create'));
     }
     
-    // TODO: Create a profile edit page so users can actually change their name, emsail, and password
+    // TODO: Create a profile edit page so users can actually change their name, email, and password
     /** @test */
     public function profile_index_page_loads() 
     {
@@ -71,6 +69,22 @@ class ProfileControllerTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewIs('profile.index');
+        $response->assertSee($user->email);
+    }
+
+    /** @test */
+    public function profile_save_page_updates_database() {
+        $user = $this->CreateUserAndAuthenticate();
+
+        $data = [
+            'name' => 'Captain Kirk',
+            'email' => 'kirk@enterprise.org',
+        ];
+
+        $response = $this->post(route('profile.update'), $data);
+
+        $data['id'] = $user->id;
+        $this->assertDatabaseHas('users', $data);
     }
 
     // TODO: Profile link shows up in the menu
