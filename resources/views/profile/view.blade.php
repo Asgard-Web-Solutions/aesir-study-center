@@ -22,7 +22,7 @@
                     <x-table.hcell>Exam Name</x-table.hcell>
                     <x-table.hcell>Times Taken</x-table.hcell>
                 </x-table.head>
-                @foreach ($user->records as $exam)
+                @foreach ($records as $exam)
                     <x-table.row>
                         <x-table.cell><a href="{{ route('exam.view', $exam) }}" class="link link-secondary">{{ $exam->name }}</a></x-table.cell>
                         <x-table.cell>{{ $exam->pivot->times_taken }}</x-table.cell>

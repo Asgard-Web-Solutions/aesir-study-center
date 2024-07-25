@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use DB;
 use App\Models\User;
 use Laravel\Pennant\Feature;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -70,8 +71,11 @@ class ProfileController extends Controller
 
     public function view(User $user) {
 
+        $records = DB::table('exam_records')->where('user_id', $user->id)->get();
+
         return view('profile.view')->with([
             'user' => $user,
+            'records' => $records,
         ]);
     }
 
