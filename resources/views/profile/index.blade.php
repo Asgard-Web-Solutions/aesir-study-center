@@ -9,7 +9,7 @@
                     <x-user.avatar size='lg'>{{ $user->gravatarUrl(256) }}</x-user.avatar>
                 </div>
                 <div class="pl-4 text-justify">
-                    <x-text.main>We use your <a href="https://gravatar.com/" class="link link-accent">Gravatar</a> (Global Avatar) for your profile image. This is based on the email address that you give us to look up your Gravatar profile.</x-text.main>
+                    <x-text.main>We use your <a href="https://gravatar.com/" class="link link-accent" target="_blank">Gravatar</a> (Global Avatar) for your profile image. This is based on the email address that you give us to look up your Gravatar profile.</x-text.main>
                     <x-text.main>To change your profile picture, please update your settings in the Gravatar website. Note that we only allow <span class="text-accent">G</span> and <span class="text-accent">PG</span> rated images.</x-text.main>
                 </div>
             </div>

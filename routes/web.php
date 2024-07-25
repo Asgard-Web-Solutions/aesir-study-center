@@ -28,7 +28,7 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::prefix('Exam')->name('exam.')->controller(ExamSetController::class)->group(function () {
+Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->group(function () {
     Route::get('/public', 'public')->name('public');
     Route::get('/{set}', 'view')->name('view');
 });
@@ -46,7 +46,9 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
     Route::post('/changepass', 'changepass')->name('changepass');
 });
 
-Route::prefix('TakeExam')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
+Route::get('/profile/{user}', [ProfileController::class, 'view'])->name('profile.view');
+
+Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/configure', 'configure')->name('configure');
     Route::post('/{set}/store', 'store')->name('store');
