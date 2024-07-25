@@ -42,11 +42,10 @@
                     @endguest
 
                     @auth
-                        @if ( auth()->user()->hasRole('admin') )
-                            {{-- <x-button.mobile href="{{ route('manage-exams') }}">Manage Exams</x-button.mobile> --}}
+                        @if ( auth()->user()->isAdmin )
+                            <x-button.mobile href="{{ route('admin.index') }}">Admin Control Panel</x-button.mobile>
                         @endif
                     @endauth
-
                     <hr class="my-2" />
                     @auth
                         <x-button.mobile href="{{ route('home') }}">Home</x-button.mobile>
@@ -71,8 +70,8 @@
                     <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
 
                     @auth
-                        @if ( auth()->user()->hasRole('admin') )
-                            {{-- <x-button.nav href="{{ route('manage-exams') }}">Manage Exams</x-button.nav> --}}
+                        @if ( auth()->user()->isAdmin )
+                            <x-button.nav href="{{ route('admin.index') }}">Admin Control Panel</x-button.nav>
                         @endif
                     @endauth
 

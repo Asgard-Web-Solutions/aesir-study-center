@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    use CreateAdminAndAuthenticate;
     use CreateUserAndAuthenticate;
     use StartPracticeSession;
     use CompleteExamSession;

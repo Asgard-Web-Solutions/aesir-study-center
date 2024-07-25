@@ -10,6 +10,7 @@
                         <x-table.row>
                             <x-table.cell>{{ $user->name }}</x-table.cell>
                             <x-table.cell>{{ $user->email }}</x-table.cell>
+                            <x-table.cell><a href="{{ route('admin.user', $user) }}" class="link link-secondary">Edit user</a></x-table.cell>
                         </x-table.row>
                     @endforeach
                 </x-table.body>
