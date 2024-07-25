@@ -50,7 +50,7 @@ class AdminControllerTest extends TestCase
         $response->assertSee($user->email);
     }
 
-    // TODO: Create a User Manage page
+    // DONE: Create a User Manage page
     /** @test */
     public function user_manage_page_is_linked_from_users_page() {
         $admin = $this->CreateAdminAndAuthenticate();
@@ -188,13 +188,33 @@ class AdminControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
-    /** @test */
-    public function users_cannot_access_users_page() {
-        $user = $this->CreateUserAndAuthenticate();
+      /** 
+     * @test 
+     * @dataProvider adminPages
+     * */
+    public function admins_can_access_admin_pages($route, $method, $model) {
+        $user = $this->CreateAdminAndAuthenticate();
+        $useRoute = null;
+        $data = array();
 
-        $response = $this->get(route('admin.users'));
+        switch ($model) {
+            case 'user':
+                $useRoute = route($route, $user);
+                $data = $this->getFormData('user');
+                break;
 
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+            default:
+                $useRoute = route($route);
+                break;
+        }
+
+        if ($method == 'get') {
+            $response = $this->get($useRoute);
+        } else {
+            $response = $this->followingRedirects()->post($useRoute, $data);
+        }
+
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     public static function adminPages() {

@@ -43,6 +43,7 @@
 
                     <hr class="my-2" />
                     @auth
+                        <x-button.mobile href="{{ route('profile.index') }}">Profile</x-button.mobile>
                         @if ( auth()->user()->isAdmin )
                             <x-button.mobile href="{{ route('admin.index') }}">Admin Control Panel</x-button.mobile>
                         @endif
@@ -55,6 +56,7 @@
                 </ul>
               </div>
 
+            {{-- Main Navigation --}}
             <div class="container flex items-center justify-between px-4 py-4 mx-auto">
                 <a href="{{ url('/') }}" class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
                 <div class="hidden space-x-4 md:flex">
@@ -79,6 +81,7 @@
                             <button tabindex="0" class="rounded-full btn btn-secondary">{{ Auth::user()->name }}</button>
                             <ul tabindex="0" class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52">
 
+                                <li> <a href="{{ route('profile.index') }}">Profile</a></li>
                                 @if ( auth()->user()->isAdmin )
                                     <li> <a href="{{ route('admin.index') }}">Admin Control Panel</a></li>
                                 @endif
@@ -99,8 +102,8 @@
         <!-- Main Content -->
         <main class="mt-8">
             @if ($errors->any())
-                @foreach(errors->all() as $error)
-                    <div role="alert" class="alert alert-error">
+                @foreach($errors->all() as $error)
+                    <div role="alert" class="my-2 alert alert-error">
                         <i class="fa-solid fa-hexagon-exclamation"></i>
                         <span>Error! {{ $error }}</span>
                     </div>
@@ -109,7 +112,7 @@
 
             @if (session('error'))
                 @if(is_string(session('error')))
-                    <div role="alert" class="alert alert-error">
+                    <div role="alert" class="my-2 alert alert-error">
                         <i class="fa-solid fa-hexagon-exclamation"></i>
                         <strong class="font-bold">Success!</strong>
                         <p class="mt-1">{{ session('error') }}</p>
@@ -119,7 +122,7 @@
 
             @if (session('warning'))
                 @if(is_string(session('warning')))
-                    <div role="alert" class="alert alert-warning">
+                    <div role="alert" class="my-2 alert alert-warning">
                         <i class="fa-sharp fa-solid fa-triangle-exclamation"></i>
                         <strong class="font-bold">Success!</strong>
                         <p class="mt-1">{{ session('warning') }}</p>
@@ -127,12 +130,14 @@
                 @endif
             @endif
 
-            @if (session('alert'))
-                @if(is_string(session('alert')))
-                    <div role="alert" class="alert alert-info">
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        <strong class="font-bold">Success!</strong>
-                        <p class="mt-1">{{ session('alert') }}</p>
+            @if (session('success'))
+                @if(is_string(session('success')))
+                    <div role="alert" class="my-2 alert alert-success d-flex align-items-center">
+                        <i class="fa-solid fa-circle-exclamation me-2"></i>
+                        <div>
+                            <strong class="font-bold me-2">Success!</strong>
+                            <span>{{ session('success') }}</span>
+                        </div>
                     </div>
                 @endif
             @endif

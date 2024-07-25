@@ -44,6 +44,12 @@ class User extends \TCG\Voyager\Models\User
         return UserFactory::new();
     }
 
+    public function gravatarUrl($size = 80)
+    {
+        $email = strtolower(trim($this->email));
+        $hash = md5($email);
+        return "https://www.gravatar.com/avatar/{$hash}?s={$size}&d=monsterid&r=pg";
+    }
 
     public function exams(): HasMany
     {
