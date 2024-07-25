@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use DB;
 
 class ProfileControllerTest extends TestCase
 {
@@ -59,7 +60,7 @@ class ProfileControllerTest extends TestCase
         $response->assertSee(route('exam-create'));
     }
     
-    // TODO: Create a profile edit page so users can actually change their name, email, and password
+    // DONE: Create a profile edit page so users can actually change their name, email, and password
     /** @test */
     public function profile_index_page_loads() 
     {
@@ -87,9 +88,51 @@ class ProfileControllerTest extends TestCase
         $this->assertDatabaseHas('users', $data);
     }
 
-    // TODO: Profile link shows up in the menu
+    /** @test */
+    public function public_profile_page_shows_up() {
+        $user = $this->CreateUser();
+        $authedUser = $this->CreateUserAndAuthenticate();
 
-    // TODO: Make a new home page with some basic info about the site
+        $response = $this->get(route('profile.view', $user));
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertViewIs('profile.view');
+    }
+
+    /** @test */
+    public function profile_page_shows_public_tests() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $user->id, 'visibility' => 1]);
+
+        $response = $this->get(route('profile.view', $user));
+
+        $response->assertSee($exam->name);
+    }
+
+    /** @test */
+    public function profile_page_does_not_show_private_tests() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $user->id, 'visibility' => 0]);
+
+        $response = $this->get(route('profile.view', $user));
+
+        $response->assertDontSee($exam->name);
+    }
+
+    /** @test */
+    public function exams_taken_show_up_on_profile_page() {
+        $user = $this->CreateUserAndAuthenticate();
+        $examOwner = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 1]);
+        DB::table('exam_records')->insert([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+        ]);
+
+        $response = $this->get(route('profile.view', $user));
+
+        $response->assertSee($exam->name);
+    }
 
     /** ========== DataProvider Methods ========== */
     private static function pagesDataProvider() {

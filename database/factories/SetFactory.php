@@ -18,7 +18,7 @@ class SetFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->words(2, true),
             'description' => fake()->words(25, true),
             'user_id' => 0,
             'visibility' => 1

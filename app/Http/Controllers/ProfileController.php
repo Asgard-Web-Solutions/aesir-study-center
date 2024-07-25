@@ -68,6 +68,13 @@ class ProfileController extends Controller
         
     }
 
+    public function view(User $user) {
+
+        return view('profile.view')->with([
+            'user' => $user,
+        ]);
+    }
+
     /** ========== Helper Functions ========== */
     private function getAuthedUser() {
         $user = User::where('id', auth()->user()->id)->with('records')->first();
