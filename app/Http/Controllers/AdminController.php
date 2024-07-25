@@ -46,6 +46,6 @@ class AdminController extends Controller
 
         $user->update($request->validated());
 
-        return redirect()->route('admin.users')->with('success', 'User updated successfully');
+        return redirect()->route('admin.users')->with('alert', 'User updated successfully');
     }
 }
