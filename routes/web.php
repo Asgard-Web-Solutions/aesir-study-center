@@ -66,6 +66,9 @@ Route::prefix('practice')->name('practice.')->controller(PracticeController::cla
 
 Route::prefix('admin')->name('admin.')->controller(AdminController::class)->middleware('auth')->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::get('/users', 'users')->name('users');
+    Route::get('/users/{user}', 'user')->name('user');
+    Route::post('/users/{user}/update', 'userUpdate')->name('user-update');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');

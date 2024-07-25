@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
-use App\Role;
 use Illuminate\Console\Command;
 
 class PromoteAdmin extends Command
@@ -13,7 +12,7 @@ class PromoteAdmin extends Command
      *
      * @var string
      */
-    protected $signature = 'promote:admin {email}';
+    protected $signature = 'user:promote {email}';
 
     /**
      * The console command description.
@@ -39,9 +38,10 @@ class PromoteAdmin extends Command
     {
         $userEmail = $this->argument('email');
 
-        $user = User::where('email', '=', $userEmail)->first();
-        $role = Role::where('name', '=', 'admin')->first();
-
-        $user->roles()->attach($role);
+        $user = User::where('email', $userEmail)->first();
+        $user->isAdmin = 1;
+        $user->save();
+        
+        $this->info('User promoted to Admin!');
     }
 }
