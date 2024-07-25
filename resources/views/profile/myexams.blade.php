@@ -5,7 +5,7 @@
     <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" />
     
     <x-card.main title="Manage Your Exams" size="full">
-        <x-table.main>
+        <x-table.mini>
             <x-table.head>
                 <x-table.hcell>Exam Name</x-table.hcell>
                 <x-table.hcell hideMobile='true'># of Questions</x-table.hcell>
@@ -25,7 +25,7 @@
                     </x-table.row>
                 @endforeach
             </x-table.body>
-        </x-table.main>
+        </x-table.mini>
 
     </x-card.main>
     
