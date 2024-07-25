@@ -9,17 +9,7 @@ use Tests\TestCase;
 
 class AdminControllerTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
-    // TODO: Create an ACP page
+    // DONE: Create an ACP page
     /** @test */
     public function acp_page_exists() {
         $this->CreateUserAndAuthenticate();
@@ -27,11 +17,40 @@ class AdminControllerTest extends TestCase
         $response = $this->get(route('admin.index'));
 
         $response->assertStatus(Response::HTTP_OK);
+        $response->assertViewIs('admin.index');
     }
 
-    // TODO: Create a User List page
+    // DONE: Create a User List page
+    /** @test */
+    public function acp_links_to_users_page() {
+        $this->CreateUserAndAuthenticate();
 
-    // TODO: Create a User Mange page
+        $response = $this->get(route('admin.index'));
+
+        $response->assertSee(route('admin.users'));
+    }
+
+    /** @test */
+    public function users_page_loads() {
+        $this->CreateUserAndAuthenticate();
+
+        $response = $this->get(route('admin.users'));
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertViewIs('admin.users');
+    }
+
+    /** @test */
+    public function users_are_shown_on_users_page() {
+        $user = $this->CreateUserAndAuthenticate();
+
+        $response = $this->get(route('admin.users'));
+
+        $response->assertSee($user->name);
+        $response->assertSee($user->email);
+    }
+
+    // TODO: Create a User Manage page
 
     // TODO: Set a user as an admin in their manage page -- Create and use the field isAdmin
 
