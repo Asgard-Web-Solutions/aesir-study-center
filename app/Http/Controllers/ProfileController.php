@@ -14,9 +14,6 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        if (!Feature::active('profile-test-manager')) {
-            abort(404, 'Not found');
-        }
         $user = $this->getAuthedUser();
 
         return view('profile.index')->with([
