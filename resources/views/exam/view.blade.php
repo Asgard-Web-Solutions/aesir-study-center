@@ -6,7 +6,10 @@
             <x-card.mini>
                 <div class="p-2 text-lg">{{ $exam->description }}</div>
                 <br />
-                @if ($exam->user_id) <div class="block p-3 m-1 text-lg md:flex badge badge-{{ config('color.author') }} tooltip" data-tip="Author: {{ $exam->user->name }}"><i class="{{ config('icon.author') }} mx-2"></i> {{ $exam->user->name }}</div> @endif
+                <div class="flex w-full py-2 my-2 rounded-lg bg-base-100">
+                    @if ($exam->user) <a href="{{ route('profile.view', $exam->user) }}"><x-user.avatar size="tiny">{{ $exam->user->gravatarUrl(64) }}</x-user.avatar></a> <a href="{{ route('profile.view', $exam->user) }}" class="link link-secondary">{{ $exam->user->name }}</a> @endif
+                    <span class="mx-4 tooltip text-accent" data-tip="Question Count"><i class="mr-1 text-lg fa-regular fa-block-question"></i> {{ $exam->questions->count() }}</span>
+                </div>
             </x-card.mini>
 
             <x-card.mini title="Exam Stats">
