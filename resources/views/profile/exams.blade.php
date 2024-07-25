@@ -5,11 +5,11 @@
         @forelse ($records as $record)
             <x-card.mini>
                 <h2 class="my-2 text-xl"><a href="{{ route('exam.view', $record) }}" class="font-bold no-underline link link-primary">{{ $record->name }}</a></h2>
-                <x-text.main label='Recent Average:'><span class="font-bold text-neutral-content">{{ $record->pivot->recent_average }}%</span></x-text.main>
-                <div class="block w-full p-4 mb-3 rounded-md md:flex bg-base-100">
-                    <div class="block m-1 md:flex badge badge-accent">Questions: {{ $record->questions->count() }}</div>
-                    @if ($record->user )<div class="block m-1 badge badge-secondary md:flex">Author: {{ $record->user->name }}</div>@endif
+                <div class="flex w-full py-2 my-2 rounded-lg bg-base-100">
+                    @if ($record->user) <a href="{{ route('profile.view', $record->user) }}"><x-user.avatar size="tiny">{{ $record->user->gravatarUrl(64) }}</x-user.avatar></a> <a href="{{ route('profile.view', $record->user) }}" class="link link-secondary">{{ $record->user->name }}</a> @endif
+                    <span class="mx-4 tooltip text-accent" data-tip="Question Count"><i class="mr-1 text-lg fa-regular fa-block-question"></i> {{ $record->questions->count() }}</span>
                 </div>
+                <x-text.main label='Recent Average:'><span class="font-bold text-neutral-content">{{ $record->pivot->recent_average }}%</span></x-text.main>
                 @if ($record->questions->count())
                     <div class="flex w-full">
                         <div class="w-1/4 text-sm row text-secondary">Mastery:</div><div class="w-3/4"><progress class="w-52 md:w-48 lg:w-52 progress progress-accent " value="{{ $record->pivot->mastery_mastered_count / $record->questions->count() * 100 }}" max="100"></progress></div>
@@ -26,11 +26,9 @@
                     <br />
                 @endif
 
-                @feature('flash-cards')
-                    <x-card.buttons primaryLabel="Take Exam" primaryAction="{{ route('exam-session.start', $record) }}" secondaryLabel="Practice" secondaryAction="{{ route('practice.start', $record) }}"></x-card.buttons>
-                @else
-                    <x-card.buttons primaryLabel="Take Exam" primaryAction="{{ route('exam-session.start', $record) }}"></x-card.buttons>
-                @endfeature
+                <div class="w-full p-2 rounded-lg bg-base-100">
+                    <x-card.buttons primaryLabel="Take Exam" primaryAction="{{ route('exam-session.start', $record) }}" secondaryLabel="Practice Exam" secondaryAction="{{ route('practice.start', $record) }}" />
+                </div>
             </x-card.mini>
         @empty
             <x-card.mini>
