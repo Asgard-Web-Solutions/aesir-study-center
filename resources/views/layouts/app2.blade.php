@@ -41,14 +41,11 @@
                         <x-button.mobile href="{{ route('register') }}">Register</x-button.mobile>
                     @endguest
 
+                    <hr class="my-2" />
                     @auth
                         @if ( auth()->user()->isAdmin )
                             <x-button.mobile href="{{ route('admin.index') }}">Admin Control Panel</x-button.mobile>
                         @endif
-                    @endauth
-                    <hr class="my-2" />
-                    @auth
-                        <x-button.mobile href="{{ route('home') }}">Home</x-button.mobile>
 
                         <a href="{{ route('logout') }}" class="block px-4 py-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
@@ -69,12 +66,6 @@
                     <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>
                     <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
 
-                    @auth
-                        @if ( auth()->user()->isAdmin )
-                            <x-button.nav href="{{ route('admin.index') }}">Admin Control Panel</x-button.nav>
-                        @endif
-                    @endauth
-
                     @guest
                         <x-button.nav href="{{ route('login') }}">Login</x-button.nav>
                         <x-button.nav href="{{ route('register') }}">Register</x-button.nav>
@@ -87,7 +78,10 @@
                         <div class="dropdown dropdown-end">
                             <button tabindex="0" class="rounded-full btn btn-secondary">{{ Auth::user()->name }}</button>
                             <ul tabindex="0" class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52">
-                                <li><a href="{{ route('home') }}">Home</a></li>
+
+                                @if ( auth()->user()->isAdmin )
+                                    <li> <a href="{{ route('admin.index') }}">Admin Control Panel</a></li>
+                                @endif
                                 <li>
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
