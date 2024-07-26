@@ -696,7 +696,7 @@ class ExamSessionTest extends TestCase
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
-    // TODO: Prevent answer page from updating info if the question was already answered
+    // DONE: Prevent answer page from updating info if the question was already answered
     /** @test */
     public function answer_page_does_not_double_count_answer() {
         $user = $this->CreateUserAndAuthenticate();

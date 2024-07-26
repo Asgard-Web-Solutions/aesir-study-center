@@ -135,6 +135,14 @@ class ProfileControllerTest extends TestCase
         $response->assertSee($exam->name);
     }
 
+    // TODO: Calculate the full mastery that has been achieved for each test
+
+    // TODO: Display an icon on the Exam card for any mastery level that has been fully achieved.
+
+    // TODO: Show a list of Exam Masteries on the users profile page
+
+    // TODO: Show a list of who has mastered an exam on the Exam View page
+
     /** ========== DataProvider Methods ========== */
     private static function pagesDataProvider() {
         /** 
