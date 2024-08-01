@@ -74,7 +74,10 @@
 
 <x-card.main title="Get Started Now!" size='full'>
     Sign up for free and experience the future of learning with <span class="text-secondary">{{ config('app.name') }}.</span> Empower yourself with the knowledge and skills you need to achieve your goals.
-    <x-card.buttons primaryLabel="Get Started" primaryAction="{{ route('register') }}" />
+
+    <div class="w-full text-center">
+        <a href="{{ route('register') }}" class="mx-auto my-3 btn btn-primary">Get Started</a>
+    </div>
 </x-card.main>
 
 <br />
