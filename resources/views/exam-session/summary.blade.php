@@ -48,7 +48,14 @@
   </x-card.main>
 
   <x-card.main>
-    <x-page.actions primary="Start Test" primaryLink="{{ route('exam-session.start', $examSet->id) }}" secondary="Exam Portal" secondaryLink="{{ route('profile.exams') }}" />
+    <div class="block object-center w-full text-center md:flex">
+        <div class="w-full text-center md:w-1/2 md:text-right">
+          <a href="{{ route('exam-session.start', $examSet->id) }}" class="mx-2 btn btn-primary">Retake Test</a>
+        </div>
+        <div class="w-full text-center md:text-left md:w-1/2">
+          <a href="{{ route('profile.exams') }}" class="mx-2 btn btn-secondary">Exam Portal</a>
+        </div>
+    </div>
   </x-card.main>
 
   <x-card.main title="{!! $examSet->name !!} - Summary">
@@ -71,10 +78,8 @@
           <div class="stat-desc">Previous {{ config('test.count_tests_for_average_score') }} Exams</div>
         </div>
       </div>
-      
     </x-card.mini>
     <x-card.mini title="Your Mastery Level">
-      
       <div class="flex w-full">
         <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('test.color_mastered') }}">Mastered:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('test.color_mastered') }} " value="{{ $examRecord->mastery_mastered_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
       </div>
