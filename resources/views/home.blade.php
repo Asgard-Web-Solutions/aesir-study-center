@@ -35,7 +35,8 @@
 
     <x-card.mini title="Interactive and Engaging">
         <x-text.main>Say goodbye to boring study sessions!</x-text.main>
-        <x-text.main><span class="text-accent">{{ config('app.name') }}</span> makes learning interactive and fun. Shuffle through questions, challenge yourself with timed tests, and monitor your progress with detailed reports. Learning has never been this engaging.</x-text.main>
+        <x-text.main><span class="text-accent">{{ config('app.name') }}</span> makes learning interactive and fun. Shuffle through questions, challenge yourself with tests, and monitor your progress with detailed reports. Learning has never been this engaging.</x-text.main>
+        <x-text.main>Review areas you are struggling with using flash-card style practices.</x-text.main>
     </x-card.mini>
 
     <x-card.mini title="Comprehensive Tracking">
