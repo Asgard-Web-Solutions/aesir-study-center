@@ -45,6 +45,59 @@
 
         {{-- // TODO: Show mastery stats --}}
     </x-card.mini>
+
+    <x-card.mini title="Mastery Change">
+      <div class="shadow stats stats-vertical md:stats-horizontal">
+        <div class="stat">
+          <div class="stat-title text-{{ config('color.apprentice') }}">Apprentice</div>
+          @if ($session->mastery_apprentice_change > 0)
+            <div class="stat-value text-warning">+ {{ $session->mastery_apprentice_change }}</div>
+          @elseif ($session->mastery_apprentice_change < 0)
+            <div class="stat-value text-error">{{ $session->mastery_apprentice_change }}</div>
+          @else
+            <div class="stat-value text-neutral">0</div>  
+          @endif
+          <div class="stat-desc"></div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title text-{{ config('color.familiar') }}">Familiar</div>
+          @if ($session->mastery_familiar_change > 0)
+            <div class="stat-value text-warning">+ {{ $session->mastery_familiar_change }}</div>
+          @elseif ($session->mastery_familiar_change < 0)
+            <div class="stat-value text-error">{{ $session->mastery_familiar_change }}</div>
+          @else
+            <div class="stat-value text-neutral">0</div>  
+          @endif
+          <div class="stat-desc"></div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title text-{{ config('color.proficient') }}">Proficient</div>
+          @if ($session->mastery_proficient_change > 0)
+            <div class="stat-value text-warning">+ {{ $session->mastery_proficient_change }}</div>
+          @elseif ($session->mastery_proficient_change < 0)
+            <div class="stat-value text-error">{{ $session->mastery_proficient_change }}</div>
+          @else
+            <div class="stat-value text-neutral">0</div>  
+          @endif
+          <div class="stat-desc"></div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title text-{{ config('color.mastered') }}">Mastered</div>
+          @if ($session->mastery_mastered_change > 0)
+            <div class="stat-value text-warning">+ {{ $session->mastery_mastered_change }}</div>
+          @elseif ($session->mastery_mastered_change < 0)
+            <div class="stat-value text-error">{{ $session->mastery_mastered_change }}</div>
+          @else
+            <div class="stat-value text-neutral">0</div>  
+          @endif
+          <div class="stat-desc"></div>
+        </div>
+
+      </div>
+    </x-card.mini>
   </x-card.main>
 
   <x-card.main>
