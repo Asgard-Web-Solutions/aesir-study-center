@@ -6,7 +6,7 @@ use DB;
 use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\User;
-// use App\Enums\Mastery;
+use App\Enums\Mastery;
 use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Http\Request;
@@ -410,6 +410,18 @@ class ExamSessionController extends Controller
             }
         }
 
+        $highestMastery = Mastery::None;
+
+        if ($masteryLevelMastered == $questions->count()) {
+            $highestMastery = Mastery::Mastered;
+        } else if ($masteryLevelProficient == $questions->count()) {
+            $highestMastery = Mastery::Proficient;
+        } else if ($masteryLevelFamiliar == $questions->count()) {
+            $highestMastery = Mastery::Familiar;
+        } else if ($masteryLevelApprentice == $questions->count()) {
+            $highestMastery = Mastery::Apprentice;
+        }
+
         DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
             'times_taken' => $record->times_taken + 1,
             'recent_average' => round($averageTotal / $averageCount),
@@ -418,6 +430,7 @@ class ExamSessionController extends Controller
             'mastery_familiar_count' => $masteryLevelFamiliar,
             'mastery_proficient_count' => $masteryLevelProficient,
             'mastery_mastered_count' => $masteryLevelMastered,
+            'highest_mastered' => $highestMastery,
         ]);
     }
 
