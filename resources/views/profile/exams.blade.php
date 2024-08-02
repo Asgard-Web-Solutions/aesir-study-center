@@ -27,16 +27,16 @@
 
                 @if ($record->questions->count())
                     <div class="flex w-full">
-                        <div class="hidden text-sm sm:w-1/2 row @if ($record->pivot->mastery_mastered_count == 0) text-info-content @else text-{{ config('color.mastered') }} @endif sm:block">Mastery:</div><div class="w-full sm:w-1/2"><progress class="w-full lg:w-full progress progress-accent " value="{{ $record->pivot->mastery_mastered_count / $record->questions->count() * 100 }}" max="100"></progress></div>
+                        <div class="hidden text-sm sm:w-1/2 row @if ($record->pivot->mastery_mastered_count == 0) text-info-content @else text-{{ config('color.mastered') }} @endif sm:block">Mastery:</div><div class="w-full sm:w-1/2"><progress class="w-full lg:w-full progress progress-{{ config('color.mastered') }} " value="{{ $record->pivot->mastery_mastered_count / $record->questions->count() * 100 }}" max="100"></progress></div>
                     </div>
                     <div class="flex w-full">
-                        <div class="hidden text-sm sm:w-1/2 row @if ($record->pivot->mastery_proficient_count == 0) text-info-content @else text-{{ config('color.proficient') }} @endif sm:block">Proficient:</div><div class="w-full sm:w-1/2"><progress class="w-full lg:w-full progress progress-{{ config('color.apprentice') }} " value="{{ $record->pivot->mastery_proficient_count / $record->questions->count() * 100 }}" max="100"></progress></div>
+                        <div class="hidden text-sm sm:w-1/2 row @if ($record->pivot->mastery_proficient_count == 0) text-info-content @else text-{{ config('color.proficient') }} @endif sm:block">Proficient:</div><div class="w-full sm:w-1/2"><progress class="w-full lg:w-full progress progress-{{ config('color.proficient') }} " value="{{ $record->pivot->mastery_proficient_count / $record->questions->count() * 100 }}" max="100"></progress></div>
                     </div>
                     <div class="flex w-full">
-                        <div class="hidden text-sm sm:w-1/2 row @if ($record->pivot->mastery_familiar_count == 0) text-info-content @else text-{{ config('color.familiar') }} @endif sm:block">Familiar:</div><div class="w-full sm:w-1/2"><progress class="w-full lg:w-full progress progress-success " value="{{ $record->pivot->mastery_familiar_count / $record->questions->count() * 100 }}" max="100"></progress></div>
+                        <div class="hidden text-sm sm:w-1/2 row @if ($record->pivot->mastery_familiar_count == 0) text-info-content @else text-{{ config('color.familiar') }} @endif sm:block">Familiar:</div><div class="w-full sm:w-1/2"><progress class="w-full lg:w-full progress progress-{{ config('color.familiar') }} " value="{{ $record->pivot->mastery_familiar_count / $record->questions->count() * 100 }}" max="100"></progress></div>
                     </div>
                     <div class="flex w-full">
-                        <div class="hidden text-sm sm:w-1/2 row @if ($record->pivot->mastery_apprentice_count == 0) text-info-content @else text-{{ config('color.apprentice') }} @endif sm:block">Apprentice:</div><div class="w-full sm:w-1/2"><progress class="w-full lg:w-full progress progress-info " value="{{ $record->pivot->mastery_apprentice_count / $record->questions->count() * 100 }}" max="100"></progress></div>
+                        <div class="hidden text-sm sm:w-1/2 row @if ($record->pivot->mastery_apprentice_count == 0) text-info-content @else text-{{ config('color.apprentice') }} @endif sm:block">Apprentice:</div><div class="w-full sm:w-1/2"><progress class="w-full lg:w-full progress progress-{{ config('color.apprentice') }} " value="{{ $record->pivot->mastery_apprentice_count / $record->questions->count() * 100 }}" max="100"></progress></div>
                     </div>
                     <br />
                 @endif
