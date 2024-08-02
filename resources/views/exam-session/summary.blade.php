@@ -103,10 +103,10 @@
   <x-card.main>
     <div class="block object-center w-full text-center md:flex">
         <div class="w-full text-center md:w-1/2 md:text-right">
-          <a href="{{ route('exam-session.start', $examSet->id) }}" class="mx-2 btn btn-primary"><i class="{{ config('icon.take-exam') }} text-lg"></i> Retake Exam</a>
+          <a href="{{ route('exam-session.start', $examSet->id) }}" class="mx-2 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-lg"></i> Retake Exam</a>
         </div>
         <div class="w-full text-center md:text-left md:w-1/2">
-          <a href="{{ route('profile.exams') }}" class="mx-2 btn btn-secondary"><i class="{{ config('icon.manage-exams') }} text-lg"></i> Manage Exams</a>
+          <a href="{{ route('profile.exams') }}" class="mx-2 btn btn-secondary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Exams</a>
         </div>
     </div>
   </x-card.main>
@@ -116,18 +116,18 @@
       <div class="w-full shadow stats stats-vertical md:stats-horizontal">
         <div class="stat">
           <div class="text-2xl stat-figure text-secondary">
-            <i class="{{ config('icon.times-taken') }} text-{{ config('color.times-taken') }}"></i>
+            <i class="{{ config('icon.times_taken') }} text-{{ config('color.times_taken') }}"></i>
           </div>
           <div class="stat-title">Times Taken</div>
-          <div class="stat-value text-{{ config('color.times-taken') }}">{{ $examRecord->times_taken }}</div>
+          <div class="stat-value text-{{ config('color.times_taken') }}">{{ $examRecord->times_taken }}</div>
           <div class="stat-desc">Last: {{ $examRecord->last_completed }}</div>
         </div>
         <div class="stat">
           <div class="text-2xl stat-figure text-secondary">
-            <i class="{{ config('icon.recent-average') }} text-{{ config('color.recent-average') }}"></i>
+            <i class="{{ config('icon.recent_average') }} text-{{ config('color.recent_average') }}"></i>
           </div>
           <div class="stat-title">Average Score</div>
-          <div class="stat-value text-{{ config('color.recent-average') }}">{{ $examRecord->recent_average }}%</div>
+          <div class="stat-value text-{{ config('color.recent_average') }}">{{ $examRecord->recent_average }}%</div>
           <div class="stat-desc">Previous {{ config('test.count_tests_for_average_score') }} Exams</div>
         </div>
       </div>

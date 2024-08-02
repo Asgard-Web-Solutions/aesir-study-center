@@ -8,9 +8,9 @@
                 
                 <div class="flex w-full py-2 my-2 rounded-lg bg-base-100">
                     @if ($record->user) <a href="{{ route('profile.view', $record->user) }}"><x-user.avatar size="tiny">{{ $record->user->gravatarUrl(64) }}</x-user.avatar></a> <a href="{{ route('profile.view', $record->user) }}" class="mr-2 link link-{{ config('color.author') }} tooltip" data-tip="Exam Author">{{ $record->user->name }}</a> @endif
-                    <span class="mx-2 tooltip text-{{ config('color.question-count') }}" data-tip="Question Count"><i class="mr-1 text-lg {{ config('icon.question-count') }}"></i> {{ $record->questions->count() }}</span>
-                    <span class="mx-2 tooltip text-{{ config('color.times-taken') }}" data-tip="Times Taken"><i class="mr-1 text-lg {{ config('icon.times-taken') }}"></i> {{ $record->pivot->times_taken }}</span>
-                    <span class="mx-2 tooltip text-{{ config('color.recent-average') }}" data-tip="Recent Average"><i class="mr-1 text-lg {{ config('icon.recent-average') }}"></i> {{ $record->pivot->recent_average }}</span>
+                    <span class="mx-2 tooltip text-{{ config('color.question_count') }}" data-tip="Question Count"><i class="mr-1 text-lg {{ config('icon.question_count') }}"></i> {{ $record->questions->count() }}</span>
+                    <span class="mx-2 tooltip text-{{ config('color.times_taken') }}" data-tip="Times Taken"><i class="mr-1 text-lg {{ config('icon.times_taken') }}"></i> {{ $record->pivot->times_taken }}</span>
+                    <span class="mx-2 tooltip text-{{ config('color.recent_average') }}" data-tip="Recent Average"><i class="mr-1 text-lg {{ config('icon.recent_average') }}"></i> {{ $record->pivot->recent_average }}</span>
                 </div>
 
                 @if ($record->questions->count())
@@ -35,18 +35,18 @@
                         <div class="dropdown">
                             <div class="m-1 btn" tabindex="0" role="button">More Actions...</div>
                             <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                                <li><a href="{{ route('exam-session.summary', $record) }}"><i class="{{ config('icon.latest-summary') }} text-lg"></i> Last Test Summary</a></li>
-                                <li><a href="{{ route('practice.start', $record) }}"><i class="{{ config('icon.take-exam') }} text-lg"></i> Practice Flash Cards</a></li>
-                                <li><a href="{{ route('exam-session.start', $record) }}"><i class="{{ config('icon.practice-exam') }} text-lg"></i> Take Exam</a></li>
+                                <li><a href="{{ route('exam-session.summary', $record) }}"><i class="{{ config('icon.latest_summary') }} text-lg"></i> Last Test Summary</a></li>
+                                <li><a href="{{ route('practice.start', $record) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
+                                <li><a href="{{ route('exam-session.start', $record) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
                                 @can('update', $record)
-                                    <li><a href="{{ route('manage-questions', $record->id) }}"><i class="{{ config('icon.edit-exam') }} text-lg"></i> Edit Exam</a>
+                                    <li><a href="{{ route('manage-questions', $record->id) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a>
                                 @endcan
                             </ul>
                         </div>
                     </div>
 
                     <div class="w-full text-center md:text-right md:w-1/2">
-                        <a href="{{ route('exam-session.start', $record) }}" class="my-1 btn btn-primary"><i class="{{ config('icon.take-exam') }} text-xl"></i> Take Exam</a>
+                        <a href="{{ route('exam-session.start', $record) }}" class="my-1 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-xl"></i> Take Exam</a>
                     </div>
                 </div>
             </x-card.mini>
@@ -59,7 +59,7 @@
 
     <br />
     <div class="flex justify-end w-full space-x-2">
-        <a href="{{ route('profile.myexams') }}" class="btn btn-primary"><i class="{{ config('icon.manage-exams') }} text-lg"></i> Manage Your Own Exams</a>
-        <a href="{{ route('exam.public') }}" class="btn btn-secondary"><i class="{{ config('icon.public-exams') }} text-lg"></i> Public Exams</a>
+        <a href="{{ route('profile.myexams') }}" class="btn btn-primary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Your Own Exams</a>
+        <a href="{{ route('exam.public') }}" class="btn btn-secondary"><i class="{{ config('icon.public_exams') }} text-lg"></i> Public Exams</a>
     </div>
 @endsection

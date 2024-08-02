@@ -7,7 +7,7 @@ return [
     'apprentice' => 'info',
 
     'author' => 'primary',
-    'question-count' => 'accent',
-    'times-taken' => 'success',
-    'recent-average' => 'info',
+    'question_count' => 'accent',
+    'times_taken' => 'success',
+    'recent_average' => 'info',
 ];
