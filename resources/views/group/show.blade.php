@@ -1,12 +1,12 @@
 @extends('layouts.app2')
 
 @section('content')
-<x-card.main title="Exam: {{ $group->set->name }} // {{ $group->name }}">
+<x-card.main title="Exam: {!! $group->set->name !!} // {!! $group->name !!}">
 
     <x-card.mini title="Test Settings">
         <form action="{{ route('group-update', $group) }}" method="POST">
             @csrf
-            <x-form.text name="name" label="Name" value="{{ $group->name }}" />
+            <x-form.text name="name" label="Name" value="{!! $group->name !!}" />
 
             <x-card.buttons submitLabel="Update Group Settings" />
         </form>

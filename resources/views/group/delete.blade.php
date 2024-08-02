@@ -1,9 +1,9 @@
 @extends('layouts.app2')
 
 @section('content')
-    <x-card.main title="Exam: {{ $group->set->name }}">
+    <x-card.main title="Exam: {!! $group->set->name !!}">
 
-        <x-card.mini title="Question: {{ $question->text }}">
+        <x-card.mini title="Question: {!! $question->text !!}">
             <form action="{{ route('group-remove-question', ['group' => $group, 'question' => $question]) }}" method="post">
                 @csrf
                 <input type='hidden' name='confirm' vaule='true' />

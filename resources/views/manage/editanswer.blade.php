@@ -3,12 +3,12 @@
 @section('content')
 <x-page.header :text="$question->set->name" />
 
-    <x-card.main title="{{ $question->text }}">
+    <x-card.main title="{!! $question->text !!}">
         <x-card.mini>
             <form action="{{ route('update-answer', $answer->id) }}" method="post">
                 @csrf
     
-                <x-form.text name="text" label="Answer" value="{{ old('text', $answer->text) }}" />
+                <x-form.text name="text" label="Answer" value="{!! old('text', $answer->text) !!}" />
     
                 @php
                     $values[0] = "Wrong";

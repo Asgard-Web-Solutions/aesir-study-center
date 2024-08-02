@@ -6,5 +6,8 @@ return [
     'familiar' => 'success',
     'apprentice' => 'info',
 
-    'author' => 'accent',
+    'author' => 'primary',
+    'question_count' => 'accent',
+    'times_taken' => 'success',
+    'recent_average' => 'info',
 ];

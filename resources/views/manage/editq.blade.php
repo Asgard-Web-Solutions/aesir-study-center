@@ -8,7 +8,7 @@
             <form action="{{ route('update-question', $question->id) }}" method="post">
                 @csrf
     
-                <x-form.text name="text" label="Question" value="{{ old('text', $question->text) }}" />
+                <x-form.text name="text" label="Question" value="{!! old('text', $question->text) !!}" />
        
                 <x-card.buttons submitLabel="Update Question" />
             </form>    

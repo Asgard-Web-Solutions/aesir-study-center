@@ -1,7 +1,16 @@
 <?php
 
 return [
-    'take-exam' => 'fa-sharp-duotone fa-solid fa-head-side-brain',
-    'edit-exam' => 'fa-solid fa-pen-to-square',
-    'author' => 'fa-sharp fa-solid fa-chalkboard-user'
+    'take_exam' => 'fa-solid fa-ballot-check',
+    'edit_exam' => 'fa-solid fa-pen-to-square',
+    'practice_exam' => 'fa-regular fa-cards-blank',
+    'public_exams' => 'fa-duotone fa-solid fa-binoculars',
+    'manage_exams' => 'fa-duotone fa-solid fa-layer-group',
+    'new_exam' => 'fa-duotone fa-solid fa-file-circle-plus',
+    
+    'question_count' => 'fa-regular fa-block-question',
+    'times_taken' => 'fa-light fa-cubes-stacked',
+    'recent_average' => 'fa-solid fa-percent',
+    'latest_summary' => 'fa-sharp fa-regular fa-paste',
+    'author' => 'fa-sharp fa-solid fa-chalkboard-user',
 ];

@@ -58,7 +58,7 @@
 
             {{-- Main Navigation --}}
             <div class="container flex items-center justify-between px-4 py-4 mx-auto">
-                <a href="{{ url('/') }}" class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
+                <a @auth href="{{ route('profile.exams') }}" @endauth @guest href="{{ route('home') }}" @endguest class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
                 <div class="hidden space-x-4 md:flex">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
@@ -112,22 +112,26 @@
 
             @if (session('error'))
                 @if(is_string(session('error')))
-                    <div role="alert" class="my-2 alert alert-error">
-                        <i class="fa-solid fa-hexagon-exclamation"></i>
-                        <strong class="font-bold">Success!</strong>
-                        <p class="mt-1">{{ session('error') }}</p>
+                <div role="alert" class="my-2 alert alert-error d-flex align-items-center">
+                    <i class="fa-solid fa-hexagon-exclamation me-2"></i>
+                    <div>
+                        <strong class="font-bold me-2">Error: </strong>
+                        <span>{{ session('error') }}</span>
                     </div>
-                @endif
+                </div>
+            @endif
             @endif
 
             @if (session('warning'))
                 @if(is_string(session('warning')))
-                    <div role="alert" class="my-2 alert alert-warning">
-                        <i class="fa-sharp fa-solid fa-triangle-exclamation"></i>
-                        <strong class="font-bold">Success!</strong>
-                        <p class="mt-1">{{ session('warning') }}</p>
+                <div role="alert" class="my-2 alert alert-warning d-flex align-items-center">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <div>
+                        <strong class="font-bold me-2">Warning: </strong>
+                        <span>{{ session('warning') }}</span>
                     </div>
-                @endif
+                </div>
+            @endif
             @endif
 
             @if (session('success'))
@@ -146,6 +150,17 @@
             @yield('content')
         </main>
     </div>
+
+    <footer class="p-10 mt-10 footer bg-neutral text-neutral-content">
+        <nav>
+            <h6 class="footer-title">Pages</h6>
+            <a class="link link-hover" href="{{ route('home') }}">Welcome</a>
+        </nav>
+        <nav>
+            <h6 class="footer-title">Social</h6>
+            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=31">Community Forum</a>
+        </nav>
+    </footer>
 
     <script>
         // function changeTheme(theme) {

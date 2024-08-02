@@ -3,7 +3,7 @@
 @section('content')
     <x-page.header :text="$question->set->name" />
 
-    <x-card.main title="Question: {{ $question->text }}">
+    <x-card.main title="Question: {!! $question->text !!}">
         
         <x-card.mini title="Answers">
             <x-table.main>
@@ -17,7 +17,9 @@
                         <x-table.row>
                             <x-table.cell>{{ $answer->text }}</x-table.cell>
                             <x-table.cell>@if ($answer->correct) <i class="fa-regular fa-square-check text-success"></i> Correct @else <i class="fa-regular fa-square-xmark text-error"></i> Wrong @endif</x-table.cell>
-                            <x-table.cell><x-card.buttons alignButtons="center" secondaryLabel="<i class='fa-solid fa-pen-to-square'> Edit" secondaryAction="{{ route('edit-answer', $answer->id) }}" /></x-table.cell>
+                            <x-table.cell>
+                                <a href="{{ route('edit-answer', $answer->id) }}" class="link link-secondary"><i class='fa-solid fa-pen-to-square'></i> Edit</a>
+                            </x-table.cell>
                         </x-table.row>
                     @empty
                         <x-table.row>

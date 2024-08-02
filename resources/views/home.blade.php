@@ -35,7 +35,8 @@
 
     <x-card.mini title="Interactive and Engaging">
         <x-text.main>Say goodbye to boring study sessions!</x-text.main>
-        <x-text.main><span class="text-accent">{{ config('app.name') }}</span> makes learning interactive and fun. Shuffle through questions, challenge yourself with timed tests, and monitor your progress with detailed reports. Learning has never been this engaging.</x-text.main>
+        <x-text.main><span class="text-accent">{{ config('app.name') }}</span> makes learning interactive and fun. Shuffle through questions, challenge yourself with tests, and monitor your progress with detailed reports. Learning has never been this engaging.</x-text.main>
+        <x-text.main>Review areas you are struggling with using flash-card style practices.</x-text.main>
     </x-card.mini>
 
     <x-card.mini title="Comprehensive Tracking">
@@ -51,7 +52,7 @@
             <li class="my-2"><span class="font-bold text-secondary">Create Custom Exams</span> Add your own questions and answers to build personalized tests.</li>
             <li class="my-2"><span class="font-bold text-secondary">Adaptive Learning</span> Focuses on questions you struggle with the most.</li>
             <li class="my-2"><span class="font-bold text-secondary">Detailed Analytics</span> Track your performance and mastery levels.</li>
-            <li class="my-2"><span class="font-bold text-secondary">Interactive Sessions</span> Engage with shuffled questions and timed tests.</li>
+            <li class="my-2"><span class="font-bold text-secondary">Interactive Sessions</span> Engage with shuffled questions and self-paced tests.</li>
             <li class="my-2"><span class="font-bold text-secondary">Flexible Learning</span> Study at your own pace and convenience.</li>
         </ul>
     </x-card.mini>
@@ -74,13 +75,10 @@
 
 <x-card.main title="Get Started Now!" size='full'>
     Sign up for free and experience the future of learning with <span class="text-secondary">{{ config('app.name') }}.</span> Empower yourself with the knowledge and skills you need to achieve your goals.
-    <x-card.buttons primaryLabel="Get Started" primaryAction="{{ route('register') }}" />
-</x-card.main>
 
-<br />
-<br />
-<br />
-<br />
-<br />
+    <div class="w-full text-center">
+        <a href="{{ route('register') }}" class="mx-auto my-3 btn btn-primary">Get Started</a>
+    </div>
+</x-card.main>
 
 @endsection

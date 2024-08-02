@@ -2,8 +2,10 @@
 
 @section('content')
 
-    <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" />
-    
+    <div class="w-full text-right">
+        <a href="{{ route('exam-create') }}" class="btn btn-primary"><i class="text-lg {{ config('icon.new_exam') }}"></i> Create an Exam</a>
+    </div>
+
     <x-card.main title="Manage Your Exams" size="full">
         <x-card.mini>
             <x-table.main>
@@ -20,8 +22,8 @@
                             <x-table.cell hideMobile='true'>{{ $exam->questions->count() }}</x-table.cell>
                             <x-table.cell hideMobile='true'>@if ($exam->visibility) <span class="badge badge-primary">Public</span> @else <span class="badge badge-accent">Private</span> @endif </x-table.cell>
                             <x-table.cell>
-                                <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 text-xl link link-primary"><i class="{{ config('icon.take-exam') }}"></i> Take Exam</a>
-                                <a href="{{ route('manage-questions', $exam->id) }}" class="mx-2 text-xl link link-secondary"><i class="{{ config('icon.edit-exam') }}"></i></a>
+                                <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 btn btn-sm btn-outline btn-primary"><i class="{{ config('icon.take_exam') }} text-lg"></i> Take Exam</a>
+                                <a href="{{ route('manage-questions', $exam->id) }}" class="mx-2 btn btn-sm btn-outline btn-secondary"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a>
                             </x-table.cell>
                         </x-table.row>
                     @endforeach
@@ -30,6 +32,8 @@
         </x-card.mini>
     </x-card.main>
     
-    <x-card.buttons primaryAction="{{ route('exam-create') }}" primaryLabel="Create an Exam" />
+    <div class="w-full text-right">
+        <a href="{{ route('exam-create') }}" class="btn btn-primary"><i class="text-lg {{ config('icon.new_exam') }}"></i> Create an Exam</a>
+    </div>
     
 @endsection
