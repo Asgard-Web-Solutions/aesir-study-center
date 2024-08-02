@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Mastery;
 use DB;
 use App\Models\User;
 use Laravel\Pennant\Feature;
@@ -26,8 +27,14 @@ class ProfileController extends Controller
         $user = $this->getAuthedUser();
         $records = $user->records;
 
+        $mastery = [];
+        foreach (Mastery::cases() as $level) {
+            $mastery[$level->value] = $level->name;
+        }
+
         return view('profile.exams')->with([
             'records' => $records,
+            'mastery' => $mastery,
         ]);
     }
 

@@ -5,6 +5,7 @@ return [
     'proficient' => 'secondary',
     'familiar' => 'success',
     'apprentice' => 'info',
+    'unskilled' => 'base-300',
 
     'author' => 'primary',
     'question_count' => 'accent',

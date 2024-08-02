@@ -68,6 +68,6 @@ class User extends \TCG\Voyager\Models\User
 
     public function records(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Set::class, 'exam_records', 'user_id', 'set_id')->withPivot('times_taken', 'recent_average', 'mastery_apprentice_count', 'mastery_familiar_count', 'mastery_proficient_count', 'mastery_mastered_count', 'last_completed');
+        return $this->belongsToMany(\App\Models\Set::class, 'exam_records', 'user_id', 'set_id')->withPivot('times_taken', 'recent_average', 'mastery_apprentice_count', 'mastery_familiar_count', 'mastery_proficient_count', 'mastery_mastered_count', 'last_completed', 'highest_mastery');
     }
 }
