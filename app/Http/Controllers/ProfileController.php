@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Mastery;
 use DB;
 use App\Models\User;
+use App\Enums\Mastery;
 use Laravel\Pennant\Feature;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
@@ -77,12 +77,18 @@ class ProfileController extends Controller
     }
 
     public function view(User $user) {
-
-        $records = DB::table('exam_records')->where('user_id', $user->id)->get();
+        $user->load(['records' => function ($query) {
+            $query->orderBy('exam_records.highest_mastery', 'desc');
+        }]);
+    
+        $mastery = [];
+        foreach (Mastery::cases() as $level) {
+            $mastery[$level->value] = $level->name;
+        }
 
         return view('profile.view')->with([
             'user' => $user,
-            'records' => $records,
+            'mastery' => $mastery,
         ]);
     }
 
