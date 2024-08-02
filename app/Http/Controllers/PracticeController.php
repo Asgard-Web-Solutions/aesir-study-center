@@ -28,7 +28,7 @@ class PracticeController extends Controller
 
         ExamFunctions::initiate_questions_for_authed_user($exam);
 
-        $questionArray = $exam->questions->pluck('id');
+        $questionArray = $exam->questions->shuffle()->pluck('id');
         
         $practice = ExamPractice::create([
             'user_id' => auth()->user()->id,
