@@ -42,11 +42,16 @@ class ExamSessionController extends Controller
         $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
 
         if ($maxQuestions == 0) {
-            $maxQuestions = $examSet->questions->count();
+            $totalQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->count();
+
+            if ($totalQuestions == 0) {
+                // There are no questions at all, so let's set this to the max available
+                $maxQuestions = $examSet->questions->count();
+            }
         }
 
         if ($maxQuestions == 0) {
-            return redirect()->route('profile.exams')->with('error', 'This exam has no questions yet');
+            return redirect()->route('profile.exams')->with('warning', 'You do not have any available questions to take yet');
         }
 
         return view('exam-session.configure')->with([
@@ -62,7 +67,13 @@ class ExamSessionController extends Controller
         $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
 
         if ($maxQuestions == 0) {
-            $maxQuestions = $examSet->questions->count();
+            // if zero, why?
+            $totalQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->count();
+
+            if ($totalQuestions == 0) {
+                // There are no questions at all, so let's set this to the max available
+                $maxQuestions = $examSet->questions->count();
+            }
         }
 
         $request->validate([

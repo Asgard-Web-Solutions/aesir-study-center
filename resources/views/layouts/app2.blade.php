@@ -112,22 +112,26 @@
 
             @if (session('error'))
                 @if(is_string(session('error')))
-                    <div role="alert" class="my-2 alert alert-error">
-                        <i class="fa-solid fa-hexagon-exclamation"></i>
-                        <strong class="font-bold">Success!</strong>
-                        <p class="mt-1">{{ session('error') }}</p>
+                <div role="alert" class="my-2 alert alert-error d-flex align-items-center">
+                    <i class="fa-solid fa-hexagon-exclamation me-2"></i>
+                    <div>
+                        <strong class="font-bold me-2">Error: </strong>
+                        <span>{{ session('error') }}</span>
                     </div>
-                @endif
+                </div>
+            @endif
             @endif
 
             @if (session('warning'))
                 @if(is_string(session('warning')))
-                    <div role="alert" class="my-2 alert alert-warning">
-                        <i class="fa-sharp fa-solid fa-triangle-exclamation"></i>
-                        <strong class="font-bold">Success!</strong>
-                        <p class="mt-1">{{ session('warning') }}</p>
+                <div role="alert" class="my-2 alert alert-warning d-flex align-items-center">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <div>
+                        <strong class="font-bold me-2">Warning: </strong>
+                        <span>{{ session('warning') }}</span>
                     </div>
-                @endif
+                </div>
+            @endif
             @endif
 
             @if (session('success'))

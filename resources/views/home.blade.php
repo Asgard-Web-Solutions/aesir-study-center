@@ -52,7 +52,7 @@
             <li class="my-2"><span class="font-bold text-secondary">Create Custom Exams</span> Add your own questions and answers to build personalized tests.</li>
             <li class="my-2"><span class="font-bold text-secondary">Adaptive Learning</span> Focuses on questions you struggle with the most.</li>
             <li class="my-2"><span class="font-bold text-secondary">Detailed Analytics</span> Track your performance and mastery levels.</li>
-            <li class="my-2"><span class="font-bold text-secondary">Interactive Sessions</span> Engage with shuffled questions and timed tests.</li>
+            <li class="my-2"><span class="font-bold text-secondary">Interactive Sessions</span> Engage with shuffled questions and self-paced tests.</li>
             <li class="my-2"><span class="font-bold text-secondary">Flexible Learning</span> Study at your own pace and convenience.</li>
         </ul>
     </x-card.mini>
@@ -80,11 +80,5 @@
         <a href="{{ route('register') }}" class="mx-auto my-3 btn btn-primary">Get Started</a>
     </div>
 </x-card.main>
-
-<br />
-<br />
-<br />
-<br />
-<br />
 
 @endsection
