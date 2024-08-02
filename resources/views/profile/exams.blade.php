@@ -33,7 +33,7 @@
 
                     <div class="w-full text-center md:w-1/2 md:text-left">
                         <div class="dropdown">
-                            <div class="m-1 btn btn-secondary btn-sm" tabindex="0" role="button">More Actions...</div>
+                            <div class="m-1 btn btn-secondary btn-sm btn-outline" tabindex="0" role="button">More Actions...</div>
                             <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                                 <li><a href="{{ route('exam-session.summary', $record) }}"><i class="{{ config('icon.latest_summary') }} text-lg"></i> Last Test Summary</a></li>
                                 <li><a href="{{ route('practice.start', $record) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
