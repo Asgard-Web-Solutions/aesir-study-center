@@ -6,6 +6,7 @@ return [
     'practice_exam' => 'fa-regular fa-cards-blank',
     'public_exams' => 'fa-duotone fa-solid fa-binoculars',
     'manage_exams' => 'fa-duotone fa-solid fa-layer-group',
+    'new_exam' => 'fa-duotone fa-solid fa-file-circle-plus',
     
     'question_count' => 'fa-regular fa-block-question',
     'times_taken' => 'fa-light fa-cubes-stacked',
