@@ -138,6 +138,9 @@ class ExamSessionController extends Controller
                 $single = true;
                 $answers = $question->answers;
 
+                // Track the text value of the answers we have selected so that we do not choose other answers with the exact same text
+                $answersText = collect($question->answers[0]->text);
+
                 $pool = Question::where('set_id', '=', $question->set_id)->where('group_id', '=', $question->group_id)->where('id', '!=', $question->id)->get();
 
                 $pool = $pool->shuffle();
@@ -145,9 +148,12 @@ class ExamSessionController extends Controller
                 $count = 1;
 
                 foreach ($pool as $q) {
-                    $answers->push($q->answers->first());
-                    $count = $count + 1;
-
+                    if (!$answersText->contains($q->answers[0]->text)) {
+                        $answersText->push($q->answers[0]->text);
+                        $answers->push($q->answers->first());
+                        $count = $count + 1;
+                    }
+                        
                     if ($count == config('test.target_answers')) {
                         break;
                     }
