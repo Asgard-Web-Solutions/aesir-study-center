@@ -42,8 +42,6 @@
               <div class="stat-desc"></div>
             </div>
           </div>
-
-        {{-- // TODO: Show mastery stats --}}
     </x-card.mini>
 
     <x-card.mini title="Mastery Change">
