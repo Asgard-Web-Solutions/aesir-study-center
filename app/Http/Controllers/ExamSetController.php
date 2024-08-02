@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Enums\Mastery;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Set as ExamSet;
@@ -23,9 +24,22 @@ class ExamSetController extends Controller
                             ->first();
         }
 
+        $mastery = [];
+        foreach (Mastery::cases() as $level) {
+            $mastery[$level->value] = $level->name;
+        }
+
+        $masters = ExamSet::whereHas('records', function ($query) use ($exam) {
+            $query->where('exam_records.highest_mastery', '>', Mastery::Proficient->value)->where('exam_records.set_id', $exam->id)->orderBy('exam_records.highest_mastery', 'desc');
+        })->with(['records' => function ($query) {
+            $query->where('exam_records.highest_mastery', '>', Mastery::Proficient->value);
+        }])->get();
+
         return view('exam.view')->with([
             'exam' => $exam,
             'examRecord' => $examRecord,
+            'mastery' => $mastery,
+            'masters' => $masters,
         ]);
     }
 

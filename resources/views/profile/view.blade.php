@@ -15,23 +15,38 @@
         </x-card.mini>
     </x-card.main>
 
-    <x-card.main title="{{ $user->name }}'s Exams Taken" size="lg">
-        <x-card.mini>
-            <x-table.main>
-                <x-table.head>
-                    <x-table.hcell>Exam Name</x-table.hcell>
-                    <x-table.hcell>Times Taken</x-table.hcell>
-                </x-table.head>
-                @foreach ($user->records as $exam)
-                    @if ($exam->visibility && ($exam->pivot->times_taken > 0))
-                        <x-table.row>
-                            <x-table.cell><a href="{{ route('exam.view', $exam) }}" class="link link-secondary">{{ $exam->name }}</a></x-table.cell>
-                            <x-table.cell>{{ $exam->pivot->times_taken }}</x-table.cell>
-                        </x-table.row>
-                    @endif
-                @endforeach
-            </x-table.main>
-        </x-card.mini>
+    <x-card.main title="Exam History">
+        
+        @forelse ($user->records as $record)
+            @if ($record->visibility && ($record->pivot->times_taken > 0))
+                <x-card.mini>
+                    <div class="block w-full md:flex">
+                        <div class="w-full md:w-3/4">
+                            <h2 class="my-2 text-xl"><a href="{{ route('exam.view', $record) }}" class="font-bold no-underline link link-primary">{{ $record->name }}</a></h2>
+                        </div>
+                        <div class="w-full md:w-1/4 tooltip" data-tip="{{ $mastery[$record->pivot->highest_mastery] }}">
+                            <i class="
+                                text-5xl
+                                text-{{ config('color.' . strtolower($mastery[$record->pivot->highest_mastery])) }} 
+                                {{ config('icon.' . strtolower($mastery[$record->pivot->highest_mastery])) }}
+                                rounded-lg ring-2 p-1 ring-base-300
+                            "></i>
+                        </div>
+                    </div>
+                    
+                    <div class="flex w-full py-2 my-2 rounded-lg bg-base-100">
+                        @if ($record->user) <a href="{{ route('profile.view', $record->user) }}"><x-user.avatar size="tiny">{{ $record->user->gravatarUrl(64) }}</x-user.avatar></a> <a href="{{ route('profile.view', $record->user) }}" class="mr-2 link link-{{ config('color.author') }} tooltip" data-tip="Exam Author">{{ $record->user->name }}</a> @endif
+                        <span class="mx-2 tooltip text-{{ config('color.question_count') }}" data-tip="Question Count"><i class="mr-1 text-lg {{ config('icon.question_count') }}"></i> {{ $record->questions->count() }}</span>
+                        <span class="mx-2 tooltip text-{{ config('color.times_taken') }}" data-tip="Times Taken"><i class="mr-1 text-lg {{ config('icon.times_taken') }}"></i> {{ $record->pivot->times_taken }}</span>
+                        <span class="mx-2 tooltip text-{{ config('color.recent_average') }}" data-tip="Recent Average"><i class="mr-1 text-lg {{ config('icon.recent_average') }}"></i> {{ $record->pivot->recent_average }}</span>
+                    </div>
+                </x-card.mini>
+            @endif
+        @empty
+            <x-card.mini>
+                <x-text.main>Exam history was not found.</x-text.main>
+            </x-card.mini>
+        @endforelse
     </x-card.main>
 
     <x-card.main title="Tests Created" size="grid">

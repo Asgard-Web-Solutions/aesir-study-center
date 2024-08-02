@@ -13,4 +13,10 @@ return [
     'recent_average' => 'fa-solid fa-percent',
     'latest_summary' => 'fa-sharp fa-regular fa-paste',
     'author' => 'fa-sharp fa-solid fa-chalkboard-user',
+
+    'mastered' => 'fa-duotone fa-solid fa-dragon',
+    'proficient' => 'fa-sharp fa-solid fa-book-sparkles',
+    'familiar' => 'fa-sharp-duotone fa-solid fa-hat-wizard',
+    'apprentice' => 'fa-duotone fa-solid fa-staff',
+    'unskilled' => 'fa-sharp fa-solid fa-dungeon',
 ];

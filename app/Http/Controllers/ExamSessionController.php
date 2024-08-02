@@ -6,6 +6,7 @@ use DB;
 use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\User;
+use App\Enums\Mastery;
 use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Http\Request;
@@ -272,44 +273,7 @@ class ExamSessionController extends Controller
             ]);
 
             // Update mastery for leveled up questions
-            $updateMastery = array();
-            if ($result == 1) {
-                switch($updatedScore) {
-                    case config('test.grade_apprentice'):
-                        $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change + 1;
-                        break;
-
-                    case config('test.grade_familiar'):
-                        $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change + 1;
-                        break;
-
-                    case config('test.grade_proficient'):
-                        $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change + 1;
-                        break;
-
-                    case config('test.grade_mastered'):
-                        $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change + 1;
-                        break;
-                }
-            } else {
-                switch($updatedScore) {
-                    case (config('test.grade_apprentice') - 1):
-                        $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change - 1;
-                        break;
-
-                    case (config('test.grade_familiar') - 1):
-                        $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change - 1;
-                        break;
-
-                    case (config('test.grade_proficient') - 1):
-                        $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change - 1;
-                        break;
-
-                    case (config('test.grade_mastered') - 1):
-                        $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change - 1;
-                        break;
-                }
-            }
+            $updateMastery = $this->calculateUpdatedMastery($userQuestion->score, $updatedScore, $session);
 
             $updateSession = [
                 'current_question' => $session->current_question +1,
@@ -389,11 +353,13 @@ class ExamSessionController extends Controller
         }
 
         $examRecord = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
+        $mastery = Mastery::from($examRecord->highest_mastery)->name;
 
         return view('exam-session.summary')->with([
             'examSet' => $examSet,
             'session' => $session,
             'examRecord' => $examRecord,
+            'mastery' => $mastery,
         ]);
     }
 
@@ -446,6 +412,18 @@ class ExamSessionController extends Controller
             }
         }
 
+        $highestMastery = Mastery::Unskilled;
+
+        if ($masteryLevelMastered == $questions->count()) {
+            $highestMastery = Mastery::Mastered->value;
+        } else if ($masteryLevelProficient == $questions->count()) {
+            $highestMastery = Mastery::Proficient->value;
+        } else if ($masteryLevelFamiliar == $questions->count()) {
+            $highestMastery = Mastery::Familiar->value;
+        } else if ($masteryLevelApprentice == $questions->count()) {
+            $highestMastery = Mastery::Apprentice->value;
+        }
+        
         DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
             'times_taken' => $record->times_taken + 1,
             'recent_average' => round($averageTotal / $averageCount),
@@ -454,6 +432,7 @@ class ExamSessionController extends Controller
             'mastery_familiar_count' => $masteryLevelFamiliar,
             'mastery_proficient_count' => $masteryLevelProficient,
             'mastery_mastered_count' => $masteryLevelMastered,
+            'highest_mastery' => $highestMastery,
         ]);
     }
 
@@ -491,5 +470,41 @@ class ExamSessionController extends Controller
         }
 
         return $correctAnswersCount;
+    }
+
+    private function calculateUpdatedMastery($originalScore, $updatedScore, $session) {
+        $updateMastery = array();
+
+        // See if the current score equals a threshold
+        if (($updatedScore == config('test.grade_apprentice')) && ($originalScore == (config('test.grade_apprentice') - 1))) {
+            $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change + 1;
+
+        } else if (($updatedScore == (config('test.grade_apprentice') - 1)) && ($originalScore == config('test.grade_apprentice'))) {
+            $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change - 1;
+        }
+
+        if (($updatedScore == config('test.grade_familiar')) && ($originalScore == (config('test.grade_familiar') - 1))) {
+            $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change + 1;
+
+        } else if (($updatedScore == (config('test.grade_familiar') - 1)) && ($originalScore == config('test.grade_familiar'))) {
+            $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change - 1;
+        }
+
+        if (($updatedScore == config('test.grade_proficient')) && ($originalScore == (config('test.grade_proficient') - 1))) {
+            $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change + 1;
+
+        } else if (($updatedScore == (config('test.grade_proficient') - 1)) && ($originalScore == config('test.grade_proficient'))) {
+            $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change - 1;
+        }
+
+
+        if (($updatedScore == config('test.grade_mastered')) && ($originalScore == (config('test.grade_mastered') - 1))) {
+            $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change + 1;
+
+        } else if (($updatedScore == (config('test.grade_mastered') - 1)) && ($originalScore == config('test.grade_mastered'))) {
+            $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change - 1;
+        }
+
+        return $updateMastery;
     }
 }

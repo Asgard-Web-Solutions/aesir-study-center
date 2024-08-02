@@ -4,7 +4,19 @@
     <x-card.main title="Exams You Have Taken" size="grid">
         @forelse ($records as $record)
             <x-card.mini>
-                <h2 class="my-2 text-xl"><a href="{{ route('exam.view', $record) }}" class="font-bold no-underline link link-primary">{{ $record->name }}</a></h2>
+                <div class="block w-full md:flex">
+                    <div class="w-full md:w-3/4">
+                        <h2 class="my-2 text-xl"><a href="{{ route('exam.view', $record) }}" class="font-bold no-underline link link-primary">{{ $record->name }}</a></h2>
+                    </div>
+                    <div class="w-full md:w-1/4 tooltip" data-tip="{{ $mastery[$record->pivot->highest_mastery] }}">
+                        <i class="
+                            text-5xl
+                            text-{{ config('color.' . strtolower($mastery[$record->pivot->highest_mastery])) }} 
+                            {{ config('icon.' . strtolower($mastery[$record->pivot->highest_mastery])) }}
+                            rounded-lg ring-2 p-1 ring-base-300
+                        "></i>
+                    </div>
+                </div>
                 
                 <div class="flex w-full py-2 my-2 rounded-lg bg-base-100">
                     @if ($record->user) <a href="{{ route('profile.view', $record->user) }}"><x-user.avatar size="tiny">{{ $record->user->gravatarUrl(64) }}</x-user.avatar></a> <a href="{{ route('profile.view', $record->user) }}" class="mr-2 link link-{{ config('color.author') }} tooltip" data-tip="Exam Author">{{ $record->user->name }}</a> @endif

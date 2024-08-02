@@ -22,6 +22,14 @@ class ExamSessionTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
+        $question = $this->CreateQuestion(['set_id' => $exam->id]);
+        DB::table('user_question')->insert([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+            'question_id' => $question->id,
+            'score' => 0,
+            'next_at' => Carbon::now()->subDays(1),
+        ]);
         $data = array();
         
         if ($route == 'summary') {
