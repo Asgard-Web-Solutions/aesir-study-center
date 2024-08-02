@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <x-card.main title="{{ $examSet->name }}">
+  <x-card.main title="{!! $examSet->name !!}">
     <x-card.mini title="Latest Exam">
         <div class="w-full mx-auto shadow md:w-1/2 stats stats-vertical md:stats-horizontal">
             <div class="stat">
@@ -51,7 +51,7 @@
     <x-page.actions primary="Start Test" primaryLink="{{ route('exam-session.start', $examSet->id) }}" secondary="Exam Portal" secondaryLink="{{ route('profile.exams') }}" />
   </x-card.main>
 
-  <x-card.main title="{{ $examSet->name }} - Summary">
+  <x-card.main title="{!! $examSet->name !!} - Summary">
     <x-card.mini>
       <div class="w-full shadow stats stats-vertical md:stats-horizontal">
         <div class="stat">

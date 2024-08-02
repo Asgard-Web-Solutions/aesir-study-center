@@ -1,7 +1,7 @@
 @extends('layouts.app2')
 
 @section('content')
-    <x-card.main title="Exam: {{ $set->name }}">
+    <x-card.main title="Exam: {!! $set->name !!}">
 
         <x-card.mini title="Create Question Group">
             <form action="{{ route('group-store', $set->id) }}" method="post">
