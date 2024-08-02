@@ -58,7 +58,7 @@
 
             {{-- Main Navigation --}}
             <div class="container flex items-center justify-between px-4 py-4 mx-auto">
-                <a href="{{ url('/') }}" class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
+                <a @auth href="{{ route('profile.exams') }}" @endauth @guest href="{{ route('home') }}" @endguest class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
                 <div class="hidden space-x-4 md:flex">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
@@ -147,16 +147,16 @@
         </main>
     </div>
 
-    <footer class="p-10 mt-8 footer bg-neutral text-neutral-content">
+    <footer class="p-10 mt-10 footer bg-neutral text-neutral-content">
         <nav>
-          <h6 class="footer-title">Pages</h6>
-          <a class="link link-hover" href="{{ route('home') }}">Welcome</a>
+            <h6 class="footer-title">Pages</h6>
+            <a class="link link-hover" href="{{ route('home') }}">Welcome</a>
         </nav>
         <nav>
-          <h6 class="footer-title">Social</h6>
-          <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=31">Community Forum</a>
+            <h6 class="footer-title">Social</h6>
+            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=31">Community Forum</a>
         </nav>
-      </footer>
+    </footer>
 
     <script>
         // function changeTheme(theme) {
