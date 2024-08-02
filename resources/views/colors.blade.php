@@ -72,5 +72,12 @@
     </div>
 
     <div class="px-1 px-2 md:px-2 md:px-1" /></body>
+    <div class="progress progress-primary"></div>
+    <div class="progress progress-secondary"></div>
+    <div class="progress progress-accent"></div>
+    <div class="progress progress-info"></div>
+    <div class="progress progress-success"></div>
+    <div class="progress progress-warning"></div>
+    <div class="progress progress-error"></div>
 </body>
 </html>
