@@ -31,6 +31,7 @@
 
                 <x-form.text name="name" value="{{ $user->name }}" />
                 <x-form.text name="email" type="email" value="{{ $user->email }}" />
+                <x-form.checkbox name="showTutorial" label="Show Query the Help Owl Tutorials" checked="{{ $user->showTutorial }}" />
                 
                 <x-card.buttons submitLabel="Save Profile" />
             </form>

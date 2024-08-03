@@ -1,13 +1,12 @@
 <?php
 
-namespace App\View\Components\help;
+namespace App\View\Components\form;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Illuminate\Support\Facades\Auth;
 
-class box extends Component
+class checkbox extends Component
 {
     /**
      * Create a new component instance.
@@ -22,12 +21,6 @@ class box extends Component
      */
     public function render(): View|Closure|string
     {
-        $user = Auth::user();
-
-        if ($user && $user->showTutorial) {
-            return view('components.help.box');
-        }
-
-        return '';
+        return view('components.form.checkbox');
     }
 }
