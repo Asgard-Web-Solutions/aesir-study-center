@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <x-card.main title="Your Profile">
+    <x-card.main title="Your Profile Settings">
         <x-card.mini title="Profile Image / Gravatar">
             <div class="block md:flex">
                 <div>
