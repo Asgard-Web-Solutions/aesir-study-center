@@ -16,7 +16,6 @@
                         $values[$status->value] = str_replace("is", "", $status->name);
                     }
                 @endphp
-                <x-form.dropdown name="visibility" label="Public / Private" :values="$values" />
 
                 <x-card.buttons submitLabel="Create Exam" />
             </form>

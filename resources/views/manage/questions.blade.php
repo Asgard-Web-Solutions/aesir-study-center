@@ -15,6 +15,13 @@
                 }
             @endphp
             <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $set->visibility }}" />
+            
+            <x-help.box>
+                <x-help.text>The exams <x-help.highlight>Visibility</x-help.highlight> determines who can see or take an exam.</x-help.text>
+                <x-help.text>If you set the exam to <x-help.highlight>Private</x-help.highlight> then only you, the exam's <x-help.highlight color="info">Architect</x-help.highlight>, can see the exam or take.</x-help.text>
+                <x-help.text>If you set the exam to <x-help.highlight>Public</x-help.highlight> then every Acolyte at the academy will be able to see the exam and take it, starting their own journey down the path of mastery.</x-help.text>
+                <x-help.text>In the future the <x-help.highlight color="info">Keeper</x-help.highlight> has plans to reward Architects who make their exams public.</x-help.text>
+            </x-help.box>
 
             <x-card.buttons submitLabel="Update Exam Settings" />
         </form>
