@@ -95,6 +95,13 @@
         </div>
 
       </div>
+      <x-help.box>
+        <x-help.text><x-help.highlight>Mastery Change</x-help.highlight> shows you how much progress was made toward mastering this subject during your latest Exam Session.</x-help.text>
+        <x-help.text>As you get questions correct they gain experience. Once they have enough experience that question gains a new mastery level.</x-help.text>
+        <x-help.text>Once <x-help.highlight color="secondary">every question reaches a certain level</x-help.highlight> then you will be awarded a <x-help.highlight color="warning">Mastery Badge</x-help.highlight> for that exam.</x-help.text>
+        <x-help.text>This <x-help.highlight color="normal">Mastery Change</x-help.highlight> section shows you how many questions achieved a new rank during your Exam Session.</x-help.text>
+        <x-help.text>Beware, questions can <x-help.highlight color="secondary">lose mastery if you get them wrong</x-help.highlight>.</x-help.text>
+      </x-help.box>
     </x-card.mini>
   </x-card.main>
 
@@ -134,6 +141,11 @@
           <div class="stat-desc">Previous {{ config('test.count_tests_for_average_score') }} Exams</div>
         </div>
       </div>
+
+      <x-help.box>
+        <x-help.text><x-help.highlight>Highest Mastery</x-help.highlight> shows you the badge for the highest mastery level that you have achieved for <x-help.highlight color="secondary">this exam</x-help.highlight>.</x-help.text>
+        <x-help.text>Once <x-help.highlight color="info">100%</x-help.highlight> of the Questions in an exam have achieved a certain Mastery Level, then you will unlock that Mastery Badge.</x-help.text>
+      </x-help.box>
     </x-card.mini>
     <x-card.mini title="Your Mastery Progress">
       <div class="shadow">
@@ -150,6 +162,12 @@
           <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.apprentice') }}">Apprentice:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.apprentice') }} " value="{{ $examRecord->mastery_apprentice_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
         </div>
       </div>
+      
+      <x-help.box>
+        <x-help.text><x-help.highlight>Mastery Progress</x-help.highlight> shows how many questions in this exam you have leveled up to each mastery level.</x-help.text>
+        <x-help.text>My own goal is to get every exam to 100% Mastered! It's a big goal, I know, but I like learning things and taking lots of Exams.</x-help.text>
+        <x-help.text>Other acolytes at Acolyte Academy will be able to see your exam badges in your <x-help.highlight color="info">Acolyte Transcript</x-help.highlight> page.</x-help.text>
+      </x-help.box>
     </x-card.mini>
   </x-card.main>
 
