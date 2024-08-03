@@ -44,6 +44,7 @@
                     <hr class="my-2" />
                     @auth
                         <x-button.mobile href="{{ route('profile.index') }}">Profile</x-button.mobile>
+                        <x-button.mobile href="{{ route('profile.view', auth()->user()) }}">Your Transcripts</x-button.mobile>
                         @if ( auth()->user()->isAdmin )
                             <x-button.mobile href="{{ route('admin.index') }}">Admin Control Panel</x-button.mobile>
                         @endif
@@ -82,6 +83,7 @@
                             <ul tabindex="0" class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52">
 
                                 <li> <a href="{{ route('profile.index') }}">Profile</a></li>
+                                <li> <a href="{{ route('profile.view', auth()->user()) }}">Your Transcripts</a></li>
                                 @if ( auth()->user()->isAdmin )
                                     <li> <a href="{{ route('admin.index') }}">Admin Control Panel</a></li>
                                 @endif

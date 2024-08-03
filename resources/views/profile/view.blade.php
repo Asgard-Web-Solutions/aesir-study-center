@@ -1,7 +1,8 @@
 @extends('layouts.app2')
 
 @section('content')
-
+    <x-page.title>Acolyte Transcript</x-page.title>
+    
     <x-card.main size="lg">
         <x-card.mini >
             <div class="block md:flex">
@@ -24,7 +25,7 @@
                         <div class="w-full md:w-3/4">
                             <h2 class="my-2 text-xl"><a href="{{ route('exam.view', $record) }}" class="font-bold no-underline link link-primary">{{ $record->name }}</a></h2>
                         </div>
-                        <div class="w-full md:w-1/4 tooltip" data-tip="{{ $mastery[$record->pivot->highest_mastery] }}">
+                        <div class="w-full md:w-1/4 tooltip" data-tip="Mastery Level: {{ $mastery[$record->pivot->highest_mastery] }}">
                             <i class="
                                 text-5xl
                                 text-{{ config('color.' . strtolower($mastery[$record->pivot->highest_mastery])) }} 

@@ -165,6 +165,7 @@
       
       <x-help.box>
         <x-help.text><x-help.highlight>Mastery Progress</x-help.highlight> shows how many questions in this exam you have leveled up to each mastery level.</x-help.text>
+        <x-help.text>To gain levels <x-help.highlight color="secondary">keep taking the exam and getting every question correct</x-help.highlight>!</x-help.text>
         <x-help.text>My own goal is to get every exam to 100% Mastered! It's a big goal, I know, but I like learning things and taking lots of Exams.</x-help.text>
         <x-help.text>Other acolytes at Acolyte Academy will be able to see your exam badges in your <x-help.highlight color="info">Acolyte Transcript</x-help.highlight> page.</x-help.text>
       </x-help.box>
