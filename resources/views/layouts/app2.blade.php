@@ -28,7 +28,7 @@
                 </div>
                 <ul
                   tabindex="0"
-                  class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                  class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow" style="z-index: 1000;">
                     @auth
                         <x-button.mobile href="{{ route('profile.exams') }}">Your Exams</x-button.mobile>
                         <x-button.mobile href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.mobile>
@@ -60,7 +60,7 @@
             {{-- Main Navigation --}}
             <div class="container flex items-center justify-between px-4 py-4 mx-auto">
                 <a @auth href="{{ route('profile.exams') }}" @endauth @guest href="{{ route('home') }}" @endguest class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
-                <div class="hidden space-x-4 md:flex">
+                <div class="hidden space-x-4 md:flex" style="z-index: 1000;">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
                         <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
