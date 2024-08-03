@@ -10,6 +10,7 @@ use DB;
 
 class ProfileControllerTest extends TestCase
 {
+    use RefreshDatabase;
     
     // DONE: Create an ExamPortal page that shows user ExamRecords
     /** 
@@ -80,6 +81,7 @@ class ProfileControllerTest extends TestCase
         $data = [
             'name' => 'Captain Kirk',
             'email' => 'kirk@enterprise.org',
+            'showTutorial' => 1,
         ];
 
         $response = $this->post(route('profile.update'), $data);

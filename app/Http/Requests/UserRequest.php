@@ -24,6 +24,7 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required|string|min:1|max:255',
             'email' => 'required|email',
+            'showTutorial' => 'sometimes|integer|min:0|max:1',
         ];
     }
 }

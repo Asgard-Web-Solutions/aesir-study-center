@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 class ProfileController extends Controller
-{
+{    
     public function index()
     {
         $user = $this->getAuthedUser();
@@ -50,9 +50,15 @@ class ProfileController extends Controller
     public function update(UserRequest $request) {
         $user = $this->getAuthedUser();
 
-        $user->update($request->validated());
+        $validatedValues = $request->validated();
+        
+        if (!$request->has('showTutorial')) {
+            $validatedValues['showTutorial'] = 0;
+        }
 
-        return back()->with('alert', 'Profile Information Saved');
+        $user->update($validatedValues);
+
+        return back()->with('success', 'Profile Information Saved');
     }
 
     public function changepass(Request $request) {

@@ -1,6 +1,16 @@
 @extends('layouts.app2')
 
 @section('content')
+
+    <x-help.box>
+        <x-help.text>Hi, I'm <x-help.highlight color="accent">Acolyte Quizalot</x-help.highlight>! I see that you met my friend, <x-help.highlight color="accent">Query the Help Owl</x-help.highlight>.</x-help.text>
+        <x-help.text>We want to make sure you have the best time here at <x-help.highlight color="info">Acolyte Academy</x-help.highlight> as you use our resources to help you master your studies of magic, or whatever you are learning.</x-help.text>
+        <x-help.text>If you see <x-help.highlight color="normal">Query</x-help.highlight> around anywhere, just click on her and she will summon me to give you information about a certain topic on the site.</x-help.text>
+        <x-help.text>And if you don't like seeing <x-help.highlight color="normal">Query</x-help.highlight> follow you around to offer help, you can <x-help.highlight color="secondary">turn off tutorials in your Profile Settings</x-help.highlight>. Just click on your name at the top of this site to access them.</x-help.text>
+        <x-help.text>Finally, if you need help with anything else, feel free to join our <x-page.communitylink>Community Forums</x-page.communitylink> where you can ask for help and interact with the <x-help.highlight color="info">Keeper</x-help.highlight>.</x-help.text>
+        <x-help.text>Happy learning!</x-help.text>
+    </x-help.box>
+    
     <x-card.main title="Exams You Have Taken" size="grid">
         @forelse ($records as $record)
             <x-card.mini>
@@ -72,6 +82,6 @@
     <br />
     <div class="flex justify-end w-full space-x-2">
         <a href="{{ route('profile.myexams') }}" class="btn btn-primary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Your Own Exams</a>
-        <a href="{{ route('exam.public') }}" class="btn btn-secondary"><i class="{{ config('icon.public_exams') }} text-lg"></i> Public Exams</a>
+        <a href="{{ route('exam.public') }}" class="btn btn-secondary"><i class="{{ config('icon.public_exams') }} text-lg"></i> Find Public Exams</a>
     </div>
 @endsection
