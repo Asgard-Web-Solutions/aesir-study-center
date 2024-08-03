@@ -58,7 +58,7 @@ class ProfileController extends Controller
 
         $user->update($validatedValues);
 
-        return back()->with('alert', 'Profile Information Saved');
+        return back()->with('success', 'Profile Information Saved');
     }
 
     public function changepass(Request $request) {
