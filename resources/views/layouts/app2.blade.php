@@ -60,6 +60,12 @@
             {{-- Main Navigation --}}
             <div class="container flex items-center justify-between px-4 py-4 mx-auto">
                 <a @auth href="{{ route('profile.exams') }}" @endauth @guest href="{{ route('home') }}" @endguest class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
+                
+                @guest
+                    <a href="{{ route('login') }}" class="btn btn-sm btn-primary md:hidden">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-sm btn-secondary md:hidden">Register</a>
+                @endguest
+                
                 <div class="hidden space-x-4 md:flex" style="z-index: 1000;">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
@@ -74,9 +80,6 @@
                         <x-button.nav href="{{ route('register') }}">Register</x-button.nav>
                     @endguest
 
-                    {{-- <a href="#" class="btn btn-ghost">Features</a>
-                    <a href="#" class="btn btn-ghost">Pricing</a>
-                    <a href="#" class="btn btn-ghost">Contact</a> --}}
                     @auth
                         <div class="dropdown dropdown-end">
                             <button tabindex="0" class="rounded-full btn btn-secondary">{{ Auth::user()->name }}</button>
@@ -93,7 +96,6 @@
                                     {{ csrf_field() }}
                                     </form>
                                 </li>
-                                <!-- Add more themes as needed -->
                             </ul>
                         </div>
                     @endauth
