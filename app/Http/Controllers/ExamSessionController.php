@@ -267,9 +267,11 @@ class ExamSessionController extends Controller
         $result = ($correct == $correctAnswersCount) ? 1 : 0;
 
         $userQuestion = DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->first();
+        $previousScore = null;
         
         if ($recordAnswer) {
             $updatedScore = 0;
+            $previousScore = $userQuestion->score;
             if ($result == 1) {
                 if ($userQuestion->score == 0) {
                     $updatedScore = config('test.min_score') + config('test.add_score');
@@ -346,6 +348,7 @@ class ExamSessionController extends Controller
             'examSet' => $examSet,
             'session' => $session,
             'userQuestionStats' => $userQuestion,
+            'previousScore' => $previousScore,
         ]);
 
         return view('exam-session.answer');
@@ -495,7 +498,8 @@ class ExamSessionController extends Controller
         $updateMastery = array();
 
         // See if the current score equals a threshold
-        if (($updatedScore == config('test.grade_apprentice')) && ($originalScore == (config('test.grade_apprentice') - 1))) {
+        // Also, if the original score was below the minimum then they could have gotten a bonus point this time around
+        if ((($updatedScore == config('test.grade_apprentice')) || $updatedScore == config('test.grade_apprentice') +1) && ($originalScore == (config('test.grade_apprentice') - 1))) {
             $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change + 1;
 
         } else if (($updatedScore == (config('test.grade_apprentice') - 1)) && ($originalScore == config('test.grade_apprentice'))) {
@@ -515,7 +519,6 @@ class ExamSessionController extends Controller
         } else if (($updatedScore == (config('test.grade_proficient') - 1)) && ($originalScore == config('test.grade_proficient'))) {
             $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change - 1;
         }
-
 
         if (($updatedScore == config('test.grade_mastered')) && ($originalScore == (config('test.grade_mastered') - 1))) {
             $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change + 1;
