@@ -269,8 +269,21 @@ class ExamSessionController extends Controller
         $userQuestion = DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->first();
         
         if ($recordAnswer) {
-            $updatedScore = ($result == 1) ? $userQuestion->score + config('test.add_score') : $userQuestion->score - config('test.sub_score');
-            $updatedScore = ($updatedScore < config('test.min_score')) ? config('test.min_score') : $updatedScore;
+            $updatedScore = 0;
+            if ($result == 1) {
+                if ($userQuestion->score == 0) {
+                    $updatedScore = config('test.min_score') + config('test.add_score');
+                } else {
+                    $updatedScore = $userQuestion->score + config('test.add_score');
+                }
+            } else {
+                $updatedScore = $userQuestion->score - config('test.sub_score');
+            }
+
+            if ($updatedScore < config('test.min_score')) {
+                $updatedScore = config('test.min_score');
+            }
+
             $nextAt = Carbon::now()->addHours((config('test.hour_multiplier') * ($updatedScore ** 2)));
 
             DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
