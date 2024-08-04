@@ -50,14 +50,16 @@
         <x-page.actions primary="Next Question" :primaryLink="route('exam-session.test', $examSet->id)" />
 
         <x-card.mini title="Your Mastery">
-            <ul class="w-full md:w-1/2 timeline timeline-vertical">
+            <ul class="w-full md:w-2/3 timeline timeline-vertical">
                 @for ($i = (config('test.grade_mastered')); $i > 0; $i --)
                     <li>
                         @if ($i == $userQuestionStats->score)
                             <div class="timeline-start">
                                 @if ($userQuestionStats->score > $previousScore)
-                                    <div class="badge badge-secondary">@if ($previousScore == 0) First Seen Bonus: @else Mastery: @endif + {{ $userQuestionStats->score - $previousScore }}</div>
+                                    @if ($previousScore == 0) First Seen Bonus @endif
+                                    <div class="badge badge-secondary">Mastery: + {{ $userQuestionStats->score - $previousScore }}</div>
                                 @else
+                                    @if ($userQuestionStats->score == $previousScore ) Apprentice Mastery Protection @endif
                                     <div class="badge badge-secondary">Mastery: - {{ $previousScore - $userQuestionStats->score }}</div>
                                 @endif
                             </div>
