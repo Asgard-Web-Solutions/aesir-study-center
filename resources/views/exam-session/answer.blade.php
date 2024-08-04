@@ -56,7 +56,7 @@
                         @if ($i == $userQuestionStats->score)
                             <div class="timeline-start">
                                 @if ($userQuestionStats->score > $previousScore)
-                                    <div class="badge badge-secondary">Mastery: + {{ $userQuestionStats->score - $previousScore }}</div>
+                                    <div class="badge badge-secondary">@if ($previousScore == 0) First Seen Bonus: @else Mastery: @endif + {{ $userQuestionStats->score - $previousScore }}</div>
                                 @else
                                     <div class="badge badge-secondary">Mastery: - {{ $previousScore - $userQuestionStats->score }}</div>
                                 @endif
