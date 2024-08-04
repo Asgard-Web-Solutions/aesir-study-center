@@ -55,10 +55,10 @@
                     <li>
                         @if ($i == $userQuestionStats->score)
                             <div class="timeline-start">
-                                @if ($correct)
-                                    <div class="badge badge-secondary">Mastery: + {{ config('test.add_score') }}</div>
+                                @if ($userQuestionStats->score > $previousScore)
+                                    <div class="badge badge-secondary">Mastery: + {{ $userQuestionStats->score - $previousScore }}</div>
                                 @else
-                                    <div class="badge badge-secondary">Mastery: - {{ config('test.sub_score') }}</div>
+                                    <div class="badge badge-secondary">Mastery: - {{ $previousScore - $userQuestionStats->score }}</div>
                                 @endif
                             </div>
                         @endif

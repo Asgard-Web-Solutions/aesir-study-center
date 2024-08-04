@@ -267,9 +267,11 @@ class ExamSessionController extends Controller
         $result = ($correct == $correctAnswersCount) ? 1 : 0;
 
         $userQuestion = DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->first();
+        $previousScore = null;
         
         if ($recordAnswer) {
             $updatedScore = 0;
+            $previousScore = $userQuestion->score;
             if ($result == 1) {
                 if ($userQuestion->score == 0) {
                     $updatedScore = config('test.min_score') + config('test.add_score');
@@ -346,6 +348,7 @@ class ExamSessionController extends Controller
             'examSet' => $examSet,
             'session' => $session,
             'userQuestionStats' => $userQuestion,
+            'previousScore' => $previousScore,
         ]);
 
         return view('exam-session.answer');
