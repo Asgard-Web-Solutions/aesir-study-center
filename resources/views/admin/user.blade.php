@@ -18,9 +18,15 @@
 
     <x-card.main title="User's Exams">
         <x-card.mini>
-            @foreach ($user->exams as $exam)
-                {{ $exam->name }}
-            @endforeach
+            <x-table.main>
+                <x-table.body>
+                    @foreach ($user->exams as $exam)
+                        <x-table.row>
+                            <x-table.cell><a href="{{ route('exam.view', $exam) }}" class="link link-primary">{{ $exam->name }}</a></x-table.cell>
+                        </x-table.row>
+                    @endforeach
+                </x-table.body>
+            </x-table.main>
         </x-card.mini>
     </x-card.main>
 
