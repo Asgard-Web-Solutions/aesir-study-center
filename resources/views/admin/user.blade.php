@@ -9,20 +9,18 @@
                 @csrf
                 <x-form.text name="name" value="{{ $user->name }}" />
                 <x-form.text name="email" type="email" value="{{ $user->email }}" />
+                <x-form.checkbox name="showTutorial" label="Show Query the Help Owl Tutorials" checked="{{ $user->showTutorial }}" />
                 
                 <x-card.buttons submitLabel="Update User" />
             </form>
+        </x-card.mini>
+    </x-card.main>
 
-
-            <x-table.main>
-                <x-table.body>
-                        <x-table.row>
-                            {{-- <x-table.cell>{{ $user->name }}</x-table.cell>
-                            <x-table.cell>{{ $user->email }}</x-table.cell>
-                            <x-table.cell><a href="{{ route('admin.user', $user) }}" class="link link-secondary">Edit user</a></x-table.cell> --}}
-                        </x-table.row>
-                </x-table.body>
-            </x-table.main>
+    <x-card.main title="User's Exams">
+        <x-card.mini>
+            @foreach ($user->exams as $exam)
+                {{ $exam->name }}
+            @endforeach
         </x-card.mini>
     </x-card.main>
 
