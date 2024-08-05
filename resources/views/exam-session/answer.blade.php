@@ -59,7 +59,7 @@
                                     @if ($previousScore == 0) <div class="badge badge-accent">First Seen Bonus</div> @endif
                                     <div class="badge badge-secondary">Mastery: + {{ $userQuestionStats->score - $previousScore }}</div>
                                 @else
-                                    @if ($userQuestionStats->score == $previousScore ) <div class="badge badge-info">Apprentice Protection</div> @endif
+                                    @if ($userQuestionStats->score == $previousScore ) <div class="badge badge-info">Keeper's Grace</div> @endif
                                     <div class="badge badge-secondary">Mastery: - {{ $previousScore - $userQuestionStats->score }}</div>
                                 @endif
                             </div>
