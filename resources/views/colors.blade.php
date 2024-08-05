@@ -79,5 +79,13 @@
     <div class="progress progress-success"></div>
     <div class="progress progress-warning"></div>
     <div class="progress progress-error"></div>
+
+    <div class="badge badge-primary"></div>
+    <div class="badge badge-secondary"></div>
+    <div class="badge badge-accent"></div>
+    <div class="badge badge-info"></div>
+    <div class="badge badge-success"></div>
+    <div class="badge badge-warning"></div>
+    <div class="badge badge-error"></div>
 </body>
 </html>

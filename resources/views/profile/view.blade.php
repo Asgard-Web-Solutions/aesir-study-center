@@ -64,7 +64,13 @@
     </x-card.main>
 
     <x-card.main title="Exams Architected">
-        
+        <x-help.box>
+            <x-help.text>I know, <x-help.highlight>Architected</x-help.highlight> is such a weird word!</x-help.text>
+            <x-help.text>The <x-help.highlight color="none">architects</x-help.highlight> are the life blood of the community here at <x-help.highlight color="info">Acolyte Academy</x-help.highlight>. They are the ones that create exams for other acolytes like yourself to take.</x-help.text>
+            <x-help.text>If you have an idea for a great exam, please create it and then set it to <x-help.highlight color="{{ config('color.public') }}">Public</x-help.highlight> so other acolytes can take it! There just might be some hidden rewards in it for you if your exams become popular.</x-help.text>
+            <x-help.text>The more high quality exams that you create will help you become known to the other acolytes at the academy. They will even be displayed in your <x-help.highlight color="secondary">transcripts</x-help.highlight>.</x-help.text>
+        </x-help.box>
+
         @forelse ($user->exams as $exam)
             @can ('view', $exam)
                 <x-card.mini>
