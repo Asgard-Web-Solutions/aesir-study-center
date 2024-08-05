@@ -37,7 +37,7 @@
         </x-card.mini>
     </x-card.main>
 
-    <x-card.main>
+    <x-card.main title="Exam Actions">
         <x-card.mini>
             <div class="flex">
                 @can ('update', $exam) 

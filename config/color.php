@@ -11,7 +11,8 @@ return [
     'question_count' => 'accent',
     'times_taken' => 'success',
     'recent_average' => 'info',
+    'acolyte_count' => 'success',
     
-    'public' => 'success',
-    'private' => 'accent',
+    'public' => 'info',
+    'private' => 'error',
 ];
