@@ -163,6 +163,7 @@
         <nav>
             <h6 class="footer-title">Social</h6>
             <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=31">Community Forum</a>
+            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=35">Release Notes</a>
         </nav>
     </footer>
 

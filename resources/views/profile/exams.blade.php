@@ -61,7 +61,7 @@
                                 <li><a href="{{ route('practice.start', $record) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
                                 <li><a href="{{ route('exam-session.start', $record) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
                                 @can('update', $record)
-                                    <li><a href="{{ route('manage-questions', $record->id) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a>
+                                    <li><a href="{{ route('manage-questions', $record->id) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a></li>
                                 @endcan
                             </ul>
                         </div>

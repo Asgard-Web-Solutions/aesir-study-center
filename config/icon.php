@@ -12,6 +12,7 @@ return [
     'times_taken' => 'fa-light fa-cubes-stacked',
     'recent_average' => 'fa-solid fa-percent',
     'latest_summary' => 'fa-sharp fa-regular fa-paste',
+    'acolyte_count' => 'fa-duotone fa-solid fa-user-graduate',
     'author' => 'fa-sharp fa-solid fa-chalkboard-user',
 
     'mastered' => 'fa-duotone fa-solid fa-dragon',
@@ -19,4 +20,7 @@ return [
     'familiar' => 'fa-sharp-duotone fa-solid fa-hat-wizard',
     'apprentice' => 'fa-duotone fa-solid fa-staff',
     'unskilled' => 'fa-sharp fa-solid fa-dungeon',
+
+    'public' => 'fa-sharp fa-solid fa-eye',
+    'private' => 'fa-sharp fa-solid fa-eye-slash',
 ];
