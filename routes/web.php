@@ -46,7 +46,7 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
     Route::post('/changepass', 'changepass')->name('changepass');
 });
 
-Route::get('/profile/{user}', [ProfileController::class, 'view'])->name('profile.view');
+Route::get('/transcripts/{user}', [ProfileController::class, 'view'])->name('profile.view');
 
 Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
