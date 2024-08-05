@@ -7,7 +7,7 @@
         <form action="{{ route('update-exam', $set) }}" method="POST">
             @csrf
             <x-form.text name="name" label="Name" value="{!! $set->name !!}" />
-            <x-form.text name="description" label="Description" value="{{ $set->description }}" />
+            <x-form.text name="description" label="Description" value="{!! $set->description !!}" />
             @php
                 foreach ($visibilityOptions as $visibility)
                 {
