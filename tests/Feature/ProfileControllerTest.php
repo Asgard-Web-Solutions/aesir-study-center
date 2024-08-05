@@ -114,9 +114,10 @@ class ProfileControllerTest extends TestCase
     /** @test */
     public function profile_page_does_not_show_private_tests() {
         $user = $this->CreateUserAndAuthenticate();
-        $exam = $this->CreateSet(['user_id' => $user->id, 'visibility' => 0]);
+        $examOwner = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 0]);
 
-        $response = $this->get(route('profile.view', $user));
+        $response = $this->get(route('profile.view', $examOwner));
 
         $response->assertDontSee($exam->name);
     }
