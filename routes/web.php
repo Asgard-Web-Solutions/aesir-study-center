@@ -28,9 +28,18 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->group(function () {
-    Route::get('/public', 'public')->name('public');
+Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware('auth');
+Route::get('/publicExams', [ExamSetController::class, 'public'])->name('exam.public');
+
+Route::prefix('architect')->name('exam.')->controller(ExamSetController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
     Route::get('/{set}', 'view')->name('view');
+    Route::get('/{set}/edit', 'edit')->name('edit');
+    Route::post('/{set}/add', 'add')->name('add');
+
+    Route::get('/{exam}/question/{question}', 'question')->name('question');
+    Route::post('/{exam}/question/{question}/update', 'questionUpdate')->name('questionUpdate');
+    Route::post('/{exam}/question/{question}/addAnswer', 'addAnswer')->name('addAnswer');
 });
 
 
@@ -77,9 +86,9 @@ Route::prefix('admin')->name('admin.')->controller(AdminController::class)->midd
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
 
-Route::get('/architect/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
-Route::post('/architect/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
-Route::post('/architect/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
+Route::get('/oldexamsystem/new', [SetController::class, 'create'])->name('exam-create')->middleware('auth');
+Route::post('/oldexamsystem/add', [SetController::class, 'store'])->name('save-exam')->middleware('auth');
+Route::post('/oldexamsystem/{set}/update', [SetController::class, 'update'])->name('update-exam')->middleware('auth');
 
 Route::get('/oldexam/{id}', [TestController::class, 'select'])->name('select-test')->middleware('auth');
 Route::post('/oldexam/{id}/start', [TestController::class, 'start'])->name('start-test')->middleware('auth');
@@ -88,13 +97,10 @@ Route::post('/test/{id}', [TestController::class, 'answer'])->name('answer')->mi
 
 Route::get('/history/{id}', [HomeController::class, 'history'])->name('test-history')->middleware('auth');
 
-Route::get('/architect', [QuestionController::class, 'exams'])->name('manage-exams')->middleware('auth');
-Route::get('/manage/{id}', [QuestionController::class, 'index'])->name('manage-questions')->middleware('auth');
 Route::get('/manage/{id}/add', [QuestionController::class, 'add'])->name('add-question')->middleware('auth');
 Route::post('/manage/{id}/add', [QuestionController::class, 'store'])->name('save-question')->middleware('auth');
 Route::get('/manage/{id}/edit', [QuestionController::class, 'edit'])->name('edit-question')->middleware('auth');
 Route::post('/manage/{id}/update', [QuestionController::class, 'update'])->name('update-question')->middleware('auth');
-Route::get('/manage/{set}/newGroup', [GroupController::class, 'create'])->name('group-create')->middleware('auth');
 Route::post('/manage/{set}/storeGroup', [GroupController::class, 'store'])->name('group-store')->middleware('auth');
 
 Route::get('/questionGroup/{group}', [GroupController::class, 'show'])->name('group-view')->middleware('auth');

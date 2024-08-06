@@ -31,7 +31,7 @@
                   class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow" style="z-index: 1000;">
                     @auth
                         <x-button.mobile href="{{ route('profile.exams') }}">Your Exams</x-button.mobile>
-                        <x-button.mobile href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.mobile>
+                        <x-button.mobile href="{{ route('exam.index') }}">Create/Manage Exams</x-button.mobile>
                     @endauth
                     <x-button.mobile href="{{ route('exam.public') }}">Public Exams</x-button.mobile>
                     <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.mobile>
@@ -69,7 +69,7 @@
                 <div class="hidden space-x-4 md:flex" style="z-index: 1000;">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
-                        <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
+                        <x-button.nav href="{{ route('exam.index') }}">Create/Manage Exams</x-button.nav>
                     @endauth
         
                     <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>

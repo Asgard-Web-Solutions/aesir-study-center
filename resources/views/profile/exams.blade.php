@@ -61,7 +61,7 @@
                                 <li><a href="{{ route('practice.start', $record) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
                                 <li><a href="{{ route('exam-session.start', $record) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
                                 @can('update', $record)
-                                    <li><a href="{{ route('manage-questions', $record->id) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a></li>
+                                    <li><a href="{{ route('exam.edit', $record) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a></li>
                                 @endcan
                             </ul>
                         </div>
@@ -81,7 +81,7 @@
 
     <br />
     <div class="flex justify-end w-full space-x-2">
-        <a href="{{ route('profile.myexams') }}" class="btn btn-primary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Your Own Exams</a>
+        <a href="{{ route('exam.index') }}" class="btn btn-primary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Your Own Exams</a>
         <a href="{{ route('exam.public') }}" class="btn btn-secondary"><i class="{{ config('icon.public_exams') }} text-lg"></i> Find Public Exams</a>
     </div>
 @endsection

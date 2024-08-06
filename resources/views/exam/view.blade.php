@@ -41,7 +41,7 @@
         <x-card.mini>
             <div class="flex">
                 @can ('update', $exam) 
-                    <a href="{{ route('manage-questions', $exam->id) }}" class="mx-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
+                    <a href="{{ route('exam.edit', $exam) }}" class="mx-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
                 @endcan
                 @can ('view', $exam) 
                     <a href="{{ route('practice.start', $exam) }}" class="mx-2 btn btn-secondary btn-sm"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a>

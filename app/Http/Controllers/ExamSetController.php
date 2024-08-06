@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Models\User;
 use App\Enums\Mastery;
+use App\Models\Answer;
+use App\Models\Question;
+use App\Enums\Visibility;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Set as ExamSet;
@@ -11,6 +15,15 @@ use Illuminate\Support\Facades\Auth;
 
 class ExamSetController extends Controller
 {
+    public function index() {
+        $user = $this->getAuthedUser();
+        $exams = $user->exams;
+
+        return view('exam.index')->with([
+            'exams' => $exams,
+        ]);
+    }
+
     public function view(ExamSet $exam): View
     {
         $this->authorize('view', $exam);
@@ -52,4 +65,104 @@ class ExamSetController extends Controller
         ]);
     }
 
+    public function edit(ExamSet $exam) {
+        $this->authorize('update', $exam);
+
+        $visibility = Visibility::cases();
+        $questions = Question::where('set_id', $exam->id)->where('group_id', 0)->get();
+
+        return view('exam.edit', [
+            'exam' => $exam,
+            'visibilityOptions' => $visibility,
+            'questions' => $questions,
+        ]);
+    }
+
+    public function add(Request $request, ExamSet $exam) {
+        $this->authorize('update', $exam);
+
+        $request->validate([
+            'question' => 'required|string',
+            'answers*' => 'required|string|nullable',
+            'correct*' => 'sometimes',
+        ]);
+
+        $question = new Question();
+        $question->text = $request->question;
+        $question->set_id = $exam->id;
+        $question->group_id = 0;
+        $question->save();
+
+        foreach ($request->answers as $index => $newAnswer) {
+            if ($newAnswer) {
+                $answer = new Answer();
+    
+                $answer->question_id = $question->id;
+                $answer->text = $newAnswer;
+                $answer->correct = (isset($request->correct[$index])) ? 1 : 0;
+                $answer->save();
+            }
+        }
+
+        return redirect()->route('exam.edit', $exam)->with('success', 'Exam question added');
+    }
+
+    public function question(ExamSet $exam, Question $question) {
+        $this->authorize('update', $exam);
+
+        return view('exam.question', [
+            'exam' => $exam,
+            'question' => $question,
+        ]);
+    }
+
+    public function questionUpdate(Request $request, ExamSet $exam, Question $question) {
+        $this->authorize('update', $exam);
+
+        $request->validate([
+            'question' => 'required|string',
+            'answers*' => 'required|string|nullable',
+            'correct*' => 'sometimes',
+        ]);
+
+        $question->text = $request->question;
+        $question->save();
+
+        foreach ($request->answers as $index => $newAnswer) {
+            $answer = Answer::find($index);
+            if ($answer->question_id != $question->id) {
+                return back()->with('error', 'There was an error handling the answers.');
+            }
+
+            $answer->text = $newAnswer;
+            $answer->correct = (isset($request->correct[$index])) ? 1 : 0;
+            $answer->save();
+        }
+
+        return redirect()->route('exam.edit', $exam)->with('success', 'Question updated successfully.');
+    }
+
+    public function addAnswer(Request $request, ExamSet $exam, Question $question) {
+        $this->authorize('update', $exam);
+
+        $request->validate([
+            'answer' => 'required|string',
+            'correct' => 'sometimes',
+        ]);
+
+        $answer = new Answer();
+    
+        $answer->question_id = $question->id;
+        $answer->text = $request->answer;
+        $answer->correct = (isset($request->correct)) ? 1 : 0;
+        $answer->save();
+
+        return redirect()->route('exam.question', ['exam' => $exam, 'question' => $question])->with('success', 'Answer added to question!');
+    }
+
+    private function getAuthedUser() {
+        $user = User::where('id', auth()->user()->id)->with('records')->first();
+
+        return $user;
+    }
 }

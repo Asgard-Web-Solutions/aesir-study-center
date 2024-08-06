@@ -5,7 +5,7 @@
     
     @if ($helptext) <x-text.dim>{{ $helptext }}</x-text.dim> @endif
        
-    <select id="{{ $name }}" name="{{ $name }}" class="w-full my-2 input @error($name) input-error @else input-primary @enderror">
+    <select id="{{ $name }}" name="{{ $name }}" class="w-full my-2 select select-bordered input @error($name) input-error @else input-primary @enderror">
         @foreach ($values as $key=>$value)
             <option value="{{ $key }}" @if ($selected && $selected == $key) SELECTED @endif>{{ $value }}</option>
         @endforeach
