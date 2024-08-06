@@ -33,6 +33,10 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->grou
     Route::get('/{set}', 'view')->name('view');
     Route::get('/{set}/edit', 'edit')->name('edit');
     Route::post('/{set}/add', 'add')->name('add');
+
+    Route::get('/{exam}/question/{question}', 'question')->name('question');
+    Route::post('/{exam}/question/{question}/update', 'questionUpdate')->name('questionUpdate');
+    Route::post('/{exam}/question/{question}/addAnswer', 'addAnswer')->name('addAnswer');
 });
 
 

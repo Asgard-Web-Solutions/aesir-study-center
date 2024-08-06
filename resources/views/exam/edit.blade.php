@@ -3,7 +3,7 @@
 @section('content')
 <x-card.main title="{!! $exam->name !!}">
 
-    <div class="collapse">
+    <div class="collapse collapse-arrow">
         <input type="checkbox">
         <div class="w-1/2 mx-auto collapse-title btn btn-secondary btn-outline btn-md">Show/Hide Settings</div>
         <div class="collapse-content">
@@ -80,7 +80,7 @@
                 <div class="divider">Answer #{{ $i }}</div>
                 <div class="block lg:flex">
                     <div class="w-full lg:w-3/4">
-                        <x-form.text name="answers[{{ $i }}]" value="{{ old('answer[' . $i . ']') }}" />
+                        <x-form.text name="answers[{{ $i }}]" value="{{ old('answers[' . $i . ']') }}" />
                     </div>
                     <div class="w-full px-4 lg:w-1/4">
                         @if ($i == 1)
@@ -110,7 +110,9 @@
                     <x-table.row>
                         <x-table.cell>{{ $question->text }}</x-table.cell>
                         <x-table.cell hideMobile='true'>{{ $question->answers->count() }}</x-table.cell>
-                        <x-table.cell><x-card.buttons primaryAction="{{ route('manage-answers', $question->id) }}" primaryLabel="Edit"/></x-table.cell>        
+                        <x-table.cell>
+                            <a href="{{ route('exam.question', ['exam' => $exam, 'question' => $question]) }}" class="btn btn-secondary btn-outline">Edit Question</a>
+                        </x-table.cell>
                     </x-table.row>
                 @endforeach
             </x-table.body>

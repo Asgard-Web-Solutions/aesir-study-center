@@ -69,6 +69,7 @@ class ExamSetController extends Controller
     }
 
     public function add(Request $request, ExamSet $exam) {
+        $this->authorize('update', $exam);
 
         $request->validate([
             'question' => 'required|string',
@@ -94,5 +95,58 @@ class ExamSetController extends Controller
         }
 
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam question added');
+    }
+
+    public function question(ExamSet $exam, Question $question) {
+        $this->authorize('update', $exam);
+
+        return view('exam.question', [
+            'exam' => $exam,
+            'question' => $question,
+        ]);
+    }
+
+    public function questionUpdate(Request $request, ExamSet $exam, Question $question) {
+        $this->authorize('update', $exam);
+
+        $request->validate([
+            'question' => 'required|string',
+            'answers*' => 'required|string|nullable',
+            'correct*' => 'sometimes',
+        ]);
+
+        $question->text = $request->question;
+        $question->save();
+
+        foreach ($request->answers as $index => $newAnswer) {
+            $answer = Answer::find($index);
+            if ($answer->question_id != $question->id) {
+                return back()->with('error', 'There was an error handling the answers.');
+            }
+
+            $answer->text = $newAnswer;
+            $answer->correct = (isset($request->correct[$index])) ? 1 : 0;
+            $answer->save();
+        }
+
+        return redirect()->route('exam.edit', $exam)->with('success', 'Question updated successfully.');
+    }
+
+    public function addAnswer(Request $request, ExamSet $exam, Question $question) {
+        $this->authorize('update', $exam);
+
+        $request->validate([
+            'answer' => 'required|string',
+            'correct' => 'sometimes',
+        ]);
+
+        $answer = new Answer();
+    
+        $answer->question_id = $question->id;
+        $answer->text = $request->answer;
+        $answer->correct = (isset($request->correct)) ? 1 : 0;
+        $answer->save();
+
+        return redirect()->route('exam.question', ['exam' => $exam, 'question' => $question])->with('success', 'Answer added to question!');
     }
 }
