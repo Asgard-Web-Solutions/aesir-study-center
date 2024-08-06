@@ -107,6 +107,10 @@
 
   <x-card.main>
     <div class="block object-center w-full text-center md:flex">
+        @can ('update', $examSet)
+          <a href="{{ route('exam.edit', $examSet) }}" class="mx-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
+        @endcan
+
         <div class="w-full text-center md:w-1/2 md:text-right">
           <a href="{{ route('exam-session.start', $examSet->id) }}" class="mx-2 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-lg"></i> Retake Exam</a>
         </div>

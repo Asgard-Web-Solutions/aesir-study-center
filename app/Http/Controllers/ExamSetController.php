@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Models\User;
 use App\Enums\Mastery;
+use App\Models\Answer;
 use App\Models\Question;
 use App\Enums\Visibility;
-use App\Models\Answer;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Set as ExamSet;
@@ -14,6 +15,15 @@ use Illuminate\Support\Facades\Auth;
 
 class ExamSetController extends Controller
 {
+    public function index() {
+        $user = $this->getAuthedUser();
+        $exams = $user->exams;
+
+        return view('exam.index')->with([
+            'exams' => $exams,
+        ]);
+    }
+
     public function view(ExamSet $exam): View
     {
         $this->authorize('view', $exam);
@@ -148,5 +158,11 @@ class ExamSetController extends Controller
         $answer->save();
 
         return redirect()->route('exam.question', ['exam' => $exam, 'question' => $question])->with('success', 'Answer added to question!');
+    }
+
+    private function getAuthedUser() {
+        $user = User::where('id', auth()->user()->id)->with('records')->first();
+
+        return $user;
     }
 }

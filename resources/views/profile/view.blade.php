@@ -90,7 +90,7 @@
 
                     <div class="w-full text-right">
                         @can ('update', $exam) 
-                            <a href="{{ route('manage-questions', $exam->id) }}" class="mx-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
+                            <a href="{{ route('exam.edit', $exam) }}" class="mx-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
                         @endcan
                         @can ('view', $exam) 
                             <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 btn btn-primary btn-sm"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a> 

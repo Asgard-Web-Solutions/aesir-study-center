@@ -46,7 +46,7 @@ class ProfileControllerTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
 
-        $response = $this->get(route('profile.myexams'));
+        $response = $this->get(route('exam.index'));
 
         $response->assertSee($exam->name);
     }
@@ -56,7 +56,7 @@ class ProfileControllerTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
 
-        $response = $this->get(route('profile.myexams'));
+        $response = $this->get(route('exam.index'));
 
         $response->assertSee(route('exam-create'));
     }
@@ -154,7 +154,6 @@ class ProfileControllerTest extends TestCase
          */
         return [
             ['exams', 'exams'],
-            ['myexams', 'myexams'],
         ];
     }
 }

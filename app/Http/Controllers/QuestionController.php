@@ -61,24 +61,6 @@ class QuestionController extends Controller
         ]);
     }
 
-    // Add an question for an exam
-    public function add($id)
-    {
-        $set = Set::find($id);
-
-        if (!$set) {
-            Alert::toast('Page Not Found', 'error');
-
-            return redirect()->route('home');
-        }
-
-        $this->authorize('update', $set);
-
-        return view('manage.addq', [
-            'set' => $set,
-        ]);
-    }
-
     // Save a question for an exam
     public function store(QuestionRequest $request, $id): RedirectResponse
     {
