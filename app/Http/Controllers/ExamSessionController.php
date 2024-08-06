@@ -101,6 +101,7 @@ class ExamSessionController extends Controller
 
         // Shuffle and select the appropriate number of questions
         $questions = $questions->random($request->question_count);
+        $questions = $questions->shuffle();
         $questionArray = array();
         $questionArray = $questions->pluck('question_id');
 
