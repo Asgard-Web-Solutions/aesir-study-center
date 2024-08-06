@@ -4,7 +4,7 @@
 
     <x-card.main title="Create An Exam">
         <x-card.mini>
-            <form action="{{ route('save-exam') }}" method="post">
+            <form action="{{ route('exam.store') }}" method="post">
                 @csrf
 
                 <x-form.text label="Name" name="name" />

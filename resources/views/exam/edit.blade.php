@@ -8,7 +8,7 @@
         <div class="w-1/2 mx-auto collapse-title btn btn-secondary btn-outline btn-md">Show/Hide Settings</div>
         <div class="collapse-content">
             <x-card.mini title="Exam Settings">
-                <form action="{{ route('update-exam', $exam) }}" method="POST">
+                <form action="{{ route('exam.update', $exam) }}" method="POST">
                     @csrf
                     <x-form.text name="name" label="Name" value="{!! $exam->name !!}" />
                     <x-form.text name="description" label="Description" value="{!! $exam->description !!}" />

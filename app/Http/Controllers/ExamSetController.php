@@ -12,6 +12,8 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Set as ExamSet;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\ExamSetDataRequest;
 
 class ExamSetController extends Controller
 {
@@ -22,6 +24,39 @@ class ExamSetController extends Controller
         return view('exam.index')->with([
             'exams' => $exams,
         ]);
+    }
+
+    public function create()
+    {
+        $this->authorize('create', ExamSet::class);
+
+        $visibility = Visibility::cases();
+
+        return view('exam.create')->with([
+            'visibility' => $visibility,
+        ]);
+    }
+
+    // Save a new exam set
+    public function store(ExamSetDataRequest $request): RedirectResponse
+    {
+        $this->authorize('create', ExamSet::class);
+
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = auth()->user()->id;
+
+        $exam = ExamSet::create($validatedData);
+
+        return redirect()->route('exam.edit', $exam)->with('success', 'Exam Created!');
+    }
+
+    public function update(ExamSetDataRequest $request, ExamSet $exam):RedirectResponse
+    {
+        $this->authorize('update', $exam);
+
+        $exam->update($request->validated());
+
+        return redirect()->route('exam.edit', $exam)->with('success', 'Exam Updated');
     }
 
     public function view(ExamSet $exam): View
