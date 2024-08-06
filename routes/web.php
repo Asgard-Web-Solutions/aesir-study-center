@@ -32,6 +32,7 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->grou
     Route::get('/public', 'public')->name('public');
     Route::get('/{set}', 'view')->name('view');
     Route::get('/{set}/edit', 'edit')->name('edit');
+    Route::post('/{set}/add', 'add')->name('add');
 });
 
 

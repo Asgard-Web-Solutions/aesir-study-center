@@ -6,6 +6,7 @@ use DB;
 use App\Enums\Mastery;
 use App\Models\Question;
 use App\Enums\Visibility;
+use App\Models\Answer;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Set as ExamSet;
@@ -65,5 +66,33 @@ class ExamSetController extends Controller
             'visibilityOptions' => $visibility,
             'questions' => $questions,
         ]);
+    }
+
+    public function add(Request $request, ExamSet $exam) {
+
+        $request->validate([
+            'question' => 'required|string',
+            'answers*' => 'required|string|nullable',
+            'correct*' => 'sometimes',
+        ]);
+
+        $question = new Question();
+        $question->text = $request->question;
+        $question->set_id = $exam->id;
+        $question->group_id = 0;
+        $question->save();
+
+        foreach ($request->answers as $index => $newAnswer) {
+            if ($newAnswer) {
+                $answer = new Answer();
+    
+                $answer->question_id = $question->id;
+                $answer->text = $newAnswer;
+                $answer->correct = (isset($request->correct[$index])) ? 1 : 0;
+                $answer->save();
+            }
+        }
+
+        return redirect()->route('exam.edit', $exam)->with('success', 'Exam question added');
     }
 }

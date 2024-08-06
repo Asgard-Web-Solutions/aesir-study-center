@@ -69,7 +69,36 @@
 </x-card.main>
 
 <x-card.main title="Test Questions">
-    <x-card.mini>
+    <x-card.mini title="Add Quesiton">
+        <form action="{{ route('exam.add', $exam) }}" method="post">
+            @csrf
+            <h3 class="text-lg font-bold text-secondary">Question</h3>
+            <x-form.text name="question" value="{{ old('question') }}" />
+
+            <h3 class="text-lg font-bold text-secondary">Answers</h3>
+            @for ($i = 1; $i <= 4; $i ++)
+                <div class="divider">Answer #{{ $i }}</div>
+                <div class="block lg:flex">
+                    <div class="w-full lg:w-3/4">
+                        <x-form.text name="answers[{{ $i }}]" value="{{ old('answer[' . $i . ']') }}" />
+                    </div>
+                    <div class="w-full px-4 lg:w-1/4">
+                        @if ($i == 1)
+                            <x-form.checkbox name="correct[{{ $i }}]" label="Answer is correct?" checked="yes" />
+                        @else
+                            <x-form.checkbox name="correct[{{ $i }}]" label="Answer is correct?"  />
+                        @endif
+                    </div>
+                </div>
+            @endfor
+
+            <div class="w-full my-2 text-right">
+                <input type="submit" value="Add Question" class="btn btn-primary">
+            </div>
+        </form>
+    </x-card.mini>
+
+    <x-card.mini title="Normal Questions">
         <x-table.main>
             <x-table.head>
                 <x-table.hcell>{{ __('Question') }}</x-table.hcell>
