@@ -81,7 +81,7 @@
 
     <br />
     <div class="flex justify-end w-full space-x-2">
-        <a href="{{ route('profile.myexams') }}" class="btn btn-primary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Your Own Exams</a>
+        <a href="{{ route('exam.index') }}" class="btn btn-primary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Your Own Exams</a>
         <a href="{{ route('exam.public') }}" class="btn btn-secondary"><i class="{{ config('icon.public_exams') }} text-lg"></i> Find Public Exams</a>
     </div>
 @endsection

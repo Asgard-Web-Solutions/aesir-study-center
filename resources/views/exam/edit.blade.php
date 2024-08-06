@@ -138,6 +138,6 @@
 </x-card.main>
 
 <div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
-    <a href="{{ route('profile.myexams') }}" class="btn btn-secondary">{{ __('Manage Your Exams') }}</a>
+    <a href="{{ route('exam.index') }}" class="btn btn-secondary">{{ __('Manage Your Exams') }}</a>
 </div>
 @endsection

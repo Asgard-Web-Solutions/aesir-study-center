@@ -42,7 +42,7 @@ class ProfileController extends Controller
         $user = $this->getAuthedUser();
         $exams = $user->exams;
 
-        return view('profile.myexams')->with([
+        return view('exam.index')->with([
             'exams' => $exams,
         ]);
     }
