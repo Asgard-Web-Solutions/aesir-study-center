@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="w-full text-right">
-        <a href="{{ route('exam-create') }}" class="btn btn-primary"><i class="text-lg {{ config('icon.new_exam') }}"></i> Create an Exam</a>
+        <a href="{{ route('exam.create') }}" class="btn btn-primary"><i class="text-lg {{ config('icon.new_exam') }}"></i> Create an Exam</a>
     </div>
 
     <x-card.main title="Manage Your Exams" size="full">
@@ -33,7 +33,7 @@
     </x-card.main>
     
     <div class="w-full text-right">
-        <a href="{{ route('exam-create') }}" class="btn btn-primary"><i class="text-lg {{ config('icon.new_exam') }}"></i> Create an Exam</a>
+        <a href="{{ route('exam.create') }}" class="btn btn-primary"><i class="text-lg {{ config('icon.new_exam') }}"></i> Create an Exam</a>
     </div>
     
 @endsection
