@@ -31,6 +31,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->group(function () {
     Route::get('/public', 'public')->name('public');
     Route::get('/{set}', 'view')->name('view');
+    Route::get('/{set}/edit', 'edit')->name('edit');
 });
 
 
@@ -89,7 +90,7 @@ Route::post('/test/{id}', [TestController::class, 'answer'])->name('answer')->mi
 Route::get('/history/{id}', [HomeController::class, 'history'])->name('test-history')->middleware('auth');
 
 Route::get('/architect', [QuestionController::class, 'exams'])->name('manage-exams')->middleware('auth');
-Route::get('/manage/{id}', [QuestionController::class, 'index'])->name('manage-questions')->middleware('auth');
+Route::get('/manage/{id}', [QuestionController::class, 'index'])->name('manage-questions')->middleware('auth'); ## Being replaced!!!
 Route::get('/manage/{id}/add', [QuestionController::class, 'add'])->name('add-question')->middleware('auth');
 Route::post('/manage/{id}/add', [QuestionController::class, 'store'])->name('save-question')->middleware('auth');
 Route::get('/manage/{id}/edit', [QuestionController::class, 'edit'])->name('edit-question')->middleware('auth');

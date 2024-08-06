@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Enums\Mastery;
+use App\Models\Question;
+use App\Enums\Visibility;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Set as ExamSet;
@@ -52,4 +54,16 @@ class ExamSetController extends Controller
         ]);
     }
 
+    public function edit(ExamSet $exam) {
+        $this->authorize('update', $exam);
+
+        $visibility = Visibility::cases();
+        $questions = Question::where('set_id', $exam->id)->where('group_id', 0)->get();
+
+        return view('exam.edit', [
+            'exam' => $exam,
+            'visibilityOptions' => $visibility,
+            'questions' => $questions,
+        ]);
+    }
 }
