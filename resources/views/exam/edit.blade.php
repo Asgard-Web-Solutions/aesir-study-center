@@ -63,9 +63,24 @@
                 @endforeach
             </x-table.body>
         </x-table.main>
-        
-        <x-card.buttons primaryLabel="Add a Group" primaryAction="{{ route('group-create', $exam) }}" />
     </x-card.mini>
+
+    
+    <div class="collapse collapse-arrow">
+        <input type="checkbox">
+        <div class="w-1/2 mx-auto collapse-title btn btn-md btn-secondary btn-outline">Create Question Group</div>
+        <div class="collapse-content">
+            <x-card.mini title="Create Question Group">
+                <form action="{{ route('group-store', $exam->id) }}" method="post">
+                    @csrf
+    
+                    <x-form.text name="name" label="Name" />
+    
+                    <x-card.buttons submitLabel="Add Group" />
+                </form>
+            </x-card.mini>
+        </div>        
+    </div>
 </x-card.main>
 
 <x-card.main title="Test Questions">
@@ -79,15 +94,16 @@
             @for ($i = 1; $i <= 4; $i ++)
                 <div class="divider">Answer #{{ $i }}</div>
                 <div class="block lg:flex">
-                    <div class="w-full lg:w-3/4">
-                        <x-form.text name="answers[{{ $i }}]" value="{{ old('answers[' . $i . ']') }}" />
-                    </div>
                     <div class="w-full px-4 lg:w-1/4">
                         @if ($i == 1)
                             <x-form.checkbox name="correct[{{ $i }}]" label="Answer is correct?" checked="yes" />
                         @else
                             <x-form.checkbox name="correct[{{ $i }}]" label="Answer is correct?"  />
                         @endif
+                    </div>
+
+                    <div class="w-full lg:w-3/4">
+                        <x-form.text name="answers[{{ $i }}]" value="{{ old('answers[' . $i . ']') }}" />
                     </div>
                 </div>
             @endfor
@@ -118,7 +134,6 @@
             </x-table.body>
         </x-table.main>
 
-        <x-card.buttons primaryAction="{{ route('add-question', $exam->id) }}" primaryLabel="Add Question" />
     </x-card.mini>
 </x-card.main>
 
