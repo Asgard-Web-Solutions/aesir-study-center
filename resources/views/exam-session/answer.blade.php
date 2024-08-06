@@ -50,7 +50,7 @@
         <x-page.actions primary="Next Question" :primaryLink="route('exam-session.test', $examSet->id)" />
 
         <x-card.mini title="Your Mastery">
-            <ul class="w-full md:w-1/2 timeline timeline-vertical">
+            <ul class="w-full md:w-3/4 lg:w-1/2 timeline timeline-vertical">
                 @for ($i = (config('test.grade_mastered')); $i > 0; $i --)
                     <li>
                         @if ($i == $userQuestionStats->score)
