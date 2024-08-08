@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Helpers\ExamFunctions;
 use App\Http\Requests\ExamSessionConfigurationRequest;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\VarDumper\VarDumper;
 
 class ExamSessionController extends Controller
 {
@@ -220,7 +221,7 @@ class ExamSessionController extends Controller
                 $normalizedAnswer[$answer->id] = (array_key_exists($answer->id, $request->answer)) ? 1 : 0;
 
                 if ($answer->correct && ($normalizedAnswer[$answer->id] == 1)) {
-                    $correct = $correct + 1;
+                    $correct += 1;
                     $testAnswers[] = [
                         'id' => $answer->id,
                         'text' => $answer->text,

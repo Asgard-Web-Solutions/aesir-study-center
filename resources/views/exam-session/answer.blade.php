@@ -14,7 +14,7 @@
                     <div class="stat-figure text-success">
                     </div>
                     <div class="stat-title">You got this answer </div>
-                    @if ($correct)
+                    @if ($result)
                         <div class="stat-value text-success">Correct</div>
                     @else
                         <div class="stat-value text-error">Incorrect</div>
