@@ -507,7 +507,7 @@ class ExamSessionController extends Controller
             $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change - 1;
         }
 
-        if (($updatedScore == config('test.grade_familiar')) && (($originalScore == (config('test.grade_familiar') - config('test.add_score'))) || ($originalScore == (config('test.grade_familiar') + 1)))) {
+        if (($updatedScore == config('test.grade_familiar')) && ($originalScore <= config('test.grade_familiar'))) {
             $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change + 1;
 
         } else if (($updatedScore == (config('test.grade_familiar') - config('test.sub_score'))) && ($originalScore == config('test.grade_familiar'))) {
