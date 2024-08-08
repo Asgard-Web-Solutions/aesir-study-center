@@ -26,18 +26,20 @@
             @endif
         </x-card.mini>
 
-        <x-card.mini title="Acolyte Level">
-            <div class="text-left">
-                @if ($user->isAdmin)
-                    <div class="m-2 text-lg tooltip" data-tip="Class: Keeper"><i class="{{ config('icon.keeper') }} text-lg ring-2 badge badge-{{ config('color.keeper') }} p-2 "></i> Keeper</div>
-                @elseif ($user->isMage)
-                    <div class="m-2 text-lg tooltip" data-tip="Class: Mage"><i class="{{ config('icon.mage') }} text-lg ring-2 badge badge-{{ config('color.mage') }} p-2 "></i> Mage</div>
-                @else
-                    <div class="m-2 text-lg tooltip" data-tip="Class: Adept"><i class="{{ config('icon.adept') }} text-lg ring-2 badge badge-{{ config('color.adept') }} p-2 "></i> Adept</div>
-                @endif
-            </div>
-            @if ($user->mage_expires_on) <x-text.dim>{{ $user->mage_expires_on }}</x-text.dim> @endif
-        </x-card.mini>
+        @feature('mage-upgrade')
+            <x-card.mini title="Acolyte Level">
+                <div class="text-left">
+                    @if ($user->isAdmin)
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Keeper"><i class="{{ config('icon.keeper') }} text-lg ring-2 badge badge-{{ config('color.keeper') }} p-2 "></i> Keeper</div>
+                    @elseif ($user->isMage)
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Mage"><i class="{{ config('icon.mage') }} text-lg ring-2 badge badge-{{ config('color.mage') }} p-2 "></i> Mage</div>
+                    @else
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Adept"><i class="{{ config('icon.adept') }} text-lg ring-2 badge badge-{{ config('color.adept') }} p-2 "></i> Adept</div>
+                    @endif
+                </div>
+                @if ($user->mage_expires_on) <x-text.dim>{{ $user->mage_expires_on }}</x-text.dim> @endif
+            </x-card.mini>
+        @endfeature
     </x-card.main>
 
     <x-card.main title="Exam History">
