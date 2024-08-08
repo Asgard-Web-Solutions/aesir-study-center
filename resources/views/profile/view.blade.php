@@ -10,8 +10,16 @@
                 <div>
                     <x-user.avatar size='lg'>{{ $user->gravatarUrl(256) }}</x-user.avatar>
                 </div>
-                <div class="ml-4 text-justify">
+                <div class="block ml-4 text-justify">
                     <span class="text-2xl font-bold text-primary">{{ $user->name }}</span>
+
+                    @if (auth()->user()->isAdmin)
+                        <div class="m-2 tooltip" data-tip="Class: Keeper"><i class="{{ config('icon.keeper') }} text-lg ring-2 badge badge-{{ config('color.keeper') }} p-2 "></i></div>
+                    @elseif (auth()->user()->isMage)
+                        <div class="m-2 tooltip" data-tip="Class: Mage"><i class="{{ config('icon.mage') }} text-lg ring-2 badge badge-{{ config('color.mage') }} p-2 "></i></div>
+                    @else
+                        <div class="m-2 tooltip" data-tip="Class: Adept"><i class="{{ config('icon.adept') }} text-lg ring-2 badge badge-{{ config('color.adept') }} p-2 "></i></div>
+                    @endif
                 </div>
             </div>
         </x-card.mini>

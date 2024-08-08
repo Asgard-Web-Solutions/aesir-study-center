@@ -15,4 +15,7 @@ return [
     
     'public' => 'info',
     'private' => 'error',
+    'adept' => 'info',
+    'mage' => 'warning',
+    'keeper' => 'accent',
 ];
