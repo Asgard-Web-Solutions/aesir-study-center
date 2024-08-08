@@ -30,8 +30,9 @@ class GroupController extends Controller
         $this->authorize('update', $set);
 
         $group = new Group();
-        $group->name = $request->input('name');
         $group->set_id = $set->id;
+        $group->name = $request->input('name');
+        $group->question = $request->input('question');
         $group->save();
 
         Alert::toast('Question Group Created', 'success');

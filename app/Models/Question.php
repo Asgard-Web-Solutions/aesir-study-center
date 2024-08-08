@@ -37,4 +37,9 @@ class Question extends Model
     {
         return $this->belongsToMany(\App\Models\User::class, 'user_question');
     }
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Group::class);
+    }
 }

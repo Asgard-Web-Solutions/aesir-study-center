@@ -5,7 +5,7 @@
     <x-card.main title="{!! $examSet->name !!}">
         <x-text.dim>Question # {{ $session->current_question + 1 }} <span class="text-xs opacity-50">of {{ $session->question_count }}</span></x-text.dim>
         <x-card.mini>
-            <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
+            <h3 class="text-3xl text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! $question->text !!}</h3>
         </x-card.mini>
         <form action="{{ route('exam-session.answer', $examSet) }}" method="post">
             <x-text.dim>Select your Answer</x-text.dim>

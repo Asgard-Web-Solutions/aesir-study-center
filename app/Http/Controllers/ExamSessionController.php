@@ -125,7 +125,7 @@ class ExamSessionController extends Controller
             return redirect()->route('exam-session.summary', $examSet);
         }
 
-        $question = Question::find($arrayData[$session->current_question]);
+        $question = Question::with(['answers', 'group'])->find($arrayData[$session->current_question]);
 
         // Generate the list of answers for this question
         $answers = null;

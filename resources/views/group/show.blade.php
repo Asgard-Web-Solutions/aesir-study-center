@@ -7,6 +7,7 @@
         <form action="{{ route('group-update', $group) }}" method="POST">
             @csrf
             <x-form.text name="name" label="Name" value="{!! $group->name !!}" />
+            <x-form.text name="question" label="Group Question Text" value="{!! $group->question !!}" helpText="Optionally show this question text with every question in this group." />
 
             <x-card.buttons submitLabel="Update Group Settings" />
         </form>

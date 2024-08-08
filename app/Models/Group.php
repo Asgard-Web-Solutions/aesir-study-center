@@ -13,7 +13,8 @@ class Group extends Model
 
     protected $fillable = [
         'set_id',
-        'name'
+        'name',
+        'question'
     ];
 
     public function set(): BelongsTo
