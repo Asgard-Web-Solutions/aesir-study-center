@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->integer('isMage')->after('showTutorial')->default(0);
-            $table->date('mage_expires_on')->after('isMage')->nullable();
+            $table->string('gift_reason')->after('isMage')->nullable();
+            $table->date('mage_expires_on')->after('gift_reason')->nullable();
             $table->date('subscribed_on')->after('mage_expires_on')->nullable();
         });
     }
@@ -24,9 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('isMage');
-            $table->dropColumn('mage_expires_on');
-            $table->dropColumn('subscribed_on');
+            $table->dropColumn(['isMage', 'gift_reason', 'mage_expires_on', 'subscribed_on']);
         });
     }
 };

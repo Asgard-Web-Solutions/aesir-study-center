@@ -146,6 +146,11 @@ class ProfileControllerTest extends TestCase
 
     // TODO: Show a list of who has mastered an exam on the Exam View page
 
+    /** @test */
+    public function gift_subscription_page_upgrades_account() {
+        
+    }
+
     /** ========== DataProvider Methods ========== */
     private static function pagesDataProvider() {
         /** 

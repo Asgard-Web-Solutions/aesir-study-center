@@ -39,13 +39,13 @@
 
     <x-card.main title="Exam Actions">
         <x-card.mini>
-            <div class="flex">
+            <div class="block lg:flex">
                 @can ('update', $exam) 
-                    <a href="{{ route('exam.edit', $exam) }}" class="mx-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
+                    <a href="{{ route('exam.edit', $exam) }}" class="mx-2 my-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
                 @endcan
                 @can ('view', $exam) 
-                    <a href="{{ route('practice.start', $exam) }}" class="mx-2 btn btn-secondary btn-sm"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a>
-                    <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 btn btn-primary btn-sm"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a> 
+                    <a href="{{ route('practice.start', $exam) }}" class="mx-2 my-2 btn btn-secondary btn-sm"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a>
+                    <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 my-2 btn btn-primary btn-sm"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a> 
                 @endcan
             </div>
         </x-card.mini>
