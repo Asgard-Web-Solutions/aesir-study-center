@@ -3,28 +3,43 @@
 @section('content')
     <x-page.title>Acolyte Transcript</x-page.title>
     
-    <x-card.main size="lg">
+    <x-card.main size="lg" title="Personal Info">
         <x-card.mini >
     
             <div class="block md:flex">
                 <div>
                     <x-user.avatar size='lg'>{{ $user->gravatarUrl(256) }}</x-user.avatar>
                 </div>
-                <div class="ml-4 text-justify">
+                <div class="block ml-4 text-justify">
                     <span class="text-2xl font-bold text-primary">{{ $user->name }}</span>
+
                 </div>
             </div>
+
+            @if ($user->id == auth()->user()->id)
+                <x-help.box>
+                    <x-help.text>Welcome to your <x-help.highlight>Acolyte Transcripts</x-help.highlight>!</x-help.text>
+                    <x-help.text>This is your official <x-help.highlight color="accent">public</x-help.highlight> record for everything that you do here at <x-help.highlight color="info">Acolyte Acadmey</x-help.highlight>. All acolytes can see this information and can track your progress in your Exams.</x-help.text>
+                    <x-help.text>But don't worry, any exams that are marked as <x-help.highlight color="accent">private</x-help.highlight> are only visible to you. None of the other acolytes will be able to see that information on your transcript.</x-help.text>
+                    <x-help.text>Now go make progress so you can show off all of those <x-help.highlight color="secondary">Mastery Badgets</x-help.highlight> that you are working so hard to earn!</x-help.text>
+                </x-help.box>
+            @endif
         </x-card.mini>
 
-        @if ($user->id == auth()->user()->id)
-            <x-help.box>
-                <x-help.text>Welcome to your <x-help.highlight>Acolyte Transcripts</x-help.highlight>!</x-help.text>
-                <x-help.text>This is your official <x-help.highlight color="accent">public</x-help.highlight> record for everything that you do here at <x-help.highlight color="info">Acolyte Acadmey</x-help.highlight>. All acolytes can see this information and can track your progress in your Exams.</x-help.text>
-                <x-help.text>But don't worry, any exams that are marked as <x-help.highlight color="accent">private</x-help.highlight> are only visible to you. None of the other acolytes will be able to see that information on your transcript.</x-help.text>
-                <x-help.text>Now go make progress so you can show off all of those <x-help.highlight color="secondary">Mastery Badgets</x-help.highlight> that you are working so hard to earn!</x-help.text>
-            </x-help.box>
-        @endif
-
+        @feature('mage-upgrade')
+            <x-card.mini title="Acolyte Level">
+                <div class="text-left">
+                    @if ($user->isAdmin)
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Keeper"><i class="{{ config('icon.keeper') }} text-lg ring-2 badge badge-{{ config('color.keeper') }} p-2 "></i> Keeper</div>
+                    @elseif ($user->isMage)
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Mage"><i class="{{ config('icon.mage') }} text-lg ring-2 badge badge-{{ config('color.mage') }} p-2 "></i> Mage</div>
+                    @else
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Adept"><i class="{{ config('icon.adept') }} text-lg ring-2 badge badge-{{ config('color.adept') }} p-2 "></i> Adept</div>
+                    @endif
+                </div>
+                @if ($user->mage_expires_on) <x-text.dim>{{ $user->mage_expires_on }}</x-text.dim> @endif
+            </x-card.mini>
+        @endfeature
     </x-card.main>
 
     <x-card.main title="Exam History">

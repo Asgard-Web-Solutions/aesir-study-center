@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });
 
-        feature::define('profile-test-manager', function() {
+        Feature::define('profile-test-manager', function() {
             return true;
             
             if (app()->environment(['local', 'testing'])) {
@@ -55,5 +55,18 @@ class AppServiceProvider extends ServiceProvider
     
             return false;
         });
+
+        Feature::define('mage-upgrade', function() {            
+            if (app()->environment(['local', 'testing'])) {
+                return true;
+            }
+    
+            if (env('FEATURE_FLAG_MAGE_UPGRADE')) {
+                return true;
+            }
+    
+            return false;
+        });
+
     }
 }

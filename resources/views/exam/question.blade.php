@@ -8,7 +8,7 @@
         @csrf
         
         <x-card.mini title="Quesiton">
-            <x-form.text name="question" value="{{ old('question', $question->text) }}" />
+            <x-form.text name="question" value="{!! old('question', $question->text) !!}" />
         </x-card.mini>
 
         <x-card.mini title="Answers">
@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="w-full lg:w-3/4">
-                        <x-form.text name="answers[{{ $answer->id }}]" value="{{ old('answers[' . $answer->id . ']', $answer->text) }}" />
+                        <x-form.text name="answers[{{ $answer->id }}]" value="{!! old('answers[' . $answer->id . ']', $answer->text) !!}" />
                     </div>
                 </div>
             @endforeach

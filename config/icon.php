@@ -23,4 +23,7 @@ return [
 
     'public' => 'fa-sharp fa-solid fa-eye',
     'private' => 'fa-sharp fa-solid fa-eye-slash',
+    'adept' => 'fa-brands fa-pied-piper-hat',
+    'mage' => 'fa-solid fa-hat-wizard',
+    'keeper' => 'fa-solid fa-hood-cloak',
 ];

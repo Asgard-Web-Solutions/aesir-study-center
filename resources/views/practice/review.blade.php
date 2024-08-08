@@ -4,7 +4,7 @@
 
     <x-card.main title="Review: {!! $exam->name !!}">
         <x-card.mini>
-            <h3 class="text-3xl text-primary">{!! $question->text !!}</h3>
+            <h3 class="text-3xl text-primary">@if ($question->group) {!! $question->group->question !!} @endif {!! $question->text !!}</h3>
         </x-card.mini>
 
         <div class="collapse bg-base-200">

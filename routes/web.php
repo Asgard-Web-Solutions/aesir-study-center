@@ -31,10 +31,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware('auth');
 Route::get('/publicExams', [ExamSetController::class, 'public'])->name('exam.public');
 
-Route::prefix('architect')->name('exam.')->controller(ExamSetController::class)->group(function () {
+Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->group(function () {
     Route::get('/', 'index')->name('index');
 
-    Route::get('/new', 'create')->name('create');
+    Route::get('/architect', 'create')->name('create');
     Route::post('/store', 'store')->name('store');
     Route::post('/{exam}/update', 'update')->name('update');
 
