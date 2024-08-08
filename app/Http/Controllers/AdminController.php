@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
@@ -37,6 +38,22 @@ class AdminController extends Controller
         return view('admin.user')->with([
             'user' => $user,
         ]);
+    }
+
+    public function gift(Request $request, User $user) {
+        if (! Gate::allows('isAdmin')) {
+            abort(403);
+        }
+
+        $request->validate([
+            'reason' => 'nullable|string',
+            'months' => 'required|integer|min:1|max:24'
+        ]);
+
+        $user->isMage = 1;
+        $user->gift_reason = $request->reason;
+        $user->mage_expires_on = Carbon::now()->addMonths($request->months)->format('Y-m-d');
+        $user->save();
     }
 
     public function userUpdate(UserRequest $request, User $user) {

@@ -30,15 +30,38 @@
             <x-card.mini title="Acolyte Level">
                 <div class="text-left">
                     @if ($user->isAdmin)
-                        <div class="m-2 text-lg tooltip" data-tip="Class: Keeper"><i class="{{ config('icon.keeper') }} text-lg ring-2 badge badge-{{ config('color.keeper') }} p-2 "></i> Keeper</div>
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Keeper"><i class="{{ config('icon.keeper') }} text-lg ring-2 badge badge-{{ config('color.keeper') }} p-2 "></i> <span class="mx-2 text-secondary">Keeper</span></div>
                     @elseif ($user->isMage)
-                        <div class="m-2 text-lg tooltip" data-tip="Class: Mage"><i class="{{ config('icon.mage') }} text-lg ring-2 badge badge-{{ config('color.mage') }} p-2 "></i> Mage</div>
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Mage"><i class="{{ config('icon.mage') }} text-lg ring-2 badge badge-{{ config('color.mage') }} p-2 "></i> <span class="mx-2 text-secondary">Mage</span></div>
                     @else
-                        <div class="m-2 text-lg tooltip" data-tip="Class: Adept"><i class="{{ config('icon.adept') }} text-lg ring-2 badge badge-{{ config('color.adept') }} p-2 "></i> Adept</div>
+                        <div class="m-2 text-lg tooltip" data-tip="Class: Adept"><i class="{{ config('icon.adept') }} text-lg ring-2 badge badge-{{ config('color.adept') }} p-2 "></i> <span class="mx-2 text-secondary">Adept</span></div>
                     @endif
                 </div>
-                @if ($user->mage_expires_on) <x-text.dim>{{ $user->mage_expires_on }}</x-text.dim> @endif
+                
+                @if ($user->mage_expires_on) <x-text.dim label="Expires:">{{ $user->mage_expires_on }}</x-text.dim> @endif
             </x-card.mini>
+
+            @if (auth()->user()->isAdmin)
+                <div class="collapse">
+                    <input type="checkbox">
+                    <div class="collapse-title">Gift Mage Membership</div>
+                    <div class="collapse-content">
+                        <x-card.mini title="Gift Mage Membership">
+                            @php
+                                $months = range(0, 24);
+                                unset($months[0]);
+                            @endphp
+            
+                            <form action="{{ route('admin.gift', $user) }}" method="POST">
+                                @csrf
+                                <x-form.text name="reason" label="Mage Gift Reason" />
+                                <x-form.dropdown name="months" :values=$months label="Gift Months" size="lg" />
+                                <input type="submit" class="my-4 btn btn-warning" value="Gift Mage Upgrade" />
+                            </form>        
+                        </x-card.mini>
+                    </div>
+                </div>
+            @endif
         @endfeature
     </x-card.main>
 
