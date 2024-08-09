@@ -14,8 +14,6 @@ return [
     'grade_apprentice' => env('GRADE_APPRENTICE', 1),
 
     'target_answers' => env('TARGET_ANSWERS', 4),
-
-    'icon_take_exam' => 'fa-sharp-duotone fa-solid fa-head-side-brain',
     
     'min_public_questions' => env('MIN_PUBLIC_QUESTIONS', 50),
 ];

@@ -46,7 +46,7 @@ class AdminController extends Controller
         }
 
         $request->validate([
-            'reason' => 'nullable|string',
+            'reason' => 'required|string',
             'months' => 'required|integer|min:1|max:24'
         ]);
 
@@ -54,6 +54,8 @@ class AdminController extends Controller
         $user->gift_reason = $request->reason;
         $user->mage_expires_on = Carbon::now()->addMonths($request->months)->format('Y-m-d');
         $user->save();
+
+        return redirect()->route('profile.view', $user)->with('success', 'User was granted Mage status');
     }
 
     public function userUpdate(UserRequest $request, User $user) {

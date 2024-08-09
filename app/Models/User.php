@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -69,5 +70,10 @@ class User extends \TCG\Voyager\Models\User
     public function records(): BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Set::class, 'exam_records', 'user_id', 'set_id')->withPivot('times_taken', 'recent_average', 'mastery_apprentice_count', 'mastery_familiar_count', 'mastery_proficient_count', 'mastery_mastered_count', 'last_completed', 'highest_mastery');
+    }
+
+    public function credit(): HasOne
+    {
+        return $this->hasOne(\App\Models\Credit::class);
     }
 }
