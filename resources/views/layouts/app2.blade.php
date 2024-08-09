@@ -106,48 +106,56 @@
         <!-- Main Content -->
         <main class="mt-8">
             @if ($errors->any())
-                @foreach($errors->all() as $error)
-                    <div role="alert" class="my-2 alert alert-error">
-                        <i class="fa-solid fa-hexagon-exclamation"></i>
-                        <span>Error! {{ $error }}</span>
-                    </div>
-                @endforeach
+                <x-card.main>
+                    @foreach($errors->all() as $error)
+                        <div role="alert" class="my-2 alert alert-error">
+                            <i class="fa-solid fa-hexagon-exclamation"></i>
+                            <span>Error! {{ $error }}</span>
+                        </div>
+                    @endforeach
+                </x-card.main>
             @endif
 
             @if (session('error'))
-                @if(is_string(session('error')))
-                <div role="alert" class="my-2 alert alert-error d-flex align-items-center">
-                    <i class="fa-solid fa-hexagon-exclamation me-2"></i>
-                    <div>
-                        <strong class="font-bold me-2">Error: </strong>
-                        <span>{{ session('error') }}</span>
-                    </div>
-                </div>
-            @endif
+                <x-card.main>
+                    @if(is_string(session('error')))
+                        <div role="alert" class="my-2 alert alert-error d-flex align-items-center">
+                            <i class="fa-solid fa-hexagon-exclamation me-2"></i>
+                            <div>
+                                <strong class="font-bold me-2">Error: </strong>
+                                <span>{{ session('error') }}</span>
+                            </div>
+                        </div>
+                    @endif
+                </x-card.main>
             @endif
 
             @if (session('warning'))
-                @if(is_string(session('warning')))
-                <div role="alert" class="my-2 alert alert-warning d-flex align-items-center">
-                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                    <div>
-                        <strong class="font-bold me-2">Warning: </strong>
-                        <span>{{ session('warning') }}</span>
-                    </div>
-                </div>
-            @endif
+                <x-card.main>
+                    @if(is_string(session('warning')))
+                        <div role="alert" class="my-2 alert alert-warning d-flex align-items-center">
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                            <div>
+                                <strong class="font-bold me-2">Warning: </strong>
+                                <span>{{ session('warning') }}</span>
+                            </div>
+                        </div>
+                    @endif
+                </x-card.main>
             @endif
 
             @if (session('success'))
-                @if(is_string(session('success')))
-                    <div role="alert" class="my-2 alert alert-success d-flex align-items-center">
-                        <i class="fa-solid fa-circle-exclamation me-2"></i>
-                        <div>
-                            <strong class="font-bold me-2">Success!</strong>
-                            <span>{{ session('success') }}</span>
+                <x-card.main>
+                    @if(is_string(session('success')))
+                        <div role="alert" class="my-2 alert alert-success d-flex align-items-center">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i>
+                            <div>
+                                <strong class="font-bold me-2">Success!</strong>
+                                <span>{{ session('success') }}</span>
+                            </div>
                         </div>
-                    </div>
-                @endif
+                    @endif
+                </x-card.main>
             @endif
             
             

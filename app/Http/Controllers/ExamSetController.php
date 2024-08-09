@@ -53,10 +53,15 @@ class ExamSetController extends Controller
     public function update(ExamSetDataRequest $request, ExamSet $exam):RedirectResponse
     {
         $this->authorize('update', $exam);
+        $validatedData = $request->validated();
+
+        if ($exam->questions->count() < config('test.min_public_questions')) {
+            $validatedData['visibility'] = 0;
+        }
 
         $exam->update($request->validated());
 
-        return redirect()->route('exam.edit', $exam)->with('success', 'Exam Updated');
+        return redirect()->route('exam.edit', $exam)->with('success', 'Exam Settings Updated');
     }
 
     public function view(ExamSet $exam): View
