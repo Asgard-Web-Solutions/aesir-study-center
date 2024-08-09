@@ -7,6 +7,7 @@
             <form action="{{ route('group-update-question', ['group' => $group, 'question' => $question]) }}" method="post">
                 @csrf
 
+                @if ($group->question) <x-text.main label="Group Question Prefix: ">{{ $group->question }}</x-text.main> @endif
                 <x-form.text name="question" label="Question" value="{!! old('question', $question->text) !!}" />
                 <x-form.text name="answer" label="Answer" value="{!! old('answer', $question->answers[0]->text) !!}" />
 

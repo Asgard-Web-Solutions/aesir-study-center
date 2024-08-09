@@ -4,6 +4,13 @@
 
     <x-card.main title="Create An Exam">
         <x-card.mini>
+
+            @feature('mage-upgrade')
+                @if (!auth()->user()->isMage)
+                    <x-text.main label="Architect Credits: ">{{ auth()->user()->credit->architect }}</x-text.main>
+                @endif
+            @endfeature
+
             <form action="{{ route('exam.store') }}" method="post">
                 @csrf
 
