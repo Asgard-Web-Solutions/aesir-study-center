@@ -47,7 +47,7 @@
 <x-card.main>
     <x-card.mini>
         <a href="{{ route('exam-session.start', $exam) }}" class="my-2 btn btn-outline btn-secondary">Take exam</a>
-        <a href="{{ route('exam.index') }}" class="my-2 btn btn-primary">Manage Exams</a>
+        <a href="{{ route('exam.index') }}" class="my-2 btn btn-secondary">Back to Manage Exams</a>
     </x-card.mini>
 </x-card.main>
 

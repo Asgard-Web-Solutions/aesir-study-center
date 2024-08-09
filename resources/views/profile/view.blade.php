@@ -25,9 +25,11 @@
                 </x-help.box>
             @endif
         </x-card.mini>
+    </x-card.main>
 
-        @feature('mage-upgrade')
-            <x-card.mini title="Acolyte Level">
+    @feature('mage-upgrade')
+        <x-card.main title="Acolyte Membership Level">
+            <x-card.mini title="Level">
                 <div class="text-left">
                     @if ($user->isAdmin)
                         <div class="m-2 text-lg tooltip" data-tip="Class: Keeper"><i class="{{ config('icon.keeper') }} text-lg ring-2 badge badge-{{ config('color.keeper') }} p-2 "></i> <span class="mx-2 text-secondary">Keeper</span></div>
@@ -37,14 +39,14 @@
                         <div class="m-2 text-lg tooltip" data-tip="Class: Adept"><i class="{{ config('icon.adept') }} text-lg ring-2 badge badge-{{ config('color.adept') }} p-2 "></i> <span class="mx-2 text-secondary">Adept</span></div>
                     @endif
                 </div>
-                
+                                
                 @if ($user->mage_expires_on) <x-text.dim label="Expires:">{{ $user->mage_expires_on }}</x-text.dim> @endif
             </x-card.mini>
 
             @if (auth()->user()->isAdmin)
                 <div class="collapse">
                     <input type="checkbox">
-                    <div class="collapse-title">Gift Mage Membership</div>
+                    <div class="text-center collapse-title"><div class="btn btn-outline btn-secondary">Gift Mage Membership</div></div>
                     <div class="collapse-content">
                         <x-card.mini title="Gift Mage Membership">
                             @php
@@ -62,8 +64,33 @@
                     </div>
                 </div>
             @endif
-        @endfeature
-    </x-card.main>
+
+            @can ('view', $user->credit)
+                <x-card.mini title="Mage Credits">
+                    <div class="shadow stats stats-vertical lg:stats-horizontal">
+                        <div class="stat">
+                            <div class="stat-title">Architect Credits</div>
+                            <div class="stat-value">{{ $user->credit->architect }}</div>
+                            <div class="stat-desc"># of Exams you can Create</div>
+                        </div>
+
+                        <div class="stat">
+                            <div class="stat-title">Study Credits</div>
+                            <div class="stat-value">{{ $user->credit->study }}</div>
+                            <div class="stat-desc"># of Public Exams you can Take</div>
+                        </div>
+
+                        <div class="stat">
+                            <div class="stat-title">Publishing Credits</div>
+                            <div class="stat-value">{{ $user->credit->publish }}</div>
+                            <div class="stat-desc"># of Exams you can make Public</div>
+                        </div>
+                    </div>
+                </x-card.mini>
+            @endcan
+
+        </x-card.main>
+    @endfeature
 
     <x-card.main title="Exam History">
         

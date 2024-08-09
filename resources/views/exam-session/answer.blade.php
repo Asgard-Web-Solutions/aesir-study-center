@@ -5,7 +5,7 @@
     <x-card.main title="{!! $examSet->name !!}">
         <x-text.dim>Question # {{ $session->current_question }} <span class="text-xs opacity-50">of {{ $session->question_count }}</span></x-text.dim>
         <x-card.mini>
-            <h3 class="text-3xl text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! $question->text !!}</h3>
+            <h3 class="text-2xl text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! $question->text !!}</h3>
         </x-card.mini>
         
         <x-card.mini>

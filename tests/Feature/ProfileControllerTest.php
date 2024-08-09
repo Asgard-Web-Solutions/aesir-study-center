@@ -58,7 +58,7 @@ class ProfileControllerTest extends TestCase
 
         $response = $this->get(route('exam.index'));
 
-        $response->assertSee(route('exam-create'));
+        $response->assertSee(route('exam.create'));
     }
     
     // DONE: Create a profile edit page so users can actually change their name, email, and password

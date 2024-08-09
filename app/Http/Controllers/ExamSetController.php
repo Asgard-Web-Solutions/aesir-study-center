@@ -9,6 +9,7 @@ use App\Models\Answer;
 use App\Models\Question;
 use App\Enums\Visibility;
 use Illuminate\View\View;
+use Laravel\Pennant\Feature;
 use Illuminate\Http\Request;
 use App\Models\Set as ExamSet;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +46,21 @@ class ExamSetController extends Controller
         $validatedData = $request->validated();
         $validatedData['user_id'] = auth()->user()->id;
 
+        if (Feature::active('mage-upgrade')) {
+            $user = $this->getAuthedUser();
+            if (!$user->isMage) {
+                if ($user->credit->architect < 1) {
+                    return back()->with('warning', 'Insufficient Architect Credits. Please obtain more credits or ;Upgrade to Mage to create another exam.');
+                }
+            }
+        }
+
         $exam = ExamSet::create($validatedData);
+
+        if (Feature::active('mage-upgrade')) {
+            $user->credit->architect -= 1;
+            $user->credit->save();
+        }
 
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam Created!');
     }
@@ -59,7 +74,7 @@ class ExamSetController extends Controller
             $validatedData['visibility'] = 0;
         }
 
-        $exam->update($request->validated());
+        $exam->update($validatedData);
 
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam Settings Updated');
     }

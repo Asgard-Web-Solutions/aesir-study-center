@@ -7,7 +7,7 @@
         <form action="{{ route('group-update', $group) }}" method="POST">
             @csrf
             <x-form.text name="name" label="Name" value="{!! $group->name !!}" />
-            <x-form.text name="question" label="Group Question Text" value="{!! $group->question !!}" helpText="Optionally show this question text with every question in this group." />
+            <x-form.text name="question" label="Group Question Prefix" value="{!! $group->question !!}" helpText="Optionally show this question text just before every question in this group." />
 
             <x-card.buttons submitLabel="Update Group Settings" />
         </form>
@@ -46,9 +46,13 @@
 </x-card.main>
 
 <x-card.main size="full" title="Add Questions">
+    @if ($group->question)
+        <x-text.main label="Question Prefix Text">{{ $group->question }}</x-text.main>
+    @endif
+
     <form action="{{ route('group-store-questions', $group) }}" method="POST">
         @csrf
-        @for ($i = 1; $i <= 8; $i++)
+        @for ($i = 1; $i <= 10; $i++)
             <x-card.mini title="Question #{{ $i }}">                
                 <x-form.group>
                     <x-form.text name="questions[{{ $i }}][question]" label="Question" size='half' />
