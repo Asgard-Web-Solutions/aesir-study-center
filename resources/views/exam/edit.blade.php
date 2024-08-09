@@ -3,6 +3,10 @@
 @section('content')
 <x-card.main title="{!! $exam->name !!}">
 
+    <x-card.mini title="Exam Stats">
+        Total Questions: {{ $exam->questions->count() }}
+    </x-card.mini>
+
     <div class="collapse collapse-arrow">
         <input type="checkbox">
         <div class="w-1/2 mx-auto collapse-title btn btn-secondary btn-outline btn-md">Show/Hide Settings</div>
@@ -18,13 +22,19 @@
                             $visibilityValues[$visibility->value] = str_replace("is", "", $visibility->name);
                         }
                     @endphp
-                    <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $exam->visibility }}" />
+
+                    @if ($exam->questions->count() >= config('test.min_public_questions'))
+                        <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $exam->visibility }}" />
+                    @else
+                        <x-text.main>A test must have at least <span class="font-bold text-accent">{{ config('test.min_public_questions') }} Questions</span> before it can be made public.</x-text.main>
+                        <x-text.dim>Progress: {{ $exam->questions->count() }} / {{ config('test.min_public_questions') }}</x-text.dim>
+                    @endif
                     
                     <x-help.box>
                         <x-help.text>The exams <x-help.highlight>Visibility</x-help.highlight> determines who can see or take an exam.</x-help.text>
                         <x-help.text>If you set the exam to <x-help.highlight>Private</x-help.highlight> then only you, the exam's <x-help.highlight color="info">Architect</x-help.highlight>, can see the exam or take.</x-help.text>
                         <x-help.text>If you set the exam to <x-help.highlight>Public</x-help.highlight> then every Acolyte at the academy will be able to see the exam and take it, starting their own journey down the path of mastery.</x-help.text>
-                        <x-help.text>In the future the <x-help.highlight color="info">Keeper</x-help.highlight> has plans to reward Architects who make their exams public.</x-help.text>
+                        <x-help.text>Note that an Exam must have <x-help.highlight color="accent">{{ config('test.min_public_questions') }} Questions</x-help.highlight> before it is eligable to be made Public.</x-help.text>
                     </x-help.box>
 
                     <x-card.buttons submitLabel="Update Exam Settings" />
@@ -32,6 +42,13 @@
             </x-card.mini>
         </div>
     </div>
+</x-card.main>
+
+<x-card.main>
+    <x-card.mini>
+        <a href="{{ route('exam-session.start', $exam) }}" class="my-2 btn btn-outline btn-secondary">Take exam</a>
+        <a href="{{ route('exam.index') }}" class="my-2 btn btn-primary">Manage Exams</a>
+    </x-card.mini>
 </x-card.main>
 
 <x-card.main title="Question Groups">

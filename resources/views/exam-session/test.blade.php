@@ -19,9 +19,9 @@
                     @foreach ($answers as $answer)
                         <div class="flex items-center">
                             @if ($multi)
-                                <input type="checkbox" id="answer-{{ $answer->id }}" class="max-w-lg text-primary-content radio radio-primary" name="answer[{{ $answer->id }}]">
+                                <input type="checkbox" id="answer-{{ $answer->id }}" class="max-w-lg mx-2 text-primary-content checkbox checkbox-primary" name="answer[{{ $answer->id }}]">
                             @else
-                                <input type="radio" id="answer-{{ $answer->id }}" class="max-w-lg text-primary-content radio radio-primary" name="answer" value="{{ $answer->id }}">
+                                <input type="radio" id="answer-{{ $answer->id }}" class="max-w-lg mx-2 text-primary-content radio radio-primary" name="answer" value="{{ $answer->id }}">
                             @endif
                             <label class="label" for="answer-{{ $answer->id }}">
                                 <span class="text-primary">{{ $answer->text }}</span>
