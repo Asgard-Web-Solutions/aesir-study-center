@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Config;
 
 class ExamSetControllerTest extends TestCase
 {
@@ -70,6 +71,44 @@ class ExamSetControllerTest extends TestCase
 
         $response->assertSee($exam->name);
     }
+
+    /** @test */
+    public function creating_exams_costs_architect_credits() {
+        Config::set('mage.default_architect_credits', 2);
+        $user = $this->CreateUserAndAuthenticate();
+        $data = ([
+            'name' => 'Test Cost',
+            'description' => 'This is just a test'
+        ]);
+
+        $response = $this->post(route('exam.store'), $data);
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'architect' => config('mage.default_architect_credits') - 1,
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
+
+    /** @test */
+    public function creating_exams_does_not_cost_mages_architect_credits() {
+        Config::set('mage.default_architect_credits', 2);
+        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
+        $data = ([
+            'name' => 'Test Cost',
+            'description' => 'This is just a test'
+        ]);
+
+        $response = $this->post(route('exam.store'), $data);
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'architect' => config('mage.default_architect_credits'),
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }    
 
     public static function dataProviderExamPages() {
         /**

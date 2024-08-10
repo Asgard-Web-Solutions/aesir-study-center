@@ -48,18 +48,18 @@ class ExamSetController extends Controller
 
         if (Feature::active('mage-upgrade')) {
             $user = $this->getAuthedUser();
-            if (!$user->isMage) {
-                if ($user->credit->architect < 1) {
-                    return back()->with('warning', 'Insufficient Architect Credits. Please obtain more credits or ;Upgrade to Mage to create another exam.');
-                }
+            if (!$user->isMage && ($user->credit->architect < 1)) {
+                return back()->with('warning', 'Insufficient Architect Credits. Please obtain more credits or Upgrade to Mage to create another exam.');
             }
         }
 
         $exam = ExamSet::create($validatedData);
 
         if (Feature::active('mage-upgrade')) {
-            $user->credit->architect -= 1;
-            $user->credit->save();
+            if (!$user->isMage) {
+                $user->credit->architect -= 1;
+                $user->credit->save();
+            }
         }
 
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam Created!');
@@ -69,9 +69,27 @@ class ExamSetController extends Controller
     {
         $this->authorize('update', $exam);
         $validatedData = $request->validated();
+        $user = $this->getAuthedUser();
 
-        if ($exam->questions->count() < config('test.min_public_questions')) {
-            $validatedData['visibility'] = 0;
+        // Make sure the exam has the authority to be made public if requested
+        if ($validatedData['visibility'] == 1) {
+            if ($exam->questions->count() < config('test.min_public_questions')) {
+                $validatedData['visibility'] = 0;
+            }
+
+            if (Feature::active('mage-upgrade')) {
+                if (!$user->isMage && !$exam->isPublished) {
+                    if ($user->credit->publish >= 1) {
+                        $user->credit->publish -= 1;
+                        $user->credit->save();
+                        
+                        $exam->isPublished = 1;
+                        $exam->save();
+                    } else {
+                        $validatedData['visibility'] = 0;
+                    }
+                }
+            }    
         }
 
         $exam->update($validatedData);
