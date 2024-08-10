@@ -26,4 +26,9 @@ return [
     'add_mastered_publish_credits' => 0.5,
     'add_mastered_question_credits' => 20,
     'add_mastered_study_credits' => 1,
+
+    'award_the_architect_architect_credits' => 1,
+    'award_the_architect_publish_credits' => 1,
+    'award_the_architect_question_credits' => 15,
+    'award_the_architect_study_credits' => 1,
 ];

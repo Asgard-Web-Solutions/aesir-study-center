@@ -10,10 +10,11 @@ use App\Enums\Mastery;
 use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Laravel\Pennant\Feature;
 use App\Helpers\ExamFunctions;
-use App\Http\Requests\ExamSessionConfigurationRequest;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\VarDumper;
+use App\Http\Requests\ExamSessionConfigurationRequest;
 
 class ExamSessionController extends Controller
 {
@@ -453,25 +454,37 @@ class ExamSessionController extends Controller
         $originalMastery = $record->highest_mastery;
         $highestMastery = max($highestMastery, $originalMastery);
         
-        $credits = $user->credit->first();
+        if (Feature::active('mage-upgrade')) {
+            $credits = $user->credit->first();
 
-        // Award proficient mastery!
-        if ($highestMastery == Mastery::Proficient->value && $originalMastery < Mastery::Proficient->value) {
-            $credits->architect += config('test.add_proficient_architect_credits');
-            $credits->publish += config('test.add_proficient_publish_credits');
-            $credits->question += config('test.add_proficient_question_credits');
-            $credits->study += config('test.add_proficient_study_credits');
+            // Award proficient mastery!
+            if ($highestMastery == Mastery::Proficient->value && $originalMastery < Mastery::Proficient->value) {
+                $credits->architect += config('test.add_proficient_architect_credits');
+                $credits->publish += config('test.add_proficient_publish_credits');
+                $credits->question += config('test.add_proficient_question_credits');
+                $credits->study += config('test.add_proficient_study_credits');
 
-            $credits->save();
-        }
+                $credits->save();
+            }
 
-        if ($highestMastery == Mastery::Mastered->value && $originalMastery < Mastery::Mastered->value) {
-            $credits->architect += config('test.add_mastered_architect_credits');
-            $credits->publish += config('test.add_mastered_publish_credits');
-            $credits->question += config('test.add_mastered_question_credits');
-            $credits->study += config('test.add_mastered_study_credits');
+            if ($highestMastery == Mastery::Mastered->value && $originalMastery < Mastery::Mastered->value) {
+                $credits->architect += config('test.add_mastered_architect_credits');
+                $credits->publish += config('test.add_mastered_publish_credits');
+                $credits->question += config('test.add_mastered_question_credits');
+                $credits->study += config('test.add_mastered_study_credits');
 
-            $credits->save();
+                $credits->save();
+            }
+
+            if (($examSet->user_id != $user->id) && ($highestMastery == Mastery::Mastered->value && $originalMastery < Mastery::Mastered->value)) {
+                $architectCredits = User::find($examSet->user_id)->credit()->first();
+                $architectCredits->architect += config('test.award_the_architect_architect_credits');
+                $architectCredits->publish += config('test.award_the_architect_publish_credits');
+                $architectCredits->question += config('test.award_the_architect_question_credits');
+                $architectCredits->study += config('test.award_the_architect_study_credits');
+
+                $architectCredits->save();
+            }
         }
 
         DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
