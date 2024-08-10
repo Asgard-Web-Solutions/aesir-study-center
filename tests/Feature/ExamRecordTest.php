@@ -270,8 +270,26 @@ class ExamRecordTest extends TestCase
         $response->assertSeeInOrder(['Mastered', 'value', '10', 'Proficient']);
     }
 
-    
-    // TODO: Write a command to generate/update the ExamRecord for a single user or all users
+    /** @test */
+    public function users_cannot_lose_a_mastery_status() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+
+        $updateSession['current_question'] = $session->question_count;
+        $updateSession['correct_answers'] = ceil($session->question_count / 2);
+        $updateSession['incorrect_answers'] = floor($session->question_count / 2);
+
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $data['highest_mastery'] = 4;
+        DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $exam->id)->update($data);
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $data['user_id'] = $user->id;
+        $this->assertDatabaseHas('exam_records', $data);
+    }
     
     
 

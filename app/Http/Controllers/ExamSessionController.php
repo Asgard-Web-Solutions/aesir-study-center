@@ -447,6 +447,10 @@ class ExamSessionController extends Controller
         } else if ($masteryLevelApprentice == $questions->count()) {
             $highestMastery = Mastery::Apprentice->value;
         }
+
+        // Make it so a person can't lose a mastery that they obtained.
+        // This can happen through the architect adding more questions, or the person losing points after obtaining mastery
+        $highestMastery = max($highestMastery, $record->highest_mastery);
         
         DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
             'times_taken' => $record->times_taken + 1,
