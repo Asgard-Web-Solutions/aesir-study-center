@@ -165,13 +165,14 @@
 
     <footer class="p-10 mt-10 footer bg-neutral text-neutral-content">
         <nav>
-            <h6 class="footer-title">Pages</h6>
+            <h6 class="footer-title">Fun Stuff</h6>
             <a class="link link-hover" href="{{ route('home') }}">Welcome</a>
+            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=31">Community Forum</a>
         </nav>
         <nav>
-            <h6 class="footer-title">Social</h6>
-            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=31">Community Forum</a>
+            <h6 class="footer-title">Legal & Boring Stuff</h6>
             <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=35">Release Notes</a>
+            <a class="link link-hover" href="{{ route('privacy-policy') }}">Privacy Policy</a>
         </nav>
     </footer>
 

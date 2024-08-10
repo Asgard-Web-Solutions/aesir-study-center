@@ -270,9 +270,228 @@ class ExamRecordTest extends TestCase
         $response->assertSeeInOrder(['Mastered', 'value', '10', 'Proficient']);
     }
 
+    /** @test */
+    public function users_cannot_lose_a_mastery_status() {
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+
+        $updateSession['current_question'] = $session->question_count;
+        $updateSession['correct_answers'] = ceil($session->question_count / 2);
+        $updateSession['incorrect_answers'] = floor($session->question_count / 2);
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $data['highest_mastery'] = 4;
+        DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $exam->id)->update($data);
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $data['user_id'] = $user->id;
+        $this->assertDatabaseHas('exam_records', $data);
+    }
     
-    // TODO: Write a command to generate/update the ExamRecord for a single user or all users
+    /** @test */
+    public function getting_proficient_mastery_grants_credits() {
+        Config::set('test.add_proficient_architect_credits', 0.2);
+        Config::set('test.add_proficient_publish_credits', 0.2);
+        Config::set('test.add_proficient_question_credits', 5);
+        Config::set('test.add_proficient_study_credits', 0.5);
+        Config::set('test.grade_proficient', 3);
+
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+
+        $updateSession['current_question'] = $session->question_count;
+        $updateSession['correct_answers'] = ceil($session->question_count / 2);
+        $updateSession['incorrect_answers'] = floor($session->question_count / 2);
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $data['highest_mastery'] = 2;
+        DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $exam->id)->update($data);
+        $questions = Question::where('set_id', $exam->id)->get();
+        foreach ($questions as $question) {
+            DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update([
+                'score' => 3,
+            ]);
+        }
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'architect' => config('mage.default_architect_credits') + config('test.add_proficient_architect_credits'),
+            'publish' => config('mage.default_publish_credits') + config('test.add_proficient_publish_credits'),
+            'question' => config('mage.default_question_credits') + config('test.add_proficient_question_credits'),
+            'study' => config('mage.default_study_credits') + config('test.add_proficient_study_credits'),
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
     
+    /** @test */
+    public function getting_mastered_mastery_grants_credits() {
+        Config::set('test.add_mastered_architect_credits', 0.5);
+        Config::set('test.add_mastered_publish_credits', 0.5);
+        Config::set('test.add_mastered_question_credits', 20);
+        Config::set('test.add_mastered_study_credits', 1);
+        Config::set('test.grade_mastered', 4);
+
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+
+        $updateSession['current_question'] = $session->question_count;
+        $updateSession['correct_answers'] = ceil($session->question_count / 2);
+        $updateSession['incorrect_answers'] = floor($session->question_count / 2);
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $data['highest_mastery'] = 3;
+        DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $exam->id)->update($data);
+        $questions = Question::where('set_id', $exam->id)->get();
+        foreach ($questions as $question) {
+            DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update([
+                'score' => 4,
+            ]);
+        }
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'architect' => config('mage.default_architect_credits') + config('test.add_mastered_architect_credits'),
+            'publish' => config('mage.default_publish_credits') + config('test.add_mastered_publish_credits'),
+            'question' => config('mage.default_question_credits') + config('test.add_mastered_question_credits'),
+            'study' => config('mage.default_study_credits') + config('test.add_mastered_study_credits'),
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
+
+    /** @test */
+    public function gaining_mastery_gives_the_exam_architect_credits() {
+        Config::set('test.award_the_architect_architect_credits', 1);
+        Config::set('test.award_the_architect_publish_credits', 1);
+        Config::set('test.award_the_architect_question_credits', 25);
+        Config::set('test.award_the_architect_study_credits', 0.5);
+        Config::set('test.grade_mastered', 4);
+
+        $user = $this->CreateUserAndAuthenticate();
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+        $session = $this->StartExamSession($user, $exam);
+
+        $updateSession['current_question'] = $session->question_count;
+        $updateSession['correct_answers'] = ceil($session->question_count / 2);
+        $updateSession['incorrect_answers'] = floor($session->question_count / 2);
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $data['highest_mastery'] = 3;
+        DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $exam->id)->update($data);
+        $questions = Question::where('set_id', $exam->id)->get();
+        foreach ($questions as $question) {
+            DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update([
+                'score' => 4,
+            ]);
+        }
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $verifyData = ([
+            'user_id' => $architect->id,
+            'architect' => config('mage.default_architect_credits') + config('test.award_the_architect_architect_credits'),
+            'publish' => config('mage.default_publish_credits') + config('test.award_the_architect_publish_credits'),
+            'question' => config('mage.default_question_credits') + config('test.award_the_architect_question_credits'),
+            'study' => config('mage.default_study_credits') + config('test.award_the_architect_study_credits'),
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
+
+    /** @test */
+    public function starting_an_exam_costs_a_study_credit() {
+        Config::set('mage.default_study_credits', 5);
+        $user = $this->CreateUserAndAuthenticate();
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'study' => config('mage.default_study_credits') - 1
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
+
+    /** @test */
+    public function cannot_start_test_without_credits() {
+        Config::set('mage.default_study_credits', 0);
+        $user = $this->CreateUserAndAuthenticate();
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseMissing('exam_records', $verifyData);
+    }
+
+    /** @test */
+    public function users_are_not_charaged_study_credits_for_their_own_tests() {
+        Config::set('mage.default_study_credits', 0);
+        $architect = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $architect->id,
+            'set_id' => $exam->id,
+        ]);
+
+        $this->assertDatabaseHas('exam_records', $verifyData);
+    }
+
+    /** @test */
+    public function mages_can_always_start_an_exam() {
+        Config::set('mage.default_study_credits', 0);
+        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+        ]);
+
+        $this->assertDatabaseHas('exam_records', $verifyData);
+    }
+
+    /** @test */
+    public function mages_are_not_charged_credits_for_exams() {
+        Config::set('mage.default_study_credits', 1);
+        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'study' => config('mage.default_study_credits')
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
     
 
     /** ========== HELPER FUNCTIONS ========== */

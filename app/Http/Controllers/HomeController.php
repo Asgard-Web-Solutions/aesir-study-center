@@ -61,4 +61,9 @@ class HomeController extends Controller
     {
         return view('colors');
     }
+
+    public function privacy(): View
+    {
+        return view('home.privacy-policy');
+    }
 }

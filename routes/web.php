@@ -27,6 +27,7 @@ use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy-policy');
 
 Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware('auth');
 Route::get('/publicExams', [ExamSetController::class, 'public'])->name('exam.public');
