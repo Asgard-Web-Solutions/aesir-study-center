@@ -279,7 +279,6 @@ class ExamRecordTest extends TestCase
         $updateSession['current_question'] = $session->question_count;
         $updateSession['correct_answers'] = ceil($session->question_count / 2);
         $updateSession['incorrect_answers'] = floor($session->question_count / 2);
-
         DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
 
         $data['highest_mastery'] = 4;
@@ -291,6 +290,43 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $data);
     }
     
+    /** @test */
+    public function getting_proficient_mastery_grants_credits() {
+        Config::set('test.add_proficient_study_credits', 0.5);
+        Config::set('test.add_proficient_architect_credits', 0.2);
+        Config::set('test.add_proficient_publish_credits', 0.2);
+        Config::set('test.add_proficient_question_credits', 5);
+
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet();
+        $session = $this->StartExamSession($user, $exam);
+
+        $updateSession['current_question'] = $session->question_count;
+        $updateSession['correct_answers'] = ceil($session->question_count / 2);
+        $updateSession['incorrect_answers'] = floor($session->question_count / 2);
+        DB::table('exam_sessions')->where('id', $session->id)->update($updateSession);
+
+        $data['highest_mastery'] = 2;
+        DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $exam->id)->update($data);
+        $questions = Question::where('set_id', $exam->id)->get();
+        foreach ($questions as $question) {
+            DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update([
+                'score' => 3,
+            ]);
+        }
+
+        $response = $this->get(route('exam-session.summary', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            // 'architect' => config('mage.default_architect_credits') + config('test.add_proficient_architect_credits'),
+            'publish' => config('mage.default_publish_credits') + config('test.add_proficient_publish_credits'),
+            'question' => config('mage.default_question_credits') + config('test.add_proficient_question_credits'),
+            'study' => config('mage.default_study_credits') + config('test.add_proficient_study_credits'),
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
     
 
     /** ========== HELPER FUNCTIONS ========== */

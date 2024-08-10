@@ -450,8 +450,21 @@ class ExamSessionController extends Controller
 
         // Make it so a person can't lose a mastery that they obtained.
         // This can happen through the architect adding more questions, or the person losing points after obtaining mastery
-        $highestMastery = max($highestMastery, $record->highest_mastery);
+        $originalMastery = $record->highest_mastery;
+        $highestMastery = max($highestMastery, $originalMastery);
         
+        $credits = $user->credit->first();
+
+        // Award proficient mastery!
+        if ($highestMastery == Mastery::Proficient->value && $originalMastery < Mastery::Proficient->value) {
+            $credits->architect += config('test.add_proficient_architect_credits');
+            $credits->publish += config('test.add_proficient_publish_credits');
+            $credits->question += config('test.add_proficient_question_credits');
+            $credits->study += config('test.add_proficient_study_credits');
+
+            $credits->save();
+        }
+
         DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
             'times_taken' => $record->times_taken + 1,
             'recent_average' => round($averageTotal / $averageCount),

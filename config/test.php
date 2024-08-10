@@ -16,4 +16,9 @@ return [
     'target_answers' => env('TARGET_ANSWERS', 4),
     
     'min_public_questions' => env('MIN_PUBLIC_QUESTIONS', 50),
+
+    'add_proficient_architect_credits' => 0.2,
+    'add_proficient_publish_credits' => 0.2,
+    'add_proficient_question_credits' => 5,
+    'add_proficient_study_credits' => 0.5,
 ];
