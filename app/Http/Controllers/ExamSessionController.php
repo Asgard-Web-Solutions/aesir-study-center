@@ -465,6 +465,15 @@ class ExamSessionController extends Controller
             $credits->save();
         }
 
+        if ($highestMastery == Mastery::Mastered->value && $originalMastery < Mastery::Mastered->value) {
+            $credits->architect += config('test.add_mastered_architect_credits');
+            $credits->publish += config('test.add_mastered_publish_credits');
+            $credits->question += config('test.add_mastered_question_credits');
+            $credits->study += config('test.add_mastered_study_credits');
+
+            $credits->save();
+        }
+
         DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
             'times_taken' => $record->times_taken + 1,
             'recent_average' => round($averageTotal / $averageCount),
