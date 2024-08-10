@@ -408,6 +408,92 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
+    /** @test */
+    public function starting_an_exam_costs_a_study_credit() {
+        Config::set('mage.default_study_credits', 5);
+        $user = $this->CreateUserAndAuthenticate();
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'study' => config('mage.default_study_credits') - 1
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
+
+    /** @test */
+    public function cannot_start_test_without_credits() {
+        Config::set('mage.default_study_credits', 0);
+        $user = $this->CreateUserAndAuthenticate();
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseMissing('exam_records', $verifyData);
+    }
+
+    /** @test */
+    public function users_are_not_charaged_study_credits_for_their_own_tests() {
+        Config::set('mage.default_study_credits', 0);
+        $architect = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $architect->id,
+            'set_id' => $exam->id,
+        ]);
+
+        $this->assertDatabaseHas('exam_records', $verifyData);
+    }
+
+    /** @test */
+    public function mages_can_always_start_an_exam() {
+        Config::set('mage.default_study_credits', 0);
+        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+        ]);
+
+        $this->assertDatabaseHas('exam_records', $verifyData);
+    }
+
+    /** @test */
+    public function mages_are_not_charged_credits_for_exams() {
+        Config::set('mage.default_study_credits', 1);
+        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
+        $architect = $this->CreateUser();
+        $exam = $this->CreateSet(['user_id' => $architect->id]);
+
+        $response = $this->get(route('exam-session.start', $exam));
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'study' => config('mage.default_study_credits')
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
+    
+
     /** ========== HELPER FUNCTIONS ========== */
     private function getExamConfigurationFormData() {
         return [

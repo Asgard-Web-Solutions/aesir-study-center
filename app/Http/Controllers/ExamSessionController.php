@@ -23,10 +23,25 @@ class ExamSessionController extends Controller
 
         $record = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
         if (!$record) {
+            $user = User::find(auth()->user()->id);
+
+            if (Feature::active('mage-upgrade')) {
+                if (!$user->isMage && ($examSet->user_id != $user->id) && ($user->credit->study < 1)) {
+                    return back()->with('warning', 'Insufficient Study Credits. Please earn more Study Credits or upgrade to Mage status to start another exam.');
+                }
+            }
+
             DB::table('exam_records')->insert([
                 'user_id' => auth()->user()->id,
                 'set_id' => $examSet->id,
             ]);
+
+            if (Feature::active('mage-upgrade')) {
+                if (!$user->isMage) {
+                    $user->credit->study -= 1;
+                    $user->credit->save();
+                }
+            }
         }
 
         $session = $this->getInProgressSession($examSet);
