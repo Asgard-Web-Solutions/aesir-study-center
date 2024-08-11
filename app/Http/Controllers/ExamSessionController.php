@@ -304,7 +304,11 @@ class ExamSessionController extends Controller
                 $updatedScore = config('test.min_score');
             }
 
-            $nextAt = Carbon::now()->addHours((config('test.hour_multiplier') * ($updatedScore ** 2)));
+            if (!$result && ($updatedScore == 1)) {
+                $nextAt = Carbon::now()->addMinutes(5);
+            } else {
+                $nextAt = Carbon::now()->addHours((config('test.hour_multiplier') * (min($updatedScore, 10) ** 2.6)));
+            }
 
             DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
                 'score' => $updatedScore,
