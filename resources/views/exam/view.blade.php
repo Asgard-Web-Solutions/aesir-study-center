@@ -26,8 +26,11 @@
                 </div>
 
                 <div class="stat">
+                    <div class="text-2xl stat-figure text-secondary">
+                        <i class="{{ config('icon.acolyte_count') }} text-{{ config('color.acolyte_count') }}"></i>
+                    </div>
                     <div class="stat-title"># of Exam Takers</div>
-                    <div class="stat-value text-secondary">{{ $exam->records->count() }}</div>
+                    <div class="stat-value text-{{ config('color.acolyte_count') }}">{{ $exam->records->count() }}</div>
                 </div>
             </div>
 
