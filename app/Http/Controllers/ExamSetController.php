@@ -160,11 +160,29 @@ class ExamSetController extends Controller
             'correct*' => 'sometimes',
         ]);
 
+        if ($exam->questions->count() >= config('test.max_exam_questions')) {
+            return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
+        }
+
+        if (Feature::active('mage-upgrade')) {
+            $user = $this->getAuthedUser();
+            if (!$user->isMage && ($user->credit->question < 1)) {
+                return back()->with('warning', 'Insufficient Question Credits. Please obtain more credits or Upgrade to Mage to add more questions to your exam.');
+            }
+        }
+
         $question = new Question();
         $question->text = $request->question;
         $question->set_id = $exam->id;
         $question->group_id = 0;
         $question->save();
+
+        if (Feature::active('mage-upgrade')) {
+            if (!$user->isMage) {
+                $user->credit->question -= 1;
+                $user->credit->save();
+            }
+        }
 
         foreach ($request->answers as $index => $newAnswer) {
             if ($newAnswer) {
@@ -231,11 +249,5 @@ class ExamSetController extends Controller
         $answer->save();
 
         return redirect()->route('exam.question', ['exam' => $exam, 'question' => $question])->with('success', 'Answer added to question!');
-    }
-
-    private function getAuthedUser() {
-        $user = User::where('id', auth()->user()->id)->with('records')->first();
-
-        return $user;
     }
 }

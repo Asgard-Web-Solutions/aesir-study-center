@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Alert;
 use DB;
-use App\Models\Group;
+use Alert;
 use App\Models\Set;
-use App\Models\Question;
+use App\Models\Group;
 use App\Models\Answer;
+use App\Models\Question;
+use Laravel\Pennant\Feature;
 use Illuminate\Http\Request;
 use App\Http\Requests\GroupSettingsRequest;
 use App\Http\Requests\GroupQuestionRequest;
@@ -51,9 +52,13 @@ class GroupController extends Controller
 
     public function removeQuestion(Request $request, Group $group, Question $question) {
         $this->authorize('delete', $group);
+        $user = $this->getAuthedUser();
 
         DB::table('user_question')->where('question_id', $question->id)->delete();
         $question->delete();
+
+        $user->credit->question += 0.8;
+        $user->credit->save();
 
         return redirect()->route('group-view', $group)->with('alert', 'Group Question was successfully deleted');
     }
@@ -76,6 +81,7 @@ class GroupController extends Controller
     public function storeQuestions(Request $request, Group $group)
     {
         $this->authorize('update', $group);
+        $user = $this->getAuthedUser();
 
         $validated = $request->validate([
             'questions.*.question' => 'nullable|string|max:255',
@@ -85,6 +91,17 @@ class GroupController extends Controller
         // Iterate over the questions and save them to the database
         foreach ($validated['questions'] as $questionData) {
             if ($questionData['question'] != '' && $questionData['answer'] != '') {
+                
+                if ($group->set->questions->count() >= config('test.max_exam_questions')) {
+                    return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
+                }
+
+                if (Feature::active('mage-upgrade')) {
+                    if (!$user->isMage && ($user->credit->question < 1)) {
+                        return back()->with('warning', 'Insufficient Question Credits. Please obtain more credits or Upgrade to Mage to add more questions to your exam.');
+                    }
+                }       
+                
                 $question = Question::create([
                     'text' => $questionData['question'],
                     'set_id' => $group->set->id,
@@ -96,6 +113,13 @@ class GroupController extends Controller
                     'question_id' => $question->id,
                     'correct' => 1,
                 ]);
+
+                if (Feature::active('mage-upgrade')) {
+                    if (!$user->isMage) {
+                        $user->credit->question -= 1;
+                        $user->credit->save();
+                    }
+                }
             }
         }
 

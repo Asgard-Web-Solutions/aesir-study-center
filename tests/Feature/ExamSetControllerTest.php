@@ -108,7 +108,71 @@ class ExamSetControllerTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('credits', $verifyData);
-    }    
+    }
+    
+    /** @test */
+    public function adding_questions_costs_question_credits() {
+        Config::set('mage.default_question_credits', 2);
+        $user = $this->CreateUserAndAuthenticate();
+        $exam = $this->CreateSet(['user_id' => $user->id]);
+        $data = ([
+            'question' => 'Test Cost',
+            'answers' => ['This is just a test'],
+            'correct' => [1],
+        ]);
+
+        $response = $this->post(route('exam.add', $exam), $data);
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'question' => config('mage.default_question_credits') - 1,
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
+
+    /** @test */
+    public function adding_questions_does_not_cost_mages_question_credits() {
+        Config::set('mage.default_question_credits', 2);
+        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
+        $exam = $this->CreateSet(['user_id' => $user->id]);
+        $data = ([
+            'question' => 'Test Cost',
+            'answers' => ['This is just a test'],
+            'correct' => [1],
+        ]);
+
+        $response = $this->post(route('exam.add', $exam), $data);
+
+        $verifyData = ([
+            'user_id' => $user->id,
+            'question' => config('mage.default_question_credits'),
+        ]);
+
+        $this->assertDatabaseHas('credits', $verifyData);
+    }
+
+    /** @test */
+    public function adding_a_question_is_restricted_if_max_limit_reached() {
+        Config::set('test.max_exam_questions', 0);
+        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
+        $exam = $this->CreateSet(['user_id' => $user->id]);
+        $data = ([
+            'question' => 'Test Cost',
+            'answers' => ['This is just a test'],
+            'correct' => [1],
+        ]);
+
+        $response = $this->post(route('exam.add', $exam), $data);
+
+        $verifyData = ([
+            'text' => $data['question'],
+        ]);
+
+        $this->assertDatabaseMissing('test_question', $verifyData);
+        $response->assertSessionHas('warning');
+    }
+    
 
     public static function dataProviderExamPages() {
         /**

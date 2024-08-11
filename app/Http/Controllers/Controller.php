@@ -11,7 +11,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    private function getAuthedUser() {
+    public function getAuthedUser() {
         $user = User::where('id', auth()->user()->id)->with('records')->first();
 
         return $user;

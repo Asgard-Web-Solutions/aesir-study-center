@@ -39,7 +39,7 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->midd
     Route::post('/store', 'store')->name('store');
     Route::post('/{exam}/update', 'update')->name('update');
 
-    Route::get('/{set}', 'view')->name('view');
+    Route::get('/{set}', 'view')->name('view')->withoutMiddleware(['auth', 'verified']);
     Route::get('/{set}/edit', 'edit')->name('edit');
     Route::post('/{set}/add', 'add')->name('add');
 

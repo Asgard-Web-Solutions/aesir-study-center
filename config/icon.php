@@ -26,4 +26,10 @@ return [
     'adept' => 'fa-brands fa-pied-piper-hat',
     'mage' => 'fa-solid fa-hat-wizard',
     'keeper' => 'fa-solid fa-hood-cloak',
+
+    'credit' => 'fa-duotone fa-solid fa-coin-vertical',
+    'architect_credit' => 'fa-light fa-person-digging',
+    'study_credit' => 'fa-light fa-book-open-cover',
+    'publish_credit' => 'fa-regular fa-bullhorn',
+    'question_credit' => 'fa-duotone fa-solid fa-block-question',
 ];

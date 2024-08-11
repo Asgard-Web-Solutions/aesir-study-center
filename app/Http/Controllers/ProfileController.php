@@ -97,11 +97,4 @@ class ProfileController extends Controller
             'mastery' => $mastery,
         ]);
     }
-
-    /** ========== Helper Functions ========== */
-    private function getAuthedUser() {
-        $user = User::where('id', auth()->user()->id)->with('records')->first();
-
-        return $user;
-    }
 }
