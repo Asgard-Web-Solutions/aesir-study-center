@@ -101,6 +101,34 @@
 </x-card.main>
 
 <x-card.main title="Test Questions">
+    <x-card.mini>
+        <div class="block w-full lg:flex">
+
+            @feature('mage-upgrade')
+                @if (!auth()->user()->isMage)
+                    <div><span class="tooltip" data-tip="Question Credits Remaining"><i class="{{ config('icon.credit') }} text-{{ config('color.credit') }} text-lg"></i> <i class="{{ config('icon.question_credit') }} text-{{ config('color.question_credit') }} text-lg"></i> {{ $exam->user->credit->question }}</span></div>
+                @endif
+            @endfeature
+
+            <span class="mx-4 tooltip" data-tip="Question Count"><i class="{{ config('icon.question_count') }} text-{{ config('color.question_count') }} text-lg"></i> {{ $exam->questions->count() }} / {{ config('test.max_exam_questions') }}</span>
+        </div>
+    </x-card.mini>
+
+    @feature('mage-upgrade')
+        @if (!auth()->user()->isMage)
+            <x-help.box>
+                <x-help.text>I bet you are wondering what these <x-help.highlight>Question Credits</x-help.highlight> are all about.</x-help.text>
+                <x-help.text>As a free user at <x-help.highlight color="primary">Acolyte Academy</x-help.highlight> you are limited for how many questions you can add to exams that you manage.</x-help.text>
+                <x-help.text>Every question that you add to an exam will cost you <x-help.highlight color="accent">1 Question Credit</x-help.highlight>. When you run out of credits you will no longer be able to add more questions to any exam.</x-help.text>
+                <x-help.text>This helps make sure that you have lots of ability to try out this website and its features, and you can create an exam that you really need to start learning for free.</x-help.text>
+                <x-help.text>You will also be <x-help.highlight color="secondary">Awarded extra Question Credits</x-help.highlight> when you achieve a <x-help.highlight color="{{ config('color.mastered') }}">Mastered</x-help.highlight> rating on a test, or when <x-help.highlight color="secondary">other people reach Mastered with one of your public exams</x-help.highlight> you will also be awarded credits.</x-help.text>
+                <x-help.text>If you want to have unlimited access to <x-help.highlight color="none">Acolyte Academny</x-help.highlight> then you can <x-help.highlight color="success">Upgrade to a Mage Account</x-help.highlight>! This helps our academy continue to exist in this world and allows us to keep updating with newer features.</x-help.text>
+            </x-help.box>
+        @endif
+    @endfeature
+
+    <div class="mx-5 divider"></div>
+    
     <x-card.mini title="Add Quesiton">
         <form action="{{ route('exam.add', $exam) }}" method="post">
             @csrf

@@ -18,4 +18,10 @@ return [
     'adept' => 'info',
     'mage' => 'warning',
     'keeper' => 'accent',
+
+    'credit' => 'warning',
+    'architect_credit' => 'warning',
+    'study_credit' => 'warning',
+    'publish_credit' => 'warning',
+    'question_credit' => 'warning',
 ];

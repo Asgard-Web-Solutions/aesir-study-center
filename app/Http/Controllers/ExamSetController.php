@@ -48,18 +48,18 @@ class ExamSetController extends Controller
 
         if (Feature::active('mage-upgrade')) {
             $user = $this->getAuthedUser();
-            if (!$user->isMage) {
-                if ($user->credit->architect < 1) {
-                    return back()->with('warning', 'Insufficient Architect Credits. Please obtain more credits or ;Upgrade to Mage to create another exam.');
-                }
+            if (!$user->isMage && ($user->credit->architect < 1)) {
+                return back()->with('warning', 'Insufficient Architect Credits. Please obtain more credits or Upgrade to Mage to create another exam.');
             }
         }
 
         $exam = ExamSet::create($validatedData);
 
         if (Feature::active('mage-upgrade')) {
-            $user->credit->architect -= 1;
-            $user->credit->save();
+            if (!$user->isMage) {
+                $user->credit->architect -= 1;
+                $user->credit->save();
+            }
         }
 
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam Created!');
@@ -69,9 +69,27 @@ class ExamSetController extends Controller
     {
         $this->authorize('update', $exam);
         $validatedData = $request->validated();
+        $user = $this->getAuthedUser();
 
-        if ($exam->questions->count() < config('test.min_public_questions')) {
-            $validatedData['visibility'] = 0;
+        // Make sure the exam has the authority to be made public if requested
+        if ($validatedData['visibility'] == 1) {
+            if ($exam->questions->count() < config('test.min_public_questions')) {
+                $validatedData['visibility'] = 0;
+            }
+
+            if (Feature::active('mage-upgrade')) {
+                if (!$user->isMage && !$exam->isPublished) {
+                    if ($user->credit->publish >= 1) {
+                        $user->credit->publish -= 1;
+                        $user->credit->save();
+                        
+                        $exam->isPublished = 1;
+                        $exam->save();
+                    } else {
+                        $validatedData['visibility'] = 0;
+                    }
+                }
+            }    
         }
 
         $exam->update($validatedData);
@@ -142,11 +160,29 @@ class ExamSetController extends Controller
             'correct*' => 'sometimes',
         ]);
 
+        if ($exam->questions->count() >= config('test.max_exam_questions')) {
+            return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
+        }
+
+        if (Feature::active('mage-upgrade')) {
+            $user = $this->getAuthedUser();
+            if (!$user->isMage && ($user->credit->question < 1)) {
+                return back()->with('warning', 'Insufficient Question Credits. Please obtain more credits or Upgrade to Mage to add more questions to your exam.');
+            }
+        }
+
         $question = new Question();
         $question->text = $request->question;
         $question->set_id = $exam->id;
         $question->group_id = 0;
         $question->save();
+
+        if (Feature::active('mage-upgrade')) {
+            if (!$user->isMage) {
+                $user->credit->question -= 1;
+                $user->credit->save();
+            }
+        }
 
         foreach ($request->answers as $index => $newAnswer) {
             if ($newAnswer) {
@@ -213,11 +249,5 @@ class ExamSetController extends Controller
         $answer->save();
 
         return redirect()->route('exam.question', ['exam' => $exam, 'question' => $question])->with('success', 'Answer added to question!');
-    }
-
-    private function getAuthedUser() {
-        $user = User::where('id', auth()->user()->id)->with('records')->first();
-
-        return $user;
     }
 }

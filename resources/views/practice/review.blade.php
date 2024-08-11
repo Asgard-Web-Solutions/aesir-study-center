@@ -3,13 +3,14 @@
 @section('content')
 
     <x-card.main title="Review: {!! $exam->name !!}">
+        <x-text.dim>Flash Card # {{ $session->question_index }} <span class="text-xs opacity-50">of {{ $session->question_count }}</span></x-text.dim>
         <x-card.mini>
             <h3 class="text-3xl text-primary">@if ($question->group) {!! $question->group->question !!} @endif {!! $question->text !!}</h3>
         </x-card.mini>
 
         <div class="collapse bg-base-200">
             <input type="checkbox" />
-            <div class="text-xl font-medium collapse-title">Reveal Answer</div>
+            <div class="w-1/2 mx-auto text-xl font-medium collapse-title btn btn-outline btn-secondary">Reveal Answer</div>
             <div class="collapse-content">
                 <x-card.mini>
                     @foreach ($answers as $answer)
