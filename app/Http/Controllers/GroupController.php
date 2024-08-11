@@ -86,6 +86,7 @@ class GroupController extends Controller
     {
         $this->authorize('update', $group);
         $user = $this->getAuthedUser();
+        $numQuestions = $group->set->questions->count();
 
         $validated = $request->validate([
             'questions.*.question' => 'nullable|string|max:255',
@@ -96,7 +97,7 @@ class GroupController extends Controller
         foreach ($validated['questions'] as $questionData) {
             if ($questionData['question'] != '' && $questionData['answer'] != '') {
                 
-                if ($group->set->questions->count() >= config('test.max_exam_questions')) {
+                if ($numQuestions >= config('test.max_exam_questions')) {
                     return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
                 }
 
@@ -117,6 +118,8 @@ class GroupController extends Controller
                     'question_id' => $question->id,
                     'correct' => 1,
                 ]);
+
+                $numQuestions += 1;
 
                 if (Feature::active('mage-upgrade')) {
                     if (!$user->isMage) {
