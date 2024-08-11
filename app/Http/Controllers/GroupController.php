@@ -57,8 +57,10 @@ class GroupController extends Controller
         DB::table('user_question')->where('question_id', $question->id)->delete();
         $question->delete();
 
-        $user->credit->question += 0.8;
-        $user->credit->save();
+        if (Feature::active('mage-upgrade')) {            
+            $user->credit->question += 0.8;
+            $user->credit->save();
+        }
 
         return redirect()->route('group-view', $group)->with('alert', 'Group Question was successfully deleted');
     }
