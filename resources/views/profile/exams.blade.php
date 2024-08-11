@@ -74,7 +74,7 @@
             </x-card.mini>
         @empty
             <x-card.mini>
-                <x-text.main>You have not taken a test yet. <a href="{{ route('exam.public') }}" class="link-primary link">Find a Public Exam</a> or else <a href="{{ route('exam.create') }}">Create Your Own Exams</a>!</x-text.main>
+                <x-text.main>You have not taken a test yet. <a href="{{ route('exam.public') }}" class="link-primary link">Find a Public Exam</a> or else <a href="{{ route('exam.create') }}" class="link-secondary link">Create Your Own Exams</a>!</x-text.main>
             </x-card.mini>
         @endforelse
     </x-card.main>

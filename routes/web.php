@@ -24,15 +24,15 @@ use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 |
 */
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy-policy');
 
-Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware('auth');
+Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware(['auth', 'verified']);
 Route::get('/publicExams', [ExamSetController::class, 'public'])->name('exam.public');
 
-Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->group(function () {
+Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
 
     Route::get('/architect', 'create')->name('create');
@@ -53,7 +53,7 @@ Route::prefix('boyager')->group(function () {
     Voyager::routes();
 });
 
-Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware('auth')->group(function () {
+Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/exams', 'exams')->name('exams');
     Route::get('/myexams', 'myexams')->name('myexams');
@@ -63,7 +63,7 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
 
 Route::get('/transcripts/{user}', [ProfileController::class, 'view'])->name('profile.view');
 
-Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::class)->middleware('auth')->group(function () {
+Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/configure', 'configure')->name('configure');
     Route::post('/{set}/store', 'store')->name('store');
@@ -73,7 +73,7 @@ Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::
     Route::get('/{set}/summary', 'summary')->name('summary');
 });
 
-Route::prefix('practice')->name('practice.')->controller(PracticeController::class)->middleware('auth')->group(function () {
+Route::prefix('practice')->name('practice.')->controller(PracticeController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/settings', 'settings')->name('settings');
     Route::post('/{set}/begin', 'begin')->name('begin');
@@ -83,7 +83,7 @@ Route::prefix('practice')->name('practice.')->controller(PracticeController::cla
     Route::get('/{set}/done', 'done')->name('done');
 });
 
-Route::prefix('admin')->name('admin.')->controller(AdminController::class)->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->controller(AdminController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/users', 'users')->name('users');
     Route::get('/users/{user}', 'user')->name('user');
