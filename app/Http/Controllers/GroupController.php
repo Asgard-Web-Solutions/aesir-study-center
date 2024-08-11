@@ -57,8 +57,12 @@ class GroupController extends Controller
         DB::table('user_question')->where('question_id', $question->id)->delete();
         $question->delete();
 
-        $user->credit->question += 0.8;
-        $user->credit->save();
+        if (Feature::active('mage-upgrade')) {  
+            if (!$user->isMage) {
+                $user->credit->question += 0.8;
+                $user->credit->save();
+            }
+        }
 
         return redirect()->route('group-view', $group)->with('alert', 'Group Question was successfully deleted');
     }
@@ -82,6 +86,7 @@ class GroupController extends Controller
     {
         $this->authorize('update', $group);
         $user = $this->getAuthedUser();
+        $numQuestions = $group->set->questions->count();
 
         $validated = $request->validate([
             'questions.*.question' => 'nullable|string|max:255',
@@ -92,7 +97,7 @@ class GroupController extends Controller
         foreach ($validated['questions'] as $questionData) {
             if ($questionData['question'] != '' && $questionData['answer'] != '') {
                 
-                if ($group->set->questions->count() >= config('test.max_exam_questions')) {
+                if ($numQuestions >= config('test.max_exam_questions')) {
                     return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
                 }
 
@@ -113,6 +118,8 @@ class GroupController extends Controller
                     'question_id' => $question->id,
                     'correct' => 1,
                 ]);
+
+                $numQuestions += 1;
 
                 if (Feature::active('mage-upgrade')) {
                     if (!$user->isMage) {

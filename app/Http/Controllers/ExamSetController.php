@@ -72,7 +72,7 @@ class ExamSetController extends Controller
         $user = $this->getAuthedUser();
 
         // Make sure the exam has the authority to be made public if requested
-        if ($validatedData['visibility'] == 1) {
+        if (array_key_exists('visibility', $validatedData) && $validatedData['visibility'] == 1) {
             if ($exam->questions->count() < config('test.min_public_questions')) {
                 $validatedData['visibility'] = 0;
             }
