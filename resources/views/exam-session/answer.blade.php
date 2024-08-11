@@ -78,19 +78,19 @@
                             </div>
                         @endif
                             @if ( $i == config('test.grade_mastered') )
-                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_mastered')) text-{{ config('test.color_mastered') }} @else text-neutral @endif">
+                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_mastered')) text-{{ config('color.mastered') }} @else text-neutral @endif">
                                     Mastered
                                 </div>
                             @elseif ( $i == config('test.grade_proficient') )
-                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_proficient')) text-{{ config('test.color_proficient') }} @else text-neutral @endif">
+                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_proficient')) text-{{ config('color.proficient') }} @else text-neutral @endif">
                                     Proficient
                                 </div>
                             @elseif ( $i == config('test.grade_familiar') )
-                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_familiar')) text-{{ config('test.color_familiar') }} @else text-neutral @endif">
+                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_familiar')) text-{{ config('color.familiar') }} @else text-neutral @endif">
                                     Familiar
                                 </div>
                             @elseif ( $i == config('test.grade_apprentice') )
-                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_apprentice')) text-{{ config('test.color_apprentice') }} @else text-neutral @endif">
+                                <div class="timeline-end timeline-box @if ($userQuestionStats->score >= config('test.grade_apprentice')) text-{{ config('color.apprentice') }} @else text-neutral @endif">
                                     Apprentice
                                 </div>
                             @else
