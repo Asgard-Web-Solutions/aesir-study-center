@@ -24,7 +24,25 @@
                     @endphp
 
                     @if ($exam->questions->count() >= config('test.min_public_questions'))
-                        <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $exam->visibility }}" />
+                        @feature('mage-upgrade')
+                            @if (!$exam->user->isMage)
+                                @if (!$exam->isPublished)
+                                    <div class="badge"><span class="tooltip" data-tip="Publish Credits"><i class="{{ config('icon.credit') }} text-{{ config('color.credit') }} text-lg"></i> <i class="{{ config('icon.publish_credit') }} text-{{ config('color.publish_credit') }} text-lg"></i> {{ $exam->user->credit->publish }}</span></div>
+                                    <br />
+                                    <x-help.box>
+                                        <x-help.text><x-help.highlight>Publish Credits</x-help.highlight> allow you to make an exam <x-help.highlight color="accent">Public</x-help.highlight> while you are on a free account.</x-help.text>
+                                        <x-help.text>Once you spend a <x-help.highlight color="none">Publish Credit</x-help.highlight> on an exam you are free to <x-help.highlight color="secondary">switch between public and private</x-help.highlight> as often as you need to.</x-help.text>
+                                        <x-help.text>If you need more credits, <x-help.highlight>Master</x-help.highlight> more exams, and get other people to <x-help.highlight color="none">Master</x-help.highlight> your exams.</x-help.text>
+                                        <x-help.text>Or <x-help.highlight color="accent">upgrade to Mage to unlock all features</x-help.highlight> of <x-help.highlight color="primary">Acolyte Academy</x-help.highlight>. This helps support the site so we can continue to exist and add new features.</x-help.text>
+                                    </x-help.box>
+                                @endif
+                                <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $exam->visibility }}" />
+                            @else
+                                <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $exam->visibility }}" />
+                            @endif
+                        @else            
+                            <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $exam->visibility }}" />
+                        @endfeature
                     @else
                         <x-text.main>A test must have at least <span class="font-bold text-accent">{{ config('test.min_public_questions') }} Questions</span> before it can be made public.</x-text.main>
                         <x-text.dim>Progress: {{ $exam->questions->count() }} / {{ config('test.min_public_questions') }}</x-text.dim>
