@@ -49,7 +49,9 @@ class User extends \TCG\Voyager\Models\User
     {
         $email = strtolower(trim($this->email));
         $hash = md5($email);
-        return "https://www.gravatar.com/avatar/{$hash}?s={$size}&d=monsterid&r=pg";
+        $default = config('academy.default_gravatar');
+        
+        return "https://www.gravatar.com/avatar/{$hash}?s={$size}&d={$default}&r=pg";
     }
 
     public function exams(): HasMany
