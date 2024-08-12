@@ -19,7 +19,7 @@ class ExamRecordTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
 
-        $response = $this->get(route('exam-session.start', $exam));
+        $response = $this->get(route('exam-session.enroll', $exam));
 
         $data = [
             'user_id' => $user->id,
@@ -54,7 +54,7 @@ class ExamRecordTest extends TestCase
 
         $response = $this->get(route('exam-session.start', $exam));
 
-        $response->assertRedirect(route('exam-session.configure', $exam));
+        $response->assertRedirect(route('exam-session.register', $exam));
     }
 
     /** @test */
@@ -76,7 +76,7 @@ class ExamRecordTest extends TestCase
 
         $response = $this->get(route('exam-session.start', $exam));
 
-        $response->assertRedirect(route('exam-session.configure', $exam));
+        $response->assertRedirect(route('exam-session.register', $exam));
     }
 
     // DONE: When a user completes an exam, update the exam record stats (latest grade, times taken, last completed)
@@ -415,7 +415,7 @@ class ExamRecordTest extends TestCase
         $architect = $this->CreateUser();
         $exam = $this->CreateSet(['user_id' => $architect->id]);
 
-        $response = $this->get(route('exam-session.start', $exam));
+        $response = $this->get(route('exam-session.enroll', $exam));
 
         $verifyData = ([
             'user_id' => $user->id,
@@ -449,7 +449,7 @@ class ExamRecordTest extends TestCase
         $architect = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $architect->id]);
 
-        $response = $this->get(route('exam-session.start', $exam));
+        $response = $this->get(route('exam-session.enroll', $exam));
 
         $verifyData = ([
             'user_id' => $architect->id,
@@ -466,7 +466,7 @@ class ExamRecordTest extends TestCase
         $architect = $this->CreateUser();
         $exam = $this->CreateSet(['user_id' => $architect->id]);
 
-        $response = $this->get(route('exam-session.start', $exam));
+        $response = $this->get(route('exam-session.enroll', $exam));
 
         $verifyData = ([
             'user_id' => $user->id,
