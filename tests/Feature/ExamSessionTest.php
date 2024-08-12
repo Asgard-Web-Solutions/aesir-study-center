@@ -105,6 +105,10 @@ class ExamSessionTest extends TestCase
     public function redirected_to_exam_configuration_page_when_starting_a_new_exam_session() {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
+        DB::table('exam_records')->insert([
+            'user_id' => $user->id,
+            'set_id' => $exam->id,
+        ]);
 
         $response = $this->get(route('exam-session.start', $exam));
 
