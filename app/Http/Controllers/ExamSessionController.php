@@ -22,25 +22,12 @@ class ExamSessionController extends Controller
         $this->authorize('view', $examSet);
 
         $record = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
+
         if (!$record) {
-            $user = User::find(auth()->user()->id);
-
-            if (Feature::active('mage-upgrade')) {
-                if (!$user->isMage && ($examSet->user_id != $user->id) && ($user->credit->study < 1)) {
-                    return back()->with('warning', 'Insufficient Study Credits. Please earn more Study Credits or upgrade to Mage status to start another exam.');
-                }
-            }
-
-            DB::table('exam_records')->insert([
-                'user_id' => auth()->user()->id,
-                'set_id' => $examSet->id,
-            ]);
-
-            if (Feature::active('mage-upgrade')) {
-                if (!$user->isMage) {
-                    $user->credit->study -= 1;
-                    $user->credit->save();
-                }
+            if ($examSet->user_id == auth()->user()->id) {
+                return redirect()->route('exam-session.enroll', $examSet);
+            } else {
+                return redirect()->route('exam-session.register', $examSet);
             }
         }
 
@@ -51,6 +38,51 @@ class ExamSessionController extends Controller
         } else {
             return redirect()->route('exam-session.test', $examSet);
         }
+    }
+
+    public function register(Set $examSet) {
+        $this->authorize('view', $examSet);
+
+        $record = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
+
+        if ($record) {
+            return redirect()->route('exam-session.configure', $examSet);
+        }
+
+        return view('exam-session.register')->with([
+            'exam' => $examSet,
+        ]);
+    }
+
+    public function enroll(Set $examSet) {
+        $this->authorize('view', $examSet);
+
+        $record = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
+        $user = User::find(auth()->user()->id);
+        
+        if ($record) {
+            return redirect()->route('exam-session.configure', $examSet)->with('info', 'You are already enrolled in this account.');
+        }
+
+        if (Feature::active('mage-upgrade')) {
+            if (!$user->isMage && ($examSet->user_id != $user->id) && ($user->credit->study < 1)) {
+                return back()->with('warning', 'Insufficient Study Credits. Please earn more Study Credits or upgrade to Mage status to start another exam.');
+            }
+        }
+
+        DB::table('exam_records')->insert([
+            'user_id' => auth()->user()->id,
+            'set_id' => $examSet->id,
+        ]);
+
+        if (Feature::active('mage-upgrade')) {
+            if (!$user->isMage && $examSet->user_id != auth()->user()->id) {
+                $user->credit->study -= 1;
+                $user->credit->save();
+            }
+        }
+
+        return redirect()->route('exam-session.start', $examSet);
     }
 
     public function configure(Set $examSet) {
@@ -80,6 +112,8 @@ class ExamSessionController extends Controller
 
     public function store(ExamSessionConfigurationRequest $request, Set $examSet) {
         $this->authorize('view', $examSet);
+
+        
 
         $now = Carbon::now();
         $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();

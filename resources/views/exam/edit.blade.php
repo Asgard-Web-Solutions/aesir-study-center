@@ -28,7 +28,7 @@
                             @if (!$exam->user->isMage)
                                 @if (!$exam->isPublished)
                                     <div class="badge"><span class="tooltip" data-tip="Publish Credits"><i class="{{ config('icon.credit') }} text-{{ config('color.credit') }} text-lg"></i> <i class="{{ config('icon.publish_credit') }} text-{{ config('color.publish_credit') }} text-lg"></i> {{ $exam->user->credit->publish }}</span></div>
-                                    <br />
+
                                     <x-help.box>
                                         <x-help.text><x-help.highlight>Publish Credits</x-help.highlight> allow you to make an exam <x-help.highlight color="accent">Public</x-help.highlight> while you are on a free account.</x-help.text>
                                         <x-help.text>Once you spend a <x-help.highlight color="none">Publish Credit</x-help.highlight> on an exam you are free to <x-help.highlight color="secondary">switch between public and private</x-help.highlight> as often as you need to.</x-help.text>

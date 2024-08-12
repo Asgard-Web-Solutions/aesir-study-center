@@ -11,7 +11,7 @@
 
                 <x-form.text type="password" name="password" label="Password" />
 
-                <x-form.checkbox name="remember" label="Remember Me" />
+                <x-form.checkbox name="remember" label="Remember Me" style="toggle" />
 
                 <div class="flex flex-wrap items-center">
                     <button type="submit" class="px-4 py-2 font-bold text-gray-100 bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline">
