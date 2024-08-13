@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AssignExamToUserCommandTest extends TestCase
+final class AssignExamToUserCommandTest extends TestCase
 {
     use RefreshDatabase;
 

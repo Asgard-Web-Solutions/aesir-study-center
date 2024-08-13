@@ -7,7 +7,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class AdminControllerTest extends TestCase
+final class AdminControllerTest extends TestCase
 {
     // DONE: Create an ACP page
     #[Test]

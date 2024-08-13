@@ -7,7 +7,7 @@ use App\Models\Set as ExamSet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ListOrphanedExamSetsTest extends TestCase
+final class ListOrphanedExamSetsTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class ProfileControllerTest extends TestCase
+final class ProfileControllerTest extends TestCase
 {
     use RefreshDatabase;
 

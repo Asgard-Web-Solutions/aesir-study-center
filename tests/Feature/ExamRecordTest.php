@@ -10,7 +10,7 @@ use DB;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class ExamRecordTest extends TestCase
+final class ExamRecordTest extends TestCase
 {
     // DONE: When a user takes an exam for the first time, create the exam record
     #[Test]

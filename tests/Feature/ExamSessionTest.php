@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class ExamSessionTest extends TestCase
+final class ExamSessionTest extends TestCase
 {
     #[Test]
     #[DataProvider('dataProviderExamSessionPages')]

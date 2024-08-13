@@ -6,7 +6,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class HomeControllerTest extends TestCase
+final class HomeControllerTest extends TestCase
 {
     #[Test]
     public function home_page_is_publicly_accessible(): void

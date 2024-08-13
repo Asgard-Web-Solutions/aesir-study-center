@@ -8,7 +8,7 @@ use Config;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class ExamSetControllerTest extends TestCase
+final class ExamSetControllerTest extends TestCase
 {
     #[Test]
     #[DataProvider('dataProviderExamPages')]

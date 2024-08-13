@@ -8,7 +8,7 @@ use App\Models\Question;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class PracticeControllerTest extends TestCase
+final class PracticeControllerTest extends TestCase
 {
     #[Test]
     public function default_page_has_link_to_practice(): void
