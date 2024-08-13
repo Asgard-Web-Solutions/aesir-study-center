@@ -4,16 +4,15 @@ namespace App\Policies;
 
 use App\Models\Credit;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CreditPolicy
 {
-    public function before(User $user, string $ability): bool|null
+    public function before(User $user, string $ability): ?bool
     {
         if ($user->isAdmin) {
             return true;
         }
-    
+
         return null;
     }
 
@@ -30,7 +29,7 @@ class CreditPolicy
      */
     public function view(User $user, Credit $credit): bool
     {
-        return ($user->id == $credit->user_id);
+        return $user->id == $credit->user_id;
     }
 
     /**

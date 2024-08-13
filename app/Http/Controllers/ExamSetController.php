@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-use App\Models\User;
 use App\Enums\Mastery;
+use App\Enums\Visibility;
+use App\Http\Requests\ExamSetDataRequest;
 use App\Models\Answer;
 use App\Models\Question;
-use App\Enums\Visibility;
+use App\Models\Set as ExamSet;
+use DB;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
-use Illuminate\Http\Request;
-use App\Models\Set as ExamSet;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\ExamSetDataRequest;
 
 class ExamSetController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $user = $this->getAuthedUser();
         $exams = $user->exams;
 
@@ -48,7 +48,7 @@ class ExamSetController extends Controller
 
         if (Feature::active('mage-upgrade')) {
             $user = $this->getAuthedUser();
-            if (!$user->isMage && ($user->credit->architect < 1)) {
+            if (! $user->isMage && ($user->credit->architect < 1)) {
                 return back()->with('warning', 'Insufficient Architect Credits. Please obtain more credits or Upgrade to Mage to create another exam.');
             }
         }
@@ -56,7 +56,7 @@ class ExamSetController extends Controller
         $exam = ExamSet::create($validatedData);
 
         if (Feature::active('mage-upgrade')) {
-            if (!$user->isMage) {
+            if (! $user->isMage) {
                 $user->credit->architect -= 1;
                 $user->credit->save();
             }
@@ -65,7 +65,7 @@ class ExamSetController extends Controller
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam Created!');
     }
 
-    public function update(ExamSetDataRequest $request, ExamSet $exam):RedirectResponse
+    public function update(ExamSetDataRequest $request, ExamSet $exam): RedirectResponse
     {
         $this->authorize('update', $exam);
         $validatedData = $request->validated();
@@ -78,18 +78,18 @@ class ExamSetController extends Controller
             }
 
             if (Feature::active('mage-upgrade')) {
-                if (!$user->isMage && !$exam->isPublished) {
+                if (! $user->isMage && ! $exam->isPublished) {
                     if ($user->credit->publish >= 1) {
                         $user->credit->publish -= 1;
                         $user->credit->save();
-                        
+
                         $exam->isPublished = 1;
                         $exam->save();
                     } else {
                         $validatedData['visibility'] = 0;
                     }
                 }
-            }    
+            }
         }
 
         $exam->update($validatedData);
@@ -105,9 +105,9 @@ class ExamSetController extends Controller
 
         if (Auth::check()) {
             $examRecord = DB::table('exam_records')
-                            ->where('set_id', $exam->id)
-                            ->where('user_id', Auth::id())
-                            ->first();
+                ->where('set_id', $exam->id)
+                ->where('user_id', Auth::id())
+                ->first();
         }
 
         $mastery = [];
@@ -138,7 +138,8 @@ class ExamSetController extends Controller
         ]);
     }
 
-    public function edit(ExamSet $exam) {
+    public function edit(ExamSet $exam)
+    {
         $this->authorize('update', $exam);
 
         $visibility = Visibility::cases();
@@ -151,7 +152,8 @@ class ExamSetController extends Controller
         ]);
     }
 
-    public function add(Request $request, ExamSet $exam) {
+    public function add(Request $request, ExamSet $exam)
+    {
         $this->authorize('update', $exam);
 
         $request->validate([
@@ -166,19 +168,19 @@ class ExamSetController extends Controller
 
         if (Feature::active('mage-upgrade')) {
             $user = $this->getAuthedUser();
-            if (!$user->isMage && ($user->credit->question < 1)) {
+            if (! $user->isMage && ($user->credit->question < 1)) {
                 return back()->with('warning', 'Insufficient Question Credits. Please obtain more credits or Upgrade to Mage to add more questions to your exam.');
             }
         }
 
-        $question = new Question();
+        $question = new Question;
         $question->text = $request->question;
         $question->set_id = $exam->id;
         $question->group_id = 0;
         $question->save();
 
         if (Feature::active('mage-upgrade')) {
-            if (!$user->isMage) {
+            if (! $user->isMage) {
                 $user->credit->question -= 1;
                 $user->credit->save();
             }
@@ -186,8 +188,8 @@ class ExamSetController extends Controller
 
         foreach ($request->answers as $index => $newAnswer) {
             if ($newAnswer) {
-                $answer = new Answer();
-    
+                $answer = new Answer;
+
                 $answer->question_id = $question->id;
                 $answer->text = $newAnswer;
                 $answer->correct = (isset($request->correct[$index])) ? 1 : 0;
@@ -198,7 +200,8 @@ class ExamSetController extends Controller
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam question added');
     }
 
-    public function question(ExamSet $exam, Question $question) {
+    public function question(ExamSet $exam, Question $question)
+    {
         $this->authorize('update', $exam);
 
         return view('exam.question', [
@@ -207,7 +210,8 @@ class ExamSetController extends Controller
         ]);
     }
 
-    public function questionUpdate(Request $request, ExamSet $exam, Question $question) {
+    public function questionUpdate(Request $request, ExamSet $exam, Question $question)
+    {
         $this->authorize('update', $exam);
 
         $request->validate([
@@ -233,7 +237,8 @@ class ExamSetController extends Controller
         return redirect()->route('exam.edit', $exam)->with('success', 'Question updated successfully.');
     }
 
-    public function questionDelete(ExamSet $exam, Question $question) {
+    public function questionDelete(ExamSet $exam, Question $question)
+    {
         $this->authorize('update', $exam);
 
         return view('exam.deleteQuestion')->with([
@@ -242,7 +247,8 @@ class ExamSetController extends Controller
         ]);
     }
 
-    public function questionRemove(Request $request, ExamSet $exam, Question $question) {
+    public function questionRemove(Request $request, ExamSet $exam, Question $question)
+    {
         $this->authorize('update', $exam);
 
         $question->delete();
@@ -250,7 +256,8 @@ class ExamSetController extends Controller
         return redirect()->route('exam.edit', $exam)->with('success', 'Question deleted.');
     }
 
-    public function addAnswer(Request $request, ExamSet $exam, Question $question) {
+    public function addAnswer(Request $request, ExamSet $exam, Question $question)
+    {
         $this->authorize('update', $exam);
 
         $request->validate([
@@ -258,8 +265,8 @@ class ExamSetController extends Controller
             'correct' => 'sometimes',
         ]);
 
-        $answer = new Answer();
-    
+        $answer = new Answer;
+
         $answer->question_id = $question->id;
         $answer->text = $request->answer;
         $answer->correct = (isset($request->correct)) ? 1 : 0;

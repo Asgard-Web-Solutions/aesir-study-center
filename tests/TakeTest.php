@@ -2,9 +2,7 @@
 
 namespace Tests;
 
-use App\Models\Set;
 use App\Models\Test;
-use App\Models\User;
 
 trait TakeTest
 {

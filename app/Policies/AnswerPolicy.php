@@ -4,16 +4,15 @@ namespace App\Policies;
 
 use App\Models\Answer;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class AnswerPolicy
 {
-    public function before(User $user, string $ability): bool|null
+    public function before(User $user, string $ability): ?bool
     {
         if ($user->isAdmin) {
             return true;
         }
-    
+
         return null;
     }
 

@@ -1,17 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SetController;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\GroupController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\PracticeController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ExamSetController;
 use App\Http\Controllers\ExamSessionController;
-use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
+use App\Http\Controllers\ExamSetController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TestController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +47,6 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->midd
     Route::get('/{exam}/question/{question}/delete', 'questionDelete')->name('questionDelete');
     Route::post('/{exam}/question/{question}/remove', 'questionRemove')->name('questionRemove');
 });
-
 
 Route::prefix('boyager')->group(function () {
     Voyager::routes();

@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Set as ExamSet;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class AssignExamToUserCommandTest extends TestCase
 {
@@ -20,8 +20,8 @@ class AssignExamToUserCommandTest extends TestCase
 
         // Run the command
         $this->artisan('exam:assign-user', ['email' => $user->email, 'examSetId' => $examSet->id])
-             ->expectsOutput('ExamSet assigned to user successfully.')
-             ->assertExitCode(0);
+            ->expectsOutput('ExamSet assigned to user successfully.')
+            ->assertExitCode(0);
 
         // Assert the ExamSet was assigned to the user
         $this->assertDatabaseHas('sets', [
@@ -38,8 +38,8 @@ class AssignExamToUserCommandTest extends TestCase
 
         // Run the command with a non-existent user's email
         $this->artisan('exam:assign-user', ['email' => 'nonexistent@example.com', 'examSetId' => $examSet->id])
-             ->expectsOutput('User not found.')
-             ->assertExitCode(1);
+            ->expectsOutput('User not found.')
+            ->assertExitCode(1);
 
         // Assert the ExamSet user_id was not changed
         $this->assertDatabaseHas('sets', [
@@ -56,7 +56,7 @@ class AssignExamToUserCommandTest extends TestCase
 
         // Run the command with a non-existent ExamSet ID
         $this->artisan('exam:assign-user', ['email' => $user->email, 'examSetId' => 999])
-             ->expectsOutput('ExamSet not found.')
-             ->assertExitCode(1);
+            ->expectsOutput('ExamSet not found.')
+            ->assertExitCode(1);
     }
 }

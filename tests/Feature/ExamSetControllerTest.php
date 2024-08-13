@@ -2,25 +2,24 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Config;
+use Symfony\Component\HttpFoundation\Response;
+use Tests\TestCase;
 
 class ExamSetControllerTest extends TestCase
 {
-
-    /** 
+    /**
      * @test
+     *
      * @dataProvider dataProviderExamPages
      */
-    public function validate_that_pages_load_correctly($route, $method, $status, $view) {
+    public function validate_that_pages_load_correctly($route, $method, $status, $view)
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
-        $data = array();
-        
-        $route = 'exam.' . $route;
+        $data = [];
+
+        $route = 'exam.'.$route;
 
         if ($method == 'get') {
             $response = $this->get(route($route, $exam));
@@ -31,13 +30,14 @@ class ExamSetControllerTest extends TestCase
         $response->assertStatus($status);
 
         if ($status == Response::HTTP_OK) {
-            $view = 'exam.' . $view;
+            $view = 'exam.'.$view;
             $response->assertViewIs($view);
         }
     }
 
     /** @test */
-    public function public_test_page_publicly_accessible() {
+    public function public_test_page_publicly_accessible()
+    {
         $response = $this->get(route('exam.public'));
 
         $response->assertStatus(Response::HTTP_OK);
@@ -45,7 +45,8 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function public_page_shows_public_tests() {
+    public function public_page_shows_public_tests()
+    {
         $exam = $this->CreateSet(['visibility' => 1]);
 
         $response = $this->get(route('exam.public'));
@@ -54,7 +55,8 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function exam_view_page_loads() {
+    public function exam_view_page_loads()
+    {
         $exam = $this->CreateSet(['visibility' => 1]);
 
         $response = $this->get(route('exam.view', $exam));
@@ -64,7 +66,8 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function exam_view_page_shows_information() {
+    public function exam_view_page_shows_information()
+    {
         $exam = $this->CreateSet(['visibility' => 1]);
 
         $response = $this->get(route('exam.view', $exam));
@@ -73,12 +76,13 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function creating_exams_costs_architect_credits() {
+    public function creating_exams_costs_architect_credits()
+    {
         Config::set('mage.default_architect_credits', 2);
         $user = $this->CreateUserAndAuthenticate();
         $data = ([
             'name' => 'Test Cost',
-            'description' => 'This is just a test'
+            'description' => 'This is just a test',
         ]);
 
         $response = $this->post(route('exam.store'), $data);
@@ -92,12 +96,13 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function creating_exams_does_not_cost_mages_architect_credits() {
+    public function creating_exams_does_not_cost_mages_architect_credits()
+    {
         Config::set('mage.default_architect_credits', 2);
         $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
         $data = ([
             'name' => 'Test Cost',
-            'description' => 'This is just a test'
+            'description' => 'This is just a test',
         ]);
 
         $response = $this->post(route('exam.store'), $data);
@@ -109,9 +114,10 @@ class ExamSetControllerTest extends TestCase
 
         $this->assertDatabaseHas('credits', $verifyData);
     }
-    
+
     /** @test */
-    public function adding_questions_costs_question_credits() {
+    public function adding_questions_costs_question_credits()
+    {
         Config::set('mage.default_question_credits', 2);
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
@@ -132,7 +138,8 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function adding_questions_does_not_cost_mages_question_credits() {
+    public function adding_questions_does_not_cost_mages_question_credits()
+    {
         Config::set('mage.default_question_credits', 2);
         $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
         $exam = $this->CreateSet(['user_id' => $user->id]);
@@ -153,7 +160,8 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function adding_a_question_is_restricted_if_max_limit_reached() {
+    public function adding_a_question_is_restricted_if_max_limit_reached()
+    {
         Config::set('test.max_exam_questions', 0);
         $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
         $exam = $this->CreateSet(['user_id' => $user->id]);
@@ -172,9 +180,9 @@ class ExamSetControllerTest extends TestCase
         $this->assertDatabaseMissing('test_question', $verifyData);
         $response->assertSessionHas('warning');
     }
-    
 
-    public static function dataProviderExamPages() {
+    public static function dataProviderExamPages()
+    {
         /**
          * Route Name
          * Method == get or post
@@ -186,5 +194,4 @@ class ExamSetControllerTest extends TestCase
             ['edit', 'get', Response::HTTP_OK, 'edit'],
         ];
     }
-
 }

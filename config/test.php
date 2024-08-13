@@ -14,7 +14,7 @@ return [
     'grade_apprentice' => env('GRADE_APPRENTICE', 1),
 
     'target_answers' => env('TARGET_ANSWERS', 4),
-    
+
     'min_public_questions' => env('MIN_PUBLIC_QUESTIONS', 50),
     'max_exam_questions' => env('MAX_EXAM_QUESTIONS', 250),
 

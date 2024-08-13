@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Alert;
+use App\Enums\Visibility;
+use App\Http\Requests\AnswerRequest;
+use App\Http\Requests\QuestionRequest;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Set;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Enums\Visibility;
-use App\Http\Requests\AnswerRequest;
-use App\Http\Requests\QuestionRequest;
 
 class QuestionController extends Controller
 {
@@ -29,7 +29,7 @@ class QuestionController extends Controller
         if (auth()->user()->hasRole('admin')) {
             $otherPrivateExams = Set::Where('user_id', '!=', auth()->user()->id)->where('visibility', '=', Visibility::isPrivate)->get();
         }
-        
+
         $visibility = Visibility::cases();
 
         return view('manage.sets', [
@@ -43,7 +43,7 @@ class QuestionController extends Controller
     {
         $set = Set::find($id);
 
-        if (!$set) {
+        if (! $set) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');
@@ -66,7 +66,7 @@ class QuestionController extends Controller
     {
         $set = Set::find($id);
 
-        if (!$set) {
+        if (! $set) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');
@@ -96,7 +96,7 @@ class QuestionController extends Controller
     }
 
     public function update(QuestionRequest $request, $id)
-    {      
+    {
         $question = Question::find($id);
 
         $this->authorize('update', $question);
@@ -112,8 +112,8 @@ class QuestionController extends Controller
     public function answers($id)
     {
         $question = Question::find($id);
-        
-        if (!$question) {
+
+        if (! $question) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');
@@ -131,7 +131,7 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
 
-        if (!$question) {
+        if (! $question) {
             Alert::toast('Page Not Found', 'error');
 
             return redirect()->route('home');

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use DB;
 use Alert;
-use App\Models\Set;
-use App\Models\Group;
-use App\Models\Answer;
-use App\Models\Question;
-use Laravel\Pennant\Feature;
-use Illuminate\Http\Request;
-use App\Http\Requests\GroupSettingsRequest;
 use App\Http\Requests\GroupQuestionRequest;
+use App\Http\Requests\GroupSettingsRequest;
+use App\Models\Answer;
+use App\Models\Group;
+use App\Models\Question;
+use App\Models\Set;
+use DB;
+use Illuminate\Http\Request;
+use Laravel\Pennant\Feature;
 
 class GroupController extends Controller
 {
@@ -30,7 +30,7 @@ class GroupController extends Controller
     {
         $this->authorize('update', $set);
 
-        $group = new Group();
+        $group = new Group;
         $group->set_id = $set->id;
         $group->name = $request->input('name');
         $group->question = $request->input('question');
@@ -41,7 +41,8 @@ class GroupController extends Controller
         return redirect()->route('group-view', $group->id);
     }
 
-    public function deleteQuestion(Group $group, Question $question) {
+    public function deleteQuestion(Group $group, Question $question)
+    {
         $this->authorize('delete', $group);
 
         return view('group.delete')->with([
@@ -50,15 +51,16 @@ class GroupController extends Controller
         ]);
     }
 
-    public function removeQuestion(Request $request, Group $group, Question $question) {
+    public function removeQuestion(Request $request, Group $group, Question $question)
+    {
         $this->authorize('delete', $group);
         $user = $this->getAuthedUser();
 
         DB::table('user_question')->where('question_id', $question->id)->delete();
         $question->delete();
 
-        if (Feature::active('mage-upgrade')) {  
-            if (!$user->isMage) {
+        if (Feature::active('mage-upgrade')) {
+            if (! $user->isMage) {
                 $user->credit->question += 0.8;
                 $user->credit->save();
             }
@@ -75,7 +77,7 @@ class GroupController extends Controller
         $this->authorize('update', $group);
 
         $questions = Question::where('group_id', $group->id)->get();
-       
+
         return view('group.show')->with([
             'group' => $group,
             'questions' => $questions,
@@ -96,23 +98,23 @@ class GroupController extends Controller
         // Iterate over the questions and save them to the database
         foreach ($validated['questions'] as $questionData) {
             if ($questionData['question'] != '' && $questionData['answer'] != '') {
-                
+
                 if ($numQuestions >= config('test.max_exam_questions')) {
                     return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
                 }
 
                 if (Feature::active('mage-upgrade')) {
-                    if (!$user->isMage && ($user->credit->question < 1)) {
+                    if (! $user->isMage && ($user->credit->question < 1)) {
                         return back()->with('warning', 'Insufficient Question Credits. Please obtain more credits or Upgrade to Mage to add more questions to your exam.');
                     }
-                }       
-                
+                }
+
                 $question = Question::create([
                     'text' => $questionData['question'],
                     'set_id' => $group->set->id,
                     'group_id' => $group->id,
                 ]);
-                
+
                 Answer::create([
                     'text' => $questionData['answer'],
                     'question_id' => $question->id,
@@ -122,7 +124,7 @@ class GroupController extends Controller
                 $numQuestions += 1;
 
                 if (Feature::active('mage-upgrade')) {
-                    if (!$user->isMage) {
+                    if (! $user->isMage) {
                         $user->credit->question -= 1;
                         $user->credit->save();
                     }
@@ -135,7 +137,8 @@ class GroupController extends Controller
         return redirect()->route('group-view', $group->id);
     }
 
-    public function editQuestion(Group $group, Question $question) {
+    public function editQuestion(Group $group, Question $question)
+    {
         $this->authorize('update', $group);
 
         return view('group.edit')->with([
@@ -144,12 +147,13 @@ class GroupController extends Controller
         ]);
     }
 
-    public function updateQuestion(GroupQuestionRequest $request, Group $group, Question $question) {
+    public function updateQuestion(GroupQuestionRequest $request, Group $group, Question $question)
+    {
         $this->authorize('update', $group);
-        
+
         $answer = Answer::where('question_id', $question->id)->first();
 
-        if (!$answer || !$question) {
+        if (! $answer || ! $question) {
             abort(404, 'Resource not found');
         }
 

@@ -2,20 +2,19 @@
 
 namespace Tests;
 
-use DB;
-use Carbon\Carbon;
-use App\Models\Set;
-use App\Models\Test;
-use App\Models\User;
-use App\Models\Question;
 use App\Models\ExamPractice;
+use App\Models\Question;
+use App\Models\Set;
+use App\Models\User;
+use Carbon\Carbon;
+use DB;
 
 trait StartPracticeSession
 {
     public function StartPracticeSession(User $user, Set $exam)
     {
         $record = ExamPractice::where('exam_id', $exam->id)->where('user_id', $user->id)->first();
-        if (!$record) {
+        if (! $record) {
             ExamPractice::create([
                 'exam_id' => $exam->id,
                 'user_id' => $user->id,

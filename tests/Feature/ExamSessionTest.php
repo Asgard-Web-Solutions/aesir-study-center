@@ -2,23 +2,23 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Config;
-use App\Models\Question;
 use App\Models\Answer;
+use App\Models\Question;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Support\Facades\Config;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ExamSessionTest extends TestCase
 {
-    /** 
+    /**
      * @test
+     *
      * @dataProvider dataProviderExamSessionPages
      */
-    public function validate_that_pages_load_correctly($route, $method, $status, $view) {
+    public function validate_that_pages_load_correctly($route, $method, $status, $view)
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -30,8 +30,8 @@ class ExamSessionTest extends TestCase
             'score' => 0,
             'next_at' => Carbon::now()->subDays(1),
         ]);
-        $data = array();
-        
+        $data = [];
+
         if ($route == 'summary') {
             $session = $this->CompleteExamSession($session);
             DB::table('exam_sessions')->where('id', $session->id)->update(['date_completed' => null]);
@@ -41,11 +41,11 @@ class ExamSessionTest extends TestCase
             $data = [
                 'answer-1' => 1,
                 'question' => 1,
-                'order' => "[1]",
+                'order' => '[1]',
             ];
         }
 
-        $route = 'exam-session.' . $route;
+        $route = 'exam-session.'.$route;
 
         if ($method == 'get') {
             $response = $this->get(route($route, $exam));
@@ -56,14 +56,15 @@ class ExamSessionTest extends TestCase
         $response->assertStatus($status);
 
         if ($status == Response::HTTP_OK) {
-            $view = 'exam-session.' . $view;
+            $view = 'exam-session.'.$view;
             $response->assertViewIs($view);
         }
     }
 
     // DONE: Create an ExamSession when a user starts a new instance of a test
     /** @test */
-    public function exam_session_created_when_first_taking_an_exam() {
+    public function exam_session_created_when_first_taking_an_exam()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
@@ -79,7 +80,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_session_is_not_created_when_an_exam_is_already_in_progress() {
+    public function exam_session_is_not_created_when_an_exam_is_already_in_progress()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
@@ -102,7 +104,8 @@ class ExamSessionTest extends TestCase
 
     // DONE: Exam Configuration Page Loads when starting a new session
     /** @test */
-    public function redirected_to_exam_configuration_page_when_starting_a_new_exam_session() {
+    public function redirected_to_exam_configuration_page_when_starting_a_new_exam_session()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         DB::table('exam_records')->insert([
@@ -116,7 +119,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_configuration_page_not_allowed_for_private_exams() {
+    public function exam_configuration_page_not_allowed_for_private_exams()
+    {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 0]);
@@ -127,7 +131,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_configuration_page_is_allowed_for_public_exams() {
+    public function exam_configuration_page_is_allowed_for_public_exams()
+    {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 1]);
@@ -138,7 +143,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_configuration_page_loads_exam_set_data() {
+    public function exam_configuration_page_loads_exam_set_data()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
 
@@ -148,7 +154,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_start_page_redirects_to_test_if_session_already_exists() {
+    public function exam_start_page_redirects_to_test_if_session_already_exists()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -160,7 +167,8 @@ class ExamSessionTest extends TestCase
 
     // DONE: Store configuration for this exam
     /** @test */
-    public function exam_configuration_saves_to_database() {
+    public function exam_configuration_saves_to_database()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
 
@@ -174,7 +182,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_save_page_not_allowed_for_private_exams() {
+    public function exam_save_page_not_allowed_for_private_exams()
+    {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 0]);
@@ -189,7 +198,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_save_page_is_allowed_for_public_exams() {
+    public function exam_save_page_is_allowed_for_public_exams()
+    {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 1]);
@@ -205,11 +215,13 @@ class ExamSessionTest extends TestCase
     }
 
     // DONE: Validate data
-    /** 
-     * @test 
+    /**
+     * @test
+     *
      * @dataProvider dataProviderForExamSessionStoreFormInvalidData
      * */
-    public function exam_save_validates_data($field, $value) {
+    public function exam_save_validates_data($field, $value)
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
@@ -221,7 +233,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_save_makes_entries_of_each_question_for_the_user() {
+    public function exam_save_makes_entries_of_each_question_for_the_user()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
@@ -238,7 +251,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_save_sets_list_of_questions() {
+    public function exam_save_sets_list_of_questions()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
@@ -257,9 +271,9 @@ class ExamSessionTest extends TestCase
             'set_id' => $exam->id,
             'current_question' => 0,
         ];
-        
+
         $this->assertDatabaseHas('exam_sessions', $validateData);
-    
+
         // Assert that the pivot record exists
         $this->assertNotNull($pivotRecord);
 
@@ -270,10 +284,11 @@ class ExamSessionTest extends TestCase
         $this->assertIsArray($questionsArray);
         $this->assertCount($question_count, $questionsArray);
     }
-            
+
     // DONE: Start the actual exam
     /** @test */
-    public function redirected_to_test_page_after_saving_data() {
+    public function redirected_to_test_page_after_saving_data()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
@@ -285,7 +300,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function test_page_loads_appropriate_question() {
+    public function test_page_loads_appropriate_question()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -301,7 +317,8 @@ class ExamSessionTest extends TestCase
     // DONE: Validate that we see the current question number on the question page
     // DONE: Validate that we see the total number of questions on the question page
     /** @test */
-    public function test_page_shows_correct_question_numbers() {
+    public function test_page_shows_correct_question_numbers()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -314,7 +331,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function test_page_shows_all_answers_for_a_question() {
+    public function test_page_shows_all_answers_for_a_question()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -329,7 +347,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function test_page_shows_answers_from_question_group() {
+    public function test_page_shows_answers_from_question_group()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -356,7 +375,8 @@ class ExamSessionTest extends TestCase
 
     // DONE: Validate that the answer is correct
     /** @test */
-    public function answer_page_responds_for_correct_answer() {
+    public function answer_page_responds_for_correct_answer()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -376,7 +396,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function answer_page_responds_for_incorrect_answer() {
+    public function answer_page_responds_for_incorrect_answer()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -394,10 +415,11 @@ class ExamSessionTest extends TestCase
 
         $response->assertSeeInOrder([$question->text, 'Incorrect', 'Your Answer']);
     }
-    
+
     // DONE: Move the Question index to the next element on submit
     /** @test */
-    public function the_session_index_is_moved_after_question_is_answered() {
+    public function the_session_index_is_moved_after_question_is_answered()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -417,14 +439,15 @@ class ExamSessionTest extends TestCase
         $verifyData = [
             'user_id' => $user->id,
             'set_id' => $exam->id,
-            'current_question' => ($currentCount + 1)
+            'current_question' => ($currentCount + 1),
         ];
-        
+
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
     /** @test */
-    public function answer_page_increments_session_correct_answer_count() {
+    public function answer_page_increments_session_correct_answer_count()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -448,12 +471,13 @@ class ExamSessionTest extends TestCase
             'correct_answers' => ($correctAnswerCount + 1),
             'incorrect_answers' => ($incorrectAnswerCount),
         ];
-        
+
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
     /** @test */
-    public function answer_page_increments_session_incorrect_answer_count() {
+    public function answer_page_increments_session_incorrect_answer_count()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -477,13 +501,14 @@ class ExamSessionTest extends TestCase
             'incorrect_answers' => ($incorrectAnswerCount + 1),
             'correct_answers' => ($correctAnswerCount),
         ];
-        
+
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
     // DONE: Update the mastery level of the questions
     /** @test */
-    public function answering_questions_correctly_updates_question_mastery() {
+    public function answering_questions_correctly_updates_question_mastery()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -514,7 +539,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function answering_questions_incorrectly_updates_question_mastery() {
+    public function answering_questions_incorrectly_updates_question_mastery()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -542,9 +568,10 @@ class ExamSessionTest extends TestCase
         $verifyData['score'] = $verifyData['score'] - config('test.sub_score');
         $this->assertDatabaseHas('user_question', $verifyData);
     }
-    
+
     /** @test */
-    public function answering_questions_incorrectly_keeps_mastery_at_a_minimum() {
+    public function answering_questions_incorrectly_keeps_mastery_at_a_minimum()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -571,10 +598,11 @@ class ExamSessionTest extends TestCase
         $verifyData['score'] = config('test.min_score');
         $this->assertDatabaseHas('user_question', $verifyData);
     }
-    
+
     // DONE: When the last element has been reached, end the test
     /** @test */
-    public function test_page_goes_to_summary_if_the_test_is_over() {
+    public function test_page_goes_to_summary_if_the_test_is_over()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -588,7 +616,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function session_end_time_is_set_when_test_is_complete() {
+    public function session_end_time_is_set_when_test_is_complete()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -603,7 +632,8 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function going_to_the_summary_page_during_a_test_redirects_to_the_test() {
+    public function going_to_the_summary_page_during_a_test_redirects_to_the_test()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -613,11 +643,13 @@ class ExamSessionTest extends TestCase
         $response->assertRedirect(route('exam-session.test', $exam));
     }
 
-    /** 
-     * @test 
+    /**
+     * @test
+     *
      * @dataProvider dataProviderSessionScoreCalculations
      * */
-    public function summary_calculates_the_score($numCorrect, $numIncorrect, $grade) {
+    public function summary_calculates_the_score($numCorrect, $numIncorrect, $grade)
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -631,17 +663,18 @@ class ExamSessionTest extends TestCase
 
         $validateData = [
             'id' => $session->id,
-            'grade' => $grade
+            'grade' => $grade,
         ];
 
         $this->assertDatabaseHas('exam_sessions', $validateData);
     }
 
     // DONE: Finalize the ExamSession at the end of the test
-    
+
     // DONE: Going to the summary page loads the latest test session summary
     /** @test */
-    public function summary_page_loads_latest_completed_test_if_no_active_test_sessions() {
+    public function summary_page_loads_latest_completed_test_if_no_active_test_sessions()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -651,10 +684,11 @@ class ExamSessionTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
     }
-    
+
     // DONE: Display the grade and number of right and wrong answers
     /** @test */
-    public function summary_page_shows_result_data() {
+    public function summary_page_shows_result_data()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -669,17 +703,19 @@ class ExamSessionTest extends TestCase
     }
 
     // DONE: Track the mastery status increases for this exam session
-    /** 
-     * @test 
+    /**
+     * @test
+     *
      * @dataProvider dataProviderMasteryUpdate
      * */
-    public function mastery_status_is_tracked_for_correct_answers($masteryLevel) {
+    public function mastery_status_is_tracked_for_correct_answers($masteryLevel)
+    {
         Config::set('test.grade_apprentice', 1);
         Config::set('test.grade_familiar', 1);
         Config::set('test.grade_proficient', 1);
         Config::set('test.grade_mastered', 1);
         Config::set('test.add_score', 1);
-        Config::set('test.grade_' . $masteryLevel, 5);
+        Config::set('test.grade_'.$masteryLevel, 5);
 
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -696,21 +732,22 @@ class ExamSessionTest extends TestCase
             'order' => json_encode([$correctAnswer->id]),
         ];
         $response = $this->post(route('exam-session.answer', $exam), $submitData);
-        
+
         $verifyData = [
             'id' => $session->id,
             'mastery_apprentice_change' => 0,
             'mastery_familiar_change' => 0,
             'mastery_proficient_change' => 0,
-            'mastery_mastered_change' => 0
+            'mastery_mastered_change' => 0,
         ];
-        $verifyData['mastery_' . $masteryLevel . '_change'] = 1;
+        $verifyData['mastery_'.$masteryLevel.'_change'] = 1;
         $this->assertDatabaseHas('exam_sessions', $verifyData);
     }
 
     // DONE: Prevent answer page from updating info if the question was already answered
     /** @test */
-    public function answer_page_does_not_double_count_answer() {
+    public function answer_page_does_not_double_count_answer()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -723,7 +760,7 @@ class ExamSessionTest extends TestCase
             'current_question' => $newQuestionNumber,
             'correct_answers' => $numCorrect,
         ];
-        
+
         DB::table('exam_sessions')->where('id', $session->id)->update($updateData);
 
         $submitData = [
@@ -744,14 +781,15 @@ class ExamSessionTest extends TestCase
 
     // DONE: Show the mastery satus increase on the answer page
     /** @test */
-    public function mastery_increase_shows_on_answer_page() {
+    public function mastery_increase_shows_on_answer_page()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $correctAnswer = $this->getQuestionAnswer($question, 1); // Get the correct answer for this question
 
-        $updateData['score'] = config('test.grade_familiar'); 
+        $updateData['score'] = config('test.grade_familiar');
         DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($updateData);
 
         $submitData = [
@@ -761,18 +799,19 @@ class ExamSessionTest extends TestCase
         ];
         $response = $this->post(route('exam-session.answer', $exam), $submitData);
 
-        $response->assertSee('Mastery: + ' . config('test.add_score'));
+        $response->assertSee('Mastery: + '.config('test.add_score'));
     }
 
     /** @test */
-    public function mastery_decrease_shows_on_answer_page() {
+    public function mastery_decrease_shows_on_answer_page()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
         $question = $this->getCurrentExamSessionQuestion($session);
         $incorrectAnswer = $this->getQuestionAnswer($question, 0); // Get the correct answer for this question
 
-        $updateData['score'] = config('test.grade_familiar'); 
+        $updateData['score'] = config('test.grade_familiar');
         DB::table('user_question')->where('user_id', $user->id)->where('question_id', $question->id)->update($updateData);
 
         $submitData = [
@@ -782,9 +821,8 @@ class ExamSessionTest extends TestCase
         ];
         $response = $this->post(route('exam-session.answer', $exam), $submitData);
 
-        $response->assertSee('Mastery: - ' . config('test.sub_score'));
+        $response->assertSee('Mastery: - '.config('test.sub_score'));
     }
-    
 
     // TODO: Show the mastery status increase count on the summary page
     // Maybe show a +1 / -1 next to the level if a level up/down did not happen
@@ -793,7 +831,8 @@ class ExamSessionTest extends TestCase
 
     // DONE: Accessing the answer page with a GET request should redirect to the test page
     /** @test */
-    public function answer_get_request_redirects_to_test_page() {
+    public function answer_get_request_redirects_to_test_page()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -805,28 +844,28 @@ class ExamSessionTest extends TestCase
 
     // TODO: Write a test for checking that tests start correctly if a completed test already exists
 
-
-
-   // TODO: Show a history of exam sessions that you have taken for an exam (Basic results (grade only) for free accounts)
+    // TODO: Show a history of exam sessions that you have taken for an exam (Basic results (grade only) for free accounts)
 
     // TODO: Record a detail history of each question in a session, for paid users, so they can replay their exams later
 
-
     //** ========== HELPER FUNCTIONS ========== */
-    public function getExamConfigurationFormData() {
+    public function getExamConfigurationFormData()
+    {
         return [
             'question_count' => 1,
         ];
     }
 
-    public function getCurrentExamSessionQuestion($session) {
+    public function getCurrentExamSessionQuestion($session)
+    {
         $questionArray = json_decode($session->questions_array);
         $question = Question::find($questionArray[$session->current_question]);
 
         return $question;
     }
 
-    public function getQuestionAnswer($question, $correct) {
+    public function getQuestionAnswer($question, $correct)
+    {
         $answer = Answer::where('question_id', $question->id)->where('correct', $correct)->first();
 
         return $answer;
@@ -844,7 +883,8 @@ class ExamSessionTest extends TestCase
         ];
     }
 
-    public static function dataProviderExamSessionPages() {
+    public static function dataProviderExamSessionPages()
+    {
         /**
          * Route Name
          * Method == get or post
@@ -859,8 +899,9 @@ class ExamSessionTest extends TestCase
         ];
     }
 
-    public static function dataProviderSessionScoreCalculations() {
-        /** 
+    public static function dataProviderSessionScoreCalculations()
+    {
+        /**
          * # Right
          * # Wrong
          * Expected score as integer
@@ -876,8 +917,9 @@ class ExamSessionTest extends TestCase
         ];
     }
 
-    public static function dataProviderMasteryUpdate() {
-        /** 
+    public static function dataProviderMasteryUpdate()
+    {
+        /**
          * Mastery Level
          */
         return [

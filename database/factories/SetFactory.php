@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use \App\Models\Set;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +20,7 @@ class SetFactory extends Factory
             'name' => fake()->words(2, true),
             'description' => fake()->words(25, true),
             'user_id' => 0,
-            'visibility' => 1
+            'visibility' => 1,
         ];
     }
 
@@ -42,5 +41,4 @@ class SetFactory extends Factory
             ];
         });
     }
-
 }

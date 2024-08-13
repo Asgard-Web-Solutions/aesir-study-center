@@ -2,16 +2,15 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AdminControllerTest extends TestCase
 {
     // DONE: Create an ACP page
     /** @test */
-    public function acp_page_exists() {
+    public function acp_page_exists()
+    {
         $this->CreateAdminAndAuthenticate();
 
         $response = $this->get(route('admin.index'));
@@ -22,7 +21,8 @@ class AdminControllerTest extends TestCase
 
     // DONE: Create a User List page
     /** @test */
-    public function acp_links_to_users_page() {
+    public function acp_links_to_users_page()
+    {
         $this->CreateAdminAndAuthenticate();
 
         $response = $this->get(route('admin.index'));
@@ -31,7 +31,8 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function users_page_loads() {
+    public function users_page_loads()
+    {
         $this->CreateAdminAndAuthenticate();
 
         $response = $this->get(route('admin.users'));
@@ -41,7 +42,8 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function users_are_shown_on_users_page() {
+    public function users_are_shown_on_users_page()
+    {
         $user = $this->CreateAdminAndAuthenticate();
 
         $response = $this->get(route('admin.users'));
@@ -52,7 +54,8 @@ class AdminControllerTest extends TestCase
 
     // DONE: Create a User Manage page
     /** @test */
-    public function user_manage_page_is_linked_from_users_page() {
+    public function user_manage_page_is_linked_from_users_page()
+    {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
 
@@ -62,7 +65,8 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_manage_page_loads() {
+    public function user_manage_page_loads()
+    {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
 
@@ -74,7 +78,8 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_update_page_saves_data() {
+    public function user_update_page_saves_data()
+    {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
 
@@ -86,11 +91,13 @@ class AdminControllerTest extends TestCase
         $this->assertDatabaseHas('users', $data);
     }
 
-    /** 
-     * @test 
+    /**
+     * @test
+     *
      * @dataProvider validUserFormData
      * */
-    public function user_update_form_data_validates($field, $value) {
+    public function user_update_form_data_validates($field, $value)
+    {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
 
@@ -104,7 +111,8 @@ class AdminControllerTest extends TestCase
         $this->assertDatabaseHas('users', $data);
     }
 
-    public function validUserFormData() {
+    public function validUserFormData()
+    {
         return [
             ['name', 'a'],
             ['name', 'Normal Test'],
@@ -113,11 +121,13 @@ class AdminControllerTest extends TestCase
         ];
     }
 
-    /** 
-     * @test 
+    /**
+     * @test
+     *
      * @dataProvider invalidUserFormData
      * */
-    public function user_update_form_data_rejects_bad_data($field, $value) {
+    public function user_update_form_data_rejects_bad_data($field, $value)
+    {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
 
@@ -131,7 +141,8 @@ class AdminControllerTest extends TestCase
         $response->assertSessionHasErrors($field);
     }
 
-    public function invalidUserFormData() {
+    public function invalidUserFormData()
+    {
         return [
             ['name', ''],
             ['name', null],
@@ -143,7 +154,8 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_update_page_redirects_to_main_users_index() {
+    public function user_update_page_redirects_to_main_users_index()
+    {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
 
@@ -153,20 +165,20 @@ class AdminControllerTest extends TestCase
 
         $response->assertRedirect(route('admin.users'));
     }
-    
-
 
     // TODO: Set a user as an admin in their manage page -- Create and use the field isAdmin
 
     // TODO: Only admins can access the ACP page
-    /** 
-     * @test 
+    /**
+     * @test
+     *
      * @dataProvider adminPages
      * */
-    public function users_cannot_access_admin_pages($route, $method, $model) {
+    public function users_cannot_access_admin_pages($route, $method, $model)
+    {
         $user = $this->CreateUserAndAuthenticate();
         $useRoute = null;
-        $data = array();
+        $data = [];
 
         switch ($model) {
             case 'user':
@@ -188,14 +200,16 @@ class AdminControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
-      /** 
-     * @test 
+    /**
+     * @test
+     *
      * @dataProvider adminPages
      * */
-    public function admins_can_access_admin_pages($route, $method, $model) {
+    public function admins_can_access_admin_pages($route, $method, $model)
+    {
         $user = $this->CreateAdminAndAuthenticate();
         $useRoute = null;
-        $data = array();
+        $data = [];
 
         switch ($model) {
             case 'user':
@@ -217,7 +231,8 @@ class AdminControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
 
-    public static function adminPages() {
+    public static function adminPages()
+    {
         return [
             ['admin.index', 'get', null],
             ['admin.users', 'get', null],
@@ -226,16 +241,16 @@ class AdminControllerTest extends TestCase
         ];
     }
 
-
     /** ========== HELPER FUNCTIONS ========== */
-    private function getFormData($type) {
-        $data = array();
+    private function getFormData($type)
+    {
+        $data = [];
 
         if ($type == 'user') {
             $data = [
                 'name' => 'Test User',
                 'email' => 'TestUser@jedi.com',
-            ];    
+            ];
         }
 
         return $data;

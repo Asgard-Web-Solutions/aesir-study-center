@@ -3,15 +3,14 @@
 namespace App\Models;
 
 use App\Observers\UserObserver;
-
 use Database\Factories\UserFactory;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
 
 #[ObservedBy([UserObserver::class])]
 
@@ -25,7 +24,7 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'showTutorial'
+        'name', 'email', 'password', 'showTutorial',
     ];
 
     /**
@@ -56,7 +55,7 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         $email = strtolower(trim($this->email));
         $hash = md5($email);
         $default = config('academy.default_gravatar');
-        
+
         return "https://www.gravatar.com/avatar/{$hash}?s={$size}&d={$default}&r=pg";
     }
 

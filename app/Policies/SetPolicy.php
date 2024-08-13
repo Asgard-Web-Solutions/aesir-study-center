@@ -5,17 +5,15 @@ namespace App\Policies;
 use App\Enums\Visibility;
 use App\Models\Set;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class SetPolicy
 {
-
-    public function before(User $user, string $ability): bool|null
+    public function before(User $user, string $ability): ?bool
     {
         if ($user->isAdmin) {
             return true;
         }
-    
+
         return null;
     }
 
@@ -44,7 +42,7 @@ class SetPolicy
      */
     public function create(User $user): bool
     {
-        return ($user !== null);
+        return $user !== null;
     }
 
     /**

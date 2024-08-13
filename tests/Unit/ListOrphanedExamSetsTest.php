@@ -1,9 +1,10 @@
 <?php
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Set as ExamSet;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ListOrphanedExamSetsTest extends TestCase
 {
@@ -19,7 +20,7 @@ class ListOrphanedExamSetsTest extends TestCase
 
         // Run the command
         $this->artisan('exam:list-orphaned')
-             ->expectsOutput('Orphaned ExamSets:')
-             ->assertExitCode(0);
+            ->expectsOutput('Orphaned ExamSets:')
+            ->assertExitCode(0);
     }
 }
