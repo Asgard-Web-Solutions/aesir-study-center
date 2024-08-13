@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\Set as ExamSet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -10,7 +11,7 @@ class ListOrphanedExamSetsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_lists_all_orphaned_exam_sets(): void
     {
         // Create ExamSets with user_id null and zero

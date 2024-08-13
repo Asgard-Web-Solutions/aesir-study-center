@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\Question;
 use Carbon\Carbon;
 use Config;
@@ -12,7 +13,7 @@ use Tests\TestCase;
 class ExamRecordTest extends TestCase
 {
     // DONE: When a user takes an exam for the first time, create the exam record
-    /** @test */
+    #[Test]
     public function exam_record_created_when_first_taking_an_exam(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -28,7 +29,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $data);
     }
 
-    /** @test */
+    #[Test]
     public function exam_record_is_not_duplicated_if_already_exists(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -47,7 +48,7 @@ class ExamRecordTest extends TestCase
     }
 
     // DONE: Make sure the user has permission to run this exam before starting (start page)
-    /** @test */
+    #[Test]
     public function user_can_start_their_own_private_exam(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -58,7 +59,7 @@ class ExamRecordTest extends TestCase
         $response->assertRedirect(route('exam-session.register', $exam));
     }
 
-    /** @test */
+    #[Test]
     public function other_users_cannot_start_private_exams(): void
     {
         $examOwner = $this->CreateUser();
@@ -70,7 +71,7 @@ class ExamRecordTest extends TestCase
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
-    /** @test */
+    #[Test]
     public function other_users_can_start_public_exams(): void
     {
         $examOwner = $this->CreateUser();
@@ -83,7 +84,7 @@ class ExamRecordTest extends TestCase
     }
 
     // DONE: When a user completes an exam, update the exam record stats (latest grade, times taken, last completed)
-    /** @test */
+    #[Test]
     public function exam_updates_times_taken_after_completing_exam(): void
     {
         $examOwner = $this->CreateUser();
@@ -102,7 +103,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function a_completed_exam_is_not_counted_twice_when_viewing_the_summary_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -121,7 +122,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function completing_an_exam_averages_the_latest_session_grades(): void
     {
         Config::set('count_tests_for_average_score', 5);
@@ -171,7 +172,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function exam_average_score_is_stored_as_an_integer(): void
     {
         Config::set('count_tests_for_average_score', 5);
@@ -209,7 +210,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function exam_record_has_last_taken_set_after_completing_a_session(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -225,7 +226,7 @@ class ExamRecordTest extends TestCase
     }
 
     // DONE: Completing an exam updates the mastery progress of the record
-    /** @test */
+    #[Test]
     public function exam_record_gets_mastery_progress_calculation(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -261,7 +262,7 @@ class ExamRecordTest extends TestCase
     }
 
     // DONE: Show the mastery level on the summary page
-    /** @test */
+    #[Test]
     public function summary_page_shows_the_overall_mastery_progress(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -280,7 +281,7 @@ class ExamRecordTest extends TestCase
         $response->assertSeeInOrder(['Mastered', 'value', '10', 'Proficient']);
     }
 
-    /** @test */
+    #[Test]
     public function users_cannot_lose_a_mastery_status(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -301,7 +302,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $data);
     }
 
-    /** @test */
+    #[Test]
     public function getting_proficient_mastery_grants_credits(): void
     {
         Config::set('test.add_proficient_architect_credits', 0.2);
@@ -341,7 +342,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function getting_mastered_mastery_grants_credits(): void
     {
         Config::set('test.add_mastered_architect_credits', 0.5);
@@ -381,7 +382,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function gaining_mastery_gives_the_exam_architect_credits(): void
     {
         Config::set('test.award_the_architect_architect_credits', 1);
@@ -422,7 +423,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function starting_an_exam_costs_a_study_credit(): void
     {
         Config::set('mage.default_study_credits', 5);
@@ -440,7 +441,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function cannot_start_test_without_credits(): void
     {
         Config::set('mage.default_study_credits', 0);
@@ -459,7 +460,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseMissing('exam_records', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function users_are_not_charaged_study_credits_for_their_own_tests(): void
     {
         Config::set('mage.default_study_credits', 0);
@@ -476,7 +477,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function mages_can_always_start_an_exam(): void
     {
         Config::set('mage.default_study_credits', 0);
@@ -494,7 +495,7 @@ class ExamRecordTest extends TestCase
         $this->assertDatabaseHas('exam_records', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function mages_are_not_charged_credits_for_exams(): void
     {
         Config::set('mage.default_study_credits', 1);

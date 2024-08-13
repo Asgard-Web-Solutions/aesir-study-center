@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\Answer;
 use App\Models\Question;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,7 +10,7 @@ use Tests\TestCase;
 
 class PracticeControllerTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function default_page_has_link_to_practice(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -46,7 +47,7 @@ class PracticeControllerTest extends TestCase
         $response->assertSee(route('practice.begin', $exam));
     }
 
-    /** @test */
+    #[Test]
     public function practice_start_page_creates_practice_session_record(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -64,7 +65,7 @@ class PracticeControllerTest extends TestCase
         $this->assertDatabaseHas('exam_practices', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function practice_start_page_redirects_to_review_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -75,7 +76,7 @@ class PracticeControllerTest extends TestCase
         $response->assertRedirect(route('practice.review', $exam));
     }
 
-    /** @test */
+    #[Test]
     public function practice_review_page_loads(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -88,7 +89,7 @@ class PracticeControllerTest extends TestCase
         $response->assertViewIs('practice.review');
     }
 
-    /** @test */
+    #[Test]
     public function practice_review_page_loads_question_data(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -102,7 +103,7 @@ class PracticeControllerTest extends TestCase
         $response->assertSee($question->text);
     }
 
-    /** @test */
+    #[Test]
     public function practice_review_page_loads_answer_data(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -116,7 +117,7 @@ class PracticeControllerTest extends TestCase
         $response->assertSee($answer->text);
     }
 
-    /** @test */
+    #[Test]
     public function practice_next_page_increases_index(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -132,7 +133,7 @@ class PracticeControllerTest extends TestCase
         $this->assertDatabaseHas('exam_practices', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function practice_next_page_redirects_to_review_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -144,7 +145,7 @@ class PracticeControllerTest extends TestCase
         $response->assertRedirect(route('practice.review', $exam));
     }
 
-    /** @test */
+    #[Test]
     public function practice_start_page_redirects_to_review_if_in_session(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -157,7 +158,7 @@ class PracticeControllerTest extends TestCase
         $response->assertRedirect(route('practice.review', $exam));
     }
 
-    /** @test */
+    #[Test]
     public function practice_next_page_ends_session_when_last_question_was_reached(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -172,7 +173,7 @@ class PracticeControllerTest extends TestCase
         $response->assertRedirect(route('practice.done', $exam));
     }
 
-    /** @test */
+    #[Test]
     public function practice_done_page_loads(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -185,7 +186,7 @@ class PracticeControllerTest extends TestCase
         $response->assertViewIs('practice.done');
     }
 
-    /** @test */
+    #[Test]
     public function practice_next_page_redirects_to_done_if_last_question_was_readched(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -200,7 +201,7 @@ class PracticeControllerTest extends TestCase
         $response->assertRedirect(route('practice.done', $exam));
     }
 
-    /** @test */
+    #[Test]
     public function practice_done_page_destroys_session(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -219,7 +220,7 @@ class PracticeControllerTest extends TestCase
         $this->assertDatabaseMissing('exam_practices', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function practice_previous_page_redirects_to_review_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -231,7 +232,7 @@ class PracticeControllerTest extends TestCase
         $response->assertRedirect(route('practice.review', $exam));
     }
 
-    /** @test */
+    #[Test]
     public function practice_previous_page_redirects_to_review_if_zero_reached(): void
     {
         $user = $this->CreateUserAndAuthenticate();

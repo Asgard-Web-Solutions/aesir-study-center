@@ -2,13 +2,15 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class AdminControllerTest extends TestCase
 {
     // DONE: Create an ACP page
-    /** @test */
+    #[Test]
     public function acp_page_exists(): void
     {
         $this->CreateAdminAndAuthenticate();
@@ -20,7 +22,7 @@ class AdminControllerTest extends TestCase
     }
 
     // DONE: Create a User List page
-    /** @test */
+    #[Test]
     public function acp_links_to_users_page(): void
     {
         $this->CreateAdminAndAuthenticate();
@@ -30,7 +32,7 @@ class AdminControllerTest extends TestCase
         $response->assertSee(route('admin.users'));
     }
 
-    /** @test */
+    #[Test]
     public function users_page_loads(): void
     {
         $this->CreateAdminAndAuthenticate();
@@ -41,7 +43,7 @@ class AdminControllerTest extends TestCase
         $response->assertViewIs('admin.users');
     }
 
-    /** @test */
+    #[Test]
     public function users_are_shown_on_users_page(): void
     {
         $user = $this->CreateAdminAndAuthenticate();
@@ -53,7 +55,7 @@ class AdminControllerTest extends TestCase
     }
 
     // DONE: Create a User Manage page
-    /** @test */
+    #[Test]
     public function user_manage_page_is_linked_from_users_page(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
@@ -64,7 +66,7 @@ class AdminControllerTest extends TestCase
         $response->assertSee(route('admin.user', $user));
     }
 
-    /** @test */
+    #[Test]
     public function user_manage_page_loads(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
@@ -77,7 +79,7 @@ class AdminControllerTest extends TestCase
         $response->assertSee($user->email);
     }
 
-    /** @test */
+    #[Test]
     public function user_update_page_saves_data(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
@@ -91,11 +93,8 @@ class AdminControllerTest extends TestCase
         $this->assertDatabaseHas('users', $data);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider validUserFormData
-     * */
+    #[Test]
+    #[DataProvider('validUserFormData')]
     public function user_update_form_data_validates($field, $value): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
@@ -121,11 +120,8 @@ class AdminControllerTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider invalidUserFormData
-     * */
+    #[Test]
+    #[DataProvider('invalidUserFormData')]
     public function user_update_form_data_rejects_bad_data($field, $value): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
@@ -153,7 +149,7 @@ class AdminControllerTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function user_update_page_redirects_to_main_users_index(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
@@ -169,11 +165,8 @@ class AdminControllerTest extends TestCase
     // TODO: Set a user as an admin in their manage page -- Create and use the field isAdmin
 
     // TODO: Only admins can access the ACP page
-    /**
-     * @test
-     *
-     * @dataProvider adminPages
-     * */
+    #[Test]
+    #[DataProvider('adminPages')]
     public function users_cannot_access_admin_pages($route, $method, $model): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -200,11 +193,8 @@ class AdminControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider adminPages
-     * */
+    #[Test]
+    #[DataProvider('adminPages')]
     public function admins_can_access_admin_pages($route, $method, $model): void
     {
         $user = $this->CreateAdminAndAuthenticate();

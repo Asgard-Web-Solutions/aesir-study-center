@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,11 +14,8 @@ class ProfileControllerTest extends TestCase
     use RefreshDatabase;
 
     // DONE: Create an ExamPortal page that shows user ExamRecords
-    /**
-     * @test
-     *
-     * @dataProvider pagesDataProvider
-     * */
+    #[Test]
+    #[DataProvider('pagesDataProvider')]
     public function profile_pages_load($route, $view): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -30,7 +29,7 @@ class ProfileControllerTest extends TestCase
         $response->assertViewIs($verifyView);
     }
 
-    /** @test */
+    #[Test]
     public function exam_portal_shows_user_tests(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -43,7 +42,7 @@ class ProfileControllerTest extends TestCase
     }
 
     // DONE: Create an ExamManage page that shows the exams that you have created, probably in a list instead of the cards
-    /** @test */
+    #[Test]
     public function myexams_shows_list_of_your_exams(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -54,7 +53,7 @@ class ProfileControllerTest extends TestCase
         $response->assertSee($exam->name);
     }
 
-    /** @test */
+    #[Test]
     public function myexams_shows_link_to_create_exam(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -66,7 +65,7 @@ class ProfileControllerTest extends TestCase
     }
 
     // DONE: Create a profile edit page so users can actually change their name, email, and password
-    /** @test */
+    #[Test]
     public function profile_index_page_loads(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -78,7 +77,7 @@ class ProfileControllerTest extends TestCase
         $response->assertSee($user->email);
     }
 
-    /** @test */
+    #[Test]
     public function profile_save_page_updates_database(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -95,7 +94,7 @@ class ProfileControllerTest extends TestCase
         $this->assertDatabaseHas('users', $data);
     }
 
-    /** @test */
+    #[Test]
     public function public_profile_page_shows_up(): void
     {
         $user = $this->CreateUser();
@@ -107,7 +106,7 @@ class ProfileControllerTest extends TestCase
         $response->assertViewIs('profile.view');
     }
 
-    /** @test */
+    #[Test]
     public function profile_page_shows_public_tests(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -118,7 +117,7 @@ class ProfileControllerTest extends TestCase
         $response->assertSee($exam->name);
     }
 
-    /** @test */
+    #[Test]
     public function profile_page_does_not_show_private_tests(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -130,7 +129,7 @@ class ProfileControllerTest extends TestCase
         $response->assertDontSee($exam->name);
     }
 
-    /** @test */
+    #[Test]
     public function exams_taken_show_up_on_profile_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -155,7 +154,7 @@ class ProfileControllerTest extends TestCase
 
     // TODO: Show a list of who has mastered an exam on the Exam View page
 
-    /** @test */
+    #[Test]
     public function gift_subscription_page_upgrades_account(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();

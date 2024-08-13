@@ -2,17 +2,16 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Config;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ExamSetControllerTest extends TestCase
 {
-    /**
-     * @test
-     *
-     * @dataProvider dataProviderExamPages
-     */
+    #[Test]
+    #[DataProvider('dataProviderExamPages')]
     public function validate_that_pages_load_correctly($route, $method, $status, $view): void
     {
         $user = $this->CreateUserAndAuthenticate();
@@ -35,7 +34,7 @@ class ExamSetControllerTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function public_test_page_publicly_accessible(): void
     {
         $response = $this->get(route('exam.public'));
@@ -44,7 +43,7 @@ class ExamSetControllerTest extends TestCase
         $response->assertViewIs('exam.public');
     }
 
-    /** @test */
+    #[Test]
     public function public_page_shows_public_tests(): void
     {
         $exam = $this->CreateSet(['visibility' => 1]);
@@ -54,7 +53,7 @@ class ExamSetControllerTest extends TestCase
         $response->assertSee($exam->name);
     }
 
-    /** @test */
+    #[Test]
     public function exam_view_page_loads(): void
     {
         $exam = $this->CreateSet(['visibility' => 1]);
@@ -65,7 +64,7 @@ class ExamSetControllerTest extends TestCase
         $response->assertViewIs('exam.view');
     }
 
-    /** @test */
+    #[Test]
     public function exam_view_page_shows_information(): void
     {
         $exam = $this->CreateSet(['visibility' => 1]);
@@ -75,7 +74,7 @@ class ExamSetControllerTest extends TestCase
         $response->assertSee($exam->name);
     }
 
-    /** @test */
+    #[Test]
     public function creating_exams_costs_architect_credits(): void
     {
         Config::set('mage.default_architect_credits', 2);
@@ -95,7 +94,7 @@ class ExamSetControllerTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function creating_exams_does_not_cost_mages_architect_credits(): void
     {
         Config::set('mage.default_architect_credits', 2);
@@ -115,7 +114,7 @@ class ExamSetControllerTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function adding_questions_costs_question_credits(): void
     {
         Config::set('mage.default_question_credits', 2);
@@ -137,7 +136,7 @@ class ExamSetControllerTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function adding_questions_does_not_cost_mages_question_credits(): void
     {
         Config::set('mage.default_question_credits', 2);
@@ -159,7 +158,7 @@ class ExamSetControllerTest extends TestCase
         $this->assertDatabaseHas('credits', $verifyData);
     }
 
-    /** @test */
+    #[Test]
     public function adding_a_question_is_restricted_if_max_limit_reached(): void
     {
         Config::set('test.max_exam_questions', 0);
