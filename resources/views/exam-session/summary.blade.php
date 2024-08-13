@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <x-card.main title="{!! $examSet->name !!}">
+  <x-card.main title="{!! $examSet->name !!} - Latest Session">
     <x-card.mini title="Latest Exam">
         <div class="w-full mx-auto shadow md:w-1/2 stats stats-vertical md:stats-horizontal">
             <div class="stat">
@@ -120,7 +120,7 @@
     </div>
   </x-card.main>
 
-  <x-card.main title="{!! $examSet->name !!} - Summary">
+  <x-card.main title="{!! $examSet->name !!} - Overall Summary">
     <x-card.mini>
       <div class="w-full shadow stats stats-vertical md:stats-horizontal">
         <div class="stat">
