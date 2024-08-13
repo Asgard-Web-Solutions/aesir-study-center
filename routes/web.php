@@ -46,6 +46,8 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->midd
     Route::get('/{exam}/question/{question}', 'question')->name('question');
     Route::post('/{exam}/question/{question}/update', 'questionUpdate')->name('questionUpdate');
     Route::post('/{exam}/question/{question}/addAnswer', 'addAnswer')->name('addAnswer');
+    Route::get('/{exam}/question/{question}/delete', 'questionDelete')->name('questionDelete');
+    Route::post('/{exam}/question/{question}/remove', 'questionRemove')->name('questionRemove');
 });
 
 

@@ -233,6 +233,23 @@ class ExamSetController extends Controller
         return redirect()->route('exam.edit', $exam)->with('success', 'Question updated successfully.');
     }
 
+    public function questionDelete(ExamSet $exam, Question $question) {
+        $this->authorize('update', $exam);
+
+        return view('exam.deleteQuestion')->with([
+            'exam' => $exam,
+            'question' => $question,
+        ]);
+    }
+
+    public function questionRemove(Request $request, ExamSet $exam, Question $question) {
+        $this->authorize('update', $exam);
+
+        $question->delete();
+
+        return redirect()->route('exam.edit', $exam)->with('success', 'Question deleted.');
+    }
+
     public function addAnswer(Request $request, ExamSet $exam, Question $question) {
         $this->authorize('update', $exam);
 

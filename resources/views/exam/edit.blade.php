@@ -191,6 +191,7 @@
                         <x-table.cell hideMobile='true'>{{ $question->answers->count() }}</x-table.cell>
                         <x-table.cell>
                             <a href="{{ route('exam.question', ['exam' => $exam, 'question' => $question]) }}" class="btn btn-secondary btn-outline">Edit Question</a>
+                            <a href="{{ route('exam.questionDelete', ['exam' => $exam, 'question' => $question]) }}" class="btn btn-error btn-outline "><i class="{{ config('icon.delete') }}"></i></a>
                         </x-table.cell>
                     </x-table.row>
                 @endforeach

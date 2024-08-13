@@ -178,6 +178,23 @@ class ExamSessionController extends Controller
 
         $question = Question::with(['answers', 'group'])->find($arrayData[$session->current_question]);
 
+        if (!$question) {
+            // Something happened, the question was probably deleted
+
+            // Remove the offending question from the session
+            unset($arrayData[$session->current_question]);
+
+            // Reindex the array
+            $arrayData = array_values($arrayData);
+
+            DB::table('exam_sessions')->where('id', $session->id)->update([
+                'questions_array' => json_encode($arrayData),
+                'question_count' => $session->question_count -1,
+            ]);
+
+            return redirect()->route('exam-session.test', $examSet)->with('warning', 'Skipping question that was deleted from the Exam');
+        }
+
         // Generate the list of answers for this question
         $answers = null;
         $single = null;
