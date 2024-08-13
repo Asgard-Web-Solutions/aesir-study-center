@@ -48,9 +48,9 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->midd
     Route::post('/{exam}/question/{question}/remove', 'questionRemove')->name('questionRemove');
 });
 
-Route::prefix('boyager')->group(function () {
-    Voyager::routes();
-});
+// Route::prefix('boyager')->group(function () {
+//     Voyager::routes();
+// });
 
 Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');

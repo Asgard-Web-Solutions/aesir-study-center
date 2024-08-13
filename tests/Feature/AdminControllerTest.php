@@ -111,7 +111,7 @@ class AdminControllerTest extends TestCase
         $this->assertDatabaseHas('users', $data);
     }
 
-    public function validUserFormData()
+    public static function validUserFormData()
     {
         return [
             ['name', 'a'],
@@ -141,7 +141,7 @@ class AdminControllerTest extends TestCase
         $response->assertSessionHasErrors($field);
     }
 
-    public function invalidUserFormData()
+    public static function invalidUserFormData()
     {
         return [
             ['name', ''],

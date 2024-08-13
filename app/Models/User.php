@@ -6,17 +6,20 @@ use App\Observers\UserObserver;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 #[ObservedBy([UserObserver::class])]
 
-class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.

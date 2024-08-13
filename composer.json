@@ -13,8 +13,7 @@
         "laravel/pennant": "^1.9",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.4",
-        "realrashid/sweet-alert": "^7.1",
-        "tcg/voyager": "^1.7"
+        "realrashid/sweet-alert": "^7.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.6",

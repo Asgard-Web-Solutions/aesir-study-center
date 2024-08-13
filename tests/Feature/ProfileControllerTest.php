@@ -176,7 +176,7 @@ class ProfileControllerTest extends TestCase
     }
 
     /** ========== DataProvider Methods ========== */
-    private static function pagesDataProvider()
+    public static function pagesDataProvider()
     {
         /**
          * Route
