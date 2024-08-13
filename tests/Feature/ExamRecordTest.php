@@ -13,7 +13,7 @@ class ExamRecordTest extends TestCase
 {
     // DONE: When a user takes an exam for the first time, create the exam record
     /** @test */
-    public function exam_record_created_when_first_taking_an_exam()
+    public function exam_record_created_when_first_taking_an_exam(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -29,7 +29,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function exam_record_is_not_duplicated_if_already_exists()
+    public function exam_record_is_not_duplicated_if_already_exists(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -48,7 +48,7 @@ class ExamRecordTest extends TestCase
 
     // DONE: Make sure the user has permission to run this exam before starting (start page)
     /** @test */
-    public function user_can_start_their_own_private_exam()
+    public function user_can_start_their_own_private_exam(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -59,7 +59,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function other_users_cannot_start_private_exams()
+    public function other_users_cannot_start_private_exams(): void
     {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
@@ -71,7 +71,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function other_users_can_start_public_exams()
+    public function other_users_can_start_public_exams(): void
     {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
@@ -84,7 +84,7 @@ class ExamRecordTest extends TestCase
 
     // DONE: When a user completes an exam, update the exam record stats (latest grade, times taken, last completed)
     /** @test */
-    public function exam_updates_times_taken_after_completing_exam()
+    public function exam_updates_times_taken_after_completing_exam(): void
     {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
@@ -103,7 +103,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function a_completed_exam_is_not_counted_twice_when_viewing_the_summary_page()
+    public function a_completed_exam_is_not_counted_twice_when_viewing_the_summary_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -122,7 +122,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function completing_an_exam_averages_the_latest_session_grades()
+    public function completing_an_exam_averages_the_latest_session_grades(): void
     {
         Config::set('count_tests_for_average_score', 5);
         $user = $this->CreateUserAndAuthenticate();
@@ -172,7 +172,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function exam_average_score_is_stored_as_an_integer()
+    public function exam_average_score_is_stored_as_an_integer(): void
     {
         Config::set('count_tests_for_average_score', 5);
         $user = $this->CreateUserAndAuthenticate();
@@ -210,7 +210,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function exam_record_has_last_taken_set_after_completing_a_session()
+    public function exam_record_has_last_taken_set_after_completing_a_session(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -226,7 +226,7 @@ class ExamRecordTest extends TestCase
 
     // DONE: Completing an exam updates the mastery progress of the record
     /** @test */
-    public function exam_record_gets_mastery_progress_calculation()
+    public function exam_record_gets_mastery_progress_calculation(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -262,7 +262,7 @@ class ExamRecordTest extends TestCase
 
     // DONE: Show the mastery level on the summary page
     /** @test */
-    public function summary_page_shows_the_overall_mastery_progress()
+    public function summary_page_shows_the_overall_mastery_progress(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -281,7 +281,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function users_cannot_lose_a_mastery_status()
+    public function users_cannot_lose_a_mastery_status(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -302,7 +302,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function getting_proficient_mastery_grants_credits()
+    public function getting_proficient_mastery_grants_credits(): void
     {
         Config::set('test.add_proficient_architect_credits', 0.2);
         Config::set('test.add_proficient_publish_credits', 0.2);
@@ -342,7 +342,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function getting_mastered_mastery_grants_credits()
+    public function getting_mastered_mastery_grants_credits(): void
     {
         Config::set('test.add_mastered_architect_credits', 0.5);
         Config::set('test.add_mastered_publish_credits', 0.5);
@@ -382,7 +382,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function gaining_mastery_gives_the_exam_architect_credits()
+    public function gaining_mastery_gives_the_exam_architect_credits(): void
     {
         Config::set('test.award_the_architect_architect_credits', 1);
         Config::set('test.award_the_architect_publish_credits', 1);
@@ -423,7 +423,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function starting_an_exam_costs_a_study_credit()
+    public function starting_an_exam_costs_a_study_credit(): void
     {
         Config::set('mage.default_study_credits', 5);
         $user = $this->CreateUserAndAuthenticate();
@@ -441,7 +441,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function cannot_start_test_without_credits()
+    public function cannot_start_test_without_credits(): void
     {
         Config::set('mage.default_study_credits', 0);
         $user = $this->CreateUserAndAuthenticate();
@@ -460,7 +460,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function users_are_not_charaged_study_credits_for_their_own_tests()
+    public function users_are_not_charaged_study_credits_for_their_own_tests(): void
     {
         Config::set('mage.default_study_credits', 0);
         $architect = $this->CreateUserAndAuthenticate();
@@ -477,7 +477,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function mages_can_always_start_an_exam()
+    public function mages_can_always_start_an_exam(): void
     {
         Config::set('mage.default_study_credits', 0);
         $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
@@ -495,7 +495,7 @@ class ExamRecordTest extends TestCase
     }
 
     /** @test */
-    public function mages_are_not_charged_credits_for_exams()
+    public function mages_are_not_charged_credits_for_exams(): void
     {
         Config::set('mage.default_study_credits', 1);
         $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);

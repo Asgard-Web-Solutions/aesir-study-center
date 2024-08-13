@@ -17,7 +17,7 @@ class ExamSessionTest extends TestCase
      *
      * @dataProvider dataProviderExamSessionPages
      */
-    public function validate_that_pages_load_correctly($route, $method, $status, $view)
+    public function validate_that_pages_load_correctly($route, $method, $status, $view): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -63,7 +63,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Create an ExamSession when a user starts a new instance of a test
     /** @test */
-    public function exam_session_created_when_first_taking_an_exam()
+    public function exam_session_created_when_first_taking_an_exam(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -80,7 +80,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_session_is_not_created_when_an_exam_is_already_in_progress()
+    public function exam_session_is_not_created_when_an_exam_is_already_in_progress(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -104,7 +104,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Exam Configuration Page Loads when starting a new session
     /** @test */
-    public function redirected_to_exam_configuration_page_when_starting_a_new_exam_session()
+    public function redirected_to_exam_configuration_page_when_starting_a_new_exam_session(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -119,7 +119,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_configuration_page_not_allowed_for_private_exams()
+    public function exam_configuration_page_not_allowed_for_private_exams(): void
     {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
@@ -131,7 +131,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_configuration_page_is_allowed_for_public_exams()
+    public function exam_configuration_page_is_allowed_for_public_exams(): void
     {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
@@ -143,7 +143,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_configuration_page_loads_exam_set_data()
+    public function exam_configuration_page_loads_exam_set_data(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -154,7 +154,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_start_page_redirects_to_test_if_session_already_exists()
+    public function exam_start_page_redirects_to_test_if_session_already_exists(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -167,7 +167,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Store configuration for this exam
     /** @test */
-    public function exam_configuration_saves_to_database()
+    public function exam_configuration_saves_to_database(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -182,7 +182,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_save_page_not_allowed_for_private_exams()
+    public function exam_save_page_not_allowed_for_private_exams(): void
     {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
@@ -198,7 +198,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_save_page_is_allowed_for_public_exams()
+    public function exam_save_page_is_allowed_for_public_exams(): void
     {
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
@@ -220,7 +220,7 @@ class ExamSessionTest extends TestCase
      *
      * @dataProvider dataProviderForExamSessionStoreFormInvalidData
      * */
-    public function exam_save_validates_data($field, $value)
+    public function exam_save_validates_data($field, $value): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -233,7 +233,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_save_makes_entries_of_each_question_for_the_user()
+    public function exam_save_makes_entries_of_each_question_for_the_user(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -251,7 +251,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function exam_save_sets_list_of_questions()
+    public function exam_save_sets_list_of_questions(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -287,7 +287,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Start the actual exam
     /** @test */
-    public function redirected_to_test_page_after_saving_data()
+    public function redirected_to_test_page_after_saving_data(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -300,7 +300,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function test_page_loads_appropriate_question()
+    public function test_page_loads_appropriate_question(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -317,7 +317,7 @@ class ExamSessionTest extends TestCase
     // DONE: Validate that we see the current question number on the question page
     // DONE: Validate that we see the total number of questions on the question page
     /** @test */
-    public function test_page_shows_correct_question_numbers()
+    public function test_page_shows_correct_question_numbers(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -331,7 +331,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function test_page_shows_all_answers_for_a_question()
+    public function test_page_shows_all_answers_for_a_question(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -347,7 +347,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function test_page_shows_answers_from_question_group()
+    public function test_page_shows_answers_from_question_group(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -375,7 +375,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Validate that the answer is correct
     /** @test */
-    public function answer_page_responds_for_correct_answer()
+    public function answer_page_responds_for_correct_answer(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -396,7 +396,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function answer_page_responds_for_incorrect_answer()
+    public function answer_page_responds_for_incorrect_answer(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -418,7 +418,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Move the Question index to the next element on submit
     /** @test */
-    public function the_session_index_is_moved_after_question_is_answered()
+    public function the_session_index_is_moved_after_question_is_answered(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -446,7 +446,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function answer_page_increments_session_correct_answer_count()
+    public function answer_page_increments_session_correct_answer_count(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -476,7 +476,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function answer_page_increments_session_incorrect_answer_count()
+    public function answer_page_increments_session_incorrect_answer_count(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -507,7 +507,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Update the mastery level of the questions
     /** @test */
-    public function answering_questions_correctly_updates_question_mastery()
+    public function answering_questions_correctly_updates_question_mastery(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -539,7 +539,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function answering_questions_incorrectly_updates_question_mastery()
+    public function answering_questions_incorrectly_updates_question_mastery(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -570,7 +570,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function answering_questions_incorrectly_keeps_mastery_at_a_minimum()
+    public function answering_questions_incorrectly_keeps_mastery_at_a_minimum(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -601,7 +601,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: When the last element has been reached, end the test
     /** @test */
-    public function test_page_goes_to_summary_if_the_test_is_over()
+    public function test_page_goes_to_summary_if_the_test_is_over(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -616,7 +616,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function session_end_time_is_set_when_test_is_complete()
+    public function session_end_time_is_set_when_test_is_complete(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -632,7 +632,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function going_to_the_summary_page_during_a_test_redirects_to_the_test()
+    public function going_to_the_summary_page_during_a_test_redirects_to_the_test(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -648,7 +648,7 @@ class ExamSessionTest extends TestCase
      *
      * @dataProvider dataProviderSessionScoreCalculations
      * */
-    public function summary_calculates_the_score($numCorrect, $numIncorrect, $grade)
+    public function summary_calculates_the_score($numCorrect, $numIncorrect, $grade): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -673,7 +673,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Going to the summary page loads the latest test session summary
     /** @test */
-    public function summary_page_loads_latest_completed_test_if_no_active_test_sessions()
+    public function summary_page_loads_latest_completed_test_if_no_active_test_sessions(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -687,7 +687,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Display the grade and number of right and wrong answers
     /** @test */
-    public function summary_page_shows_result_data()
+    public function summary_page_shows_result_data(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -708,7 +708,7 @@ class ExamSessionTest extends TestCase
      *
      * @dataProvider dataProviderMasteryUpdate
      * */
-    public function mastery_status_is_tracked_for_correct_answers($masteryLevel)
+    public function mastery_status_is_tracked_for_correct_answers($masteryLevel): void
     {
         Config::set('test.grade_apprentice', 1);
         Config::set('test.grade_familiar', 1);
@@ -746,7 +746,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Prevent answer page from updating info if the question was already answered
     /** @test */
-    public function answer_page_does_not_double_count_answer()
+    public function answer_page_does_not_double_count_answer(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -781,7 +781,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Show the mastery satus increase on the answer page
     /** @test */
-    public function mastery_increase_shows_on_answer_page()
+    public function mastery_increase_shows_on_answer_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -803,7 +803,7 @@ class ExamSessionTest extends TestCase
     }
 
     /** @test */
-    public function mastery_decrease_shows_on_answer_page()
+    public function mastery_decrease_shows_on_answer_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -831,7 +831,7 @@ class ExamSessionTest extends TestCase
 
     // DONE: Accessing the answer page with a GET request should redirect to the test page
     /** @test */
-    public function answer_get_request_redirects_to_test_page()
+    public function answer_get_request_redirects_to_test_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();

@@ -13,7 +13,7 @@ class ExamSetControllerTest extends TestCase
      *
      * @dataProvider dataProviderExamPages
      */
-    public function validate_that_pages_load_correctly($route, $method, $status, $view)
+    public function validate_that_pages_load_correctly($route, $method, $status, $view): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
@@ -36,7 +36,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function public_test_page_publicly_accessible()
+    public function public_test_page_publicly_accessible(): void
     {
         $response = $this->get(route('exam.public'));
 
@@ -45,7 +45,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function public_page_shows_public_tests()
+    public function public_page_shows_public_tests(): void
     {
         $exam = $this->CreateSet(['visibility' => 1]);
 
@@ -55,7 +55,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function exam_view_page_loads()
+    public function exam_view_page_loads(): void
     {
         $exam = $this->CreateSet(['visibility' => 1]);
 
@@ -66,7 +66,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function exam_view_page_shows_information()
+    public function exam_view_page_shows_information(): void
     {
         $exam = $this->CreateSet(['visibility' => 1]);
 
@@ -76,7 +76,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function creating_exams_costs_architect_credits()
+    public function creating_exams_costs_architect_credits(): void
     {
         Config::set('mage.default_architect_credits', 2);
         $user = $this->CreateUserAndAuthenticate();
@@ -96,7 +96,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function creating_exams_does_not_cost_mages_architect_credits()
+    public function creating_exams_does_not_cost_mages_architect_credits(): void
     {
         Config::set('mage.default_architect_credits', 2);
         $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
@@ -116,7 +116,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function adding_questions_costs_question_credits()
+    public function adding_questions_costs_question_credits(): void
     {
         Config::set('mage.default_question_credits', 2);
         $user = $this->CreateUserAndAuthenticate();
@@ -138,7 +138,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function adding_questions_does_not_cost_mages_question_credits()
+    public function adding_questions_does_not_cost_mages_question_credits(): void
     {
         Config::set('mage.default_question_credits', 2);
         $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
@@ -160,7 +160,7 @@ class ExamSetControllerTest extends TestCase
     }
 
     /** @test */
-    public function adding_a_question_is_restricted_if_max_limit_reached()
+    public function adding_a_question_is_restricted_if_max_limit_reached(): void
     {
         Config::set('test.max_exam_questions', 0);
         $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);

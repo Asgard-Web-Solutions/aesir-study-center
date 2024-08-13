@@ -12,7 +12,7 @@ class AssignExamToUserCommandTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_assigns_examset_to_user_successfully()
+    public function it_assigns_examset_to_user_successfully(): void
     {
         // Create a user and an ExamSet
         $user = User::factory()->create(['email' => 'user@example.com']);
@@ -31,7 +31,7 @@ class AssignExamToUserCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_shows_error_when_user_not_found()
+    public function it_shows_error_when_user_not_found(): void
     {
         // Create an ExamSet
         $examSet = $this->CreateSet();
@@ -49,7 +49,7 @@ class AssignExamToUserCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_shows_error_when_examset_not_found()
+    public function it_shows_error_when_examset_not_found(): void
     {
         // Create a user
         $user = User::factory()->create(['email' => 'user@example.com']);

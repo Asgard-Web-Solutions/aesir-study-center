@@ -8,7 +8,7 @@ use Tests\TestCase;
 class HomeControllerTest extends TestCase
 {
     /** @test */
-    public function home_page_is_publicly_accessible()
+    public function home_page_is_publicly_accessible(): void
     {
         $response = $this->get(route('home'));
 

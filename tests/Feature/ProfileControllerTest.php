@@ -17,7 +17,7 @@ class ProfileControllerTest extends TestCase
      *
      * @dataProvider pagesDataProvider
      * */
-    public function profile_pages_load($route, $view)
+    public function profile_pages_load($route, $view): void
     {
         $user = $this->CreateUserAndAuthenticate();
 
@@ -31,7 +31,7 @@ class ProfileControllerTest extends TestCase
     }
 
     /** @test */
-    public function exam_portal_shows_user_tests()
+    public function exam_portal_shows_user_tests(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
@@ -44,7 +44,7 @@ class ProfileControllerTest extends TestCase
 
     // DONE: Create an ExamManage page that shows the exams that you have created, probably in a list instead of the cards
     /** @test */
-    public function myexams_shows_list_of_your_exams()
+    public function myexams_shows_list_of_your_exams(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
@@ -55,7 +55,7 @@ class ProfileControllerTest extends TestCase
     }
 
     /** @test */
-    public function myexams_shows_link_to_create_exam()
+    public function myexams_shows_link_to_create_exam(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
@@ -67,7 +67,7 @@ class ProfileControllerTest extends TestCase
 
     // DONE: Create a profile edit page so users can actually change their name, email, and password
     /** @test */
-    public function profile_index_page_loads()
+    public function profile_index_page_loads(): void
     {
         $user = $this->CreateUserAndAuthenticate();
 
@@ -79,7 +79,7 @@ class ProfileControllerTest extends TestCase
     }
 
     /** @test */
-    public function profile_save_page_updates_database()
+    public function profile_save_page_updates_database(): void
     {
         $user = $this->CreateUserAndAuthenticate();
 
@@ -96,7 +96,7 @@ class ProfileControllerTest extends TestCase
     }
 
     /** @test */
-    public function public_profile_page_shows_up()
+    public function public_profile_page_shows_up(): void
     {
         $user = $this->CreateUser();
         $authedUser = $this->CreateUserAndAuthenticate();
@@ -108,7 +108,7 @@ class ProfileControllerTest extends TestCase
     }
 
     /** @test */
-    public function profile_page_shows_public_tests()
+    public function profile_page_shows_public_tests(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id, 'visibility' => 1]);
@@ -119,7 +119,7 @@ class ProfileControllerTest extends TestCase
     }
 
     /** @test */
-    public function profile_page_does_not_show_private_tests()
+    public function profile_page_does_not_show_private_tests(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $examOwner = $this->CreateUser();
@@ -131,7 +131,7 @@ class ProfileControllerTest extends TestCase
     }
 
     /** @test */
-    public function exams_taken_show_up_on_profile_page()
+    public function exams_taken_show_up_on_profile_page(): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $examOwner = $this->CreateUser();
@@ -156,7 +156,7 @@ class ProfileControllerTest extends TestCase
     // TODO: Show a list of who has mastered an exam on the Exam View page
 
     /** @test */
-    public function gift_subscription_page_upgrades_account()
+    public function gift_subscription_page_upgrades_account(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();

@@ -9,7 +9,7 @@ class AdminControllerTest extends TestCase
 {
     // DONE: Create an ACP page
     /** @test */
-    public function acp_page_exists()
+    public function acp_page_exists(): void
     {
         $this->CreateAdminAndAuthenticate();
 
@@ -21,7 +21,7 @@ class AdminControllerTest extends TestCase
 
     // DONE: Create a User List page
     /** @test */
-    public function acp_links_to_users_page()
+    public function acp_links_to_users_page(): void
     {
         $this->CreateAdminAndAuthenticate();
 
@@ -31,7 +31,7 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function users_page_loads()
+    public function users_page_loads(): void
     {
         $this->CreateAdminAndAuthenticate();
 
@@ -42,7 +42,7 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function users_are_shown_on_users_page()
+    public function users_are_shown_on_users_page(): void
     {
         $user = $this->CreateAdminAndAuthenticate();
 
@@ -54,7 +54,7 @@ class AdminControllerTest extends TestCase
 
     // DONE: Create a User Manage page
     /** @test */
-    public function user_manage_page_is_linked_from_users_page()
+    public function user_manage_page_is_linked_from_users_page(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
@@ -65,7 +65,7 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_manage_page_loads()
+    public function user_manage_page_loads(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
@@ -78,7 +78,7 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_update_page_saves_data()
+    public function user_update_page_saves_data(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
@@ -96,7 +96,7 @@ class AdminControllerTest extends TestCase
      *
      * @dataProvider validUserFormData
      * */
-    public function user_update_form_data_validates($field, $value)
+    public function user_update_form_data_validates($field, $value): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
@@ -126,7 +126,7 @@ class AdminControllerTest extends TestCase
      *
      * @dataProvider invalidUserFormData
      * */
-    public function user_update_form_data_rejects_bad_data($field, $value)
+    public function user_update_form_data_rejects_bad_data($field, $value): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
@@ -154,7 +154,7 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_update_page_redirects_to_main_users_index()
+    public function user_update_page_redirects_to_main_users_index(): void
     {
         $admin = $this->CreateAdminAndAuthenticate();
         $user = $this->CreateUser();
@@ -174,7 +174,7 @@ class AdminControllerTest extends TestCase
      *
      * @dataProvider adminPages
      * */
-    public function users_cannot_access_admin_pages($route, $method, $model)
+    public function users_cannot_access_admin_pages($route, $method, $model): void
     {
         $user = $this->CreateUserAndAuthenticate();
         $useRoute = null;
@@ -205,7 +205,7 @@ class AdminControllerTest extends TestCase
      *
      * @dataProvider adminPages
      * */
-    public function admins_can_access_admin_pages($route, $method, $model)
+    public function admins_can_access_admin_pages($route, $method, $model): void
     {
         $user = $this->CreateAdminAndAuthenticate();
         $useRoute = null;

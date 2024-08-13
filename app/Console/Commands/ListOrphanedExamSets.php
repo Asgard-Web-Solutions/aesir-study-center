@@ -16,7 +16,7 @@ class ListOrphanedExamSets extends Command
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): void
     {
         // Fetch ExamSets with user_id of null or zero
         $orphanedExamSets = ExamSet::where(function ($query) {

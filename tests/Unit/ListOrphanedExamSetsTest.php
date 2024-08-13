@@ -11,7 +11,7 @@ class ListOrphanedExamSetsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_lists_all_orphaned_exam_sets()
+    public function it_lists_all_orphaned_exam_sets(): void
     {
         // Create ExamSets with user_id null and zero
         ExamSet::factory()->create(['user_id' => null]);
