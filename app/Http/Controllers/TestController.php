@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Alert;
+use App\Enums\Visibility;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Set;
@@ -13,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use App\Enums\Visibility;
 
 class TestController extends Controller
 {
@@ -55,7 +55,7 @@ class TestController extends Controller
             'number_questions' => 'required|integer|max:'.$set->questions->count(),
         ]);
 
-        $now = new Carbon();
+        $now = new Carbon;
         $start = $now->subMinutes(2);
 
         // Load all questions to the user questions
@@ -74,7 +74,7 @@ class TestController extends Controller
             return redirect()->route('home');
         }
 
-        $test = new Test();
+        $test = new Test;
         $test->user_id = $user->id;
         $test->set_id = $set->id;
         $test->num_questions = $request->number_questions;

@@ -2,15 +2,16 @@
 
 namespace App\Helpers;
 
-use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Set as ExamSet;
+use App\Models\User;
+use Carbon\Carbon;
 
-Class ExamFunctions {
-
-    public static function initiate_questions_for_authed_user(ExamSet $exam) {
+class ExamFunctions
+{
+    public static function initiate_questions_for_authed_user(ExamSet $exam)
+    {
         $user = User::find(auth()->user()->id);
-        $now = new Carbon();
+        $now = new Carbon;
         $start = $now->clone()->subMinutes(2);
 
         foreach ($exam->questions as $question) {

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Test;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TestPolicy
 {
@@ -21,7 +20,7 @@ class TestPolicy
      */
     public function view(User $user, Test $test): bool
     {
-        return ($test->user_id == $user->id);
+        return $test->user_id == $user->id;
     }
 
     /**

@@ -41,7 +41,7 @@ class PromoteAdmin extends Command
         $user = User::where('email', $userEmail)->first();
         $user->isAdmin = 1;
         $user->save();
-        
+
         $this->info('User promoted to Admin!');
     }
 }

@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Question;
 use App\Models\Set;
 use App\Models\Test;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use Laravel\Pennant\Feature;
 
 class HomeController extends Controller
 {
@@ -19,10 +16,7 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     /**
      * Show the application dashboard.

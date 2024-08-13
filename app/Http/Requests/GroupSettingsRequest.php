@@ -23,7 +23,7 @@ class GroupSettingsRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'question' => 'nullable|string|max:255'
+            'question' => 'nullable|string|max:255',
         ];
     }
 }

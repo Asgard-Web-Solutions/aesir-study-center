@@ -3,17 +3,15 @@
 namespace Tests\Feature;
 
 use App\Models\Answer;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Pennant\Feature;
 use App\Models\Question;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class PracticeControllerTest extends TestCase
 {
     /** @test */
-    public function default_page_has_link_to_practice() {
+    public function default_page_has_link_to_practice(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $session = $this->StartExamSession($user, $exam);
@@ -25,7 +23,8 @@ class PracticeControllerTest extends TestCase
 
     // Going to the start page redirects to a configuration page if there is no configuration saved for this ExamSet
     /** DISABLED */
-    public function practice_start_redirects_to_practice_config_if_no_db_data() {
+    public function practice_start_redirects_to_practice_config_if_no_db_data()
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
 
@@ -48,7 +47,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_start_page_creates_practice_session_record() {
+    public function practice_start_page_creates_practice_session_record(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
 
@@ -60,12 +60,13 @@ class PracticeControllerTest extends TestCase
             'question_count' => $exam->questions->count(),
             'question_index' => 0,
         ];
-        
+
         $this->assertDatabaseHas('exam_practices', $verifyData);
     }
 
     /** @test */
-    public function practice_start_page_redirects_to_review_page() {
+    public function practice_start_page_redirects_to_review_page(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
 
@@ -75,7 +76,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_review_page_loads() {
+    public function practice_review_page_loads(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -87,7 +89,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_review_page_loads_question_data() {
+    public function practice_review_page_loads_question_data(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -100,7 +103,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_review_page_loads_answer_data() {
+    public function practice_review_page_loads_answer_data(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -113,7 +117,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_next_page_increases_index() {
+    public function practice_next_page_increases_index(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -128,7 +133,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_next_page_redirects_to_review_page() {
+    public function practice_next_page_redirects_to_review_page(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -139,7 +145,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_start_page_redirects_to_review_if_in_session() {
+    public function practice_start_page_redirects_to_review_if_in_session(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -151,7 +158,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_next_page_ends_session_when_last_question_was_reached() {
+    public function practice_next_page_ends_session_when_last_question_was_reached(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -165,7 +173,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_done_page_loads() {
+    public function practice_done_page_loads(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -177,7 +186,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_next_page_redirects_to_done_if_last_question_was_readched() {
+    public function practice_next_page_redirects_to_done_if_last_question_was_readched(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -191,7 +201,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_done_page_destroys_session() {
+    public function practice_done_page_destroys_session(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -209,7 +220,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_previous_page_redirects_to_review_page() {
+    public function practice_previous_page_redirects_to_review_page(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -220,7 +232,8 @@ class PracticeControllerTest extends TestCase
     }
 
     /** @test */
-    public function practice_previous_page_redirects_to_review_if_zero_reached() {
+    public function practice_previous_page_redirects_to_review_if_zero_reached(): void
+    {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
         $session = $this->StartPracticeSession($user, $exam);
@@ -233,8 +246,6 @@ class PracticeControllerTest extends TestCase
         $response->assertRedirect(route('practice.review', $exam));
     }
 
-
-    
     // Going to the start page starts the practice session if the configuration is already set
 
     // Saving the configuration immediately goes to start the practice session

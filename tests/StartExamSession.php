@@ -2,19 +2,18 @@
 
 namespace Tests;
 
-use App\Models\Set;
-use App\Models\Test;
-use App\Models\User;
 use App\Models\Question;
-use DB;
+use App\Models\Set;
+use App\Models\User;
 use Carbon\Carbon;
+use DB;
 
 trait StartExamSession
 {
     public function StartExamSession(User $user, Set $exam)
     {
         $record = DB::table('exam_records')->where('set_id', $exam->id)->where('user_id', $user->id)->first();
-        if (!$record) {
+        if (! $record) {
             DB::table('exam_records')->insert([
                 'set_id' => $exam->id,
                 'user_id' => $user->id,

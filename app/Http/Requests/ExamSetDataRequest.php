@@ -24,7 +24,7 @@ class ExamSetDataRequest extends FormRequest
         return [
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'visibility' => 'sometimes|required|integer'
+            'visibility' => 'sometimes|required|integer',
         ];
     }
 }

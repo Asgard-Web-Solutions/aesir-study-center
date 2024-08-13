@@ -2,11 +2,8 @@
 
 namespace Tests;
 
-use DB;
-use App\Models\Set;
 use App\Models\Question;
-use Attribute;
-use Illuminate\Database\Eloquent\Collection;
+use DB;
 
 trait CreateQuestion
 {
@@ -16,14 +13,14 @@ trait CreateQuestion
 
         DB::table('answers')->insert([
             'question_id' => $question->id,
-            'text' => 'Correct Answer ' . $question->id,
+            'text' => 'Correct Answer '.$question->id,
             'correct' => 1,
         ]);
 
-        if (!isset($attributes['group_id'])) {
+        if (! isset($attributes['group_id'])) {
             DB::table('answers')->insert([
                 'question_id' => $question->id,
-                'text' => 'Incorrect Answer ' . $question->id,
+                'text' => 'Incorrect Answer '.$question->id,
                 'correct' => 0,
             ]);
         }

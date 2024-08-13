@@ -8,7 +8,7 @@ return [
     'manage_exams' => 'fa-duotone fa-solid fa-layer-group',
     'new_exam' => 'fa-duotone fa-solid fa-file-circle-plus',
     'delete' => 'fa-regular fa-trash-can',
-    
+
     'question_count' => 'fa-regular fa-block-question',
     'times_taken' => 'fa-light fa-cubes-stacked',
     'recent_average' => 'fa-solid fa-percent',

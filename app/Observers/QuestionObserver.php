@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
-use DB;
 use App\Models\Answer;
 use App\Models\Question;
+use DB;
 
 class QuestionObserver
 {

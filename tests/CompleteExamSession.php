@@ -2,10 +2,8 @@
 
 namespace Tests;
 
-use App\Models\Set;
-use App\Models\User;
-use DB;
 use Carbon\Carbon;
+use DB;
 
 trait CompleteExamSession
 {

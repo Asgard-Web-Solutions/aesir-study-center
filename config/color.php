@@ -12,7 +12,7 @@ return [
     'times_taken' => 'success',
     'recent_average' => 'info',
     'acolyte_count' => 'success',
-    
+
     'public' => 'info',
     'private' => 'error',
     'adept' => 'info',

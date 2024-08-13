@@ -25,12 +25,12 @@ class CalculateMageCredits extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $users = User::all();
 
         foreach ($users as $user) {
-            if (!$user->credit) {
+            if (! $user->credit) {
                 $credit = new Credit([
                     'architect' => config('mage.default_architect_credits'),
                     'publish' => config('mage.default_publish_credits'),

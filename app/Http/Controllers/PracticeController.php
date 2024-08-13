@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ExamFunctions;
-use App\Models\Set as ExamSet;
-use App\Models\ExamPractice;
-use Illuminate\Http\Request;
-use Laravel\Pennant\Feature;
-use App\Models\Question;
 use App\Models\Answer;
-use DB;
+use App\Models\ExamPractice;
+use App\Models\Question;
+use App\Models\Set as ExamSet;
+use Laravel\Pennant\Feature;
 
 class PracticeController extends Controller
 {
-    public function start(ExamSet $exam) {
-        if (!Feature::active('flash-cards')) {
+    public function start(ExamSet $exam)
+    {
+        if (! Feature::active('flash-cards')) {
             abort(404, 'Not found');
         }
 
@@ -29,7 +28,7 @@ class PracticeController extends Controller
         ExamFunctions::initiate_questions_for_authed_user($exam);
 
         $questionArray = $exam->questions->shuffle()->pluck('id');
-        
+
         $practice = ExamPractice::create([
             'user_id' => auth()->user()->id,
             'exam_id' => $exam->id,
@@ -41,8 +40,9 @@ class PracticeController extends Controller
         return redirect()->route('practice.review', $exam);
     }
 
-    public function config(ExamSet $exam) {
-        if (!Feature::active('flash-cards')) {
+    public function config(ExamSet $exam)
+    {
+        if (! Feature::active('flash-cards')) {
             abort(404, 'Not found');
         }
 
@@ -50,35 +50,36 @@ class PracticeController extends Controller
         $this->authorize('create', ExamPractice::class);
 
         $selectMastery = ['All', 'Strong', 'Weak'];
-        
+
         return view('practice.config')->with([
             'exam' => $exam,
         ]);
     }
 
-    public function review(ExamSet $exam) {
+    public function review(ExamSet $exam)
+    {
         $this->authorize('view', $exam);
-        
+
         $session = $this->getPracticeSession($exam);
 
-        if (!$session) {
+        if (! $session) {
             return redirect()->route('practice.start', $exam);
         }
 
         $this->authorize('view', $session);
-        
+
         $questionArray = json_decode($session->question_order);
 
-        if (!array_key_exists($session->question_index, $questionArray)) {
+        if (! array_key_exists($session->question_index, $questionArray)) {
             return redirect()->route('practice.done', $exam);
         }
 
         $question = Question::find($questionArray[$session->question_index]);
 
-        if (!$question) {
+        if (! $question) {
             // Something happened, the question was probably deleted
             $session->question_count -= 1;
-            
+
             // Remove the offending question from the session
             unset($questionArray[$session->question_index]);
 
@@ -100,13 +101,14 @@ class PracticeController extends Controller
         ]);
     }
 
-    public function done(ExamSet $exam) {
+    public function done(ExamSet $exam)
+    {
         $this->authorize('view', $exam);
-        
+
         $session = $this->getPracticeSession($exam);
         $this->authorize('delete', $session);
 
-        if (!$session) {
+        if (! $session) {
             return redirect()->route('profile.exams');
         }
 
@@ -117,7 +119,8 @@ class PracticeController extends Controller
         ]);
     }
 
-    public function next(ExamSet $exam) {
+    public function next(ExamSet $exam)
+    {
         $this->authorize('view', $exam);
 
         $session = $this->getPracticeSession($exam);
@@ -133,8 +136,9 @@ class PracticeController extends Controller
 
         return redirect()->route('practice.review', $exam);
     }
-    
-    public function previous(ExamSet $exam) {
+
+    public function previous(ExamSet $exam)
+    {
         $this->authorize('view', $exam);
 
         $session = $this->getPracticeSession($exam);
@@ -150,10 +154,10 @@ class PracticeController extends Controller
 
         return redirect()->route('practice.review', $exam);
     }
-    
 
     /** ========== Helper Functions ========== */
-    private function getPracticeSession(ExamSet $exam) {
+    private function getPracticeSession(ExamSet $exam)
+    {
         $session = ExamPractice::where('exam_id', $exam->id)->where('user_id', auth()->user()->id)->first();
 
         return $session;

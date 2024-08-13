@@ -14,7 +14,7 @@ class Group extends Model
     protected $fillable = [
         'set_id',
         'name',
-        'question'
+        'question',
     ];
 
     public function set(): BelongsTo

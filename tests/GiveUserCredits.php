@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use App\Models\User;
 use App\Models\Credit;
+use App\Models\User;
 
 trait GiveUserCredits
 {

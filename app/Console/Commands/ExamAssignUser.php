@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use App\Models\Set as ExamSet;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class ExamAssignUser extends Command
@@ -25,7 +25,7 @@ class ExamAssignUser extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         // Get the input arguments
         $email = $this->argument('email');
@@ -34,16 +34,18 @@ class ExamAssignUser extends Command
         // Find the user by email
         $user = User::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error('User not found.');
+
             return 1;
         }
 
         // Find the ExamSet by id
         $examSet = ExamSet::find($examSetId);
 
-        if (!$examSet) {
+        if (! $examSet) {
             $this->error('ExamSet not found.');
+
             return 1;
         }
 

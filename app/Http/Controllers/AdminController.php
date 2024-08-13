@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         if (! Gate::allows('isAdmin')) {
             abort(403);
         }
@@ -18,7 +19,8 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
-    public function users() {
+    public function users()
+    {
         if (! Gate::allows('isAdmin')) {
             abort(403);
         }
@@ -30,7 +32,8 @@ class AdminController extends Controller
         ]);
     }
 
-    public function user(User $user) {
+    public function user(User $user)
+    {
         if (! Gate::allows('isAdmin')) {
             abort(403);
         }
@@ -40,14 +43,15 @@ class AdminController extends Controller
         ]);
     }
 
-    public function gift(Request $request, User $user) {
+    public function gift(Request $request, User $user)
+    {
         if (! Gate::allows('isAdmin')) {
             abort(403);
         }
 
         $request->validate([
             'reason' => 'required|string',
-            'months' => 'required|integer|min:1|max:24'
+            'months' => 'required|integer|min:1|max:24',
         ]);
 
         $user->isMage = 1;
@@ -58,7 +62,8 @@ class AdminController extends Controller
         return redirect()->route('profile.view', $user)->with('success', 'User was granted Mage status');
     }
 
-    public function userUpdate(UserRequest $request, User $user) {
+    public function userUpdate(UserRequest $request, User $user)
+    {
         if (! Gate::allows('isAdmin')) {
             abort(403);
         }

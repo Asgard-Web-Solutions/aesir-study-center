@@ -4,8 +4,8 @@ namespace App\View\Components\help;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\View\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\Component;
 
 class box extends Component
 {

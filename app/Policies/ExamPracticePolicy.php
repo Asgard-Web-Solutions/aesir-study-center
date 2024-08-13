@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\ExamPractice;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ExamPracticePolicy
 {
@@ -21,7 +20,7 @@ class ExamPracticePolicy
      */
     public function view(User $user, ExamPractice $examPractice): bool
     {
-        return ($user->id == $examPractice->user_id);
+        return $user->id == $examPractice->user_id;
     }
 
     /**
@@ -37,7 +36,7 @@ class ExamPracticePolicy
      */
     public function update(User $user, ExamPractice $examPractice): bool
     {
-        return ($user->id == $examPractice->user_id);
+        return $user->id == $examPractice->user_id;
     }
 
     /**
@@ -45,7 +44,7 @@ class ExamPracticePolicy
      */
     public function delete(User $user, ExamPractice $examPractice): bool
     {
-        return ($user->id == $examPractice->user_id);
+        return $user->id == $examPractice->user_id;
     }
 
     /**
