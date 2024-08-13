@@ -60,6 +60,11 @@ class PracticeController extends Controller
         $this->authorize('view', $exam);
         
         $session = $this->getPracticeSession($exam);
+
+        if (!$session) {
+            return redirect()->route('practice.start', $exam);
+        }
+
         $this->authorize('view', $session);
         
         $questionArray = json_decode($session->question_order);
@@ -69,6 +74,22 @@ class PracticeController extends Controller
         }
 
         $question = Question::find($questionArray[$session->question_index]);
+
+        if (!$question) {
+            // Something happened, the question was probably deleted
+            $session->question_count -= 1;
+            
+            // Remove the offending question from the session
+            unset($questionArray[$session->question_index]);
+
+            // Reindex the array
+            $questionArray = array_values($questionArray);
+            $session->question_order = json_encode($questionArray);
+            $session->save();
+
+            return redirect()->route('practice.review', $exam)->with('warning', 'Skipping question that was deleted from the Exam');
+        }
+
         $answers = Answer::where('question_id', $question->id)->where('correct', 1)->get();
 
         return view('practice.review')->with([
