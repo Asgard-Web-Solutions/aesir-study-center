@@ -11,7 +11,6 @@ abstract class TestCase extends BaseTestCase
     use CreateAdminAndAuthenticate;
     use CreateQuestion;
     use CreateQuestionGroup;
-    use CreatesApplication;
     use CreateSet;
     use CreateUser;
     use CreateUserAndAuthenticate;
