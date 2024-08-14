@@ -173,6 +173,7 @@
             <h6 class="footer-title">Legal & Boring Stuff</h6>
             <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=35">Release Notes</a>
             <a class="link link-hover" href="{{ route('privacy-policy') }}">Privacy Policy</a>
+            <a class="link link-hover" href="{{ route('terms-of-service') }}">Terms of Service</a>
         </nav>
     </footer>
 
