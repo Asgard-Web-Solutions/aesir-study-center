@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 
-class SetControllerTest extends TestCase
+final class SetControllerTest extends TestCase
 {
     /**
      * A basic feature test example.

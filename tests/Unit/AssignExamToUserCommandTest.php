@@ -2,16 +2,17 @@
 
 namespace Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\Set as ExamSet;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AssignExamToUserCommandTest extends TestCase
+final class AssignExamToUserCommandTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_assigns_examset_to_user_successfully(): void
     {
         // Create a user and an ExamSet
@@ -30,7 +31,7 @@ class AssignExamToUserCommandTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_error_when_user_not_found(): void
     {
         // Create an ExamSet
@@ -48,7 +49,7 @@ class AssignExamToUserCommandTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_error_when_examset_not_found(): void
     {
         // Create a user
