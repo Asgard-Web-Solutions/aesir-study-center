@@ -26,6 +26,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy-policy');
+Route::get('/terms-of-service', [HomeController::class, 'tos'])->name('terms-of-service');
 
 Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware(['auth', 'verified']);
 Route::get('/publicExams', [ExamSetController::class, 'public'])->name('exam.public');
