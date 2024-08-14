@@ -60,4 +60,9 @@ class HomeController extends Controller
     {
         return view('home.privacy-policy');
     }
+
+    public function tos(): View
+    {
+        return view('home.terms-of-service');
+    }
 }
