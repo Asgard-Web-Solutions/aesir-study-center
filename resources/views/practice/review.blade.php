@@ -10,7 +10,7 @@
 
         <div class="collapse bg-base-200">
             <input type="checkbox" />
-            <div class="w-1/2 mx-auto text-xl font-medium collapse-title btn btn-outline btn-secondary">Reveal Answer</div>
+            <div class="w-full mx-auto text-xl font-medium lg:w-1/2 collapse-title btn btn-outline btn-secondary">Reveal Answer</div>
             <div class="collapse-content">
                 <x-card.mini>
                     @foreach ($answers as $answer)
