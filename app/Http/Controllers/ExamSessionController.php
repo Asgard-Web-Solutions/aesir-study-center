@@ -427,8 +427,20 @@ class ExamSessionController extends Controller
             'userQuestionStats' => $userQuestion,
             'previousScore' => $previousScore,
         ]);
+    }
 
-        return view('exam-session.answer');
+    public function toggleReviewFlag(Set $examSet, Question $question) {
+        $userQuestion = DB::table('user_question')->where('question_id', $question->id)->where('user_id', auth()->user()->id)->first();
+
+        DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
+            'reviewFlagged' => ($userQuestion->reviewFlagged) ? 0 : 1,
+        ]);
+
+        return view('exam-session.flagged')->with([
+            'exam' => $examSet,
+            'userQuestion' => $userQuestion,
+            'question' => $question,
+        ]);
     }
 
     public function summary(Set $examSet)

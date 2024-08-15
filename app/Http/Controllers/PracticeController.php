@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ExamFunctions;
+use DB;
 use App\Models\Answer;
-use App\Models\ExamPractice;
 use App\Models\Question;
-use App\Models\Set as ExamSet;
+use App\Models\ExamPractice;
+use Illuminate\Http\Request;
 use Laravel\Pennant\Feature;
+use App\Helpers\ExamFunctions;
+use App\Models\Set as ExamSet;
 
 class PracticeController extends Controller
 {
@@ -27,20 +29,12 @@ class PracticeController extends Controller
 
         ExamFunctions::initiate_questions_for_authed_user($exam);
 
-        $questionArray = $exam->questions->shuffle()->pluck('id');
-
-        $practice = ExamPractice::create([
-            'user_id' => auth()->user()->id,
-            'exam_id' => $exam->id,
-            'question_count' => $exam->questions->count(),
-            'question_index' => 0,
-            'question_order' => json_encode($questionArray),
+        return view('practice.start')->with([
+            'exam' => $exam,
         ]);
-
-        return redirect()->route('practice.review', $exam);
     }
 
-    public function config(ExamSet $exam)
+    public function begin(Request $request, ExamSet $exam)
     {
         if (! Feature::active('flash-cards')) {
             abort(404, 'Not found');
@@ -49,11 +43,40 @@ class PracticeController extends Controller
         $this->authorize('view', $exam);
         $this->authorize('create', ExamPractice::class);
 
-        $selectMastery = ['All', 'Strong', 'Weak'];
-
-        return view('practice.config')->with([
-            'exam' => $exam,
+        $request->validate([
+            'filter' => 'required|string|min:1|max:32',
         ]);
+
+        $questionsArray = array();
+
+        switch ($request->filter) {
+            case 'all':
+                $questionsArray = $exam->questions->shuffle()->pluck('id');
+                break;
+
+            case 'flagged':
+                $questionsArray = DB::table('user_question')
+                    ->where('set_id', $exam->id)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('reviewFlagged', 1)
+                    ->pluck('question_id')
+                    ->shuffle();
+                break;
+        }
+
+        if ($questionsArray->count() == 0) {
+            return back()->with('warning', 'There were no questions available for review with the options selected');
+        }
+
+        $practice = ExamPractice::create([
+            'user_id' => auth()->user()->id,
+            'exam_id' => $exam->id,
+            'question_count' => $questionsArray->count(),
+            'question_index' => 0,
+            'question_order' => json_encode($questionsArray),
+        ]);
+
+        return redirect()->route('practice.review', $exam);
     }
 
     public function review(ExamSet $exam)
@@ -93,11 +116,14 @@ class PracticeController extends Controller
 
         $answers = Answer::where('question_id', $question->id)->where('correct', 1)->get();
 
+        $userQuestion = DB::table('user_question')->where('question_id', $question->id)->where('user_id', auth()->user()->id)->first();
+
         return view('practice.review')->with([
             'exam' => $exam,
             'question' => $question,
             'answers' => $answers,
             'session' => $session,
+            'userQuestion' => $userQuestion,
         ]);
     }
 
@@ -106,12 +132,12 @@ class PracticeController extends Controller
         $this->authorize('view', $exam);
 
         $session = $this->getPracticeSession($exam);
-        $this->authorize('delete', $session);
-
+        
         if (! $session) {
-            return redirect()->route('profile.exams');
+            return redirect()->route('practice.start', $exam);
         }
-
+        $this->authorize('delete', $session);
+        
         $session->delete();
 
         return view('practice.done')->with([
@@ -153,6 +179,16 @@ class PracticeController extends Controller
         ]);
 
         return redirect()->route('practice.review', $exam);
+    }
+
+    public function toggleReviewFlag(ExamSet $exam, Question $question) {
+        $userQuestion = DB::table('user_question')->where('question_id', $question->id)->where('user_id', auth()->user()->id)->first();
+
+        DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
+            'reviewFlagged' => ($userQuestion->reviewFlagged) ? 0 : 1,
+        ]);
+
+        return redirect()->route('practice.review', $question->set_id);
     }
 
     /** ========== Helper Functions ========== */

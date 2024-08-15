@@ -47,7 +47,17 @@
             @endforeach
         </x-card.mini>
 
-        <x-page.actions primary="Next Question" :primaryLink="route('exam-session.test', $examSet->id)" />
+        <div class="flex w-full">
+            <div class="w-1/3 text-left">
+
+            </div>
+            <div class="w-1/3 text-center">
+                <a href="{{ route('exam-session.toggleReviewFlag', ['set' => $examSet, 'question' => $question]) }}" class="btn"><i class="{{ config('icon.review_flag') }} @if ($userQuestionStats->reviewFlagged) text-{{ config('color.review_flag_on') }} @else text-{{ config('color.review_flag_off') }} @endif text-3xl"></i></a>
+            </div>
+            <div class="w-1/3 text-right">
+                <a href="{{ route('exam-session.test', $examSet) }}" class="btn btn-primary btn-outline">Next Question</a>
+            </div>
+        </div>
 
         <x-card.mini title="Your Mastery">
             <ul class="w-full md:w-3/4 lg:w-1/2 timeline timeline-vertical">

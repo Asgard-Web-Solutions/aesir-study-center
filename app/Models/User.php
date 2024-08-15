@@ -72,7 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function questions(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Question::class, 'user_question')->withPivot('score', 'next_at');
+        return $this->belongsToMany(\App\Models\Question::class, 'user_question')->withPivot('score', 'next_at', 'reviewFlagged');
     }
 
     public function tests(): HasMany
