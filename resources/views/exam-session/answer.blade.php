@@ -54,7 +54,7 @@
             <div class="w-1/3 text-center">
                 <a href="{{ route('exam-session.toggleReviewFlag', ['set' => $examSet, 'question' => $question]) }}" class="btn"><i class="{{ config('icon.review_flag') }} @if ($userQuestionStats->reviewFlagged) text-{{ config('color.review_flag_on') }} @else text-{{ config('color.review_flag_off') }} @endif text-3xl"></i></a>
             </div>
-            <div class="w-1/3 text-right">
+            <div class="w-2/3 text-right">
                 <a href="{{ route('exam-session.test', $examSet) }}" class="btn btn-primary btn-outline">Next Question</a>
             </div>
         </div>
