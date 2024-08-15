@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Enums\Mastery;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\ExamPractice;
@@ -62,6 +63,24 @@ class PracticeController extends Controller
                     ->pluck('question_id')
                     ->shuffle();
                 break;
+            
+            case 'weak';
+            $questionsArray = DB::table('user_question')
+                ->where('set_id', $exam->id)
+                ->where('user_id', auth()->user()->id)
+                ->where('score', '<=', Mastery::Familiar)
+                ->pluck('question_id')
+                ->shuffle();
+            break;
+
+            $questionsArray = DB::table('user_question')
+                ->where('set_id', $exam->id)
+                ->where('user_id', auth()->user()->id)
+                ->where('score', '>=', Mastery::Proficient)
+                ->pluck('question_id')
+                ->shuffle();
+            break;
+
         }
 
         if ($questionsArray->count() == 0) {

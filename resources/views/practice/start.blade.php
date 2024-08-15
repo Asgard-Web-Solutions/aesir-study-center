@@ -8,7 +8,7 @@
                 @csrf
 
                 @php
-                    $options = ['all' => "All Questions", 'flagged' => "Review Book"]; 
+                    $options = ['all' => "All Questions", 'flagged' => "Review Book", 'weak' => "Weak/Low Mastery", 'strong' => "Strong/High Mastery"]; 
                 @endphp
                 <x-form.dropdown :values=$options label="Select Review Set" name="filter" selected='flagged' />
 
