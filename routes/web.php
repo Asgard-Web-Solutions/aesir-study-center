@@ -69,10 +69,12 @@ Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::
     Route::post('/{set}/store', 'store')->name('store');
     Route::get('/{set}/test', 'test')->name('test');
     Route::post('/{set}/answer', 'answer')->name('answer');
-    Route::get('/{set}/answer', 'answerRedirect')->name('answer-break');
+    Route::get('/{set}/answer', 'answer')->name('answer-break');
     Route::get('/{set}/summary', 'summary')->name('summary');
     Route::get('/{set}/register', 'register')->name('register');
     Route::get('/{set}/enroll', 'enroll')->name('enroll');
+    Route::get('/{set}/flagReview/{question}', 'toggleReviewFlag')->name('toggleReviewFlag');
+
 });
 
 Route::prefix('practice')->name('practice.')->controller(PracticeController::class)->middleware(['auth', 'verified'])->group(function () {
@@ -83,6 +85,7 @@ Route::prefix('practice')->name('practice.')->controller(PracticeController::cla
     Route::get('/{set}/next', 'next')->name('next');
     Route::get('/{set}/previous', 'previous')->name('previous');
     Route::get('/{set}/done', 'done')->name('done');
+    Route::get('/{set}/flagReview/{question}', 'toggleReviewFlag')->name('toggleReviewFlag');
 });
 
 Route::prefix('admin')->name('admin.')->controller(AdminController::class)->middleware(['auth', 'verified'])->group(function () {

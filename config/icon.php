@@ -33,4 +33,6 @@ return [
     'study_credit' => 'fa-light fa-book-open-cover',
     'publish_credit' => 'fa-regular fa-bullhorn',
     'question_credit' => 'fa-duotone fa-solid fa-block-question',
+
+    'review_flag' => 'fa-sharp fa-solid fa-book-sparkles',
 ];

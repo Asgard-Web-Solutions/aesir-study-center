@@ -39,7 +39,7 @@ class Question extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\User::class, 'user_question');
+        return $this->belongsToMany(\App\Models\User::class, 'user_question')->withPivot('reviewFlagged');
     }
 
     public function group(): BelongsTo

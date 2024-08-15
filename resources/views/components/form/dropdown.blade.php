@@ -7,7 +7,7 @@
        
     <select id="{{ $name }}" name="{{ $name }}" class="@if ($size == 'lg') w-full @elseif ($size == 'sm') w-full lg:w-1/4 @endif my-2 select select-bordered select  @error($name) select-error @else select-primary @enderror">
         @foreach ($values as $key=>$value)
-            <option value="{{ $key }}" @if ($selected && $selected == $key) SELECTED @endif>{{ $value }}</option>
+            <option value="{{ $key }}" @if ($selected && $selected == $key) SELECTED @endif>{!! $value !!}</option>
         @endforeach
     </select>
 
