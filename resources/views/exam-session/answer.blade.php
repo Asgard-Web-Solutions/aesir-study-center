@@ -115,7 +115,10 @@
                 @endfor
             </ul>
         </x-card.mini>
-        <x-page.actions primary="Next Question" :primaryLink="route('exam-session.test', $examSet->id)" />
+
+        <div class="w-full text-right">
+            <a href="{{ route('exam-session.test', $examSet) }}" class="btn btn-primary btn-outline">Next Question</a>
+        </div>
     </x-card.main>
             
     <script>

@@ -35,5 +35,5 @@ return [
     'question_credit' => 'fa-duotone fa-solid fa-block-question',
 
     'review_flag' => 'fa-sharp fa-solid fa-book-sparkles',
-    'bonus_mastery' => 'fa-solid fa-layer-plus',
+    'bonus_mastery' => 'fa-solid fa-duotone fa-square-plus',
 ];
