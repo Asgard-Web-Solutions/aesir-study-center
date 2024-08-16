@@ -28,17 +28,17 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy-policy');
 Route::get('/terms-of-service', [HomeController::class, 'tos'])->name('terms-of-service');
 
-Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware(['auth']);
+Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware(['auth', 'verified']);
 Route::get('/publicExams', [ExamSetController::class, 'public'])->name('exam.public');
 
-Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->middleware(['auth'])->group(function () {
+Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
 
     Route::get('/architect', 'create')->name('create');
     Route::post('/store', 'store')->name('store');
     Route::post('/{exam}/update', 'update')->name('update');
 
-    Route::get('/{set}', 'view')->name('view')->withoutMiddleware(['auth']);
+    Route::get('/{set}', 'view')->name('view')->withoutMiddleware(['auth', 'verified']);
     Route::get('/{set}/edit', 'edit')->name('edit');
     Route::post('/{set}/add', 'add')->name('add');
 
@@ -53,7 +53,7 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->midd
 //     Voyager::routes();
 // });
 
-Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware(['auth'])->group(function () {
+Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/exams', 'exams')->name('exams');
     Route::get('/myexams', 'myexams')->name('myexams');
@@ -63,7 +63,7 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
 
 Route::get('/transcripts/{user}', [ProfileController::class, 'view'])->name('profile.view');
 
-Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::class)->middleware(['auth'])->group(function () {
+Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/configure', 'configure')->name('configure');
     Route::post('/{set}/store', 'store')->name('store');
@@ -77,7 +77,7 @@ Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::
 
 });
 
-Route::prefix('practice')->name('practice.')->controller(PracticeController::class)->middleware(['auth'])->group(function () {
+Route::prefix('practice')->name('practice.')->controller(PracticeController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/{set}/start', 'start')->name('start');
     Route::get('/{set}/settings', 'settings')->name('settings');
     Route::post('/{set}/begin', 'begin')->name('begin');
@@ -88,7 +88,7 @@ Route::prefix('practice')->name('practice.')->controller(PracticeController::cla
     Route::get('/{set}/flagReview/{question}', 'toggleReviewFlag')->name('toggleReviewFlag');
 });
 
-Route::prefix('admin')->name('admin.')->controller(AdminController::class)->middleware(['auth'])->group(function () {
+Route::prefix('admin')->name('admin.')->controller(AdminController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/users', 'users')->name('users');
     Route::get('/users/{user}', 'user')->name('user');
@@ -125,7 +125,3 @@ Route::get('/answer/{id}/edit', [QuestionController::class, 'editAnswer'])->name
 Route::post('/answer/{id}/edit', [QuestionController::class, 'updateAnswer'])->name('update-answer')->middleware('auth');
 Route::get('/answer/{id}/delete', [QuestionController::class, 'deleteAnswer'])->name('delete-answer')->middleware('auth');
 Route::post('/answer/{id}/delete', [QuestionController::class, 'deleteAnswerConfirm'])->name('delete-answer-confirm')->middleware('auth');
-
-// Route::get('/practice/{set}', [PracticeController::class, 'start'])->name('practice-start')->middleware('auth');
-// Route::get('/practice/{set}/config', [PracticeController::class, 'config'])->name('practice-config')->middleware('auth');
-// Route::post('/practice/{set}/config', [PracticeController::class, 'configUpdate'])->name('practice-config-update')->middleware('auth');
