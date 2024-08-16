@@ -431,9 +431,10 @@ class ExamSessionController extends Controller
 
     public function toggleReviewFlag(Set $examSet, Question $question) {
         $userQuestion = DB::table('user_question')->where('question_id', $question->id)->where('user_id', auth()->user()->id)->first();
+        $userQuestion->toggleReviewFlag = ($userQuestion->reviewFlagged) ? 0 : 1;
 
         DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
-            'reviewFlagged' => ($userQuestion->reviewFlagged) ? 0 : 1,
+            'reviewFlagged' => $userQuestion->toggleReviewFlag,
         ]);
 
         return view('exam-session.flagged')->with([
@@ -465,7 +466,7 @@ class ExamSessionController extends Controller
         }
 
         $examRecord = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
-        $mastery = Mastery::from($examRecord->highest_mastery)->name;
+        $mastery = ($session) ? Mastery::from($examRecord->highest_mastery)->name : Mastery::Unskilled->name;
 
         return view('exam-session.summary')->with([
             'examSet' => $examSet,
