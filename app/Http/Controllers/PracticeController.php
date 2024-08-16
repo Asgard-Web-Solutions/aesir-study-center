@@ -64,23 +64,23 @@ class PracticeController extends Controller
                     ->shuffle();
                 break;
             
-            case 'weak';
-            $questionsArray = DB::table('user_question')
-                ->where('set_id', $exam->id)
-                ->where('user_id', auth()->user()->id)
-                ->where('score', '<=', Mastery::Familiar)
-                ->pluck('question_id')
-                ->shuffle();
-            break;
+            case 'weak':
+                $questionsArray = DB::table('user_question')
+                    ->where('set_id', $exam->id)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('score', '<=', Mastery::Familiar)
+                    ->pluck('question_id')
+                    ->shuffle();
+                break;
 
-            $questionsArray = DB::table('user_question')
-                ->where('set_id', $exam->id)
-                ->where('user_id', auth()->user()->id)
-                ->where('score', '>=', Mastery::Proficient)
-                ->pluck('question_id')
-                ->shuffle();
-            break;
-
+            case 'strong':
+                $questionsArray = DB::table('user_question')
+                    ->where('set_id', $exam->id)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('score', '>=', Mastery::Proficient)
+                    ->pluck('question_id')
+                    ->shuffle();
+                break;
         }
 
         if ($questionsArray->count() == 0) {

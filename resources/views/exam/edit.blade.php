@@ -65,7 +65,7 @@
 <x-card.main>
     <x-card.mini>
         <a href="{{ route('exam-session.start', $exam) }}" class="my-2 btn btn-outline btn-secondary">Take exam</a>
-        <a href="{{ route('exam.index') }}" class="my-2 btn btn-secondary">Back to Manage Exams</a>
+        <a href="{{ route('exam.index') }}" class="my-2 btn btn-secondary">Back to Exam Manager</a>
     </x-card.mini>
 </x-card.main>
 
@@ -190,8 +190,13 @@
                         <x-table.cell>{{ $question->text }}</x-table.cell>
                         <x-table.cell hideMobile='true'>{{ $question->answers->count() }}</x-table.cell>
                         <x-table.cell>
-                            <a href="{{ route('exam.question', ['exam' => $exam, 'question' => $question]) }}" class="btn btn-secondary btn-outline">Edit Question</a>
-                            <a href="{{ route('exam.questionDelete', ['exam' => $exam, 'question' => $question]) }}" class="btn btn-error btn-outline "><i class="{{ config('icon.delete') }}"></i></a>
+                            <div class="dropdown">
+                                <div class="m-1 btn btn-secondary btn-sm btn-outline" tabindex="0" role="button">Question Actions...</div>
+                                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                                    <li><a href="{{ route('exam.question', ['exam' => $exam, 'question' => $question]) }}" class=""><i class="{{ config('icon.edit_exam') }} text-{{ config('color.edit_exam') }} text-lg"></i> Edit Question</a></li>
+                                    <li><a href="{{ route('exam.questionDelete', ['exam' => $exam, 'question' => $question]) }}" ><i class="{{ config('icon.delete') }} text-{{ config('color.delete') }} text-lg"></i> Delete Question</a></li>
+                                </ul>
+                            </div>    
                         </x-table.cell>
                     </x-table.row>
                 @endforeach
@@ -201,7 +206,9 @@
     </x-card.mini>
 </x-card.main>
 
-<div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
-    <a href="{{ route('exam.index') }}" class="btn btn-secondary">{{ __('Manage Your Exams') }}</a>
-</div>
+<x-card.main>
+    <div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
+        <a href="{{ route('exam.index') }}" class="btn btn-secondary">{{ __('Back to Exam Manager') }}</a>
+    </div>
+</x-card.main>
 @endsection

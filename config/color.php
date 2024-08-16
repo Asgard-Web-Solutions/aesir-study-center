@@ -7,6 +7,9 @@ return [
     'apprentice' => 'info',
     'unskilled' => 'base-300',
 
+    'delete' => 'error',
+    'edit_exam' => 'info',
+
     'author' => 'primary',
     'question_count' => 'accent',
     'times_taken' => 'success',

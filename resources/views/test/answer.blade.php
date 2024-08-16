@@ -9,7 +9,7 @@
             <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
         </x-card.mini>
     
-        <p class="my-4 text-lg text-center @if ($correct) text-success @else text-error @endif">
+        <p class="my-4 text-lg text-center @if ($correct) text-success @else text-error @endif" id="scroll-to">
             @if ($correct) Correct @else Incorrect @endif
         </p>
     
@@ -37,6 +37,14 @@
         </x-card.mini>
         <x-page.actions primary="Next Question" :primaryLink="route('take-test', $test->id)" />
     </x-card.main>
-            
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Scroll to the target section
+            document.getElementById('scroll-to').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>    
 
 @endsection
