@@ -13,7 +13,7 @@
                 <div class="text-center stat">
                     <div class="stat-figure text-success">
                     </div>
-                    <div class="stat-title">You got this answer </div>
+                    <div class="stat-title" id="scroll-to">You got this answer </div>
                     @if ($result)
                         <div class="stat-value text-success">Correct</div>
                     @else
@@ -66,7 +66,7 @@
                         @if ($i == $userQuestionStats->score)
                             <div class="timeline-start">
                                 @if ($userQuestionStats->score > $previousScore)
-                                    @if ($previousScore == 0) <div class="badge badge-accent">First Seen Bonus</div> @endif
+                                    @if ($previousScore == 0) <div class="badge badge-accent"><i class="{{ config('icon.bonus_mastery') }} mr-2"></i> First Seen</div> @endif
                                     <div class="badge badge-secondary">Mastery: + {{ $userQuestionStats->score - $previousScore }}</div>
                                 @else
                                     @if ($userQuestionStats->score == $previousScore ) <div class="badge badge-info">Keeper's Grace</div> @endif
@@ -118,5 +118,14 @@
         <x-page.actions primary="Next Question" :primaryLink="route('exam-session.test', $examSet->id)" />
     </x-card.main>
             
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.innerWidth < 768) {
+                document.getElementById('scroll-to').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    </script>    
 
 @endsection

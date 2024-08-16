@@ -39,7 +39,7 @@
 
     <x-card.main>
         <div class="w-full text-right">
-            <a href="{{ route('practice.done', $exam) }}" class="btn btn-secondary">End Review Session</a>
+            <a href="{{ route('practice.done', $exam) }}" class="btn btn-error btn-outline">End Review Session</a>
         </div>
     </x-card.main>
 
