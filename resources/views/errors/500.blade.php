@@ -1,7 +1,7 @@
 @extends('layouts.app2')
 
 @section('content')
-    <x-card.main title="ERROR - PAGE NOT FOUND">
+    <x-card.main title="SERVER ERROR - DON'T PANIC!">
         <x-card.mini>
             <div class="md:flex">
                 <div class="w-full md:w-1/4">
