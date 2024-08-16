@@ -58,8 +58,11 @@
               </div>
 
             {{-- Main Navigation --}}
-            <div class="container flex items-center justify-between px-4 py-4 mx-auto">
-                <a @auth href="{{ route('profile.exams') }}" @endauth @guest href="{{ route('home') }}" @endguest class="text-lg font-semibold">{{ config('app.name', 'Study App') }}</a>
+            <div class="container flex items-center justify-between px-4 mx-auto">
+                <a @auth href="{{ route('profile.exams') }}" @endauth @guest href="{{ route('home') }}" @endguest class="text-lg font-semibold">
+                    <img src="{{ asset('images/AALogo-DodgerBlue-Long-Small.png') }}" alt="Acolyte Academy Logo" style="height: 70px;" />
+                    {{-- {{ config('app.name', 'Study App') }} --}}
+                </a>
                 
                 @guest
                     <a href="{{ route('login') }}" class="btn btn-sm btn-primary md:hidden">Login</a>
