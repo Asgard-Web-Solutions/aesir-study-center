@@ -52,7 +52,8 @@ class PracticeControllerTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $user->id]);
 
-        $response = $this->get(route('practice.start', $exam));
+        $data['filter'] = 'all';
+        $response = $this->post(route('practice.begin', $exam), $data);
 
         $verifyData = [
             'user_id' => $user->id,
@@ -62,17 +63,6 @@ class PracticeControllerTest extends TestCase
         ];
 
         $this->assertDatabaseHas('exam_practices', $verifyData);
-    }
-
-    /** @test */
-    public function practice_start_page_redirects_to_review_page(): void
-    {
-        $user = $this->CreateUserAndAuthenticate();
-        $exam = $this->CreateSet(['user_id' => $user->id]);
-
-        $response = $this->get(route('practice.start', $exam));
-
-        $response->assertRedirect(route('practice.review', $exam));
     }
 
     /** @test */

@@ -69,7 +69,7 @@ Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::
     Route::post('/{set}/store', 'store')->name('store');
     Route::get('/{set}/test', 'test')->name('test');
     Route::post('/{set}/answer', 'answer')->name('answer');
-    Route::get('/{set}/answer', 'answer')->name('answer-break');
+    Route::get('/{set}/answer', 'answerRedirect')->name('answer-break');
     Route::get('/{set}/summary', 'summary')->name('summary');
     Route::get('/{set}/register', 'register')->name('register');
     Route::get('/{set}/enroll', 'enroll')->name('enroll');
