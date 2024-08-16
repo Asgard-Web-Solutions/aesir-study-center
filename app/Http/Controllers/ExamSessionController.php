@@ -448,11 +448,11 @@ class ExamSessionController extends Controller
         $session = $this->getInProgressOrLatestSession($examSet);
 
         // Make sure the exam has been completed
-        if (($session->current_question) != ($session->question_count)) {
+        if (($session) && (($session->current_question) != ($session->question_count))) {
             return redirect()->route('exam-session.test', $examSet);
         }
 
-        if (! $session->date_completed) {
+        if ($session && !$session->date_completed) {
             $dateNow = Carbon::now();
             $updateSession['date_completed'] = $dateNow;
             $updateSession['grade'] = round(($session->correct_answers / $session->question_count) * 100);
