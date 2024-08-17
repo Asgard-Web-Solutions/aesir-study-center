@@ -74,20 +74,6 @@ class ExamSetController extends Controller
             if ($exam->questions->count() < config('test.min_public_questions')) {
                 $validatedData['visibility'] = 0;
             }
-
-            if (Feature::active('mage-upgrade')) {
-                if (! $user->isMage && ! $exam->isPublished) {
-                    if ($user->credit->publish >= 1) {
-                        $user->credit->publish -= 1;
-                        $user->credit->save();
-
-                        $exam->isPublished = 1;
-                        $exam->save();
-                    } else {
-                        $validatedData['visibility'] = 0;
-                    }
-                }
-            }
         }
 
         $exam->update($validatedData);
