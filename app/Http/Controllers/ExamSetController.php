@@ -48,7 +48,7 @@ class ExamSetController extends Controller
 
         if (Feature::active('mage-upgrade')) {
             $user = $this->getAuthedUser();
-            if (! $user->isMage && ($user->credit->architect < 1)) {
+            if (($user->credit->architect < 1)) {
                 return back()->with('warning', 'Insufficient Architect Credits. Please obtain more credits or Upgrade to Mage to create another exam.');
             }
         }
@@ -56,10 +56,8 @@ class ExamSetController extends Controller
         $exam = ExamSet::create($validatedData);
 
         if (Feature::active('mage-upgrade')) {
-            if (! $user->isMage) {
-                $user->credit->architect -= 1;
-                $user->credit->save();
-            }
+            $user->credit->architect -= 1;
+            $user->credit->save();
         }
 
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam Created!');
@@ -166,25 +164,11 @@ class ExamSetController extends Controller
             return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
         }
 
-        if (Feature::active('mage-upgrade')) {
-            $user = $this->getAuthedUser();
-            if (! $user->isMage && ($user->credit->question < 1)) {
-                return back()->with('warning', 'Insufficient Question Credits. Please obtain more credits or Upgrade to Mage to add more questions to your exam.');
-            }
-        }
-
         $question = new Question;
         $question->text = $request->question;
         $question->set_id = $exam->id;
         $question->group_id = 0;
         $question->save();
-
-        if (Feature::active('mage-upgrade')) {
-            if (! $user->isMage) {
-                $user->credit->question -= 1;
-                $user->credit->save();
-            }
-        }
 
         foreach ($request->answers as $index => $newAnswer) {
             if ($newAnswer) {

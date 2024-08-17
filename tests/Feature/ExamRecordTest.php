@@ -305,8 +305,6 @@ class ExamRecordTest extends TestCase
     public function getting_proficient_mastery_grants_credits(): void
     {
         Config::set('test.add_proficient_architect_credits', 0.2);
-        Config::set('test.add_proficient_publish_credits', 0.2);
-        Config::set('test.add_proficient_question_credits', 5);
         Config::set('test.add_proficient_study_credits', 0.5);
         Config::set('test.grade_proficient', 3);
 
@@ -333,8 +331,6 @@ class ExamRecordTest extends TestCase
         $verifyData = ([
             'user_id' => $user->id,
             'architect' => config('mage.default_architect_credits') + config('test.add_proficient_architect_credits'),
-            'publish' => config('mage.default_publish_credits') + config('test.add_proficient_publish_credits'),
-            'question' => config('mage.default_question_credits') + config('test.add_proficient_question_credits'),
             'study' => config('mage.default_study_credits') + config('test.add_proficient_study_credits'),
         ]);
 
@@ -345,8 +341,6 @@ class ExamRecordTest extends TestCase
     public function getting_mastered_mastery_grants_credits(): void
     {
         Config::set('test.add_mastered_architect_credits', 0.5);
-        Config::set('test.add_mastered_publish_credits', 0.5);
-        Config::set('test.add_mastered_question_credits', 20);
         Config::set('test.add_mastered_study_credits', 1);
         Config::set('test.grade_mastered', 4);
 
@@ -373,8 +367,6 @@ class ExamRecordTest extends TestCase
         $verifyData = ([
             'user_id' => $user->id,
             'architect' => config('mage.default_architect_credits') + config('test.add_mastered_architect_credits'),
-            'publish' => config('mage.default_publish_credits') + config('test.add_mastered_publish_credits'),
-            'question' => config('mage.default_question_credits') + config('test.add_mastered_question_credits'),
             'study' => config('mage.default_study_credits') + config('test.add_mastered_study_credits'),
         ]);
 
@@ -385,8 +377,6 @@ class ExamRecordTest extends TestCase
     public function gaining_mastery_gives_the_exam_architect_credits(): void
     {
         Config::set('test.award_the_architect_architect_credits', 1);
-        Config::set('test.award_the_architect_publish_credits', 1);
-        Config::set('test.award_the_architect_question_credits', 25);
         Config::set('test.award_the_architect_study_credits', 0.5);
         Config::set('test.grade_mastered', 4);
 
@@ -414,8 +404,6 @@ class ExamRecordTest extends TestCase
         $verifyData = ([
             'user_id' => $architect->id,
             'architect' => config('mage.default_architect_credits') + config('test.award_the_architect_architect_credits'),
-            'publish' => config('mage.default_publish_credits') + config('test.award_the_architect_publish_credits'),
-            'question' => config('mage.default_question_credits') + config('test.award_the_architect_question_credits'),
             'study' => config('mage.default_study_credits') + config('test.award_the_architect_study_credits'),
         ]);
 
@@ -474,42 +462,6 @@ class ExamRecordTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('exam_records', $verifyData);
-    }
-
-    /** @test */
-    public function mages_can_always_start_an_exam(): void
-    {
-        Config::set('mage.default_study_credits', 0);
-        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
-        $architect = $this->CreateUser();
-        $exam = $this->CreateSet(['user_id' => $architect->id]);
-
-        $response = $this->get(route('exam-session.enroll', $exam));
-
-        $verifyData = ([
-            'user_id' => $user->id,
-            'set_id' => $exam->id,
-        ]);
-
-        $this->assertDatabaseHas('exam_records', $verifyData);
-    }
-
-    /** @test */
-    public function mages_are_not_charged_credits_for_exams(): void
-    {
-        Config::set('mage.default_study_credits', 1);
-        $user = $this->CreateUserAndAuthenticate(['isMage' => 1]);
-        $architect = $this->CreateUser();
-        $exam = $this->CreateSet(['user_id' => $architect->id]);
-
-        $response = $this->get(route('exam-session.start', $exam));
-
-        $verifyData = ([
-            'user_id' => $user->id,
-            'study' => config('mage.default_study_credits'),
-        ]);
-
-        $this->assertDatabaseHas('credits', $verifyData);
     }
 
     /** ========== HELPER FUNCTIONS ========== */

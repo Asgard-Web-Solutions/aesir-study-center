@@ -93,7 +93,7 @@ Route::prefix('admin')->name('admin.')->controller(AdminController::class)->midd
     Route::get('/users', 'users')->name('users');
     Route::get('/users/{user}', 'user')->name('user');
     Route::post('/users/{user}/update', 'userUpdate')->name('user-update');
-    Route::post('/users/{user}/gift', 'gift')->name('gift');
+    Route::post('/users/{user}/', 'gift')->name('gift');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');

@@ -155,26 +155,6 @@ class ProfileControllerTest extends TestCase
 
     // TODO: Show a list of who has mastered an exam on the Exam View page
 
-    /** @test */
-    public function gift_subscription_page_upgrades_account(): void
-    {
-        $admin = $this->CreateAdminAndAuthenticate();
-        $user = $this->CreateUser();
-        $data = [
-            'months' => 12,
-            'reason' => 'Just a test',
-        ];
-
-        $response = $this->post(route('admin.gift', $user), $data);
-
-        $verifyData = [
-            'isMage' => 1,
-            'gift_reason' => $data['reason'],
-            'mage_expires_on' => now()->addMonths($data['months'])->format('Y-m-d'),
-        ];
-        $this->assertDatabaseHas('users', $verifyData);
-    }
-
     /** ========== DataProvider Methods ========== */
     public static function pagesDataProvider()
     {

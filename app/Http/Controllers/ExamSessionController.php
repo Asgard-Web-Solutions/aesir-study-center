@@ -66,7 +66,7 @@ class ExamSessionController extends Controller
         }
 
         if (Feature::active('mage-upgrade')) {
-            if (! $user->isMage && ($examSet->user_id != $user->id) && ($user->credit->study < 1)) {
+            if (($examSet->user_id != $user->id) && ($user->credit->study < 1)) {
                 return back()->with('warning', 'Insufficient Study Credits. Please earn more Study Credits or upgrade to Mage status to start another exam.');
             }
         }
@@ -77,7 +77,7 @@ class ExamSessionController extends Controller
         ]);
 
         if (Feature::active('mage-upgrade')) {
-            if (! $user->isMage && $examSet->user_id != auth()->user()->id) {
+            if ($examSet->user_id != auth()->user()->id) {
                 $user->credit->study -= 1;
                 $user->credit->save();
             }
@@ -549,8 +549,6 @@ class ExamSessionController extends Controller
             // Award proficient mastery!
             if ($highestMastery == Mastery::Proficient->value && $originalMastery < Mastery::Proficient->value) {
                 $credits->architect += config('test.add_proficient_architect_credits');
-                $credits->publish += config('test.add_proficient_publish_credits');
-                $credits->question += config('test.add_proficient_question_credits');
                 $credits->study += config('test.add_proficient_study_credits');
 
                 $credits->save();
@@ -558,8 +556,6 @@ class ExamSessionController extends Controller
 
             if ($highestMastery == Mastery::Mastered->value && $originalMastery < Mastery::Mastered->value) {
                 $credits->architect += config('test.add_mastered_architect_credits');
-                $credits->publish += config('test.add_mastered_publish_credits');
-                $credits->question += config('test.add_mastered_question_credits');
                 $credits->study += config('test.add_mastered_study_credits');
 
                 $credits->save();
@@ -568,8 +564,6 @@ class ExamSessionController extends Controller
             if (($examSet->user_id != $user->id) && ($highestMastery == Mastery::Mastered->value && $originalMastery < Mastery::Mastered->value)) {
                 $architectCredits = User::find($examSet->user_id)->credit()->first();
                 $architectCredits->architect += config('test.award_the_architect_architect_credits');
-                $architectCredits->publish += config('test.award_the_architect_publish_credits');
-                $architectCredits->question += config('test.award_the_architect_question_credits');
                 $architectCredits->study += config('test.award_the_architect_study_credits');
 
                 $architectCredits->save();

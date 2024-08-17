@@ -43,25 +43,6 @@ class AdminController extends Controller
         ]);
     }
 
-    public function gift(Request $request, User $user)
-    {
-        if (! Gate::allows('isAdmin')) {
-            abort(403);
-        }
-
-        $request->validate([
-            'reason' => 'required|string',
-            'months' => 'required|integer|min:1|max:24',
-        ]);
-
-        $user->isMage = 1;
-        $user->gift_reason = $request->reason;
-        $user->mage_expires_on = Carbon::now()->addMonths($request->months)->format('Y-m-d');
-        $user->save();
-
-        return redirect()->route('profile.view', $user)->with('success', 'User was granted Mage status');
-    }
-
     public function userUpdate(UserRequest $request, User $user)
     {
         if (! Gate::allows('isAdmin')) {

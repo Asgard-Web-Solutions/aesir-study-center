@@ -49,12 +49,6 @@
 
     <x-card.mini>
         <div class="block w-full lg:flex">
-            @feature('mage-upgrade')
-                @if (!auth()->user()->isMage)
-                    <div><span class="mr-4 tooltip" data-tip="Question Credits Remaining"><i class="{{ config('icon.credit') }} text-{{ config('color.credit') }} text-lg"></i> <i class="{{ config('icon.question_credit') }} text-{{ config('color.question_credit') }} text-lg"></i> {{ $question->set->user->credit->question }}</span></div>
-                @endif
-            @endfeature
-
             <span class="mx-4 tooltip" data-tip="Question Count"><i class="{{ config('icon.question_count') }} text-{{ config('color.question_count') }} text-lg"></i> {{ $group->set->questions->count() }} / {{ config('test.max_exam_questions') }}</span>
         </div>
     </x-card.mini>
