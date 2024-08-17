@@ -59,13 +59,6 @@ class GroupController extends Controller
         DB::table('user_question')->where('question_id', $question->id)->delete();
         $question->delete();
 
-        if (Feature::active('mage-upgrade')) {
-            if (! $user->isMage) {
-                $user->credit->question += 0.8;
-                $user->credit->save();
-            }
-        }
-
         return redirect()->route('group-view', $group)->with('alert', 'Group Question was successfully deleted');
     }
 
@@ -103,12 +96,6 @@ class GroupController extends Controller
                     return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
                 }
 
-                if (Feature::active('mage-upgrade')) {
-                    if (! $user->isMage && ($user->credit->question < 1)) {
-                        return back()->with('warning', 'Insufficient Question Credits. Please obtain more credits or Upgrade to Mage to add more questions to your exam.');
-                    }
-                }
-
                 $question = Question::create([
                     'text' => $questionData['question'],
                     'set_id' => $group->set->id,
@@ -122,13 +109,6 @@ class GroupController extends Controller
                 ]);
 
                 $numQuestions += 1;
-
-                if (Feature::active('mage-upgrade')) {
-                    if (! $user->isMage) {
-                        $user->credit->question -= 1;
-                        $user->credit->save();
-                    }
-                }
             }
         }
 

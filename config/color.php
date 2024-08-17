@@ -25,8 +25,6 @@ return [
     'credit' => 'warning opacity-60',
     'architect_credit' => 'warning',
     'study_credit' => 'warning',
-    'publish_credit' => 'warning',
-    'question_credit' => 'warning',
 
     'review_flag_on' => 'warning opacity-90 hover:opacity-70',
     'review_flag_off' => 'info opacity-30 hover:opacity-60',

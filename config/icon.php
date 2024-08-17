@@ -31,8 +31,6 @@ return [
     'credit' => 'fa-duotone fa-solid fa-coin-vertical',
     'architect_credit' => 'fa-light fa-person-digging',
     'study_credit' => 'fa-light fa-book-open-cover',
-    'publish_credit' => 'fa-regular fa-bullhorn',
-    'question_credit' => 'fa-duotone fa-solid fa-block-question',
 
     'review_flag' => 'fa-sharp fa-solid fa-book-sparkles',
     'bonus_mastery' => 'fa-solid fa-duotone fa-square-plus',

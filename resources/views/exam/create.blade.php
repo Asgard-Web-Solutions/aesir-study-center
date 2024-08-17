@@ -6,9 +6,7 @@
         <x-card.mini>
 
             @feature('mage-upgrade')
-                @if (!auth()->user()->isMage)
-                    <x-text.main label="Architect Credits: ">{{ auth()->user()->credit->architect }}</x-text.main>
-                @endif
+                <x-text.main label="Architect Credits: ">{{ auth()->user()->credit->architect }}</x-text.main>
             @endfeature
 
             <form action="{{ route('exam.store') }}" method="post">
