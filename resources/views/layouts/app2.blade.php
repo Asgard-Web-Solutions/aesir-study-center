@@ -11,8 +11,9 @@
     <div class="container mx-auto">
         <!-- Navbar -->
         <nav class="rounded-b-lg shadow-md navbar bg-neutral text-neutral-content">
-            <div class="dropdown md:hidden">
-                <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+
+            <details class="dropdown lg:hidden">
+                <summary role="button" class="btn btn-ghost btn-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="w-5 h-5"
@@ -25,26 +26,26 @@
                       stroke-width="2"
                       d="M4 6h16M4 12h16M4 18h7" />
                   </svg>
-                </div>
-                <ul
-                  tabindex="0"
-                  class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow" style="z-index: 1000;">
+                </summary>
+                <ul class="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow" style="z-index: 1000;">
                     @auth
-                        <x-button.mobile href="{{ route('profile.exams') }}">Your Exams</x-button.mobile>
-                        <x-button.mobile href="{{ route('exam.index') }}">Create/Manage Exams</x-button.mobile>
+                        <x-button.mobile href="{{ route('profile.index') }}">Profile Settings</x-button.mobile>
+                        <x-button.mobile href="{{ route('profile.exams') }}">Your Library</x-button.mobile>
+                        <x-button.mobile href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.mobile>
+                        <x-button.mobile href="{{ route('profile.view', auth()->user()) }}">Your Transcripts</x-button.mobile>
+                        <div class="divider"></div>
                     @endauth
+
                     <x-button.mobile href="{{ route('exam.public') }}">Public Exams</x-button.mobile>
                     <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.mobile>
-                    
+                    <div class="divider"></div>
+
                     @guest
                         <x-button.mobile href="{{ route('login') }}">Login</x-button.mobile>
                         <x-button.mobile href="{{ route('register') }}">Register</x-button.mobile>
                     @endguest
 
-                    <hr class="my-2" />
                     @auth
-                        <x-button.mobile href="{{ route('profile.index') }}">Profile Settings</x-button.mobile>
-                        <x-button.mobile href="{{ route('profile.view', auth()->user()) }}">Your Transcripts</x-button.mobile>
                         @if ( auth()->user()->isAdmin )
                             <x-button.mobile href="{{ route('admin.index') }}">Admin Control Panel</x-button.mobile>
                         @endif
@@ -55,14 +56,16 @@
                         </form>
                     @endauth
                 </ul>
-              </div>
+            </details>
 
             {{-- Main Navigation --}}
             <div class="container flex items-center justify-between px-4 mx-auto">
-                <a @auth href="{{ route('profile.exams') }}" @endauth @guest href="{{ route('home') }}" @endguest class="text-lg font-semibold">
-                    <img src="{{ asset('images/AALogo-DodgerBlue-Long-Small.png') }}" alt="Acolyte Academy Logo" style="height: 70px;" />
-                    {{-- {{ config('app.name', 'Study App') }} --}}
-                </a>
+                <div class="px-2 bg-gray-100 rounded-xl">
+                    <a @auth href="{{ route('profile.exams') }}" @endauth @guest href="{{ route('home') }}" @endguest class="text-lg font-semibold">
+                        <img src="{{ asset('images/AALogo-DodgerBlue-Long-Small.png') }}" alt="Acolyte Academy Logo" style="height: 70px;" />
+                        {{-- {{ config('app.name', 'Study App') }} --}}
+                    </a>
+                </div>
                 
                 @guest
                     <a href="{{ route('login') }}" class="btn btn-sm btn-primary md:hidden">Login</a>
@@ -72,7 +75,7 @@
                 <div class="hidden space-x-4 md:flex" style="z-index: 1000;">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
-                        <x-button.nav href="{{ route('exam.index') }}">Create/Manage Exams</x-button.nav>
+                        <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
                     @endauth
         
                     <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>
