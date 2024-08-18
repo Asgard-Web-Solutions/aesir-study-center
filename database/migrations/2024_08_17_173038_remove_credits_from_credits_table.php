@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('sets', function (Blueprint $table) {
-            $table->integer('isPublished')->default(0)->after('visibility');
+        Schema::table('credits', function (Blueprint $table) {
+            $table->dropColumn(['publish', 'question']);
         });
     }
 
@@ -21,8 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('sets', function (Blueprint $table) {
-            $table->dropColumn('isPublished');
+        Schema::table('credits', function (Blueprint $table) {
+            $table->decimal('publish', 4, 1)->default(1.0);
+            $table->decimal('question', 4, 1)->default(10.0);
         });
     }
 };

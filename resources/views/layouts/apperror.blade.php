@@ -31,7 +31,7 @@
                     @auth
                         <x-button.mobile href="{{ route('profile.index') }}">Profile Settings</x-button.mobile>
                         <x-button.mobile href="{{ route('profile.exams') }}">Your Library</x-button.mobile>
-                        <x-button.mobile href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.mobile>
+                        <x-button.mobile href="{{ route('exam.index') }}">Create/Manage Exams</x-button.mobile>
                         <x-button.mobile href="{{ route('profile.view', auth()->user()) }}">Your Transcripts</x-button.mobile>
                         <div class="divider"></div>
                     @endauth
@@ -75,7 +75,7 @@
                 <div class="hidden space-x-4 md:flex" style="z-index: 1000;">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
-                        <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
+                        <x-button.nav href="{{ route('exam.index') }}">Create/Manage Exams</x-button.nav>
                     @endauth
         
                     <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>

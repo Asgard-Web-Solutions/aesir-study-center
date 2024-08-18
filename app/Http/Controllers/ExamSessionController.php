@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Mastery;
-use App\Helpers\ExamFunctions;
-use App\Http\Requests\ExamSessionConfigurationRequest;
-use App\Models\Answer;
-use App\Models\Question;
+use DB;
+use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\User;
-use Carbon\Carbon;
-use DB;
+use App\Enums\Mastery;
+use App\Models\Answer;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Laravel\Pennant\Feature;
+use App\Actions\ExamRecords\CreateUserExamRecord;
+use App\Actions\ExamSession\SelectQuestionsForExam;
+use App\Actions\ExamSession\CalculateQuestionTimeout;
+use App\Http\Requests\ExamSessionConfigurationRequest;
+use App\Actions\ExamSession\AddExamQuestionsToUserRecord;
+use App\Actions\ExamSession\CalculateUsersMaxAvailableQuestions;
 
 class ExamSessionController extends Controller
 {
@@ -59,7 +63,7 @@ class ExamSessionController extends Controller
         $this->authorize('view', $examSet);
 
         $record = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
-        $user = User::find(auth()->user()->id);
+        $user = $this->getAuthedUser();
 
         if ($record) {
             return redirect()->route('exam-session.configure', $examSet)->with('info', 'You are already enrolled in this account.');
@@ -71,17 +75,7 @@ class ExamSessionController extends Controller
             }
         }
 
-        DB::table('exam_records')->insert([
-            'user_id' => auth()->user()->id,
-            'set_id' => $examSet->id,
-        ]);
-
-        if (Feature::active('mage-upgrade')) {
-            if ($examSet->user_id != auth()->user()->id) {
-                $user->credit->study -= 1;
-                $user->credit->save();
-            }
-        }
+        CreateUserExamRecord::execute($user, $examSet);
 
         return redirect()->route('exam-session.start', $examSet);
     }
@@ -90,17 +84,9 @@ class ExamSessionController extends Controller
     {
         $this->authorize('view', $examSet);
 
-        $now = Carbon::now();
-        $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
-
-        if ($maxQuestions == 0) {
-            $totalQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->count();
-
-            if ($totalQuestions == 0) {
-                // There are no questions at all, so let's set this to the max available
-                $maxQuestions = $examSet->questions->count();
-            }
-        }
+        $user = $this->getAuthedUser();
+        AddExamQuestionsToUserRecord::execute($user, $examSet);
+        $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet);
 
         if ($maxQuestions == 0) {
             return redirect()->route('profile.exams')->with('warning', 'You do not have any available questions to take yet');
@@ -116,49 +102,29 @@ class ExamSessionController extends Controller
     {
         $this->authorize('view', $examSet);
 
-        $now = Carbon::now();
-        $maxQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('next_at', '<', $now)->count();
-
-        if ($maxQuestions == 0) {
-            // if zero, why?
-            $totalQuestions = DB::table('user_question')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->count();
-
-            if ($totalQuestions == 0) {
-                // There are no questions at all, so let's set this to the max available
-                $maxQuestions = $examSet->questions->count();
-            }
-        }
-
-        $request->validate([
-            'question_count' => 'max:'.$maxQuestions,
-        ]);
-
-        if ($request->question_count > $maxQuestions) {
-            return back()->with('error', 'Requested question count exceeds maximum available of '.$maxQuestions.' Questions.');
-        }
-
-        // See if there is already an exam in progress
         $session = $this->getInProgressSession($examSet);
         if ($session) {
             return redirect()->route('exam-session.test', $examSet);
         }
 
-        // Initiate questions for the user
-        ExamFunctions::initiate_questions_for_authed_user($examSet);
-        $now = Carbon::now();
-        $userId = auth()->user()->id;
+        $user = $this->getAuthedUser();
+        $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet);
+        
+        $request->validate([
+            'question_count' => 'max:'.$maxQuestions,
+        ]);
+        
+        if ($request->question_count > $maxQuestions) {
+            return back()->with('error', 'Requested question count exceeds maximum available of '.$maxQuestions.' Questions.');
+        }
+        
+        $questions = SelectQuestionsForExam::execute($user, $examSet, $request->question_count);
 
-        // Select number of questions requested
-        $questions = DB::table('user_question')->where('user_id', $userId)->where('set_id', $examSet->id)->where('next_at', '<', $now)->get();
-
-        // Shuffle and select the appropriate number of questions
-        $questions = $questions->random($request->question_count);
-        $questions = $questions->shuffle();
         $questionArray = [];
         $questionArray = $questions->pluck('question_id');
 
         // Create a new instance of this test
-        $examSet->sessions()->attach($userId, ['question_count' => $request->question_count, 'questions_array' => json_encode($questionArray), 'current_question' => 0]);
+        $examSet->sessions()->attach($user->id, ['question_count' => $request->question_count, 'questions_array' => json_encode($questionArray), 'current_question' => 0]);
 
         return redirect()->route('exam-session.test', $examSet->id);
     }
@@ -359,11 +325,7 @@ class ExamSessionController extends Controller
                 $updatedScore = config('test.min_score');
             }
 
-            if (! $result && ($updatedScore == 1)) {
-                $nextAt = Carbon::now()->addMinutes(5);
-            } else {
-                $nextAt = Carbon::now()->addHours((config('test.hour_multiplier') * (min($updatedScore, 10) ** 2.6)));
-            }
+            $nextAt = CalculateQuestionTimeout::execute($updatedScore, $result);
 
             DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
                 'score' => $updatedScore,

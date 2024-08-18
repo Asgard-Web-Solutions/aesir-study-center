@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sets', function (Blueprint $table) {
-            $table->integer('isPublished')->default(0)->after('visibility');
+            $table->dropColumn('isPublished');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('sets', function (Blueprint $table) {
-            $table->dropColumn('isPublished');
+            $table->integer('isPublished')->default(0)->after('visibility');
         });
     }
 };

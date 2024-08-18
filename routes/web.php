@@ -29,7 +29,7 @@ Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy
 Route::get('/terms-of-service', [HomeController::class, 'tos'])->name('terms-of-service');
 
 Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware(['auth', 'verified']);
-Route::get('/publicExams', [ExamSetController::class, 'public'])->name('exam.public');
+Route::get('/exams', [ExamSetController::class, 'public'])->name('exam.public');
 
 Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
@@ -55,8 +55,8 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->midd
 
 Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
-    Route::get('/exams', 'exams')->name('exams');
-    Route::get('/myexams', 'myexams')->name('myexams');
+    Route::get('/library', 'exams')->name('exams');
+    Route::get('/author', 'myexams')->name('myexams');
     Route::post('/update', 'update')->name('update');
     Route::post('/changepass', 'changepass')->name('changepass');
 });
@@ -94,6 +94,7 @@ Route::prefix('admin')->name('admin.')->controller(AdminController::class)->midd
     Route::get('/users/{user}', 'user')->name('user');
     Route::post('/users/{user}/update', 'userUpdate')->name('user-update');
     Route::post('/users/{user}/', 'gift')->name('gift');
+    Route::get('/products', 'productsList')->name('products');
 });
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');

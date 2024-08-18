@@ -68,6 +68,7 @@ class ExamSessionTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
+        $this->RegisterUserQuestions($user, $exam);
 
         $response = $this->post(route('exam-session.store', $exam), $data);
 
@@ -171,6 +172,7 @@ class ExamSessionTest extends TestCase
     {
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
+        $this->RegisterUserQuestions($user, $exam);
 
         $data = [
             'question_count' => 1,
@@ -203,6 +205,7 @@ class ExamSessionTest extends TestCase
         $examOwner = $this->CreateUser();
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet(['user_id' => $examOwner->id, 'visibility' => 1]);
+        $this->RegisterUserQuestions($user, $exam);
 
         $data = [
             'question_count' => 1,
@@ -238,6 +241,7 @@ class ExamSessionTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
+        $this->RegisterUserQuestions($user, $exam);
 
         $response = $this->post(route('exam-session.store', $exam), $data);
 
@@ -256,6 +260,7 @@ class ExamSessionTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
+        $this->RegisterUserQuestions($user, $exam);
         $question_count = 3;
         $data['question_count'] = $question_count;
 
@@ -292,6 +297,7 @@ class ExamSessionTest extends TestCase
         $user = $this->CreateUserAndAuthenticate();
         $exam = $this->CreateSet();
         $data = $this->getExamConfigurationFormData();
+        $this->RegisterUserQuestions($user, $exam);
 
         $response = $this->post(route('exam-session.store', $exam), $data);
 

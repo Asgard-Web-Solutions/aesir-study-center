@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -16,6 +17,7 @@ abstract class TestCase extends BaseTestCase
     use CreateUserAndAuthenticate;
     use GiveUserCredits;
     use RefreshDatabase;
+    use RegisterUserQuestions;
     use StartExamSession;
     use StartPracticeSession;
     use TakeTest;
