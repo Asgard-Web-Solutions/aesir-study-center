@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -52,5 +53,17 @@ class AdminController extends Controller
         $user->update($request->validated());
 
         return redirect()->route('admin.users')->with('alert', 'User updated successfully');
+    }
+
+    public function productsList() {
+        if (! Gate::allows('isAdmin')) {
+            abort(403);
+        }
+        
+        $products = Product::all();
+
+        return view('admin.products')->with([
+            'products' => $products,
+        ]);
     }
 }
