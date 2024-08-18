@@ -118,23 +118,27 @@
   </x-card.main>
 
   <x-card.main>
-    <div class="block object-center w-full text-center md:flex">
-        <div class="w-full text-center md:w-1/2 md:text-right">
-          <a href="{{ route('exam-session.start', $examSet->id) }}" class="mx-2 my-2 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-lg"></i> Retake Exam</a>
+    <div class="block object-center w-full text-center lg:flex">
+      <div class="w-full text-center lg:w-1/3 md:text-left">
+        <div class="dropdown">
+          <div class="m-1 btn btn-secondary btn-outline" tabindex="0" role="button">More Actions...</div>
+          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+            <li><a href="{{ route('practice.start', $examSet) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
+            <li><a href="{{ route('exam-session.start', $examSet) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
+            @can('update', $examSet)
+              <li><a href="{{ route('exam.edit', $examSet) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a></li>
+            @endcan
+          </ul>
         </div>
+      </div>
 
-        @can ('update', $examSet)
-          <a href="{{ route('exam.edit', $examSet) }}" class="mx-2 my-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
-        @endcan
+      <div class="w-full text-center md:text-left md:w-1/3">
+        <a href="{{ route('profile.exams') }}" class="mx-2 my-2 btn btn-secondary btn-outline"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Your Exam Library</a>
+      </div>
 
-        
-        <div class="w-full text-center md:w-1/2 md:text-right">
-          <a href="{{ route('practice.start', $examSet) }}" class="mx-2 my-2 btn btn-secondary btn-outline"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Practice Session</a>
-        </div>
-
-        <div class="w-full text-center md:text-left md:w-1/2">
-          <a href="{{ route('profile.exams') }}" class="mx-2 my-2 btn btn-secondary btn-outline"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Your Exam Library</a>
-        </div>
+      <div class="w-full text-center lg:w-1/3 md:text-right">
+        <a href="{{ route('exam-session.start', $examSet->id) }}" class="mx-2 my-2 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-lg"></i> Retake Exam</a>
+      </div>
     </div>
   </x-card.main>
 
