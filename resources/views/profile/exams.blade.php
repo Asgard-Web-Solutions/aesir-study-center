@@ -11,14 +11,14 @@
         <x-help.text>Happy learning!</x-help.text>
     </x-help.box>
     
-    <x-card.main title="Exams You Have Taken" size="grid">
+    <x-card.main title="Your Exam Library" size="grid">
         @forelse ($records as $record)
             <x-card.mini>
-                <div class="block w-full md:flex">
-                    <div class="w-full md:w-3/4">
+                <div class="block w-full lg:flex">
+                    <div class="w-full lg:w-3/4">
                         <h2 class="my-2 text-xl"><a href="{{ route('exam.view', $record) }}" class="font-bold no-underline link link-primary">{{ $record->name }}</a></h2>
                     </div>
-                    <div class="w-full md:w-1/4 tooltip" data-tip="{{ $mastery[$record->pivot->highest_mastery] }}">
+                    <div class="w-full lg:w-1/4 tooltip" data-tip="{{ $mastery[$record->pivot->highest_mastery] }}">
                         <i class="
                             text-5xl
                             text-{{ config('color.' . strtolower($mastery[$record->pivot->highest_mastery])) }} 
@@ -55,7 +55,7 @@
 
                     <div class="w-full text-center md:w-1/2 md:text-left">
                         <div class="dropdown">
-                            <div class="m-1 btn btn-secondary btn-sm btn-outline" tabindex="0" role="button">More Actions...</div>
+                            <div class="mx-1 my-3 btn btn-secondary btn-sm btn-outline" tabindex="0" role="button">More Actions...</div>
                             <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                                 <li><a href="{{ route('exam-session.summary', $record) }}"><i class="{{ config('icon.latest_summary') }} text-lg"></i> Last Test Summary</a></li>
                                 <li><a href="{{ route('practice.start', $record) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class="w-full text-center md:text-right md:w-1/2">
-                        <a href="{{ route('exam-session.start', $record) }}" class="my-1 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-xl"></i> Take Exam</a>
+                        <a href="{{ route('exam-session.start', $record) }}" class="my-1 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-xl"></i> Exam</a>
                     </div>
                 </div>
             </x-card.mini>
@@ -80,8 +80,8 @@
     </x-card.main>
 
     <br />
-    <div class="flex justify-end w-full space-x-2">
-        <a href="{{ route('exam.index') }}" class="btn btn-primary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Your Own Exams</a>
-        <a href="{{ route('exam.public') }}" class="btn btn-secondary"><i class="{{ config('icon.public_exams') }} text-lg"></i> Find Public Exams</a>
+    <div class="block w-full space-x-2 text-center lg:justify-end lg:flex">
+        <a href="{{ route('exam.index') }}" class="my-2 btn btn-primary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Manage Your Own Exams</a>
+        <a href="{{ route('exam.public') }}" class="my-2 btn btn-secondary"><i class="{{ config('icon.public_exams') }} text-lg"></i> Find Public Exams</a>
     </div>
 @endsection

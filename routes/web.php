@@ -55,8 +55,8 @@ Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->midd
 
 Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
-    Route::get('/exams', 'exams')->name('exams');
-    Route::get('/myexams', 'myexams')->name('myexams');
+    Route::get('/library', 'exams')->name('exams');
+    Route::get('/exams', 'myexams')->name('myexams');
     Route::post('/update', 'update')->name('update');
     Route::post('/changepass', 'changepass')->name('changepass');
 });
