@@ -46,6 +46,12 @@
       </x-card.mini>
 
       <x-card.mini title="Mastery Change">
+        @php
+          $remaining['apprentice'] = $examSet->questions->count() - $examRecord->mastery_apprentice_count;
+          $remaining['familiar'] = $examSet->questions->count() - $examRecord->mastery_familiar_count;
+          $remaining['proficient'] = $examSet->questions->count() - $examRecord->mastery_proficient_count;
+          $remaining['mastered'] = $examSet->questions->count() - $examRecord->mastery_mastered_count;
+        @endphp
         <div class="shadow stats stats-vertical md:stats-horizontal">
           <div class="stat">
             <div class="stat-title text-{{ config('color.apprentice') }}">Apprentice</div>
@@ -56,7 +62,7 @@
             @else
               <div class="stat-value text-neutral">0</div>  
             @endif
-            <div class="stat-desc"></div>
+            <div class="stat-desc">@if ($remaining['apprentice']) {{ $remaining['apprentice'] }} Remaining @else Completed @endif</div>
           </div>
 
           <div class="stat">
@@ -68,7 +74,7 @@
             @else
               <div class="stat-value text-neutral">0</div>  
             @endif
-            <div class="stat-desc"></div>
+            <div class="stat-desc">@if ($remaining['familiar']) {{ $remaining['familiar'] }} Remaining @else Completed @endif</div>
           </div>
 
           <div class="stat">
@@ -78,9 +84,9 @@
             @elseif ($session->mastery_proficient_change < 0)
               <div class="stat-value text-error">{{ $session->mastery_proficient_change }}</div>
             @else
-              <div class="stat-value text-neutral">0</div>  
+              <div class="stat-value text-neutral">0</div> 
             @endif
-            <div class="stat-desc"></div>
+            <div class="stat-desc">@if ($remaining['proficient']) {{ $remaining['proficient'] }} Remaining @else Completed @endif</div>
           </div>
 
           <div class="stat">
@@ -92,7 +98,7 @@
             @else
               <div class="stat-value text-neutral">0</div>  
             @endif
-            <div class="stat-desc"></div>
+            <div class="stat-desc">@if ($remaining['mastered']) {{ $remaining['mastered'] }} Remaining @else Completed @endif</div>
           </div>
 
         </div>
@@ -113,15 +119,21 @@
 
   <x-card.main>
     <div class="block object-center w-full text-center md:flex">
+        <div class="w-full text-center md:w-1/2 md:text-right">
+          <a href="{{ route('exam-session.start', $examSet->id) }}" class="mx-2 my-2 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-lg"></i> Retake Exam</a>
+        </div>
+
         @can ('update', $examSet)
-          <a href="{{ route('exam.edit', $examSet) }}" class="mx-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
+          <a href="{{ route('exam.edit', $examSet) }}" class="mx-2 my-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
         @endcan
 
+        
         <div class="w-full text-center md:w-1/2 md:text-right">
-          <a href="{{ route('exam-session.start', $examSet->id) }}" class="mx-2 btn btn-primary"><i class="{{ config('icon.take_exam') }} text-lg"></i> Retake Exam</a>
+          <a href="{{ route('practice.start', $examSet) }}" class="mx-2 my-2 btn btn-secondary btn-outline"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Practice Session</a>
         </div>
+
         <div class="w-full text-center md:text-left md:w-1/2">
-          <a href="{{ route('profile.exams') }}" class="mx-2 btn btn-secondary"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Your Exams</a>
+          <a href="{{ route('profile.exams') }}" class="mx-2 my-2 btn btn-secondary btn-outline"><i class="{{ config('icon.manage_exams') }} text-lg"></i> Your Exam Library</a>
         </div>
     </div>
   </x-card.main>

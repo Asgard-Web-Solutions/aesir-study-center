@@ -125,7 +125,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             if (window.innerWidth < 768) {
                 document.getElementById('scroll-to').scrollIntoView({
-                    behavior: 'smooth'
+                    behavior: 'instant'
                 });
             }
         });
