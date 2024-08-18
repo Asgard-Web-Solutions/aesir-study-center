@@ -31,6 +31,10 @@ Route::get('/terms-of-service', [HomeController::class, 'tos'])->name('terms-of-
 Route::get('/myexams', [QuestionController::class, 'exams'])->name('manage-exams')->middleware(['auth', 'verified']);
 Route::get('/exams', [ExamSetController::class, 'public'])->name('exam.public');
 
+Route::get('/profile/exams', function () {
+    return redirect()->route('profile.exams');
+});
+
 Route::prefix('exam')->name('exam.')->controller(ExamSetController::class)->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', 'index')->name('index');
 
