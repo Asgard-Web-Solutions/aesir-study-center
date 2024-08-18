@@ -11,10 +11,12 @@ use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Laravel\Pennant\Feature;
+use App\Actions\ExamRecords\CreateUserExamRecord;
+use App\Actions\ExamSession\SelectQuestionsForExam;
+use App\Actions\ExamSession\CalculateQuestionTimeout;
 use App\Http\Requests\ExamSessionConfigurationRequest;
 use App\Actions\ExamSession\AddExamQuestionsToUserRecord;
 use App\Actions\ExamSession\CalculateUsersMaxAvailableQuestions;
-use App\Actions\ExamSession\SelectQuestionsForExam;
 
 class ExamSessionController extends Controller
 {
@@ -73,17 +75,7 @@ class ExamSessionController extends Controller
             }
         }
 
-        DB::table('exam_records')->insert([
-            'user_id' => auth()->user()->id,
-            'set_id' => $examSet->id,
-        ]);
-
-        if (Feature::active('mage-upgrade')) {
-            if ($examSet->user_id != auth()->user()->id) {
-                $user->credit->study -= 1;
-                $user->credit->save();
-            }
-        }
+        CreateUserExamRecord::execute($user, $examSet);
 
         return redirect()->route('exam-session.start', $examSet);
     }
@@ -333,11 +325,7 @@ class ExamSessionController extends Controller
                 $updatedScore = config('test.min_score');
             }
 
-            if (! $result && ($updatedScore == 1)) {
-                $nextAt = Carbon::now()->addMinutes(5);
-            } else {
-                $nextAt = Carbon::now()->addHours((config('test.hour_multiplier') * (min($updatedScore, 10) ** 2.6)));
-            }
+            $nextAt = CalculateQuestionTimeout::execute($updatedScore, $result);
 
             DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
                 'score' => $updatedScore,
