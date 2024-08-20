@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.2",
         "honeybadger-io/honeybadger-laravel": "^4.1",
-        "laravel/framework": "^11.20",
+        "laravel/framework": "^11.21",
         "laravel/pennant": "^1.9",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
