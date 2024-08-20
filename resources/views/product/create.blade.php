@@ -12,7 +12,7 @@
             </x-card.mini>
 
             <x-card.mini title="Product Rewards">
-                <x-form.text label="Architect Credits" name="architect_credits" size="half" value="{{ old('name') }}" />
+                <x-form.text label="Author Credits" name="architect_credits" size="half" value="{{ old('name') }}" />
                 <x-form.text label="Study Credits" name="study_credits" size="half" value="{{ old('name') }}" />
             </x-card.mini>
 

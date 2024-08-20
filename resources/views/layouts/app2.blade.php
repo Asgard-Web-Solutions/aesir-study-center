@@ -74,7 +74,7 @@
                 
                 <div class="hidden space-x-4 md:flex" style="z-index: 1000;">
                     @auth
-                        <x-button.nav href="{{ route('profile.exams') }}">Your Exams</x-button.nav>
+                        <x-button.nav href="{{ route('profile.exams') }}">Your Library</x-button.nav>
                         <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
                     @endauth
         
