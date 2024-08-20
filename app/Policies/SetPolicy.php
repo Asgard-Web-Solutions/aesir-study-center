@@ -34,6 +34,10 @@ class SetPolicy
             return true;
         }
 
+        if (!$user) {
+            return false;
+        }
+
         return $set->user_id === $user->id;
     }
 
