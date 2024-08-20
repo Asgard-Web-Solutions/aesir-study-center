@@ -36,7 +36,7 @@
 
             <br />
             <hr />
-            <x-text.dim>Date Create: {{ $exam->created_at }}</x-text.dim>
+            <x-text.dim>Date Created: {{ $exam->created_at }}</x-text.dim>
         </x-card.mini>
     </x-card.main>
 

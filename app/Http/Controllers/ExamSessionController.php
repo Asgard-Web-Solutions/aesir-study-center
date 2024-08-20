@@ -12,9 +12,11 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 use Laravel\Pennant\Feature;
 use App\Actions\ExamRecords\CreateUserExamRecord;
+use App\Actions\ExamSession\AwardCreditsForMastery;
 use App\Actions\ExamSession\SelectQuestionsForExam;
 use App\Actions\ExamSession\CalculateQuestionTimeout;
 use App\Http\Requests\ExamSessionConfigurationRequest;
+use App\Actions\ExamSession\UpdateUsersHighestMastery;
 use App\Actions\ExamSession\AddExamQuestionsToUserRecord;
 use App\Actions\ExamSession\CalculateUsersMaxAvailableQuestions;
 
@@ -89,7 +91,14 @@ class ExamSessionController extends Controller
         $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet);
 
         if ($maxQuestions == 0) {
-            return redirect()->route('profile.exams')->with('warning', 'You do not have any available questions to take yet');
+            $record = DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $examSet->id)->first();
+            if ($record->available_at) {
+                $available = Carbon::parse($record->available_at);
+
+                $message = "You will have have 10 more questions available: " . $available->diffForHumans();
+            }
+            
+            return redirect()->route('profile.exams')->with('warning', 'You do not have any available questions to take yet. ' . $message);
         }
 
         return view('exam-session.configure')->with([
@@ -449,9 +458,11 @@ class ExamSessionController extends Controller
         $record = DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $examSet->id)->first();
 
         $recentSessions = DB::table('exam_sessions')->where('set_id', $examSet->id)->where('user_id', $user->id)->orderBy('date_completed', 'desc')->limit(config('count_tests_for_average_score'))->get();
+
         $averageCount = 0;
         $averageTotal = 0;
         $dateNow = null;
+
         foreach ($recentSessions as $recentSession) {
             if (! $dateNow) {
                 $dateNow = $recentSession->date_completed;
@@ -461,86 +472,22 @@ class ExamSessionController extends Controller
             $averageTotal += $recentSession->grade;
         }
 
-        $masteryLevelMastered = 0;
-        $masteryLevelProficient = 0;
-        $masteryLevelFamiliar = 0;
-        $masteryLevelApprentice = 0;
-        $questions = DB::table('user_question')->where('user_id', $user->id)->where('set_id', $examSet->id)->get();
-
-        foreach ($questions as $question) {
-            if ($question->score >= config('test.grade_mastered')) {
-                $masteryLevelMastered++;
-                $masteryLevelProficient++;
-                $masteryLevelFamiliar++;
-                $masteryLevelApprentice++;
-
-            } elseif ($question->score >= config('test.grade_proficient')) {
-                $masteryLevelProficient++;
-                $masteryLevelFamiliar++;
-                $masteryLevelApprentice++;
-
-            } elseif ($question->score >= config('test.grade_familiar')) {
-                $masteryLevelFamiliar++;
-                $masteryLevelApprentice++;
-
-            } elseif ($question->score >= config('test.grade_apprentice')) {
-                $masteryLevelApprentice++;
-            }
-        }
-
-        $highestMastery = Mastery::Unskilled;
-
-        if ($masteryLevelMastered == $questions->count()) {
-            $highestMastery = Mastery::Mastered->value;
-        } elseif ($masteryLevelProficient == $questions->count()) {
-            $highestMastery = Mastery::Proficient->value;
-        } elseif ($masteryLevelFamiliar == $questions->count()) {
-            $highestMastery = Mastery::Familiar->value;
-        } elseif ($masteryLevelApprentice == $questions->count()) {
-            $highestMastery = Mastery::Apprentice->value;
-        }
-
-        // Make it so a person can't lose a mastery that they obtained.
-        // This can happen through the architect adding more questions, or the person losing points after obtaining mastery
         $originalMastery = $record->highest_mastery;
-        $highestMastery = max($highestMastery, $originalMastery);
+        $highestMastery = UpdateUsersHighestMastery::execute($user, $examSet, $originalMastery);
 
         if (Feature::active('mage-upgrade')) {
-            $credits = $user->credit->first();
-
-            // Award proficient mastery!
-            if ($highestMastery == Mastery::Proficient->value && $originalMastery < Mastery::Proficient->value) {
-                $credits->architect += config('test.add_proficient_architect_credits');
-                $credits->study += config('test.add_proficient_study_credits');
-
-                $credits->save();
-            }
-
-            if ($highestMastery == Mastery::Mastered->value && $originalMastery < Mastery::Mastered->value) {
-                $credits->architect += config('test.add_mastered_architect_credits');
-                $credits->study += config('test.add_mastered_study_credits');
-
-                $credits->save();
-            }
-
-            if (($examSet->user_id != $user->id) && ($highestMastery == Mastery::Mastered->value && $originalMastery < Mastery::Mastered->value)) {
-                $architectCredits = User::find($examSet->user_id)->credit()->first();
-                $architectCredits->architect += config('test.award_the_architect_architect_credits');
-                $architectCredits->study += config('test.award_the_architect_study_credits');
-
-                $architectCredits->save();
-            }
+            AwardCreditsForMastery::execute($user, $examSet, $originalMastery, $highestMastery);
         }
 
-        DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->update([
+        $nextQuestions = DB::table('user_question')->where('user_id', $user->id)->where('set_id', $examSet->id)->orderBy('next_at', 'asc')->limit(10)->get();
+        $tenthQuestion = $nextQuestions->last();
+
+        DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $examSet->id)->update([
             'times_taken' => $record->times_taken + 1,
             'recent_average' => round($averageTotal / $averageCount),
             'last_completed' => $dateNow,
-            'mastery_apprentice_count' => $masteryLevelApprentice,
-            'mastery_familiar_count' => $masteryLevelFamiliar,
-            'mastery_proficient_count' => $masteryLevelProficient,
-            'mastery_mastered_count' => $masteryLevelMastered,
             'highest_mastery' => $highestMastery,
+            'available_at' => $tenthQuestion->next_at,
         ]);
     }
 

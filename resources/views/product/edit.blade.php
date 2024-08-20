@@ -12,7 +12,7 @@
             </x-card.mini>
 
             <x-card.mini title="Product Rewards">
-                <x-form.text label="Architect Credits" name="architect_credits" size="half" value="{{ old('name', $product->architect_credits) }}" />
+                <x-form.text label="Author Credits" name="architect_credits" size="half" value="{{ old('name', $product->architect_credits) }}" />
                 <x-form.text label="Study Credits" name="study_credits" size="half" value="{{ old('name', $product->study_credits) }}" />
             </x-card.mini>
 
@@ -29,12 +29,8 @@
             </x-card.mini>
 
             <div class="block w-full lg:flex">
-                <div class="w-full mx-3 lg:w-1/2">
-                    <a href="{{ route('admin.product.index') }}" class="btn btn-secondary">Cancel</a>
-                </div>
-                <div class="w-full mx-3 lg:w-1/2">
-                    <x-card.buttons submitLabel="Create Product" />
-                </div>
+                <a href="{{ route('admin.product.index') }}" class="my-3 btn btn-secondary">Cancel</a>
+                <x-card.buttons submitLabel="Create Product" />
             </div>
         </form>
     </x-card.main>
