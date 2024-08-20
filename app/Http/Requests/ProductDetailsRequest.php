@@ -32,7 +32,7 @@ class ProductDetailsRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:255',
             'description' => 'required|string|min:3|max:255|nullable',
-            'price' => 'required|decimal:2|min:0|max:9999.99',
+            'price' => 'required|decimal:0,2|min:0|max:9999.99',
             'isSubscription' => 'sometimes|nullable',
             'annual_price' => 'nullable|decimal:0,2|min:0|max:9999.99',
             'stripe_product_id' => 'string|min:0|max:255|nullable',

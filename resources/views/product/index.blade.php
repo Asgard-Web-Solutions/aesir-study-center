@@ -29,7 +29,7 @@
 
     <x-card.main>
         <div class="w-full text-right">
-            <a href="{{ route('admin.product.create') }}" class="btn btn-primary">Add Product</a>
+            <a href="{{ route('admin.product.create') }}" class="btn btn-primary">Create New Product</a>
         </div>
     </x-card.main>
 

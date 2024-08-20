@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductDetailsRequest;
+use App\Actions\Product\StandardizeProductFormData;
 
 class ProductController extends Controller
 {
@@ -39,14 +40,11 @@ class ProductController extends Controller
     {
         $this->authorize('create', Product::class);
 
-        $validated = $request->validated();
+        $validated = StandardizeProductFormData::execute($request);
 
-        $validated['isSubscription'] = (isset($request->isSubmission)) ? 1 : 0;
-        $validated['annual_price'] = $validated->annual_price ?? 000.00;
-        // dd($validated);
         Product::create($request->validated());
 
-        return redirect()->route('admin.product.index');
+        return redirect()->route('admin.product.index')->with('success', 'Product added');
     }
 
     /**
@@ -62,15 +60,25 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $this->authorize('update', $product);
+
+        return view('product.edit')->with([
+            'product' => $product,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductDetailsRequest $request, Product $product)
     {
-        //
+        $this->authorize('update', $product);
+
+        $validated = StandardizeProductFormData::execute($request);
+        
+        $product->update($validated);
+
+        return redirect()->route('admin.product.index')->with('success', 'Product updated');
     }
 
     /**
