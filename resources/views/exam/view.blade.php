@@ -81,22 +81,26 @@
                     <div class="stat-desc">Previous {{ config('test.count_tests_for_average_score') }} Exams</div>
                     </div>
                 </div>
-                </x-card.mini>
-                <x-card.mini title="Your Mastery Progress">
-                <div class="shadow">
-                    <div class="flex w-full">
-                    <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.mastered') }}">Mastered:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.mastered') }} " value="{{ $examRecord->mastery_mastered_count / $exam->questions->count() * 100 }}" max="100"></progress></div>
+            </x-card.mini>
+            <x-card.mini title="Your Mastery Progress">
+                @if ($exam->questions->count())
+                    <div class="shadow">
+                        <div class="flex w-full">
+                            <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.mastered') }}">Mastered:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.mastered') }} " value="{{ $examRecord->mastery_mastered_count / $exam->questions->count() * 100 }}" max="100"></progress></div>
+                        </div>
+                        <div class="flex w-full">
+                            <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.proficient') }}">Proficient:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.proficient') }} " value="{{ $examRecord->mastery_proficient_count / $exam->questions->count() * 100 }}" max="100"></progress></div>
+                        </div>
+                        <div class="flex w-full">
+                            <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.familiar') }}">Familiar:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.familiar') }} " value="{{ $examRecord->mastery_familiar_count / $exam->questions->count() * 100 }}" max="100"></progress></div>
+                        </div>
+                        <div class="flex w-full">
+                            <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.apprentice') }}">Apprentice:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.apprentice') }} " value="{{ $examRecord->mastery_apprentice_count / $exam->questions->count() * 100 }}" max="100"></progress></div>
+                        </div>
                     </div>
-                    <div class="flex w-full">
-                    <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.proficient') }}">Proficient:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.proficient') }} " value="{{ $examRecord->mastery_proficient_count / $exam->questions->count() * 100 }}" max="100"></progress></div>
-                    </div>
-                    <div class="flex w-full">
-                    <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.familiar') }}">Familiar:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.familiar') }} " value="{{ $examRecord->mastery_familiar_count / $exam->questions->count() * 100 }}" max="100"></progress></div>
-                    </div>
-                    <div class="flex w-full">
-                    <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.apprentice') }}">Apprentice:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.apprentice') }} " value="{{ $examRecord->mastery_apprentice_count / $exam->questions->count() * 100 }}" max="100"></progress></div>
-                    </div>
-                </div>
+                @else
+                    <div class="shadow">Cannot calculate mastery without questions in your test.</div>
+                @endif
             </x-card.mini>
         </x-card.main>
     @endif
