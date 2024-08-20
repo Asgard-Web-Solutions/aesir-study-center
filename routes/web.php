@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ExamSessionController;
-use App\Http\Controllers\ExamSetController;
-use App\Http\Controllers\GroupController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PracticeController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ExamSetController;
+use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ExamSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,8 +99,15 @@ Route::prefix('admin')->name('admin.')->controller(AdminController::class)->midd
     Route::get('/users/{user}', 'user')->name('user');
     Route::post('/users/{user}/update', 'userUpdate')->name('user-update');
     Route::post('/users/{user}/', 'gift')->name('gift');
-    Route::get('/products', 'productsList')->name('products');
+    
+    Route::prefix('products')->name('product.')->controller(ProductController::class)->middleware(['auth', 'verified'])->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit', 'edit')->name('edit');
+    });
 });
+
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
 

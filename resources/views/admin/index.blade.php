@@ -8,7 +8,7 @@
         </x-card.mini>
 
         <x-card.mini title="Products">
-            <a href="{{ route('admin.products') }}" class="btn btn-primary">View All Products</a>
+            <a href="{{ route('admin.product.index') }}" class="btn btn-primary">View All Products</a>
         </x-card.mini>
 
     </x-card.main>

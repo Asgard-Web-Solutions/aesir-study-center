@@ -16,6 +16,10 @@
         @endforeach
     </x-card.main>
 
-    Button to create new product
+    <x-card.main>
+        <div class="w-full text-right">
+            <a href="{{ route('admin.product.new') }}" class="btn btn-primary">Add Product</a>
+        </div>
+    </x-card.main>
 
 @endsection

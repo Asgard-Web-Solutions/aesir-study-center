@@ -8,8 +8,7 @@
                     <img src="{{ asset('images/error403.webp') }}" alt="Barn Owl looking for something" class="">
                 </div>
                 <div class="w-full p-3 md:w-3/4">
-                    <x-text.main>You tried to access a page that you do not have the permssion to access.</x-text.main>
-                    <x-text.main>Are you trying to hack us? Please don't...</x-text.main>
+                    <x-text.main>We are sorry, Acolyte {{ auth()->user()->name }}! But you do not have permission to view this page.</x-text.main>
                 </div>
             </div>        
         </x-card.mini>
