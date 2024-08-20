@@ -89,6 +89,7 @@ class ExamSessionController extends Controller
         $user = $this->getAuthedUser();
         AddExamQuestionsToUserRecord::execute($user, $examSet);
         $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet);
+        $message = '';
 
         if ($maxQuestions == 0) {
             $record = DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $examSet->id)->first();
