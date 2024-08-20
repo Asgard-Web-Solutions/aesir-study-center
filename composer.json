@@ -11,10 +11,10 @@
         "php": "^8.2",
         "honeybadger-io/honeybadger-laravel": "^4.1",
         "laravel/framework": "^11.21",
-        "laravel/pennant": "^1.9",
+        "laravel/pennant": "^1.10",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
-        "realrashid/sweet-alert": "^7.1"
+        "realrashid/sweet-alert": "^7.2"
     },
     "require-dev": {
         "mockery/mockery": "^1.6",
