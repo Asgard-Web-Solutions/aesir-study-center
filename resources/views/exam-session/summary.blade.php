@@ -142,66 +142,67 @@
     </div>
   </x-card.main>
 
-  <x-card.main title="{!! $examSet->name !!} - Overall Summary">
-    <x-card.mini>
-      <div class="w-full shadow stats stats-vertical md:stats-horizontal">
-        <div class="stat">
-          <div class="stat-title">Highest Mastery</div>
-          <div class="w-full my-2 text-center stat-value text-{{ config('color.' . strtolower($mastery)) }}"><i class="text-5xl {{ config('icon.' . strtolower($mastery)) }}"></i></div>
-          <div class="stat-desc">{{ $mastery }}</div>
-        </div>
-        <div class="stat">
-          <div class="text-2xl stat-figure text-secondary">
-            <i class="{{ config('icon.times_taken') }} text-{{ config('color.times_taken') }}"></i>
+  @if ($examRecord)
+    <x-card.main title="{!! $examSet->name !!} - Overall Summary">
+      <x-card.mini>
+        <div class="w-full shadow stats stats-vertical md:stats-horizontal">
+          <div class="stat">
+            <div class="stat-title">Highest Mastery</div>
+            <div class="w-full my-2 text-center stat-value text-{{ config('color.' . strtolower($mastery)) }}"><i class="text-5xl {{ config('icon.' . strtolower($mastery)) }}"></i></div>
+            <div class="stat-desc">{{ $mastery }}</div>
           </div>
-          <div class="stat-title">Times Taken</div>
-          <div class="stat-value text-{{ config('color.times_taken') }}">{{ $examRecord->times_taken }}</div>
-          <div class="stat-desc">Last: {{ $examRecord->last_completed }}</div>
-        </div>
-        <div class="stat">
-          <div class="text-2xl stat-figure text-secondary">
-            <i class="{{ config('icon.recent_average') }} text-{{ config('color.recent_average') }}"></i>
+          <div class="stat">
+            <div class="text-2xl stat-figure text-secondary">
+              <i class="{{ config('icon.times_taken') }} text-{{ config('color.times_taken') }}"></i>
+            </div>
+            <div class="stat-title">Times Taken</div>
+            <div class="stat-value text-{{ config('color.times_taken') }}">{{ $examRecord->times_taken }}</div>
+            <div class="stat-desc">Last: {{ $examRecord->last_completed }}</div>
           </div>
-          <div class="stat-title">Average Score</div>
-          <div class="stat-value text-{{ config('color.recent_average') }}">{{ $examRecord->recent_average }}%</div>
-          <div class="stat-desc">Previous {{ config('test.count_tests_for_average_score') }} Exams</div>
+          <div class="stat">
+            <div class="text-2xl stat-figure text-secondary">
+              <i class="{{ config('icon.recent_average') }} text-{{ config('color.recent_average') }}"></i>
+            </div>
+            <div class="stat-title">Average Score</div>
+            <div class="stat-value text-{{ config('color.recent_average') }}">{{ $examRecord->recent_average }}%</div>
+            <div class="stat-desc">Previous {{ config('test.count_tests_for_average_score') }} Exams</div>
+          </div>
         </div>
-      </div>
 
-      <x-help.box>
-        <x-help.text><x-help.highlight>Highest Mastery</x-help.highlight> shows you the badge for the highest mastery level that you have achieved for <x-help.highlight color="secondary">this exam</x-help.highlight>.</x-help.text>
-        <x-help.text>Once <x-help.highlight color="info">100%</x-help.highlight> of the Questions in an exam have achieved a certain Mastery Level, then you will unlock that Mastery Badge.</x-help.text>
-      </x-help.box>
-    </x-card.mini>
-    <x-card.mini title="Your Mastery Progress">
-      @if ($session)
-        <div class="shadow">
-          <div class="flex w-full">
-            <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.mastered') }}">Mastered:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.mastered') }} " value="{{ $examRecord->mastery_mastered_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+        <x-help.box>
+          <x-help.text><x-help.highlight>Highest Mastery</x-help.highlight> shows you the badge for the highest mastery level that you have achieved for <x-help.highlight color="secondary">this exam</x-help.highlight>.</x-help.text>
+          <x-help.text>Once <x-help.highlight color="info">100%</x-help.highlight> of the Questions in an exam have achieved a certain Mastery Level, then you will unlock that Mastery Badge.</x-help.text>
+        </x-help.box>
+      </x-card.mini>
+      <x-card.mini title="Your Mastery Progress">
+        @if ($session)
+          <div class="shadow">
+            <div class="flex w-full">
+              <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.mastered') }}">Mastered:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.mastered') }} " value="{{ $examRecord->mastery_mastered_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+            </div>
+            <div class="flex w-full">
+              <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.proficient') }}">Proficient:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.proficient') }} " value="{{ $examRecord->mastery_proficient_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+            </div>
+            <div class="flex w-full">
+              <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.familiar') }}">Familiar:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.familiar') }} " value="{{ $examRecord->mastery_familiar_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+            </div>
+            <div class="flex w-full">
+              <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.apprentice') }}">Apprentice:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.apprentice') }} " value="{{ $examRecord->mastery_apprentice_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
+            </div>
           </div>
-          <div class="flex w-full">
-            <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.proficient') }}">Proficient:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.proficient') }} " value="{{ $examRecord->mastery_proficient_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
-          </div>
-          <div class="flex w-full">
-            <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.familiar') }}">Familiar:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.familiar') }} " value="{{ $examRecord->mastery_familiar_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
-          </div>
-          <div class="flex w-full">
-            <div class="w-1/2 md:w-1/4 text-sm row text-{{ config('color.apprentice') }}">Apprentice:</div><div class="w-1/2 md:w-3/4"><progress class="w-36 md:w-64 progress progress-{{ config('color.apprentice') }} " value="{{ $examRecord->mastery_apprentice_count / $examSet->questions->count() * 100 }}" max="100"></progress></div>
-          </div>
-        </div>
-      @else
-        <x-text.main>You have not taken this exam, yet.</x-text.main>
-      @endif
-      
-      <x-help.box>
-        <x-help.text><x-help.highlight>Mastery Progress</x-help.highlight> shows how many questions in this exam you have leveled up to each mastery level.</x-help.text>
-        <x-help.text>To gain levels <x-help.highlight color="secondary">keep taking the exam and getting every question correct</x-help.highlight>!</x-help.text>
-        <x-help.text>My own goal is to get every exam to 100% Mastered! It's a big goal, I know, but I like learning things and taking lots of Exams.</x-help.text>
-        <x-help.text>Other acolytes at Acolyte Academy will be able to see your exam badges in your <x-help.highlight color="info">Acolyte Transcript</x-help.highlight> page.</x-help.text>
-      </x-help.box>
-    </x-card.mini>
-  </x-card.main>
-
+        @else
+          <x-text.main>You have not taken this exam, yet.</x-text.main>
+        @endif
+        
+        <x-help.box>
+          <x-help.text><x-help.highlight>Mastery Progress</x-help.highlight> shows how many questions in this exam you have leveled up to each mastery level.</x-help.text>
+          <x-help.text>To gain levels <x-help.highlight color="secondary">keep taking the exam and getting every question correct</x-help.highlight>!</x-help.text>
+          <x-help.text>My own goal is to get every exam to 100% Mastered! It's a big goal, I know, but I like learning things and taking lots of Exams.</x-help.text>
+          <x-help.text>Other acolytes at Acolyte Academy will be able to see your exam badges in your <x-help.highlight color="info">Acolyte Transcript</x-help.highlight> page.</x-help.text>
+        </x-help.box>
+      </x-card.mini>
+    </x-card.main>
+  @endif
 
 
      
