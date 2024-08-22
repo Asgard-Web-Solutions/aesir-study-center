@@ -16,55 +16,59 @@
                 </div>
             </div>
 
-            @if ($user->id == auth()->user()->id)
-                <x-help.box>
-                    <x-help.text>Welcome to your <x-help.highlight>Acolyte Transcripts</x-help.highlight>!</x-help.text>
-                    <x-help.text>This is your official <x-help.highlight color="accent">public</x-help.highlight> record for everything that you do here at <x-help.highlight color="info">Acolyte Acadmey</x-help.highlight>. All acolytes can see this information and can track your progress in your Exams.</x-help.text>
-                    <x-help.text>But don't worry, any exams that are marked as <x-help.highlight color="accent">private</x-help.highlight> are only visible to you. None of the other acolytes will be able to see that information on your transcript.</x-help.text>
-                    <x-help.text>Now go make progress so you can show off all of those <x-help.highlight color="secondary">Mastery Badgets</x-help.highlight> that you are working so hard to earn!</x-help.text>
-                </x-help.box>
-            @endif
+            @auth
+                @if ($user->id == auth()->user()->id)
+                    <x-help.box>
+                        <x-help.text>Welcome to your <x-help.highlight>Acolyte Transcripts</x-help.highlight>!</x-help.text>
+                        <x-help.text>This is your official <x-help.highlight color="accent">public</x-help.highlight> record for everything that you do here at <x-help.highlight color="info">Acolyte Acadmey</x-help.highlight>. All acolytes can see this information and can track your progress in your Exams.</x-help.text>
+                        <x-help.text>But don't worry, any exams that are marked as <x-help.highlight color="accent">private</x-help.highlight> are only visible to you. None of the other acolytes will be able to see that information on your transcript.</x-help.text>
+                        <x-help.text>Now go make progress so you can show off all of those <x-help.highlight color="secondary">Mastery Badgets</x-help.highlight> that you are working so hard to earn!</x-help.text>
+                    </x-help.box>
+                @endif
+            @endauth
         </x-card.mini>
     </x-card.main>
 
     @feature('mage-upgrade')
-        {{-- Hide this, only admins and the user can see this --}}
-        <x-card.main title="Subscription Information">
-            <x-card.mini>
-                Show subscription info here...
-            </x-card.mini>
-
-            @if (auth()->user()->isAdmin)
-                <div class="collapse">
-                    <input type="checkbox">
-                    <div class="text-center collapse-title"><div class="btn btn-outline btn-secondary">Gift Subscriptions</div></div>
-                    <div class="collapse-content">
-                        <x-card.mini title="Gift Mage Membership">
-            
-                        </x-card.mini>
-                    </div>
-                </div>
-            @endif
-
-            @can ('view', $user->credit)
-                <x-card.mini title="Mage Credits">
-                    <div class="shadow stats stats-vertical lg:stats-horizontal">
-                        <div class="stat">
-                            <div class="stat-title">Architect Credits</div>
-                            <div class="stat-value">{{ $user->credit->architect }}</div>
-                            <div class="stat-desc"># of Exams you can Create</div>
-                        </div>
-
-                        <div class="stat">
-                            <div class="stat-title">Study Credits</div>
-                            <div class="stat-value">{{ $user->credit->study }}</div>
-                            <div class="stat-desc"># of Public Exams you can Take</div>
-                        </div>
-                    </div>
+        @auth
+            {{-- Hide this, only admins and the user can see this --}}
+            <x-card.main title="Subscription Information">
+                <x-card.mini>
+                    Show subscription info here...
                 </x-card.mini>
-            @endcan
 
-        </x-card.main>
+                @if (auth()->user()->isAdmin)
+                    <div class="collapse">
+                        <input type="checkbox">
+                        <div class="text-center collapse-title"><div class="btn btn-outline btn-secondary">Gift Subscriptions</div></div>
+                        <div class="collapse-content">
+                            <x-card.mini title="Gift Mage Membership">
+                
+                            </x-card.mini>
+                        </div>
+                    </div>
+                @endif
+
+                @can ('view', $user->credit)
+                    <x-card.mini title="Mage Credits">
+                        <div class="shadow stats stats-vertical lg:stats-horizontal">
+                            <div class="stat">
+                                <div class="stat-title">Architect Credits</div>
+                                <div class="stat-value">{{ $user->credit->architect }}</div>
+                                <div class="stat-desc"># of Exams you can Create</div>
+                            </div>
+
+                            <div class="stat">
+                                <div class="stat-title">Study Credits</div>
+                                <div class="stat-value">{{ $user->credit->study }}</div>
+                                <div class="stat-desc"># of Public Exams you can Take</div>
+                            </div>
+                        </div>
+                    </x-card.mini>
+                @endcan
+
+            </x-card.main>
+        @endauth
     @endfeature
 
     <x-card.main title="Exam History">
@@ -132,7 +136,7 @@
                         @can ('update', $exam) 
                             <a href="{{ route('exam.edit', $exam) }}" class="mx-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
                         @endcan
-                        @can ('view', $exam) 
+                        @can ('take', $exam) 
                             <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 btn btn-primary btn-sm"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a> 
                         @endcan
                     </div>

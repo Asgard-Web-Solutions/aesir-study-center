@@ -41,6 +41,16 @@ class SetPolicy
         return $set->user_id === $user->id;
     }
 
+    public function take(User $user, Set $set): bool
+    {
+        if ($set->visibility == Visibility::isPublic->value) {
+            return true;
+        }
+
+        return $set->user_id === $user->id;
+    }
+
+
     /**
      * Determine whether the user can create models.
      */
