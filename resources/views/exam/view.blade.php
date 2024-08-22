@@ -40,20 +40,19 @@
         </x-card.mini>
     </x-card.main>
 
-    <x-card.main title="Exam Actions">
-        <x-card.mini>
-            <div class="block lg:flex">
-                @can ('update', $exam) 
-                    <a href="{{ route('exam.edit', $exam) }}" class="mx-2 my-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
-                @endcan
-                @can ('view', $exam) 
+    @can('take', $exam)
+        <x-card.main title="Exam Actions">
+            <x-card.mini>
+                <div class="block lg:flex">
+                    @can ('update', $exam) 
+                        <a href="{{ route('exam.edit', $exam) }}" class="mx-2 my-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
+                    @endcan
                     <a href="{{ route('practice.start', $exam) }}" class="mx-2 my-2 btn btn-secondary btn-sm"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a>
                     <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 my-2 btn btn-primary btn-sm"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a> 
-                @endcan
-            </div>
-        </x-card.mini>
-    </x-card.main>
-
+                </div>
+            </x-card.mini>
+        </x-card.main>
+    @endcan
 
     @if ($examRecord)
         <x-card.main title="Your Personal Stats">
@@ -118,7 +117,7 @@
 
                     <x-table.row>
                         <x-table.cell>
-                            <a href="{{ route('profile.view', $master->user) }}"><x-user.avatar size="sm">{{ $master->user->gravatarUrl(128) }}</x-user.avatar></a> <a href="{{ route('profile.view', $master->user) }}" class="text-2xl no-underline link link-secondary tooltip hover:underline" data-tip="Exam Author">{{ $exam->user->name }}</a>
+                            @if ($exam->user) <a href="{{ route('profile.view', $master->user) }}"><x-user.avatar size="sm">{{ $master->user->gravatarUrl(128) }}</x-user.avatar></a> <a href="{{ route('profile.view', $master->user) }}" class="text-2xl no-underline link link-secondary tooltip hover:underline" data-tip="Exam Author">{{ $exam->user->name }}</a>@endif
                         </x-table.cell>
                         <x-table.cell>
                             <i class="
