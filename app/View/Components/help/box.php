@@ -24,7 +24,7 @@ class box extends Component
     {
         $user = Auth::user();
 
-        if ($user && $user->showTutorial) {
+        if ($user != null && $user->showTutorial) {
             return view('components.help.box');
         }
 

@@ -48,6 +48,11 @@ class CreditPolicy
         //
     }
 
+    public function gift(User $user, Credit $credit): bool
+    {
+        return false;
+    }
+
     /**
      * Determine whether the user can delete the model.
      */

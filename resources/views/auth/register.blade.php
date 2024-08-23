@@ -7,7 +7,7 @@
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 
-                <x-form.text name="name" label="Name" />
+                <x-form.text name="name" label="Username" helptext="This will be visible to other users." />
                 <x-form.text name="email" label="E-mail Address" type="email" />
                 <x-form.text name="password" label="Password" type="password" />
                 <x-form.text name="password_confirmation" label="Confirm Password" type="password" />

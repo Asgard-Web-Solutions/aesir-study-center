@@ -50,10 +50,10 @@
                 @endif
 
                 @can ('view', $user->credit)
-                    <x-card.mini title="Mage Credits">
+                    <x-card.mini title="Account Credits">
                         <div class="shadow stats stats-vertical lg:stats-horizontal">
                             <div class="stat">
-                                <div class="stat-title">Architect Credits</div>
+                                <div class="stat-title">Author Credits</div>
                                 <div class="stat-value">{{ $user->credit->architect }}</div>
                                 <div class="stat-desc"># of Exams you can Create</div>
                             </div>
@@ -66,6 +66,12 @@
                         </div>
                     </x-card.mini>
                 @endcan
+
+                @if (auth() && auth()->user()->isAdmin)
+                    <div class="w-full text-center">
+                        <a href="{{ route('profile.credits', $user) }}" class="mx-auto btn btn-sm btn-secondary">View Credit History</a>
+                    </div>
+                @endif
 
             </x-card.main>
         @endauth
