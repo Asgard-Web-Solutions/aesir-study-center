@@ -8,6 +8,7 @@ use App\Models\CreditHistory;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Laravel\Pennant\Feature;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -104,6 +105,10 @@ class ProfileController extends Controller
 
     public function credits(User $user)
     {
+        if (! Feature::active('mage-upgrade')) {
+            abort(404, 'Not found');
+        }
+
         $history = $user->creditHistory();
         $products = Product::all();
 
@@ -116,6 +121,10 @@ class ProfileController extends Controller
 
     public function gift(Request $request, User $user)
     {
+        if (! Feature::active('mage-upgrade')) {
+            abort(404, 'Not found');
+        }
+
         $request->validate([
             'package' => 'required|integer|exists:products,id',
             'reason' => 'required|string|min:3|max:255',
