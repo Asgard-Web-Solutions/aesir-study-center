@@ -64,6 +64,8 @@ Route::prefix('profile')->name('profile.')->controller(ProfileController::class)
     Route::get('/author', 'myexams')->name('myexams');
     Route::post('/update', 'update')->name('update');
     Route::post('/changepass', 'changepass')->name('changepass');
+    Route::get('/{user}/credits', 'credits')->name('credits');
+    Route::post('/{user}/credits/gift', 'gift')->name('gift');
 });
 
 Route::get('/transcripts/{user}', [ProfileController::class, 'view'])->name('profile.view');

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\Mastery;
 use App\Http\Requests\UserRequest;
+use App\Models\CreditHistory;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -98,5 +100,47 @@ class ProfileController extends Controller
             'user' => $user,
             'mastery' => $mastery,
         ]);
+    }
+
+    public function credits(User $user)
+    {
+        $history = $user->creditHistory();
+        $products = Product::all();
+
+        return view('profile.credits')->with([
+            'history' => $history,
+            'user' => $user,
+            'products' => $products,
+        ]);
+    }
+
+    public function gift(Request $request, User $user)
+    {
+        $request->validate([
+            'package' => 'required|integer|exists:products,id',
+            'reason' => 'required|string|min:3|max:255',
+        ]);
+
+        $package = Product::find($request->package);
+
+        if (!$package) {
+            return back()->with('error', 'There was an error retrieving the requested product package');
+        }
+
+        $credits = $user->credit;
+        $credits->architect += $package->architect_credits;
+        $credits->study += $package->study_credits;
+        $credits->save();
+
+        $history = new CreditHistory();
+        $history->user_id = $user->id;
+        $history->title = "Keeper Gift";
+        $history->reason = $request->reason;
+        $history->product_id = $package->id;
+        $history->architect_change = $package->architect_credits;
+        $history->study_change = $package->study_credits;
+        $history->save();
+
+        return back()->with('succes', 'Credits gifted to user!');
     }
 }

@@ -89,4 +89,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(\App\Models\Credit::class);
     }
+
+    public function creditHistory(): HasMany
+    {
+        return $this->hasMany(\App\Models\CreditHistory::class);
+    }
 }
