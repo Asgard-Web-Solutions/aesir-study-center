@@ -137,7 +137,7 @@ class ProfileController extends Controller
             return back()->with('error', 'There was an error retrieving the requested product package');
         }
 
-        ApplyProductToUser::execute($user, $package, "Keeper Gift", $request->reason);
+        ApplyProductToUser::execute($user, $package, "Keeper's Gift", $request->reason);
 
         return back()->with('succes', 'Credits gifted to user!');
     }
