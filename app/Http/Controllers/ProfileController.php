@@ -139,6 +139,6 @@ class ProfileController extends Controller
 
         ApplyProductToUser::execute($user, $package, "Keeper's Gift", $request->reason);
 
-        return back()->with('succes', 'Credits gifted to user!');
+        return back()->with('success', 'Credits gifted to user!');
     }
 }

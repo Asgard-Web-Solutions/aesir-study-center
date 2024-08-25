@@ -113,7 +113,7 @@
 
     <div class="mx-5 divider"></div>
     
-    <x-card.mini title="Add Quesiton">
+    <x-card.mini title="Add Question">
         <form action="{{ route('exam.add', $exam) }}" method="post">
             @csrf
             <h3 class="text-lg font-bold text-secondary">Question</h3>
