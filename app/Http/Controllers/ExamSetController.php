@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\User\RecordCreditHistory;
 use DB;
 use App\Enums\Mastery;
 use App\Models\Answer;
@@ -14,6 +15,7 @@ use App\Models\Set as ExamSet;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\ExamSetDataRequest;
+use App\Models\CreditHistory;
 
 class ExamSetController extends Controller
 {
@@ -58,6 +60,11 @@ class ExamSetController extends Controller
         if (Feature::active('mage-upgrade')) {
             $user->credit->architect -= 1;
             $user->credit->save();
+
+            $credits['architect'] = -1;
+            $history = RecordCreditHistory::execute($user, 'Exam Created', 'Exam created and added to your account.', $credits);
+            $history->set_id = $exam->id;
+            $history->save();
         }
 
         return redirect()->route('exam.edit', $exam)->with('success', 'Exam Created!');

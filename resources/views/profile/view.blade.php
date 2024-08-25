@@ -37,18 +37,6 @@
                     Show subscription info here...
                 </x-card.mini>
 
-                @if (auth()->user()->isAdmin)
-                    <div class="collapse">
-                        <input type="checkbox">
-                        <div class="text-center collapse-title"><div class="btn btn-outline btn-secondary">Gift Subscriptions</div></div>
-                        <div class="collapse-content">
-                            <x-card.mini title="Gift Mage Membership">
-                
-                            </x-card.mini>
-                        </div>
-                    </div>
-                @endif
-
                 @can ('view', $user->credit)
                     <x-card.mini title="Account Credits">
                         <div class="shadow stats stats-vertical lg:stats-horizontal">
