@@ -77,8 +77,8 @@
                     <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
 
                     @guest
-                        <x-button.nav href="{{ route('login') }}">Login</x-button.nav>
-                        <x-button.nav href="{{ route('register') }}">Register</x-button.nav>
+                        <x-button.nav href="{{ route('login') }}" color="primary">Login</x-button.nav>
+                        <x-button.nav href="{{ route('register') }}" color="secondary">Register</x-button.nav>
                     @endguest
 
                     @auth
