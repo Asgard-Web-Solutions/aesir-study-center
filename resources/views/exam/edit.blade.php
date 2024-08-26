@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'EDIT - ' . $exam->name ])
 
 @section('content')
 <x-card.main title="{!! $exam->name !!}">

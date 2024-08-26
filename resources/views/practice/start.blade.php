@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'Practice - ' . $exam->name ])
 
 @section('content')
 

@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'Exam - ' . $question->set->name ])
 
 @section('content')
 <x-page.header :text="$question->set->name" />

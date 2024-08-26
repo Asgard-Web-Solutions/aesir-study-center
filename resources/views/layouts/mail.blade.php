@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name') }} Email</title>
+    <title>{{ $heading }} | {{ config('app.name') }} Email</title>
     <style>
         .body {
             background-color: #1a202c; /* Dark background */

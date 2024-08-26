@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'EDIT - ' . $exam->name . ' | Delete Question'])
 
 @section('content')
     <x-card.main title="Exam: {!! $exam->name !!}">

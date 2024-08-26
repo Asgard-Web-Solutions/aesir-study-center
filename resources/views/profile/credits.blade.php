@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'Your Credits'])
 
 @section('content')
     <x-page.title>Acolyte Credit History</x-page.title>
