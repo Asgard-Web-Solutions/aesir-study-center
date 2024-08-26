@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'Public Exams'])
 
 @section('content')
     <x-card.main title='Public Exams' size='grid'>

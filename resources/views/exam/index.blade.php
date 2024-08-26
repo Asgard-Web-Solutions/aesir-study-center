@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'Manage Authored Exams'])
 
 @section('content')
 

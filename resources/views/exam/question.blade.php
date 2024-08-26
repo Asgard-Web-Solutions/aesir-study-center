@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'EDIT - ' . $exam->name . ' | Edit Question'])
 
 @section('content')
 <x-page.title>{!! $exam->name !!}</x-page.title>

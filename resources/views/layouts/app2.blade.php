@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Study App') }}</title>
+    <title>@if (isset($heading)) {{ $heading }} | @endif {{ config('app.name', 'Study App') }}</title>
     <script src="https://kit.fontawesome.com/ac81ff684d.js" crossorigin="anonymous"></script>
     @vite('resources/css/app.css')
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
 </head>
 <body class="text-gray-900 base-100">
     <div class="container mx-auto">
@@ -178,11 +183,12 @@
         <nav>
             <h6 class="footer-title">Fun Stuff</h6>
             <a class="link link-hover" href="{{ route('home') }}">Welcome</a>
-            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=31">Community Forum</a>
+            <a class="link link-hover" target="_blank" href="https://community.jonzenor.com/viewforum.php?f=76">Community Forum</a>
+            <a class="link link-hover" target="_blank" href="https://finalasgard.dev/discord">Discord Server</a>
         </nav>
         <nav>
             <h6 class="footer-title">Legal & Boring Stuff</h6>
-            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=35">Release Notes</a>
+            <a class="link link-hover" target="_blank" href="https://community.jonzenor.com/search.php?keywords=Release+Notes&terms=all&author=&sc=1&sf=titleonly&sr=posts&sk=t&sd=d&st=0&ch=300&t=0&submit=Search">Release Notes</a>
             <a class="link link-hover" href="{{ route('privacy-policy') }}">Privacy Policy</a>
             <a class="link link-hover" href="{{ route('terms-of-service') }}">Terms of Service</a>
         </nav>
