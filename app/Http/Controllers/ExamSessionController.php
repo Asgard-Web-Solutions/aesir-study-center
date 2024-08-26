@@ -19,6 +19,7 @@ use App\Http\Requests\ExamSessionConfigurationRequest;
 use App\Actions\ExamSession\UpdateUsersHighestMastery;
 use App\Actions\ExamSession\AddExamQuestionsToUserRecord;
 use App\Actions\ExamSession\CalculateUsersMaxAvailableQuestions;
+use App\Actions\User\RecordCreditHistory;
 
 class ExamSessionController extends Controller
 {
@@ -78,6 +79,16 @@ class ExamSessionController extends Controller
         }
 
         CreateUserExamRecord::execute($user, $examSet);
+
+        if (Feature::active('mage-upgrade')) {
+            $user->credit->study -= 1;
+            $user->credit->save();
+
+            $credits['study'] = -1;
+            $history = RecordCreditHistory::execute($user, 'Exam Enrollment', 'This exam was added to your account.', $credits);
+            $history->set_id = $examSet->id;
+            $history->save();
+        }
 
         return redirect()->route('exam-session.start', $examSet);
     }
