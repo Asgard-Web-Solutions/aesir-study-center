@@ -66,12 +66,7 @@
                         {{-- {{ config('app.name', 'Study App') }} --}}
                     </a>
                 </div>
-                
-                @guest
-                    <a href="{{ route('login') }}" class="btn btn-sm btn-primary md:hidden">Login</a>
-                    <a href="{{ route('register') }}" class="btn btn-sm btn-secondary md:hidden">Register</a>
-                @endguest
-                
+                                
                 <div class="hidden space-x-4 md:flex" style="z-index: 1000;">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Library</x-button.nav>
@@ -111,6 +106,16 @@
 
         <!-- Main Content -->
         <main class="mt-8">
+
+            @guest
+                <x-card.main hideDesktop=true>
+                    <x-card.mini>
+                        <a href="{{ route('login') }}" class="my-3 btn btn-sm btn-primary md:hidden">Login</a>
+                        <a href="{{ route('register') }}" class="my-3 btn btn-sm btn-secondary md:hidden">Register</a>
+                    </x-card.mini>
+                </x-card.main>
+            @endguest
+
             @if ($errors->any())
                 <x-card.main>
                     @foreach($errors->all() as $error)
