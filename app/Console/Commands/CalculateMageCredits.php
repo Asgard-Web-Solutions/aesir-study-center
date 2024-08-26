@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\User\RecordCreditHistory;
 use App\Models\Credit;
+use App\Models\CreditHistory;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -13,7 +15,7 @@ class CalculateMageCredits extends Command
      *
      * @var string
      */
-    protected $signature = 'mage:calculate-credits';
+    protected $signature = 'app:calculate-new-credits';
 
     /**
      * The console command description.
@@ -31,12 +33,18 @@ class CalculateMageCredits extends Command
 
         foreach ($users as $user) {
             if (! $user->credit) {
+
+                $credits['architect'] = config('mage.default_architect_credits');
+                $credits['study'] = config('mage.default_study_credits');
+
                 $credit = new Credit([
-                    'architect' => config('mage.default_architect_credits'),
-                    'study' => config('mage.default_study_credits'),
+                    'architect' => $credits['architect'],
+                    'study' => $credits['study'],
                 ]);
 
                 $user->credit()->save($credit);
+
+                $history = RecordCreditHistory::execute($user, 'Acolyte Enrollment', 'Credits received for enrolling at Acolyte Academy.', $credits);
             }
         }
     }

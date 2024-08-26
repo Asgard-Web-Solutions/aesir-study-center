@@ -2,6 +2,7 @@
 
 namespace App\Actions\ExamRecords;
 
+use App\Actions\User\RecordCreditHistory;
 use DB;
 use Carbon\Carbon;
 use App\Models\User;
@@ -20,8 +21,12 @@ class CreateUserExamRecord
             if ($exam->user_id != auth()->user()->id) {
                 $user->credit->study -= 1;
                 $user->credit->save();
+
+                $credits['study'] = -1;
+                $history = RecordCreditHistory::execute($user, 'Exam Enrollment', 'This exam was added to your account.', $credits);
+                $history->set_id = $exam->id;
+                $history->save();    
             }
         }
-
     }
 }

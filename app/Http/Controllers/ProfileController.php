@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Mastery;
-use App\Http\Requests\UserRequest;
-use App\Models\CreditHistory;
-use App\Models\Product;
 use App\Models\User;
+use App\Enums\Mastery;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Laravel\Pennant\Feature;
+use App\Models\CreditHistory;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Actions\User\ApplyProductToUser;
 
 class ProfileController extends Controller
 {
@@ -136,20 +137,8 @@ class ProfileController extends Controller
             return back()->with('error', 'There was an error retrieving the requested product package');
         }
 
-        $credits = $user->credit;
-        $credits->architect += $package->architect_credits;
-        $credits->study += $package->study_credits;
-        $credits->save();
+        ApplyProductToUser::execute($user, $package, "Keeper's Gift", $request->reason);
 
-        $history = new CreditHistory();
-        $history->user_id = $user->id;
-        $history->title = "Keeper Gift";
-        $history->reason = $request->reason;
-        $history->product_id = $package->id;
-        $history->architect_change = $package->architect_credits;
-        $history->study_change = $package->study_credits;
-        $history->save();
-
-        return back()->with('succes', 'Credits gifted to user!');
+        return back()->with('success', 'Credits gifted to user!');
     }
 }

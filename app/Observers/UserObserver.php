@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Actions\User\RecordCreditHistory;
 use App\Models\Credit;
+use App\Models\CreditHistory;
 use App\Models\User;
 
 class UserObserver
@@ -12,12 +14,17 @@ class UserObserver
      */
     public function created(User $user): void
     {
+        $credits['architect'] = config('mage.default_architect_credits');
+        $credits['study'] = config('mage.default_study_credits');
+
         $credit = new Credit([
-            'architect' => config('mage.default_architect_credits'),
-            'study' => config('mage.default_study_credits'),
+            'architect' => $credits['architect'],
+            'study' => $credits['study'],
         ]);
 
         $user->credit()->save($credit);
+
+        $history = RecordCreditHistory::execute($user, 'Acolyte Enrollment', 'Credits received for enrolling at Acolyte Academy.', $credits);
     }
 
     /**

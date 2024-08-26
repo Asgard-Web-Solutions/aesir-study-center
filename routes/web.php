@@ -11,6 +11,8 @@ use App\Http\Controllers\ExamSetController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ExamSessionController;
+use App\Models\CreditHistory;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,7 +112,6 @@ Route::prefix('admin')->name('admin.')->controller(AdminController::class)->midd
         Route::post('/update/{product}', 'update')->name('update');
     });
 });
-
 
 Route::get('/colors', [HomeController::class, 'colors'])->name('colors');
 

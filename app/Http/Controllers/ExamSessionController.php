@@ -19,6 +19,7 @@ use App\Http\Requests\ExamSessionConfigurationRequest;
 use App\Actions\ExamSession\UpdateUsersHighestMastery;
 use App\Actions\ExamSession\AddExamQuestionsToUserRecord;
 use App\Actions\ExamSession\CalculateUsersMaxAvailableQuestions;
+use App\Actions\User\RecordCreditHistory;
 
 class ExamSessionController extends Controller
 {

@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Models\CreditHistory;
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,17 +11,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class GiftedPurchaseReceipt extends Mailable
+class AcolytePurchaseReceipt extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(
+        public CreditHistory $history,
+    ) { }
 
     /**
      * Get the message envelope.
@@ -27,7 +28,7 @@ class GiftedPurchaseReceipt extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Gifted Purchase Receipt',
+            subject: 'Acolyte Purchase Receipt',
         );
     }
 
@@ -37,7 +38,7 @@ class GiftedPurchaseReceipt extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.purchase-receipt',
         );
     }
 
