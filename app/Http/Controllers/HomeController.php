@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\Test;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -64,5 +66,55 @@ class HomeController extends Controller
     public function tos(): View
     {
         return view('home.terms-of-service');
+    }
+
+    public function pricing(): View
+    {
+        if (! Feature::active('mage-upgrade')) {
+            abort(404, 'Not found');
+        }
+
+        $products = Product::orderBy('isSubscription', 'asc')->orderBy('price', 'asc')->get();
+
+        return view('home.pricing')->with([
+            'products' => $products,
+        ]);
+    }
+
+    public function checkout(Request $request, Product $product, String $plan = 'one-time') 
+    {
+        if (! Feature::active('mage-upgrade')) {
+            abort(404, 'Not found');
+        }
+
+        $priceId = ($plan == 'annual') ? $product->stripe_annual_price_id : $product->stripe_price_id;
+
+        if ($product->isSubscription) {
+            return $request->user()
+            ->newSubscription($product->stripe_product_id, $priceId)
+            ->checkout([
+                'success_url' => route('purchase-success').'?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('pricing'),
+            ]);
+        }
+        
+        $quantity = 1;
+        return $request->user()->checkout([$priceId => $quantity], [
+            'success_url' => route('purchase-success').'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('pricing'),
+        ]);
+    }
+
+    public function success(Request $request) 
+    {
+        if (! Feature::active('mage-upgrade')) {
+            abort(404, 'Not found');
+        }
+
+        $checkoutSession = $request->user()->stripe()->checkout->sessions->retrieve($request->get('session_id'));
+
+        dd($checkoutSession);
+
+        return view('home.purchase-success');
     }
 }

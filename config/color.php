@@ -23,8 +23,9 @@ return [
     'keeper' => 'accent',
 
     'credit' => 'warning opacity-60',
-    'architect_credit' => 'warning',
-    'study_credit' => 'warning',
+    'architect_credit' => 'accent opacity-90',
+    'study_credit' => 'info',
+    'usd' => 'success opacity-80',
 
     'review_flag_on' => 'warning opacity-90 hover:opacity-70',
     'review_flag_off' => 'info opacity-30 hover:opacity-60',

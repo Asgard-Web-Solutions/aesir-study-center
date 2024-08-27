@@ -30,7 +30,7 @@
 
             <div class="block w-full lg:flex">
                 <a href="{{ route('admin.product.index') }}" class="my-3 btn btn-secondary">Cancel</a>
-                <x-card.buttons submitLabel="Create Product" />
+                <x-card.buttons submitLabel="Update Product Info" />
             </div>
         </form>
     </x-card.main>
