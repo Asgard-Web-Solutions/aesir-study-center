@@ -29,8 +29,9 @@ return [
     'keeper' => 'fa-solid fa-hood-cloak',
 
     'credit' => 'fa-duotone fa-solid fa-coin-vertical',
-    'architect_credit' => 'fa-light fa-person-digging',
+    'architect_credit' => 'fa-sharp fa-solid fa-typewriter',
     'study_credit' => 'fa-light fa-book-open-cover',
+    'usd' => 'fa-sharp fa-solid fa-dollar-sign',
 
     'review_flag' => 'fa-sharp fa-solid fa-book-sparkles',
     'bonus_mastery' => 'fa-solid fa-duotone fa-square-plus',

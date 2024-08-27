@@ -2,24 +2,23 @@
 
 namespace App\Models;
 
+use Laravel\Cashier\Billable;
 use App\Observers\UserObserver;
 use Database\Factories\UserFactory;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 #[ObservedBy([UserObserver::class])]
-
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable;
-    use HasFactory;
+    use Notifiable, HasFactory, Billable;
 
     /**
      * The attributes that are mass assignable.
