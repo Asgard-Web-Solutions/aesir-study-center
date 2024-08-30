@@ -3,9 +3,10 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Laravel\Pennant\Feature;
+use Laravel\Pulse\Facades\Pulse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Pennant\Feature;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,16 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('isAdmin', function (User $user) {
             return $user->isAdmin;
         });
+
+        Gate::define('viewPulse', function (User $user) {
+            return $user->isAdmin;
+        });
+
+        Pulse::user(fn ($user) => [
+            'name' => $user->name,
+            'extra' => $user->email,
+            'avatar' => $user->gravatarUrl(),
+        ]);
 
         Feature::define('flash-cards', function () {
             return true;
@@ -75,6 +86,5 @@ class AppServiceProvider extends ServiceProvider
 
             return false;
         });
-
     }
 }
