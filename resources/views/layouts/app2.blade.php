@@ -53,6 +53,7 @@
                     @auth
                         @if ( auth()->user()->isAdmin )
                             <x-button.mobile href="{{ route('admin.index') }}">Admin Control Panel</x-button.mobile>
+                            <x-button.mobile href="{{ route('pulse') }}">Pulse Dashboard</x-button.mobile>
                         @endif
 
                         <a href="{{ route('logout') }}" class="block px-4 py-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
@@ -95,6 +96,7 @@
                                 <li> <a href="{{ route('profile.view', auth()->user()) }}">Your Transcripts</a></li>
                                 @if ( auth()->user()->isAdmin )
                                     <li> <a href="{{ route('admin.index') }}">Admin Control Panel</a></li>
+                                    <li> <a href="{{ route('pulse') }}">Pulse Dashboard</a></li>
                                 @endif
                                 <li>
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
