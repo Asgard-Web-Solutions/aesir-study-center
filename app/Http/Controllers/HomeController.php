@@ -10,6 +10,7 @@ use App\Models\Product;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Pennant\Feature;
 
 class HomeController extends Controller
 {
