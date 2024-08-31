@@ -183,10 +183,11 @@
 
     <footer class="p-10 mt-10 footer bg-neutral text-neutral-content">
         <nav>
-            <h6 class="footer-title">Fun Stuff</h6>
+            <h6 class="footer-title">Community</h6>
             <a class="link link-hover" href="{{ route('home') }}">Welcome</a>
             <a class="link link-hover" target="_blank" href="https://community.jonzenor.com/viewforum.php?f=76">Community Forum</a>
             <a class="link link-hover" target="_blank" href="https://finalasgard.dev/discord">Discord Server</a>
+            <a class="link link-hover" target="_blank" href="https://suggest.gg/acolyte/ideas">Make a Suggestion & Vote</a>
         </nav>
         <nav>
             <h6 class="footer-title">Legal & Boring Stuff</h6>
