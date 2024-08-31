@@ -42,7 +42,7 @@
                     @endauth
 
                     <x-button.mobile href="{{ route('exam.public') }}">Public Exams</x-button.mobile>
-                    <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.mobile>
+                    <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=76">Forums & Help</x-button.mobile>
                     <div class="divider"></div>
 
                     @guest
@@ -80,7 +80,7 @@
                     @endauth
         
                     <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>
-                    <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
+                    <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=76">Forums & Help</x-button.nav>
 
                     @guest
                         <x-button.nav href="{{ route('login') }}" color="primary">Login</x-button.nav>
