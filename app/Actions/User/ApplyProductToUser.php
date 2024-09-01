@@ -17,9 +17,10 @@ class ApplyProductToUser
         ApplyCreditsToUser::execute($user, $credits);
 
         $history = RecordCreditHistory::execute($user, $title, $reason, $credits);
-        $history->product_id = $product->id;
-        $history->save();
+        $history->update(['product_id' => $product->id]);
 
         Mail::to($user->email)->send(new AcolytePurchaseReceipt($history));
+
+        return $history;
     }
 }

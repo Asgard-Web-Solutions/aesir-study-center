@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\User\ApplyProductToUser;
+use App\Enums\OrderStatus;
+use App\Models\Order;
 use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\Test;
@@ -88,6 +91,14 @@ class HomeController extends Controller
             abort(404, 'Not found');
         }
 
+        $user = $this->getAuthedUser();
+
+        $order = new Order();
+        $order->user_id = $user->id;
+        $order->product_id = $product->id;
+        $order->status = OrderStatus::Incomplete->value;
+        $order->save();
+
         $priceId = ($plan == 'annual') ? $product->stripe_annual_price_id : $product->stripe_price_id;
 
         if ($product->isSubscription) {
@@ -96,6 +107,7 @@ class HomeController extends Controller
             ->checkout([
                 'success_url' => route('purchase-success').'?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('pricing'),
+                'metadata' => ['order_id' => $order->id],
             ]);
         }
         
@@ -103,6 +115,7 @@ class HomeController extends Controller
         return $request->user()->checkout([$priceId => $quantity], [
             'success_url' => route('purchase-success').'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('pricing'),
+            'metadata' => ['order_id' => $order->id],
         ]);
     }
 
@@ -112,10 +125,35 @@ class HomeController extends Controller
             abort(404, 'Not found');
         }
 
+        $sessionId = $request->get('session_id');
+ 
+        if ($sessionId === null) {
+            return redirect()->route('pricing')->with('error', 'Invalid Stripe ID');
+        }    
+
         $checkoutSession = $request->user()->stripe()->checkout->sessions->retrieve($request->get('session_id'));
 
-        dd($checkoutSession);
+        if ($checkoutSession->payment_status !== 'paid') {
+            return;
+        }    
 
-        return view('home.purchase-success');
+        $orderId = $checkoutSession->metadata->order_id ?? null;
+ 
+        $order = Order::find($orderId);
+
+        if (!$order) {
+            return redirect()->route('pricing')->with('error', 'Could not find order');
+        }
+
+        if ($order->status != OrderStatus::Incomplete) {
+            return redirect()->route('profile.credits', $order->user)->with('warning', 'Order already processed');
+        }
+     
+        $order->update(['status' => OrderStatus::Paid->value, 'stripe_session' => $sessionId]);
+        
+        $history = ApplyProductToUser::execute($order->user, $order->product, 'Purchase', 'You purchased a credit package');
+        $history->update(['order_id' => $order->id]);
+
+        return redirect()->route('profile.credits', $order->user)->with('success', 'Purchase Complete!');
     }
 }
