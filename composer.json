@@ -12,11 +12,11 @@
         "honeybadger-io/honeybadger-laravel": "^4.1",
         "laravel/cashier": "^15.4",
         "laravel/framework": "^11.22",
-        "laravel/pennant": "^1.9",
+        "laravel/pennant": "^1.10",
         "laravel/pulse": "^1.2",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
-        "realrashid/sweet-alert": "^7.1"
+        "realrashid/sweet-alert": "^7.2"
     },
     "require-dev": {
         "mockery/mockery": "^1.6",
