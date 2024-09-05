@@ -92,14 +92,15 @@ class HomeController extends Controller
         }
 
         $user = $this->getAuthedUser();
+        $priceId = ($plan == 'annual') ? $product->stripe_annual_price_id : $product->stripe_price_id;
 
         $order = new Order();
         $order->user_id = $user->id;
         $order->product_id = $product->id;
         $order->status = OrderStatus::Incomplete->value;
+        $order->price_id = $priceId;
         $order->save();
 
-        $priceId = ($plan == 'annual') ? $product->stripe_annual_price_id : $product->stripe_price_id;
 
         if ($product->isSubscription) {
             return $request->user()
@@ -126,6 +127,7 @@ class HomeController extends Controller
         }
 
         $sessionId = $request->get('session_id');
+        $user = $this->getAuthedUser();
  
         if ($sessionId === null) {
             return redirect()->route('pricing')->with('error', 'Invalid Stripe ID');
@@ -150,10 +152,14 @@ class HomeController extends Controller
         }
      
         $order->update(['status' => OrderStatus::Paid->value, 'stripe_session' => $sessionId]);
+
+        if ($order->product->isSubscription) {
+            dd($user->subscribed($order->product->id));
+        }
         
         $history = ApplyProductToUser::execute($order->user, $order->product, 'Purchase', 'You purchased a credit package');
         $history->update(['order_id' => $order->id]);
 
-        return redirect()->route('profile.credits', $order->user)->with('success', 'Purchase Complete!');
+        // return redirect()->route('profile.credits', $order->user)->with('success', 'Purchase Complete!');
     }
 }
