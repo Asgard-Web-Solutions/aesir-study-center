@@ -24,7 +24,10 @@ class UserObserver
 
         $user->credit()->save($credit);
 
-        $history = RecordCreditHistory::execute($user, 'Acolyte Enrollment', 'Credits received for enrolling at Acolyte Academy.', $credits);
+        $historyTitle = 'Acolyte Enrollment';
+        $historyDesc = 'Credits received for enrolling at Acolyte Academy.';
+
+        $history = RecordCreditHistory::execute($user, $historyTitle, $historyDesc, $credits);
     }
 
     /**

@@ -33,7 +33,6 @@ class CalculateMageCredits extends Command
 
         foreach ($users as $user) {
             if (! $user->credit) {
-
                 $credits['architect'] = config('mage.default_architect_credits');
                 $credits['study'] = config('mage.default_study_credits');
 
@@ -44,7 +43,10 @@ class CalculateMageCredits extends Command
 
                 $user->credit()->save($credit);
 
-                $history = RecordCreditHistory::execute($user, 'Acolyte Enrollment', 'Credits received for enrolling at Acolyte Academy.', $credits);
+                $historyTitle = 'Acolyte Enrollment';
+                $historyDesc = 'Credits received for enrolling at Acolyte Academy.';
+
+                $history = RecordCreditHistory::execute($user, $historyTitle, $historyDesc, $credits);
             }
         }
     }

@@ -85,7 +85,7 @@ class ProfileControllerTest extends TestCase
 
         $data = [
             'name' => 'Captain Kirk',
-            'email' => 'kirk@enterprise.org',
+            'email' => 'kirk@starfleet.net',
             'showTutorial' => 1,
         ];
 
