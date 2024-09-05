@@ -91,7 +91,6 @@ class GroupController extends Controller
         // Iterate over the questions and save them to the database
         foreach ($validated['questions'] as $questionData) {
             if ($questionData['question'] != '' && $questionData['answer'] != '') {
-
                 if ($numQuestions >= config('test.max_exam_questions')) {
                     return back()->with('warning', 'You have reached the maximum allowed questions for an exam.');
                 }

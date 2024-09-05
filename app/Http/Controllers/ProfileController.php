@@ -84,14 +84,15 @@ class ProfileController extends Controller
         $user->save();
 
         return back()->with('success', 'Password changed successfully!');
-
     }
 
     public function view(User $user)
     {
-        $user->load(['records' => function ($query) {
+        $user->load([
+        'records' => function ($query) {
             $query->orderBy('exam_records.highest_mastery', 'desc');
-        }]);
+        },
+        ]);
 
         $mastery = [];
         foreach (Mastery::cases() as $level) {

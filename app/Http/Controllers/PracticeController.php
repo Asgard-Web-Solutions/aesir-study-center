@@ -200,7 +200,8 @@ class PracticeController extends Controller
         return redirect()->route('practice.review', $exam);
     }
 
-    public function toggleReviewFlag(ExamSet $exam, Question $question) {
+    public function toggleReviewFlag(ExamSet $exam, Question $question)
+    {
         $userQuestion = DB::table('user_question')->where('question_id', $question->id)->where('user_id', auth()->user()->id)->first();
 
         DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
@@ -210,7 +211,9 @@ class PracticeController extends Controller
         return redirect()->route('practice.review', $question->set_id);
     }
 
-    /** ========== Helper Functions ========== */
+    /**
+ * ========== Helper Functions ==========
+*/
     private function getPracticeSession(ExamSet $exam)
     {
         $session = ExamPractice::where('exam_id', $exam->id)->where('user_id', auth()->user()->id)->first();

@@ -7,9 +7,10 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Set as ExamSet;
 
-class CalculateUsersMaxAvailableQuestions 
+class CalculateUsersMaxAvailableQuestions
 {
-    public static function execute(User $user, ExamSet $exam): int {
+    public static function execute(User $user, ExamSet $exam): int
+    {
         $now = Carbon::now();
         $maxQuestions = DB::table('user_question')->where('user_id', $user->id)->where('set_id', $exam->id)->where('next_at', '<', $now)->count();
 

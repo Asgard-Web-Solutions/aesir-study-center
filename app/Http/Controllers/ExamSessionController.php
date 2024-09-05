@@ -402,7 +402,8 @@ class ExamSessionController extends Controller
         ]);
     }
 
-    public function toggleReviewFlag(Set $examSet, Question $question) {
+    public function toggleReviewFlag(Set $examSet, Question $question)
+    {
         $userQuestion = DB::table('user_question')->where('question_id', $question->id)->where('user_id', auth()->user()->id)->first();
 
         DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
@@ -450,7 +451,9 @@ class ExamSessionController extends Controller
         ]);
     }
 
-    /** ========== Public Helper Functions ========== */
+    /**
+ * ========== Public Helper Functions ==========
+*/
     public function calculateExamRecordStats(Set $examSet, $user = null)
     {
         if (! $user) {
@@ -493,7 +496,9 @@ class ExamSessionController extends Controller
         ]);
     }
 
-    /** ========== HELPER FUNCTIONS ========== */
+    /**
+ * ========== HELPER FUNCTIONS ==========
+*/
     private function getInProgressOrLatestSession($examSet)
     {
         $session = DB::table('exam_sessions')
@@ -541,28 +546,24 @@ class ExamSessionController extends Controller
         // Also, if the original score was below the minimum then they could have gotten a bonus point this time around
         if ((($updatedScore == config('test.grade_apprentice')) || $updatedScore == (config('test.grade_apprentice') + config('test.add_score'))) && ($originalScore == (config('test.grade_apprentice') - config('test.add_score')))) {
             $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change + 1;
-
         } elseif (($updatedScore == (config('test.grade_apprentice') - config('test.sub_score'))) && ($originalScore == config('test.grade_apprentice'))) {
             $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change - 1;
         }
 
         if (($updatedScore == config('test.grade_familiar')) && ($originalScore <= config('test.grade_familiar'))) {
             $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change + 1;
-
         } elseif (($updatedScore == (config('test.grade_familiar') - config('test.sub_score'))) && ($originalScore == config('test.grade_familiar'))) {
             $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change - 1;
         }
 
         if (($updatedScore == config('test.grade_proficient')) && ($originalScore == (config('test.grade_proficient') - config('test.add_score')))) {
             $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change + 1;
-
         } elseif (($updatedScore == (config('test.grade_proficient') - config('test.sub_score'))) && ($originalScore == config('test.grade_proficient'))) {
             $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change - 1;
         }
 
         if (($updatedScore == config('test.grade_mastered')) && ($originalScore == (config('test.grade_mastered') - config('test.add_score')))) {
             $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change + 1;
-
         } elseif (($updatedScore == (config('test.grade_mastered') - config('test.sub_score'))) && ($originalScore == config('test.grade_mastered'))) {
             $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change - 1;
         }

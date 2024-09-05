@@ -8,9 +8,10 @@ use App\Models\Product;
 use App\Models\CreditHistory;
 use Illuminate\Support\Facades\Mail;
 
-class ApplyProductToUser 
+class ApplyProductToUser
 {
-    public static function execute(User $user, Product $product, $title, $reason) {
+    public static function execute(User $user, Product $product, $title, $reason)
+    {
         $credits['architect'] = $product->architect_credits;
         $credits['study'] = $product->study_credits;
 

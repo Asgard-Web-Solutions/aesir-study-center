@@ -9,9 +9,10 @@ use App\Models\User;
 use App\Enums\Mastery;
 use App\Models\Set as ExamSet;
 
-class AwardCreditsForMastery 
+class AwardCreditsForMastery
 {
-    public static function execute(User $user, ExamSet $examSet, $originalMastery, $highestMastery): Void {
+    public static function execute(User $user, ExamSet $examSet, $originalMastery, $highestMastery): Void
+    {
         $credits = $user->credit->first();
 
         // Award proficient mastery!

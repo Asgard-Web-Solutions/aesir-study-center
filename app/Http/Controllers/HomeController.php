@@ -22,7 +22,9 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Show the application dashboard.
@@ -85,7 +87,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function checkout(Request $request, Product $product, String $plan = 'one-time') 
+    public function checkout(Request $request, Product $product, String $plan = 'one-time')
     {
         if (! Feature::active('mage-upgrade')) {
             abort(404, 'Not found');
@@ -120,7 +122,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function success(Request $request) 
+    public function success(Request $request)
     {
         if (! Feature::active('mage-upgrade')) {
             abort(404, 'Not found');
@@ -131,13 +133,13 @@ class HomeController extends Controller
  
         if ($sessionId === null) {
             return redirect()->route('pricing')->with('error', 'Invalid Stripe ID');
-        }    
+        }
 
         $checkoutSession = $request->user()->stripe()->checkout->sessions->retrieve($request->get('session_id'));
 
         if ($checkoutSession->payment_status !== 'paid') {
             return;
-        }    
+        }
 
         $orderId = $checkoutSession->metadata->order_id ?? null;
  

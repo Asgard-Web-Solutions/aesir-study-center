@@ -9,9 +9,10 @@ use App\Models\User;
 use Laravel\Pennant\Feature;
 use App\Models\Set as ExamSet;
 
-class CreateUserExamRecord 
+class CreateUserExamRecord
 {
-    public static function execute(User $user, ExamSet $exam) {
+    public static function execute(User $user, ExamSet $exam)
+    {
         DB::table('exam_records')->insert([
             'user_id' => $user->id,
             'set_id' => $exam->id,
@@ -25,7 +26,7 @@ class CreateUserExamRecord
                 $credits['study'] = -1;
                 $history = RecordCreditHistory::execute($user, 'Exam Enrollment', 'This exam was added to your account.', $credits);
                 $history->set_id = $exam->id;
-                $history->save();    
+                $history->save();
             }
         }
     }

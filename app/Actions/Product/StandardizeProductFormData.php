@@ -8,9 +8,10 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Request;
 use App\Http\Requests\ProductDetailsRequest;
 
-class StandardizeProductFormData 
+class StandardizeProductFormData
 {
-    public static function execute(ProductDetailsRequest $request) {
+    public static function execute(ProductDetailsRequest $request)
+    {
         $validated = $request->validated();
 
         $validated['isSubscription'] = (isset($request->isSubscription)) ? 1 : 0;

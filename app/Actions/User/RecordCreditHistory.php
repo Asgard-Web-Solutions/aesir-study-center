@@ -6,9 +6,10 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\CreditHistory;
 
-class RecordCreditHistory 
+class RecordCreditHistory
 {
-    public static function execute(User $user, $title, $reason, $credits) {
+    public static function execute(User $user, $title, $reason, $credits)
+    {
         
         $architect_change = array_key_exists('architect', $credits) ? $credits['architect'] : 0;
         $study_change = array_key_exists('study', $credits) ? $credits['study'] : 0;

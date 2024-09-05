@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class table.head extends Component
+class table. head extends Component
 {
     /**
      * Create a new component instance.

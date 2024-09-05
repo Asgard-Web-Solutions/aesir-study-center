@@ -20,7 +20,9 @@ class AcolytePurchaseReceipt extends Mailable
      */
     public function __construct(
         public CreditHistory $history,
-    ) { }
+    )
+    {
+    }
 
     /**
      * Get the message envelope.
