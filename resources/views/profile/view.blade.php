@@ -29,42 +29,6 @@
         </x-card.mini>
     </x-card.main>
 
-    @feature('mage-upgrade')
-        @auth
-            {{-- Hide this, only admins and the user can see this --}}
-            <x-card.main title="Subscription Information">
-                <x-card.mini>
-                    Show subscription info here...
-                </x-card.mini>
-
-                @can ('view', $user->credit)
-                    <x-card.mini title="Account Credits">
-                        <div class="shadow stats stats-vertical lg:stats-horizontal">
-                            <div class="stat">
-                                <div class="stat-title">Author Credits</div>
-                                <div class="stat-value">{{ $user->credit->architect }}</div>
-                                <div class="stat-desc"># of Exams you can Create</div>
-                            </div>
-
-                            <div class="stat">
-                                <div class="stat-title">Study Credits</div>
-                                <div class="stat-value">{{ $user->credit->study }}</div>
-                                <div class="stat-desc"># of Public Exams you can Take</div>
-                            </div>
-                        </div>
-                    </x-card.mini>
-                @endcan
-
-                @if (auth() && auth()->user()->isAdmin)
-                    <div class="w-full text-center">
-                        <a href="{{ route('profile.credits', $user) }}" class="mx-auto btn btn-sm btn-secondary">View Credit History</a>
-                    </div>
-                @endif
-
-            </x-card.main>
-        @endauth
-    @endfeature
-
     <x-card.main title="Exam History">
         
         @forelse ($user->records as $record)

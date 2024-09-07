@@ -8,9 +8,10 @@ use App\Models\User;
 use App\Enums\Mastery;
 use App\Models\Set as ExamSet;
 
-class UpdateUsersHighestMastery 
+class UpdateUsersHighestMastery
 {
-    public static function execute(User $user, ExamSet $examSet, Int $originalMastery): Int {
+    public static function execute(User $user, ExamSet $examSet, Int $originalMastery): Int
+    {
         $masteryLevelMastered = 0;
         $masteryLevelProficient = 0;
         $masteryLevelFamiliar = 0;
@@ -24,16 +25,13 @@ class UpdateUsersHighestMastery
                 $masteryLevelProficient++;
                 $masteryLevelFamiliar++;
                 $masteryLevelApprentice++;
-
             } elseif ($question->score >= config('test.grade_proficient')) {
                 $masteryLevelProficient++;
                 $masteryLevelFamiliar++;
                 $masteryLevelApprentice++;
-
             } elseif ($question->score >= config('test.grade_familiar')) {
                 $masteryLevelFamiliar++;
                 $masteryLevelApprentice++;
-
             } elseif ($question->score >= config('test.grade_apprentice')) {
                 $masteryLevelApprentice++;
             }

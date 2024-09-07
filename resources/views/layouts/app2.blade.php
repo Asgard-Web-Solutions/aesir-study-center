@@ -41,6 +41,10 @@
                         <div class="divider"></div>
                     @endauth
 
+                    @guest
+                        <x-button.mobile href="{{ route('pricing') }}">Pricing</x-button.mobile>
+                    @endguest
+                    
                     <x-button.mobile href="{{ route('exam.public') }}">Public Exams</x-button.mobile>
                     <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=76">Forums & Help</x-button.mobile>
                     <div class="divider"></div>
@@ -79,6 +83,10 @@
                         <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
                     @endauth
         
+                    @guest
+                        <x-button.nav href="{{ route('pricing') }}">Pricing</x-button.nav>
+                    @endguest
+                    
                     <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>
                     <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=76">Forums & Help</x-button.nav>
 
@@ -117,8 +125,8 @@
             @guest
                 <x-card.main hideDesktop=true>
                     <x-card.mini>
-                        <a href="{{ route('login') }}" class="my-3 btn btn-sm btn-primary md:hidden">Login</a>
-                        <a href="{{ route('register') }}" class="my-3 btn btn-sm btn-secondary md:hidden">Register</a>
+                        <a href="{{ route('login') }}" class="my-3 btn btn-sm btn-primary">Login</a>
+                        <a href="{{ route('register') }}" class="my-3 btn btn-sm btn-secondary">Register</a>
                     </x-card.mini>
                 </x-card.main>
             @endguest
@@ -183,8 +191,12 @@
 
     <footer class="p-10 mt-10 footer bg-neutral text-neutral-content">
         <nav>
-            <h6 class="footer-title">Community</h6>
+            <h6 class="footer-title">Useful Links</h6>
             <a class="link link-hover" href="{{ route('home') }}">Welcome</a>
+            <a class="link link-hover" href="{{ route('pricing') }}">Pricing</a>
+        </nav>
+        <nav>
+            <h6 class="footer-title">Community</h6>
             <a class="link link-hover" target="_blank" href="https://community.jonzenor.com/viewforum.php?f=76">Community Forum</a>
             <a class="link link-hover" target="_blank" href="https://finalasgard.dev/discord">Discord Server</a>
             <a class="link link-hover" target="_blank" href="https://suggest.gg/acolyte/ideas">Make a Suggestion & Vote</a>

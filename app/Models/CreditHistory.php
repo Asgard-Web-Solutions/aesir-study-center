@@ -10,6 +10,8 @@ class CreditHistory extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['order_id', 'product_id'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class);

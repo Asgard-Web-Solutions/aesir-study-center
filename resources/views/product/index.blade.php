@@ -10,8 +10,15 @@
                         <x-text.main>{{ $product->description }}</x-text.main>
                     </div>
                     <div class="w-full lg:w-1/4">
-                        <a href="{{ route('admin.product.edit', $product) }}" class="btn btn-secondary btn-sm"><i class="{{ config('icon.edit') }} text-lg"></i> Edit Product</a>
+                        <a href="{{ route('admin.product.edit', $product) }}" class="mx-2 btn btn-secondary btn-sm"><i class="{{ config('icon.edit') }} text-lg"></i> Edit Product</a>
                     </div>
+                </div>
+                <div class="py-2">
+                    @if ($product->isActive)
+                        <div class="badge badge-info">Active</div>
+                    @else
+                        <div class="badge badge-ghost">Inactive</div>
+                    @endif
                 </div>
                 <div class="shadow stats">
                     <div class="stat">

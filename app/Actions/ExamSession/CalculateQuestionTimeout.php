@@ -7,9 +7,10 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Set as ExamSet;
 
-class CalculateQuestionTimeout 
+class CalculateQuestionTimeout
 {
-    public static function execute($score, $correct = 1): Carbon {
+    public static function execute($score, $correct = 1): Carbon
+    {
         $hours = (config('test.hour_multiplier') * (min($score, 10) ** 2.6));
 
         if (!$correct) {

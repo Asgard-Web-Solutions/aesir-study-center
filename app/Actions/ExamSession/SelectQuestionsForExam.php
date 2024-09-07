@@ -7,9 +7,10 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Set as ExamSet;
 
-class SelectQuestionsForExam 
+class SelectQuestionsForExam
 {
-    public static function execute(User $user, ExamSet $exam, $questionCount) {
+    public static function execute(User $user, ExamSet $exam, $questionCount)
+    {
         $now = Carbon::now();
         
         // Select number of questions requested

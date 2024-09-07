@@ -47,10 +47,17 @@
         </x-card.main>
     @endcan
 
-    <x-card.main title="Credit Transaction History">
+    <x-card.main>
+        <div class="w-full text-center">
+            <a href="{{ route('profile.index') }}" class="btn btn-secondary">Back to Profile</a>
+        </div>
+    </x-card.main>
+
+    <x-card.main title="Credit Transaction History" size='xl'>
         <x-card.mini>
             <x-table.main>
                 <x-table.head>
+                    <x-table.hcell>Date</x-table.hcell>
                     <x-table.hcell>Transaction Type</x-table.hcell>
                     <x-table.hcell>Description</x-table.hcell>
                     <x-table.hcell>Author <i class="{{ config('icon.credit') }} text-{{ config('color.credit') }} text-lg"></i> </x-table.hcell>
@@ -59,6 +66,7 @@
                 <x-table.body>
                     @forelse ($user->creditHistory as $history)
                         <x-table.row>
+                            <x-table.cell>{{ date('d M Y', strtotime($history->created_at)) }}</x-table.cell>
                             <x-table.cell>{{ $history->title }}</x-table.cell>
                             <x-table.cell>{{ $history->reason }}</x-table.cell>
                             <x-table.cell>{{ $history->architect_change }}</x-table.cell>
@@ -76,7 +84,7 @@
 
     <x-card.main>
         <div class="w-full text-center">
-            <a href="{{ route('profile.view', $user) }}" class="btn btn-secondary">Back to Transcript</a>
+            <a href="{{ route('profile.index') }}" class="btn btn-secondary">Back to Profile</a>
         </div>
     </x-card.main>
 @endsection

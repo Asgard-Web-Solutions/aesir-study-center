@@ -6,9 +6,10 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Set as ExamSet;
 
-class AddExamQuestionsToUserRecord 
+class AddExamQuestionsToUserRecord
 {
-    public static function execute(User $user, ExamSet $exam) {
+    public static function execute(User $user, ExamSet $exam)
+    {
         $now = new Carbon;
         $startTime = $now->clone()->subMinutes(2);
 

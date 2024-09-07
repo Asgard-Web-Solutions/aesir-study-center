@@ -6,9 +6,10 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\CreditHistory;
 
-class ApplyCreditsToUser 
+class ApplyCreditsToUser
 {
-    public static function execute(User $user, $creditAmounts) {
+    public static function execute(User $user, $creditAmounts)
+    {
         $credits = $user->credit;
 
         $credits->architect += $creditAmounts['architect'];

@@ -55,7 +55,8 @@ class AdminController extends Controller
         return redirect()->route('admin.users')->with('alert', 'User updated successfully');
     }
 
-    public function productsList() {
+    public function productsList()
+    {
         if (! Gate::allows('isAdmin')) {
             abort(403);
         }

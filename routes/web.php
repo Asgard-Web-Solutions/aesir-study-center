@@ -87,7 +87,6 @@ Route::prefix('test')->name('exam-session.')->controller(ExamSessionController::
     Route::get('/{set}/register', 'register')->name('register');
     Route::get('/{set}/enroll', 'enroll')->name('enroll');
     Route::get('/{set}/flagReview/{question}', 'toggleReviewFlag')->name('toggleReviewFlag');
-
 });
 
 Route::prefix('practice')->name('practice.')->controller(PracticeController::class)->middleware(['auth', 'verified'])->group(function () {

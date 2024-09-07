@@ -11,11 +11,6 @@ class ListOrphanedExamSets extends Command
 
     protected $description = 'List all ExamSets with a user_id of null or zero';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function handle(): void
     {
         // Fetch ExamSets with user_id of null or zero
