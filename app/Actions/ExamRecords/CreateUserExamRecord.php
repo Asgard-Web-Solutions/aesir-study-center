@@ -23,8 +23,11 @@ class CreateUserExamRecord
                 $user->credit->study -= 1;
                 $user->credit->save();
 
+                $title = 'Exam Enrollment';
+                $desc = 'This exam was added to your account.';
+
                 $credits['study'] = -1;
-                $history = RecordCreditHistory::execute($user, 'Exam Enrollment', 'This exam was added to your account.', $credits);
+                $history = RecordCreditHistory::execute($user, $title, $desc, $credits);
                 $history->set_id = $exam->id;
                 $history->save();
             }
