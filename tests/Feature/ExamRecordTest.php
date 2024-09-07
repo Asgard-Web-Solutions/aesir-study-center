@@ -376,8 +376,8 @@ class ExamRecordTest extends TestCase
     /** @test */
     public function gaining_mastery_gives_the_exam_architect_credits(): void
     {
-        Config::set('test.award_the_architect_architect_credits', 1);
-        Config::set('test.award_the_architect_study_credits', 0.5);
+        Config::set('test.award_the_architect_architect_credits', 2);
+        Config::set('test.award_the_architect_study_credits', 1);
         Config::set('test.grade_mastered', 4);
 
         $user = $this->CreateUserAndAuthenticate();
@@ -403,8 +403,8 @@ class ExamRecordTest extends TestCase
 
         $verifyData = ([
             'user_id' => $architect->id,
-            'architect' => config('mage.default_architect_credits') + config('test.award_the_architect_architect_credits'),
-            'study' => config('mage.default_study_credits') + config('test.award_the_architect_study_credits'),
+            'architect' => config('mage.default_architect_credits') + (config('test.award_the_architect_architect_credits') * 0.5),
+            'study' => config('mage.default_study_credits') + (config('test.award_the_architect_study_credits') * 0.5),
         ]);
 
         $this->assertDatabaseHas('credits', $verifyData);

@@ -107,10 +107,10 @@ class ExamSetController extends Controller
         }
 
         $masters = ExamSet::whereHas('records', function ($query) use ($exam) {
-            $query->where('exam_records.highest_mastery', '>=', Mastery::Familiar->value)->where('exam_records.set_id', $exam->id)->orderBy('exam_records.highest_mastery', 'desc');
+            $query->where('exam_records.highest_mastery', '>=', Mastery::Apprentice->value)->where('exam_records.set_id', $exam->id)->orderBy('exam_records.highest_mastery', 'desc');
         })->with([
         'records' => function ($query) {
-            $query->where('exam_records.highest_mastery', '>=', Mastery::Familiar->value);
+            $query->where('exam_records.highest_mastery', '>=', Mastery::Apprentice->value);
         },
         ])->get();
 
