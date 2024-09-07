@@ -1,7 +1,7 @@
 @extends('layouts.app2', ['heading' => 'Pricing'])
 
 @section('content')
-    <x-card.main title='Purchase Credits' size='grid'>
+    <x-card.main title='Purchase Credits' size='grid' cols='3'>
         @foreach ($products as $product)
             <x-card.mini>
                 <h2 class="my-2 text-2xl text-center text-blue-600 bg-gray-200 rounded-xl">{{ $product->name }}</h2>
@@ -58,6 +58,25 @@
 
             </x-card.mini>
         @endforeach
+    </x-card.main>
+
+    <x-card.main title="Free Credits">
+        <x-card.mini>
+            <text.main>
+                All users will get more free credits over time just by using the site. There are two ways to earn more credits.
+                <br /><br />
+                <ul class="list-disc list-inside">
+                    <li class="list-item"> Master exams</li>
+                    <li class="list-item"> Create public exams that others master</li>
+                </ul>
+                <br /><br />
+                If you gain mastery in the exams that you are taking then you will be awarded additional credits.
+                <br /><br />
+                Also you will be given credits if you make a test public that others gain mastery in.
+                <br /><br />
+                Either way, using Acolyte Academy can be free if you are patient and dedicated to learning.
+            </text.main>
+        </x-card.mini>
     </x-card.main>
 
 @endsection

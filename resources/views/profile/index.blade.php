@@ -35,9 +35,44 @@
                 
                 <x-card.buttons submitLabel="Save Profile" />
             </form>
-
         </x-card.mini>
+    </x-card.main>
 
+    @feature('mage-upgrade')
+        @auth
+            {{-- Hide this, only admins and the user can see this --}}
+            <x-card.main title="Exam Credits">
+                @can ('view', $user->credit)
+                    <x-card.mini title="Account Credits">
+                        <div class="shadow stats stats-vertical lg:stats-horizontal">
+                            <div class="stat">
+                                <div class="stat-title">Author Credits</div>
+                                <div class="stat-value">{{ $user->credit->architect }}</div>
+                                <div class="stat-desc"># of Exams you can Create</div>
+                            </div>
+
+                            <div class="stat">
+                                <div class="stat-title">Study Credits</div>
+                                <div class="stat-value">{{ $user->credit->study }}</div>
+                                <div class="stat-desc"># of Public Exams you can Take</div>
+                            </div>
+                        </div>
+                    </x-card.mini>
+                @endcan
+
+                @if (auth() && auth()->user()->isAdmin)
+                    <div class="w-full text-center">
+                        <a href="{{ route('pricing') }}" class="mx-auto btn btn-primary btn-sm">Buy Credits</a>
+                        <a href="{{ route('profile.credits', $user) }}" class="mx-auto btn btn-sm">View Credit History</a>
+                    </div>
+                @endif
+
+            </x-card.main>
+        @endauth
+    @endfeature
+
+
+    <x-card.main title="Password Settings">
         <x-card.mini title="Update Password">
             <form action="{{ route('profile.changepass') }}" method="POST">
                 @csrf

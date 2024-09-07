@@ -47,6 +47,12 @@
         </x-card.main>
     @endcan
 
+    <x-card.main>
+        <div class="w-full text-center">
+            <a href="{{ route('profile.index') }}" class="btn btn-secondary">Back to Profile</a>
+        </div>
+    </x-card.main>
+
     <x-card.main title="Credit Transaction History" size='xl'>
         <x-card.mini>
             <x-table.main>
@@ -78,7 +84,7 @@
 
     <x-card.main>
         <div class="w-full text-center">
-            <a href="{{ route('profile.view', $user) }}" class="btn btn-secondary">Back to Transcript</a>
+            <a href="{{ route('profile.index') }}" class="btn btn-secondary">Back to Profile</a>
         </div>
     </x-card.main>
 @endsection
