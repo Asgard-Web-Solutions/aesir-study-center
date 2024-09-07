@@ -80,7 +80,7 @@ class AppServiceProvider extends ServiceProvider
                 return true;
             }
 
-            if (env('FEATURE_FLAG_MAGE_UPGRADE')) {
+            if (env('FEATURE_FLAG_MAGE_UPGRADE') == 'true') {
                 return true;
             }
 
