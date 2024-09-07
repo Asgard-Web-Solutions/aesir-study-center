@@ -9,6 +9,7 @@
             <x-card.mini title="Product Details">
                 <x-form.text label="Name" name="name" value="{{ old('name', $product->name) }}" />
                 <x-form.text label="Description" name="description" value="{{ old('name', $product->description) }}" />
+                <x-form.checkbox label="Active" name="isActive" checked="{{ old('isActive', $product->isActive) }}" style="toggle" />
             </x-card.mini>
 
             <x-card.mini title="Product Rewards">
