@@ -76,6 +76,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Feature::define('mage-upgrade', function () {
+            return true;
+            
             if (app()->environment(['local', 'testing'])) {
                 return true;
             }
