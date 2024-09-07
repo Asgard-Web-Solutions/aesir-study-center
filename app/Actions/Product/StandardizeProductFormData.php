@@ -15,6 +15,7 @@ class StandardizeProductFormData
         $validated = $request->validated();
 
         $validated['isSubscription'] = (isset($request->isSubscription)) ? 1 : 0;
+        $validated['isActive'] = (isset($request->isActive)) ? 1 : 0;
         $validated['annual_price'] = $request->annual_price ?? 000.00;
 
         return $validated;

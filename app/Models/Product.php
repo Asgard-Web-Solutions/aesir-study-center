@@ -14,6 +14,7 @@ class Product extends Model
         'description',
         'price',
         'isSubscription',
+        'isActive',
         'annual_price',
         'stripe_product_id',
         'stripe_price_id',

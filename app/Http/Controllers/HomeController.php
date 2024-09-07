@@ -80,7 +80,7 @@ class HomeController extends Controller
             abort(404, 'Not found');
         }
 
-        $products = Product::orderBy('isSubscription', 'asc')->orderBy('price', 'asc')->get();
+        $products = Product::where('isActive', 1)->orderBy('isSubscription', 'asc')->orderBy('price', 'asc')->get();
 
         return view('home.pricing')->with([
             'products' => $products,

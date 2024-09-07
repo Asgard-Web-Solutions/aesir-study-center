@@ -117,8 +117,8 @@
             @guest
                 <x-card.main hideDesktop=true>
                     <x-card.mini>
-                        <a href="{{ route('login') }}" class="my-3 btn btn-sm btn-primary md:hidden">Login</a>
-                        <a href="{{ route('register') }}" class="my-3 btn btn-sm btn-secondary md:hidden">Register</a>
+                        <a href="{{ route('login') }}" class="my-3 btn btn-sm btn-primary">Login</a>
+                        <a href="{{ route('register') }}" class="my-3 btn btn-sm btn-secondary">Register</a>
                     </x-card.mini>
                 </x-card.main>
             @endguest
