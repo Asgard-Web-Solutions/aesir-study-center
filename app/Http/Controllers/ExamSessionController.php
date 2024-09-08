@@ -572,7 +572,7 @@ class ExamSessionController extends Controller
         return $correctAnswersCount;
     }
 
-    private function calculateUpdatedMastery($originalScore, $updatedScore, $session)
+    public function calculateUpdatedMastery($originalScore, $updatedScore, $session)
     {
         $updateMastery = [];
 
@@ -585,7 +585,9 @@ class ExamSessionController extends Controller
             $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change - 1;
         }
 
-        if ($this->justAttainedMasteryLevel($originalScore, $updatedScore, 'familiar')) {
+        if ($this->justAttainedMasteryLevel($originalScore, $updatedScore, 'familiar') ||
+            ($originalScore == 0 && $this->scoreIsMasteryLevel($updatedScore, 'familiar'))
+        ) {
             $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change + 1;
         } elseif ($this->justLostMasteryLevel($originalScore, $updatedScore, 'familiar')) {
             $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change - 1;
@@ -619,7 +621,7 @@ class ExamSessionController extends Controller
         return false;
     }
 
-    private function justAttainedMasteryLevel($originalScore, $updatedScore, $mastery)
+    public function justAttainedMasteryLevel($originalScore, $updatedScore, $mastery)
     {
         if ($this->scoreIsMasteryLevel($updatedScore, $mastery) &&
             $this->scoreIsMasteryMinusCorrect($originalScore, $mastery)
@@ -643,7 +645,7 @@ class ExamSessionController extends Controller
         return false;
     }
 
-    private function scoreIsMasteryLevel($score, $mastery)
+    public function scoreIsMasteryLevel($score, $mastery)
     {
         return $score == config('test.grade_' . $mastery);
     }
