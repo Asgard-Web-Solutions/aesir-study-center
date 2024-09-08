@@ -202,15 +202,17 @@ class ExamSetController extends Controller
         $question->text = $request->question;
         $question->save();
 
-        foreach ($request->answers as $index => $newAnswer) {
-            $answer = Answer::find($index);
-            if ($answer->question_id != $question->id) {
-                return back()->with('error', 'There was an error handling the answers.');
-            }
+        if ($request->answers) {
+            foreach ($request->answers as $index => $newAnswer) {
+                $answer = Answer::find($index);
+                if ($answer->question_id != $question->id) {
+                    return back()->with('error', 'There was an error handling the answers.');
+                }
 
-            $answer->text = $newAnswer;
-            $answer->correct = (isset($request->correct[$index])) ? 1 : 0;
-            $answer->save();
+                $answer->text = $newAnswer;
+                $answer->correct = (isset($request->correct[$index])) ? 1 : 0;
+                $answer->save();
+            }
         }
 
         return redirect()->route('exam.edit', $exam)->with('success', 'Question updated successfully.');
