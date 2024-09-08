@@ -253,7 +253,9 @@ class ExamSessionController extends Controller
 
         $recordAnswer = true;
         $questionArray = json_decode($session->questions_array);
-        if (($session->current_question == $session->question_count) || ($questionArray[$session->current_question] != $question->id)) {
+        if (($session->current_question == $session->question_count) ||
+            ($questionArray[$session->current_question] != $question->id)
+        ) {
             // We have already recorded the results of this question, so let's not record it again.
             $recordAnswer = false;
         }
@@ -316,7 +318,10 @@ class ExamSessionController extends Controller
 
         $result = ($correct == $correctAnswersCount) ? 1 : 0;
 
-        $userQuestion = DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->first();
+        $userQuestion = DB::table('user_question')
+            ->where('user_id', auth()->user()->id)
+            ->where('question_id', $question->id)
+            ->first();
         $previousScore = null;
 
         if ($recordAnswer) {
@@ -338,10 +343,13 @@ class ExamSessionController extends Controller
 
             $nextAt = CalculateQuestionTimeout::execute($updatedScore, $result);
 
-            DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
-                'score' => $updatedScore,
-                'next_at' => $nextAt,
-            ]);
+            DB::table('user_question')
+                ->where('user_id', auth()->user()->id)
+                ->where('question_id', $question->id)
+                ->update([
+                    'score' => $updatedScore,
+                    'next_at' => $nextAt,
+                ]);
 
             // Update mastery for leveled up questions
             $updateMastery = $this->calculateUpdatedMastery($userQuestion->score, $updatedScore, $session);
@@ -386,7 +394,10 @@ class ExamSessionController extends Controller
 
         // Get an updated copy of the session
         $session = $this->getSessionById($session->id);
-        $userQuestion = DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->first();
+        $userQuestion = DB::table('user_question')
+            ->where('user_id', auth()->user()->id)
+            ->where('question_id', $question->id)
+            ->first();
 
         return view('exam-session.answer', [
             'question' => $question,
@@ -404,13 +415,19 @@ class ExamSessionController extends Controller
 
     public function toggleReviewFlag(Set $examSet, Question $question)
     {
-        $userQuestion = DB::table('user_question')->where('question_id', $question->id)->where('user_id', auth()->user()->id)->first();
+        $userQuestion = DB::table('user_question')
+            ->where('question_id', $question->id)
+            ->where('user_id', auth()->user()->id)
+            ->first();
 
         DB::table('user_question')->where('user_id', auth()->user()->id)->where('question_id', $question->id)->update([
             'reviewFlagged' => ($userQuestion->reviewFlagged) ? 0 : 1,
         ]);
 
-        $userQuestion = DB::table('user_question')->where('question_id', $question->id)->where('user_id', auth()->user()->id)->first();
+        $userQuestion = DB::table('user_question')
+            ->where('question_id', $question->id)
+            ->where('user_id', auth()->user()->id)
+            ->first();
 
         return view('exam-session.flagged')->with([
             'exam' => $examSet,
@@ -440,7 +457,10 @@ class ExamSessionController extends Controller
             $this->calculateExamRecordStats($examSet);
         }
 
-        $examRecord = DB::table('exam_records')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->first();
+        $examRecord = DB::table('exam_records')
+            ->where('user_id', auth()->user()->id)
+            ->where('set_id', $examSet->id)
+            ->first();
         $mastery = ($session) ? Mastery::from($examRecord->highest_mastery)->name : Mastery::Unskilled->name;
 
         return view('exam-session.summary')->with([
@@ -462,7 +482,12 @@ class ExamSessionController extends Controller
 
         $record = DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $examSet->id)->first();
 
-        $recentSessions = DB::table('exam_sessions')->where('set_id', $examSet->id)->where('user_id', $user->id)->orderBy('date_completed', 'desc')->limit(config('count_tests_for_average_score'))->get();
+        $recentSessions = DB::table('exam_sessions')
+            ->where('set_id', $examSet->id)
+            ->where('user_id', $user->id)
+            ->orderBy('date_completed', 'desc')
+            ->limit(config('count_tests_for_average_score'))
+            ->get();
 
         $averageCount = 0;
         $averageTotal = 0;
@@ -484,7 +509,12 @@ class ExamSessionController extends Controller
             AwardCreditsForMastery::execute($user, $examSet, $originalMastery, $highestMastery);
         }
 
-        $nextQuestions = DB::table('user_question')->where('user_id', $user->id)->where('set_id', $examSet->id)->orderBy('next_at', 'asc')->limit(10)->get();
+        $nextQuestions = DB::table('user_question')
+            ->where('user_id', $user->id)
+            ->where('set_id', $examSet->id)
+            ->orderBy('next_at', 'asc')
+            ->limit(10)
+            ->get();
         $tenthQuestion = $nextQuestions->last();
 
         DB::table('exam_records')->where('user_id', $user->id)->where('set_id', $examSet->id)->update([
@@ -513,7 +543,11 @@ class ExamSessionController extends Controller
 
     private function getInProgressSession($examSet)
     {
-        $session = DB::table('exam_sessions')->where('user_id', auth()->user()->id)->where('set_id', $examSet->id)->where('date_completed', null)->first();
+        $session = DB::table('exam_sessions')
+            ->where('user_id', auth()->user()->id)
+            ->where('set_id', $examSet->id)
+            ->where('date_completed', null)
+            ->first();
 
         return $session;
     }
@@ -543,31 +577,94 @@ class ExamSessionController extends Controller
         $updateMastery = [];
 
         // See if the current score equals a threshold
-        // Also, if the original score was below the minimum then they could have gotten a bonus point this time around
-        if ((($updatedScore == config('test.grade_apprentice')) || $updatedScore == (config('test.grade_apprentice') + config('test.add_score'))) && ($originalScore == (config('test.grade_apprentice') - config('test.add_score')))) {
+        if ($this->justAttainedMasteryLevel($originalScore, $updatedScore, 'apprentice') ||
+            $this->justAttainedMasteryLevelPlusOne($originalScore, $updatedScore, 'apprentice')
+        ) {
             $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change + 1;
-        } elseif (($updatedScore == (config('test.grade_apprentice') - config('test.sub_score'))) && ($originalScore == config('test.grade_apprentice'))) {
+        } elseif ($this->justLostMasteryLevel($originalScore, $updatedScore, 'apprentice')) {
             $updateMastery['mastery_apprentice_change'] = $session->mastery_apprentice_change - 1;
         }
 
-        if (($updatedScore == config('test.grade_familiar')) && ($originalScore <= config('test.grade_familiar'))) {
+        if ($this->justAttainedMasteryLevel($originalScore, $updatedScore, 'familiar')) {
             $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change + 1;
-        } elseif (($updatedScore == (config('test.grade_familiar') - config('test.sub_score'))) && ($originalScore == config('test.grade_familiar'))) {
+        } elseif ($this->justLostMasteryLevel($originalScore, $updatedScore, 'familiar')) {
             $updateMastery['mastery_familiar_change'] = $session->mastery_familiar_change - 1;
         }
 
-        if (($updatedScore == config('test.grade_proficient')) && ($originalScore == (config('test.grade_proficient') - config('test.add_score')))) {
+        if ($this->justAttainedMasteryLevel($originalScore, $updatedScore, 'proficient')) {
             $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change + 1;
-        } elseif (($updatedScore == (config('test.grade_proficient') - config('test.sub_score'))) && ($originalScore == config('test.grade_proficient'))) {
+        } elseif ($this->justLostMasteryLevel($originalScore, $updatedScore, 'proficient')) {
             $updateMastery['mastery_proficient_change'] = $session->mastery_proficient_change - 1;
         }
 
-        if (($updatedScore == config('test.grade_mastered')) && ($originalScore == (config('test.grade_mastered') - config('test.add_score')))) {
+        if ($this->justAttainedMasteryLevel($originalScore, $updatedScore, 'mastered')) {
             $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change + 1;
-        } elseif (($updatedScore == (config('test.grade_mastered') - config('test.sub_score'))) && ($originalScore == config('test.grade_mastered'))) {
+        } elseif ($this->justLostMasteryLevel($originalScore, $updatedScore, 'mastered')) {
             $updateMastery['mastery_mastered_change'] = $session->mastery_mastered_change - 1;
         }
 
         return $updateMastery;
+    }
+
+
+
+    private function justLostMasteryLevel($originalScore, $updatedScore, $mastery)
+    {
+        if ($this->scoreIsMasteryMinusIncorrect($updatedScore, $mastery) &&
+            $this->scoreIsMasteryLevel($originalScore, $mastery)
+        ) {
+            return true;
+        }
+    
+        return false;
+    }
+
+    private function justAttainedMasteryLevel($originalScore, $updatedScore, $mastery)
+    {
+        if ($this->scoreIsMasteryLevel($updatedScore, $mastery) &&
+            $this->scoreIsMasteryMinusCorrect($originalScore, $mastery)
+            ) {
+                return true;
+        }
+
+        return false;
+    }
+
+    // This is a one off calculation because the user can sometimes get a bonus point for getting the question
+    // correct the first time, so we have to account for that as well
+    private function justAttainedMasteryLevelPlusOne($originalScore, $updatedScore, $mastery)
+    {
+        if ($this->scoreIsMasteryPlusCorrect($updatedScore, $mastery) &&
+            $this->scoreIsMasteryMinusCorrect($originalScore, $mastery)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function scoreIsMasteryLevel($score, $mastery)
+    {
+        return $score == config('test.grade_' . $mastery);
+    }
+
+    private function scoreIsMasteryMinusCorrect($score, $mastery)
+    {
+        return $score == (config('test.grade_' . $mastery) - config('test.add_score'));
+    }
+
+    private function scoreIsMasteryMinusIncorrect($score, $mastery)
+    {
+        return $score == (config('test.grade_' . $mastery) - config('test.sub_score'));
+    }
+
+    private function scoreIsLessThanMastery($score, $mastery)
+    {
+        return $score <= config('test.grade_' . $mastery);
+    }
+
+    private function scoreIsMasteryPlusCorrect($score, $mastery)
+    {
+        return $score == (config('test.grade_' . $mastery) + config('test.add_score'));
     }
 }

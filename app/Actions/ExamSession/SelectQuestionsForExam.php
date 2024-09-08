@@ -14,7 +14,11 @@ class SelectQuestionsForExam
         $now = Carbon::now();
         
         // Select number of questions requested
-        $questions = DB::table('user_question')->where('user_id', $user->id)->where('set_id', $exam->id)->where('next_at', '<', $now)->get();
+        $questions = DB::table('user_question')
+            ->where('user_id', $user->id)
+            ->where('set_id', $exam->id)
+            ->where('next_at', '<', $now)
+            ->get();
 
         // Shuffle and select the appropriate number of questions
         $questions = $questions->random($questionCount);

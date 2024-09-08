@@ -25,7 +25,9 @@ class AwardCreditsForMastery
 
             $credits->save();
 
-            $history = RecordCreditHistory::execute($user, 'Profciency Bonus', 'Bonus credits for achieving proficient in an exam set.', $creditRewards);
+            $title = 'Profciency Bonus';
+            $desc = 'Bonus credits for achieving proficient in an exam set.';
+            $history = RecordCreditHistory::execute($user, $title, $desc, $creditRewards);
             $history->set_id = $examSet->id;
             $history->save();
         }
@@ -40,7 +42,9 @@ class AwardCreditsForMastery
 
             $credits->save();
 
-            $history = RecordCreditHistory::execute($user, 'Mastery Bonus', 'Bonus credits for achieving Mastery in an exam set.', $creditRewards);
+            $title = 'Mastery Bonus';
+            $desc = 'Bonus credits for achieving Mastery in an exam set.';
+            $history = RecordCreditHistory::execute($user, $title, $desc, $creditRewards);
             $history->set_id = $examSet->id;
             $history->save();
         }
@@ -73,7 +77,9 @@ class AwardCreditsForMastery
     
                 $architectCredits->save();
     
-                $history = RecordCreditHistory::execute($examSet->user, 'Author Mastery Bonus', 'Bonus credits for someone leveling up their mastery on an exam you authored!', $creditRewards);
+                $title = 'Author Mastery Bonus';
+                $desc = 'Bonus credits for someone leveling up their mastery on an exam you authored!';
+                $history = RecordCreditHistory::execute($examSet->user, $title, $desc, $creditRewards);
                 $history->set_id = $examSet->id;
                 $history->save();
             }
