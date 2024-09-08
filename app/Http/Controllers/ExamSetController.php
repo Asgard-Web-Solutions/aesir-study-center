@@ -124,7 +124,7 @@ class ExamSetController extends Controller
 
     public function public(): View
     {
-        $exams = ExamSet::where('visibility', 1)->get();
+        $exams = ExamSet::where('visibility', 1)->orderBy('created_at', 'desc')->get();
 
         return view('exam.public')->with([
             'exams' => $exams,

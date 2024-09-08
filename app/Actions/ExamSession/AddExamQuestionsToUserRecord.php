@@ -15,7 +15,12 @@ class AddExamQuestionsToUserRecord
 
         foreach ($exam->questions as $question) {
             if (! $user->questions->contains($question)) {
-                $user->questions()->attach($question->id, ['score' => 0, 'next_at' => $startTime, 'set_id' => $exam->id]);
+                $user->questions()
+                ->attach($question->id, [
+                    'score' => 0,
+                    'next_at' => $startTime,
+                    'set_id' => $exam->id
+                ]);
             }
         }
     }
