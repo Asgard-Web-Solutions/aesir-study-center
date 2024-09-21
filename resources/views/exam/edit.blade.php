@@ -26,14 +26,14 @@
                     @if ($exam->questions->count() >= config('test.min_public_questions'))
                         @feature('mage-upgrade')
                             <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $exam->visibility }}" />
-                        @else            
+                        @else
                             <x-form.dropdown name="visibility" label="Public / Private" :values="$visibilityValues" selected="{{ $exam->visibility }}" />
                         @endfeature
                     @else
                         <x-text.main>A test must have at least <span class="font-bold text-accent">{{ config('test.min_public_questions') }} Questions</span> before it can be made public.</x-text.main>
                         <x-text.dim>Progress: {{ $exam->questions->count() }} / {{ config('test.min_public_questions') }}</x-text.dim>
                     @endif
-                    
+
                     <x-help.box>
                         <x-help.text>The exams <x-help.highlight>Visibility</x-help.highlight> determines who can see or take an exam.</x-help.text>
                         <x-help.text>If you set the exam to <x-help.highlight>Private</x-help.highlight> then only you, the exam's <x-help.highlight color="info">Architect</x-help.highlight>, can see the exam or take.</x-help.text>
@@ -86,7 +86,7 @@
         </x-table.main>
     </x-card.mini>
 
-    
+
     <div class="collapse collapse-arrow">
         <input type="checkbox">
         <div class="w-1/2 mx-auto collapse-title btn btn-md btn-secondary btn-outline">Create Question Group</div>
@@ -94,13 +94,13 @@
             <x-card.mini title="Create Question Group">
                 <form action="{{ route('group-store', $exam->id) }}" method="post">
                     @csrf
-    
+
                     <x-form.text name="name" label="Name" />
-    
+
                     <x-card.buttons submitLabel="Add Group" />
                 </form>
             </x-card.mini>
-        </div>        
+        </div>
     </div>
 </x-card.main>
 
@@ -112,8 +112,8 @@
     </x-card.mini>
 
     <div class="mx-5 divider"></div>
-    
-    <x-card.mini title="Add Question">
+
+    <x-card.mini title="Create a Question">
         <form action="{{ route('exam.add', $exam) }}" method="post">
             @csrf
             <h3 class="text-lg font-bold text-secondary">Question</h3>
@@ -138,7 +138,7 @@
             @endfor
 
             <div class="w-full my-2 text-right">
-                <input type="submit" value="Add Question" class="btn btn-primary">
+                <input type="submit" value="Save Question" class="btn btn-primary">
             </div>
         </form>
     </x-card.mini>
@@ -162,7 +162,7 @@
                                     <li><a href="{{ route('exam.question', ['exam' => $exam, 'question' => $question]) }}" class=""><i class="{{ config('icon.edit_exam') }} text-{{ config('color.edit_exam') }} text-lg"></i> Edit Question</a></li>
                                     <li><a href="{{ route('exam.questionDelete', ['exam' => $exam, 'question' => $question]) }}" ><i class="{{ config('icon.delete') }} text-{{ config('color.delete') }} text-lg"></i> Delete Question</a></li>
                                 </ul>
-                            </div>    
+                            </div>
                         </x-table.cell>
                     </x-table.row>
                 @endforeach
