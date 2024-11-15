@@ -48,8 +48,6 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         Feature::define('flash-cards', function () {
-            return true;
-
             if (app()->environment(['local', 'testing'])) {
                 return true;
             }
@@ -62,8 +60,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Feature::define('profile-test-manager', function () {
-            return true;
-
             if (app()->environment(['local', 'testing'])) {
                 return true;
             }
@@ -86,5 +82,30 @@ class AppServiceProvider extends ServiceProvider
 
             return false;
         });
+
+        Feature::define('captcha', function () {
+            if (app()->environment(['local', 'testing'])) {
+                return false;
+            }
+
+            if (env('FEATURE_FLAG_CAPTCHA')) {
+                return true;
+            }
+
+            return false;
+        });
+
+        Feature::define('email_verification', function () {
+            if (app()->environment(['local', 'testing'])) {
+                return false;
+            }
+
+            if (env('FEATURE_FLAG_EMAIL_VERIFICATION')) {
+                return true;
+            }
+
+            return false;
+        });
+
     }
 }

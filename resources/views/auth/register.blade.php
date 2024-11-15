@@ -12,6 +12,9 @@
                 <x-form.text name="password" label="Password" type="password" />
                 <x-form.text name="password_confirmation" label="Confirm Password" type="password" />
 
+                @feature('captcha')
+                    <x-captcha-container />
+                @endfeature
                 <x-card.buttons submitLabel="Register" />
             </form>
         </x-card.mini>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@if (isset($heading)) {{ $heading }} | @endif {{ config('app.name', 'Study App') }}</title>
     <script src="https://kit.fontawesome.com/ac81ff684d.js" crossorigin="anonymous"></script>
+    <x-captcha-js />
     @vite('resources/css/app.css')
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -44,7 +45,7 @@
                     @guest
                         <x-button.mobile href="{{ route('pricing') }}">Pricing</x-button.mobile>
                     @endguest
-                    
+
                     <x-button.mobile href="{{ route('exam.public') }}">Public Exams</x-button.mobile>
                     <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=76">Forums & Help</x-button.mobile>
                     <div class="divider"></div>
@@ -76,17 +77,17 @@
                         {{-- {{ config('app.name', 'Study App') }} --}}
                     </a>
                 </div>
-                                
+
                 <div class="hidden space-x-4 md:flex" style="z-index: 1000;">
                     @auth
                         <x-button.nav href="{{ route('profile.exams') }}">Your Library</x-button.nav>
                         <x-button.nav href="{{ route('profile.myexams') }}">Create/Manage Exams</x-button.nav>
                     @endauth
-        
+
                     @guest
                         <x-button.nav href="{{ route('pricing') }}">Pricing</x-button.nav>
                     @endguest
-                    
+
                     <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>
                     <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=76">Forums & Help</x-button.nav>
 
@@ -183,8 +184,8 @@
                     @endif
                 </x-card.main>
             @endif
-            
-            
+
+
             @yield('content')
         </main>
     </div>
@@ -218,7 +219,7 @@
             menu.classList.toggle('hidden');
         });
     </script>
-    
+
     @include('sweetalert::alert')
 </body>
 </html>

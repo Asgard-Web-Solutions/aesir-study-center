@@ -7,7 +7,10 @@ use App\Models\User;
 use App\Providers\AppServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Rahul900day\Captcha\Facades\Captcha;
+use Rahul900day\Captcha\Rules\Captcha as CaptchaRule;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Pennant\Feature;
 
 class RegisterController extends Controller
 {
@@ -46,11 +49,20 @@ class RegisterController extends Controller
      */
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
-        return Validator::make($data, [
+        $validationRules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email:rfc,dns,strict,spoof,filter', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ];
+
+        if (Feature::active('captcha')) {
+            $validationRules[Captcha::getResponseName()] = [
+                'required',
+                new CaptchaRule(),
+            ];
+        }
+
+        return Validator::make($data, $validationRules);
     }
 
     /**
