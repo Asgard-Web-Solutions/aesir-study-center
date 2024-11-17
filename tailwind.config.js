@@ -4,6 +4,8 @@ module.exports = {
     './resources/**/*.blade.php',
     './resources/**/*.js',
     './resources/**/*.vue',
+    "./vendor/livewire/flux-pro/stubs/**/*.blade.php",
+    "./vendor/livewire/flux/stubs/**/*.blade.php",
   ],
   plugins: [require("daisyui")],
   daisyui: {
@@ -14,4 +16,10 @@ module.exports = {
   //   extend: {},
   // },
   // ...
+  theme: {
+    fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+    },
+  },
+
 }
