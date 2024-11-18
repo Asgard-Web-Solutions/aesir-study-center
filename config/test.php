@@ -26,4 +26,6 @@ return [
 
     'award_the_architect_architect_credits' => 2,
     'award_the_architect_study_credits' => 2,
+
+    'number_answers_to_add' => env('NUM_ANSWERS_TO_ADD', 4),
 ];
