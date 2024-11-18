@@ -5,16 +5,32 @@
     <x-card.main title="{!! $examSet->name !!}">
         <x-text.dim>Question # {{ $session->current_question + 1 }} <span class="text-xs opacity-50" id="scroll-to">of {{ $session->question_count }}</span></x-text.dim>
         <x-card.mini>
-            <h3 class="text-2xl text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! $question->text !!}</h3>
+            @php
+                $length = 0;
+                if ($question->group) {
+                    $length += strlen($question->group->question);
+                }
+
+                $length += strlen($question->text);
+                $textSize = ($length > 15) ? "text-lg" : "text-2xl";
+            @endphp
+
+            <h3 class="{{ $textSize }} leading-relaxed text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! nl2br($question->text) !!}</h3>
         </x-card.mini>
         <form action="{{ route('exam-session.answer', $examSet) }}" method="post">
-            <x-text.dim>Select your Answer</x-text.dim>
+            <x-text.dim>
+                @if ($multi)
+                    Select <span class="font-bold">two or more</span> answers
+                @else
+                    Select <span class="font-bold">one</span> answer
+                @endif
+            </x-text.dim>
             <x-card.mini>
-                
+
                 @csrf
                 <input type="hidden" name="question" value="{{ $question->id }}">
                 <input type="hidden" name="order" value="{{ $order }}">
-        
+
                 <div class="my-4 space-y-4">
                     @foreach ($answers as $answer)
                         <div class="flex items-center">
@@ -29,7 +45,7 @@
                         </div>
                     @endforeach
                 </div>
-            
+
             </x-card.mini>
             <x-card.buttons submitLabel="Submit Answer" />
         </form>
@@ -43,6 +59,6 @@
                 behavior: 'smooth'
             });
         });
-    </script>    
+    </script>
 
 @endsection
