@@ -15,7 +15,7 @@
 
     @if ($helptext) <x-text.dim>{{ $helptext }}</x-text.dim> @endif
 
-    <textarea id="{{ $name }}" name="{{ $name }}" rows="{{ $rows }}" class="resize h-full w-full my-2 input @error($name) input-error @else input-primary @enderror">{!! $text !!}</textarea>
+    <textarea id="{{ $name }}" name="{{ $name }}" rows="{{ $rows }}" class="resize @if ($rows > 2) h-full @endif w-full my-2 input @error($name) input-error @else input-primary @enderror">{!! $text !!}</textarea>
 
     @error($name)
         <p class="mt-1 text-xs text-error">{{ $message }}</p>
