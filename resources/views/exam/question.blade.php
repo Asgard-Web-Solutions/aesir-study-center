@@ -3,7 +3,7 @@
 @section('content')
 <x-page.title>{!! $exam->name !!}</x-page.title>
 
-<x-card.main title="{!! $question->text !!}">
+<x-card.main>
     <form action="{{ route('exam.questionUpdate', ['exam' => $exam, 'question' => $question]) }}" method="post">
         @csrf
 
