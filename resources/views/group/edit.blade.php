@@ -3,7 +3,7 @@
 @section('content')
     <x-card.main title="Exam: {!! $group->set->name !!}">
 
-        <x-card.mini title="Question: {!! $question->text !!}">
+        <x-card.mini">
             <form action="{{ route('group-update-question', ['group' => $group, 'question' => $question]) }}" method="post">
                 @csrf
 
