@@ -8,7 +8,7 @@
                 @csrf
 
                 @if ($group->question) <x-text.main label="Group Question Prefix: ">{{ $group->question }}</x-text.main> @endif
-                <x-form.text name="question" label="Question" value="{!! old('question', $question->text) !!}" />
+                <x-form.textarea name="question" rows="6" label="Question" value="{!! old('question', $question->text) !!}" />
                 <x-form.text name="answer" label="Answer" value="{!! old('answer', $question->answers[0]->text) !!}" />
 
                 <x-card.buttons submitLabel="Update Question" />
