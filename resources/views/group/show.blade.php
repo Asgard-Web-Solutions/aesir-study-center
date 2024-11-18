@@ -52,7 +52,7 @@
             <span class="mx-4 tooltip" data-tip="Question Count"><i class="{{ config('icon.question_count') }} text-{{ config('color.question_count') }} text-lg"></i> {{ $group->set->questions->count() }} / {{ config('test.max_exam_questions') }}</span>
         </div>
     </x-card.mini>
-    
+
     @if ($group->question)
         <x-card.mini>
             Group Question Prefix: <span class="text-xl text-primary">{{ $group->question }}</span>
@@ -63,14 +63,14 @@
     <form action="{{ route('group-store-questions', $group) }}" method="POST">
         @csrf
         @for ($i = 1; $i <= 10; $i++)
-            <x-card.mini title="Question #{{ $i }}">                
+            <x-card.mini title="Question #{{ $i }}">
                 <x-form.group>
-                    <x-form.text name="questions[{{ $i }}][question]" label="Question" size='half' />
+                    <x-form.textarea rows="1" name="questions[{{ $i }}][question]" label="Question" size='half' />
                     <x-form.text name="questions[{{ $i }}][answer]" label="Answer" size='half'/>
                 </x-form.group>
             </x-card.mini>
         @endfor
-        
+
         <x-card.buttons submitLabel="Save Questions" />
     </form>
 </x-card.main>

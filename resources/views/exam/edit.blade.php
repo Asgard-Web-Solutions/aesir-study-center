@@ -117,7 +117,7 @@
         <form action="{{ route('exam.add', $exam) }}" method="post">
             @csrf
             <h3 class="text-lg font-bold text-secondary">Question</h3>
-            <x-form.text name="question" value="{{ old('question') }}" />
+            <x-form.textarea name="question" value="{{ old('question') }}" />
 
             <h3 class="text-lg font-bold text-secondary">Answers</h3>
             @for ($i = 1; $i <= 4; $i ++)

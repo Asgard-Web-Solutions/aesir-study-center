@@ -5,9 +5,19 @@
     <x-card.main title="{!! $examSet->name !!}">
         <x-text.dim>Question # {{ $session->current_question }} <span class="text-xs opacity-50">of {{ $session->question_count }}</span></x-text.dim>
         <x-card.mini>
-            <h3 class="text-2xl text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! $question->text !!}</h3>
+            @php
+                $length = 0;
+                if ($question->group) {
+                    $length += strlen($question->group->question);
+                }
+
+                $length += strlen($question->text);
+                $textSize = ($length > 15) ? "text-lg" : "text-2xl";
+            @endphp
+
+            <h3 class="{{ $textSize }} leading-relaxed text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! nl2br($question->text) !!}</h3>
         </x-card.mini>
-        
+
         <x-card.mini>
             <div class="shadow stats">
                 <div class="text-center stat">
@@ -23,7 +33,7 @@
                 </div>
             </div>
         </x-card.mini>
-    
+
         <x-card.mini title="Your Answer">
             @foreach ($answers as $answer)
                 <div class="flex items-center p-2 rounded-lg hover:bg-base-200">
@@ -120,7 +130,7 @@
             <a href="{{ route('exam-session.test', $examSet) }}" class="btn btn-primary btn-outline">Next Question</a>
         </div>
     </x-card.main>
-            
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             if (window.innerWidth < 768) {
@@ -129,6 +139,6 @@
                 });
             }
         });
-    </script>    
+    </script>
 
 @endsection

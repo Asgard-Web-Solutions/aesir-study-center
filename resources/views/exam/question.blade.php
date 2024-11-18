@@ -6,9 +6,9 @@
 <x-card.main title="{!! $question->text !!}">
     <form action="{{ route('exam.questionUpdate', ['exam' => $exam, 'question' => $question]) }}" method="post">
         @csrf
-        
+
         <x-card.mini title="Quesiton">
-            <x-form.text name="question" value="{!! old('question', $question->text) !!}" />
+            <x-form.textarea name="question" rows="6" value="{!! old('question', $question->text) !!}" />
         </x-card.mini>
 
         <x-card.mini title="Answers">
@@ -37,7 +37,7 @@
     <x-card.mini title="Add Answer">
         <form action="{{ route('exam.addAnswer', ['exam' => $exam, 'question' => $question]) }}" method="post">
             @csrf
-            
+
             <div class="block lg:flex">
                 <div class="w-full px-4 lg:w-1/4">
                     <x-form.checkbox name="correct" label="Answer is correct?" />
