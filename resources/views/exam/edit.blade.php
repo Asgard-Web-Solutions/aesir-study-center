@@ -117,10 +117,10 @@
         <form action="{{ route('exam.add', $exam) }}" method="post">
             @csrf
             <h3 class="text-lg font-bold text-secondary">Question</h3>
-            <x-form.textarea name="question" value="{{ old('question') }}" />
+            <x-form.textarea name="question" rows="4" value="{{ old('question') }}" />
 
             <h3 class="text-lg font-bold text-secondary">Answers</h3>
-            @for ($i = 1; $i <= 4; $i ++)
+            @for ($i = 1; $i <= config('test.number_answers_to_add'); $i ++)
                 <div class="divider">Answer #{{ $i }}</div>
                 <div class="block lg:flex">
                     <div class="w-full px-4 lg:w-1/4">
