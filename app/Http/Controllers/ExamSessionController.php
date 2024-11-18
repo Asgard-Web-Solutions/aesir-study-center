@@ -99,7 +99,7 @@ class ExamSessionController extends Controller
 
                 $message = "You will have have 10 more questions available: " . $available->diffForHumans();
             }
-            
+
             return redirect()->route('profile.exams')->with('warning', 'You do not have any available questions to take yet. ' . $message);
         }
 
@@ -120,15 +120,15 @@ class ExamSessionController extends Controller
 
         $user = $this->getAuthedUser();
         $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet);
-        
+
         $request->validate([
             'question_count' => 'max:'.$maxQuestions,
         ]);
-        
+
         if ($request->question_count > $maxQuestions) {
             return back()->with('error', 'Requested question count exceeds maximum available of '.$maxQuestions.' Questions.');
         }
-        
+
         $questions = SelectQuestionsForExam::execute($user, $examSet, $request->question_count);
 
         $questionArray = [];
@@ -269,23 +269,22 @@ class ExamSessionController extends Controller
         foreach ($question->answers as $answer) {
             if ($multi) {
                 $normalizedAnswer[$answer->id] = (array_key_exists($answer->id, $request->answer)) ? 1 : 0;
+                $gotRight = 0;
 
                 if ($answer->correct && ($normalizedAnswer[$answer->id] == 1)) {
                     $correct += 1;
-                    $testAnswers[] = [
-                        'id' => $answer->id,
-                        'text' => $answer->text,
-                        'correct' => $answer->correct,
-                        'gotRight' => 1,
-                    ];
-                } else {
-                    $testAnswers[] = [
-                        'id' => $answer->id,
-                        'text' => $answer->text,
-                        'correct' => $answer->correct,
-                        'gotRight' => 0,
-                    ];
+                    $gotRight = 1;
+                } else if (!$answer->correct && ($normalizedAnswer[$answer->id] == 1)) {
+                    $correct -= 1;
+                    $gotRight = 0;
                 }
+
+                $testAnswers[] = [
+                    'id' => $answer->id,
+                    'text' => $answer->text,
+                    'correct' => $answer->correct,
+                    'gotRight' => $gotRight,
+                ];
             } elseif ($question->answers->count() == 1) {
                 $correct = ($request->answer == $answer->id) ? 1 : 0;
 
@@ -617,7 +616,7 @@ class ExamSessionController extends Controller
         ) {
             return true;
         }
-    
+
         return false;
     }
 
