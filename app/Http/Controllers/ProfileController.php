@@ -27,7 +27,7 @@ class ProfileController extends Controller
     public function exams()
     {
         $user = $this->getAuthedUser();
-        $records = $user->records;
+        $records = $user->records()->orderBy('last_completed', 'desc')->get();
 
         $mastery = [];
         foreach (Mastery::cases() as $level) {
