@@ -19,7 +19,8 @@
         "livewire/flux": "^1.0",
         "livewire/flux-pro": "^1.0",
         "rahul900day/laravel-captcha": "^3.0",
-        "realrashid/sweet-alert": "^7.2"
+        "realrashid/sweet-alert": "^7.2",
+        "msamgan/laravel-env-keys-checker": "^1.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
