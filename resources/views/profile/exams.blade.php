@@ -10,7 +10,7 @@
         <x-help.text>Finally, if you need help with anything else, feel free to join our <x-page.communitylink>Community Forums</x-page.communitylink> where you can ask for help and interact with the <x-help.highlight color="info">Keeper</x-help.highlight>.</x-help.text>
         <x-help.text>Happy learning!</x-help.text>
     </x-help.box>
-    
+
     <x-card.main title="Your Exam Library" size="grid">
         @forelse ($records as $record)
             <x-card.mini>
@@ -21,13 +21,13 @@
                     <div class="w-full lg:w-1/4 tooltip" data-tip="{{ $mastery[$record->pivot->highest_mastery] }}">
                         <i class="
                             text-5xl
-                            text-{{ config('color.' . strtolower($mastery[$record->pivot->highest_mastery])) }} 
+                            text-{{ config('color.' . strtolower($mastery[$record->pivot->highest_mastery])) }}
                             {{ config('icon.' . strtolower($mastery[$record->pivot->highest_mastery])) }}
                             rounded-lg ring-2 p-1 ring-base-300
                         "></i>
                     </div>
                 </div>
-                
+
                 <div class="flex w-full py-2 my-2 rounded-lg bg-base-100">
                     @if ($record->user) <a href="{{ route('profile.view', $record->user) }}"><x-user.avatar size="tiny">{{ $record->user->gravatarUrl(64) }}</x-user.avatar></a> <a href="{{ route('profile.view', $record->user) }}" class="mr-2 link link-{{ config('color.author') }} tooltip" data-tip="Exam Author">{{ $record->user->name }}</a> @endif
                     <span class="mx-2 tooltip text-{{ config('color.question_count') }}" data-tip="Question Count"><i class="mr-1 text-lg {{ config('icon.question_count') }}"></i> {{ $record->questions->count() }}</span>
@@ -57,12 +57,12 @@
                         <div class="dropdown">
                             <div class="mx-1 my-3 btn btn-secondary btn-sm btn-outline" tabindex="0" role="button">More Actions...</div>
                             <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                                <li><a href="{{ route('exam-session.summary', $record) }}"><i class="{{ config('icon.latest_summary') }} text-lg"></i> Last Test Summary</a></li>
-                                <li><a href="{{ route('practice.start', $record) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
-                                <li><a href="{{ route('exam-session.start', $record) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
                                 @can('update', $record)
                                     <li><a href="{{ route('exam.edit', $record) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a></li>
                                 @endcan
+                                <li><a href="{{ route('exam-session.summary', $record) }}"><i class="{{ config('icon.latest_summary') }} text-lg"></i> Last Test Summary</a></li>
+                                <li><a href="{{ route('practice.start', $record) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
+                                <li><a href="{{ route('exam-session.start', $record) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
                             </ul>
                         </div>
                     </div>
