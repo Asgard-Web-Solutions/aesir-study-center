@@ -44,11 +44,11 @@
         <x-card.main title="Exam Actions">
             <x-card.mini>
                 <div class="block lg:flex">
-                    @can ('update', $exam) 
-                        <a href="{{ route('exam.edit', $exam) }}" class="mx-2 my-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a> 
+                    @can ('update', $exam)
+                        <a href="{{ route('exam.edit', $exam) }}" class="mx-2 my-2 btn btn-sm"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a>
                     @endcan
                     <a href="{{ route('practice.start', $exam) }}" class="mx-2 my-2 btn btn-secondary btn-sm"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a>
-                    <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 my-2 btn btn-primary btn-sm"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a> 
+                    <a href="{{ route('exam-session.start', $exam) }}" class="mx-2 my-2 btn btn-primary btn-sm"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a>
                 </div>
             </x-card.mini>
         </x-card.main>
@@ -117,12 +117,12 @@
 
                     <x-table.row>
                         <x-table.cell>
-                            @if ($exam->user) <a href="{{ route('profile.view', $master->user) }}"><x-user.avatar size="sm">{{ $master->user->gravatarUrl(128) }}</x-user.avatar></a> <a href="{{ route('profile.view', $master->user) }}" class="text-2xl no-underline link link-secondary tooltip hover:underline" data-tip="Exam Author">{{ $exam->user->name }}</a>@endif
+                            @if ($exam->user) <a href="{{ route('profile.view', $master->user) }}"><x-user.avatar size="sm">{{ $master->user->gravatarUrl(128) }}</x-user.avatar></a> <a href="{{ route('profile.view', $master->user) }}" class="text-2xl no-underline link link-secondary hover:underline"">{{ $exam->user->name }}</a>@endif
                         </x-table.cell>
                         <x-table.cell>
                             <i class="
                                 text-3xl
-                                text-{{ config('color.' . strtolower($mastery[$master->records[0]->pivot->highest_mastery])) }} 
+                                text-{{ config('color.' . strtolower($mastery[$master->records[0]->pivot->highest_mastery])) }}
                                 {{ config('icon.' . strtolower($mastery[$master->records[0]->pivot->highest_mastery])) }}
                                 rounded-lg ring-2 p-1 ring-base-300
                             "></i>
@@ -131,7 +131,7 @@
                             <span class="mx-2 tooltip text-{{ config('color.times_taken') }} text-xl" data-tip="Times Taken"><i class="mr-1 {{ config('icon.times_taken') }}"></i> {{ $master->records[0]->pivot->times_taken }}</span>
                         </x-table.cell>
                         <x-table.cell hideMobile="true">
-                            <span class="mx-2 tooltip text-{{ config('color.recent_average') }} text-xl" data-tip="Recent Average"><i class="mr-1 {{ config('icon.recent_average') }}"></i> {{ $master->records[0]->pivot->recent_average }}</span>    
+                            <span class="mx-2 tooltip text-{{ config('color.recent_average') }} text-xl" data-tip="Recent Average"><i class="mr-1 {{ config('icon.recent_average') }}"></i> {{ $master->records[0]->pivot->recent_average }}</span>
                         </x-table.cell>
                     </x-table.row>
                 @empty
