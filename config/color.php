@@ -29,4 +29,7 @@ return [
 
     'review_flag_on' => 'warning opacity-90 hover:opacity-70',
     'review_flag_off' => 'info opacity-30 hover:opacity-60',
+
+    'mastery_insight_on' => 'text-accent',
+    'mastery_insight_off' => 'text-accent opacity-30',
 ];

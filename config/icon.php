@@ -35,4 +35,5 @@ return [
 
     'review_flag' => 'fa-sharp fa-solid fa-book-sparkles',
     'bonus_mastery' => 'fa-solid fa-duotone fa-square-plus',
+    'mastery_insight' => 'fa-duotone fa-light fa-head-side-gear',
 ];
