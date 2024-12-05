@@ -12,7 +12,9 @@
         <flux:tab.group>
             <flux:tabs>
                 @foreach ($personalities as $personality)
-                    <flux:tab name="{{ $personality['name'] }}">{{ $personality['name'] }}</flux:tab>
+                    @if ($personality['id'] > 0 || $insights[$personality['id']])
+                        <flux:tab name="{{ $personality['name'] }}">{{ $personality['name'] }}</flux:tab>
+                    @endif
                 @endforeach
             </flux:tabs>
 
@@ -26,14 +28,14 @@
                     </div>
 
                     <flux:card class="space-y-6">
-                        <div class="mb-5 space-y-6">
-                            <flux:heading size="lg">{{ $personality['name'] }}'s Explanation of the Question</flux:heading>
-                        </div>
-
                         @if ($insights[$personality['id']])
-                            {!! $insights[$personality['id']]->insight_text !!}
+                            {!! nl2br($insights[$personality['id']]->insight_text) !!}
                         @else
                             {{ $personality['name'] }} has not given a lesson on this question yet.
+
+                            @if ($personality['id'] > 0)
+                                <div><flux:button variant="primary" wire:click="summon({{ $question }}, {{ $personality['id'] }})">Summon {{ $personality['name'] }}</flux:button></div>
+                            @endif
                         @endif
                     </flux:card>
                 </flux:tab.panel>

@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Actions\MasteryInsights\RecordInsightResponse;
+use App\Actions\MasteryInsights\RequestNewInsightFromAI;
 use App\Models\Insight;
 use App\Models\Question;
 use Livewire\Component;
@@ -12,6 +14,12 @@ class QuestionInsightsDisplay extends Component
 
     public function mount(Question $question) {
         $this->question = $question;
+    }
+
+    public function summon(Question $question, $id) {
+        $this->question = $question;
+        $text = RequestNewInsightFromAI::execute($question, $id);
+        $insight = RecordInsightResponse::execute($question, $id, $text);
     }
 
     public function render()
