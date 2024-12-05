@@ -39,7 +39,8 @@ class RequestNewInsightFromAI
             $result = OpenAI::chat()->create([
                 'model' => config('personalities.model'),
                 'messages' => [
-                    ['role' => 'system', 'content' => $personality['attitude'] . '\n' . config('personalities.job_instruction') . '\n' . config('personalities.coworkers') . '\n' . config('personalities.task')],
+                    // ['role' => 'system', 'content' => $personality['attitude'] . '\n' . config('personalities.job_instruction') . '\n' . config('personalities.coworkers') . '\n' . config('personalities.task')],
+                    ['role' => 'system', 'content' => $personality['attitude'] . '\n' . config('personalities.job_instruction') . '\n' . config('personalities.task')],
                     ['role' => 'user', 'content' => 'I need help with this test question. Exam: ' . $question->set->name . '\nExam Description: ' . $question->set->description . '\nQuestion Text: ' . $question->text . '\n' . $listAnswers ],
                 ],
             ]);
