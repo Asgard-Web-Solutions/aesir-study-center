@@ -13,6 +13,7 @@ class QuestionInsightsDisplay extends Component
 {
     private ?Question $question = null;
     private $insights = null;
+    private $personalities = null;
 
     public function mount(Question $question) {
         $this->question = $question;
@@ -24,7 +25,7 @@ class QuestionInsightsDisplay extends Component
 
         if ($response['success']) {
             $insight = RecordInsightResponse::execute($question, $id, $response['data']);
-            $this->insights = $this->getInsights();
+            $this->getInsights();
             Flux::toast('Instructor summoned! Reload the page if you do not see the Mastery Insight!');
         } else {
             Flux::toast(variant: 'danger', text: 'There was an error communicating with the Instructor. Please try again later.');
@@ -33,6 +34,7 @@ class QuestionInsightsDisplay extends Component
 
     public function getInsights() {
         $insights = array();
+        $personalities = array();
 
         for ($i = 0; $i <= config('personalities.ai_count'); $i ++) {
             if ($i == 0) {
@@ -51,13 +53,14 @@ class QuestionInsightsDisplay extends Component
             $insights[$i] = $this->question->insights->where('ai_generated', $i)->first() ?? null;
         }
 
-        return $insights;
+        $this->personalities = $personalities;
+        $this->insights = $insights;
     }
 
     public function render()
     {
         $personalities = array();
-        $this->insights = $this->getInsights();
+        $this->getInsights();
 
         return view('livewire.question-insights-display', [
             'insights' => $this->insights,
