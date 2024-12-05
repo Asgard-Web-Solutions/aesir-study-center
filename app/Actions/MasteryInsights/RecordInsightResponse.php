@@ -9,7 +9,7 @@ class RecordInsightResponse
 {
     public static function execute(Question $question, $personality, $text)
     {
-        $insight = $question->where('ai_personality', $personality)->first();
+        $insight = $question->insights->where('ai_personality', $personality)->first();
         if (!$insight) {
             $insight = new Insight();
 
