@@ -3,7 +3,7 @@
 @section('content')
     <x-card.main title="Exam: {!! $group->set->name !!}">
 
-        <x-card.mini">
+        <x-card.mini>
             <form action="{{ route('group-update-question', ['group' => $group, 'question' => $question]) }}" method="post">
                 @csrf
 
@@ -14,6 +14,8 @@
                 <x-card.buttons submitLabel="Update Question" />
             </form>
         </x-card.mini>
+
+        @livewire('question-insights-editor', ['question' => $question])
     </x-card.main>
 
     <x-card.buttons secondaryLabel='Back' secondaryAction="{{ route('group-view', $group) }}" />

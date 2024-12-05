@@ -48,8 +48,8 @@ class Question extends Model
         return $this->belongsTo(\App\Models\Group::class);
     }
 
-    public function insight(): HasOne
+    public function insights(): HasMany
     {
-        return $this->HasOne(Insight::class);
+        return $this->HasMany(Insight::class);
     }
 }
