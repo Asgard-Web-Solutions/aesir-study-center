@@ -1,6 +1,6 @@
 <div>
     <flux:modal.trigger name="edit-insight">
-        <flux:button>Edit Mastery Insight</flux:button>
+        <flux:button>Exam Author Mastery Insight</flux:button>
     </flux:modal.trigger>
 
     <flux:modal name="edit-insight" class="w-full space-y-6 md:w-3/4">

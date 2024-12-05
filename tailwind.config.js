@@ -11,7 +11,7 @@ module.exports = {
   daisyui: {
     themes: ["night", "cupcake"],
   },
-  darkMode: 'class', // or 'media' if you prefer automatic dark mode based on user preferences
+  darkMode: 'media', // or 'media' if you prefer automatic dark mode based on user preferences
   // theme: {
   //   extend: {},
   // },
