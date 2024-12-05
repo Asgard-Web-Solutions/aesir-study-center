@@ -8,15 +8,18 @@ use App\Models\Insight;
 use App\Models\Question;
 use Flux\Flux;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
+#[On('refresh-the-component')]
 class QuestionInsightsDisplay extends Component
 {
-    private ?Question $question = null;
-    private $insights = null;
-    private $personalities = null;
+    public ?Question $question = null;
+    public $insights = [];
+    private $personalities = [];
 
     public function mount(Question $question) {
         $this->question = $question;
+        $this->getInsights();
     }
 
     public function summon(Question $question, $id) {
@@ -25,8 +28,9 @@ class QuestionInsightsDisplay extends Component
 
         if ($response['success']) {
             $insight = RecordInsightResponse::execute($question, $id, $response['data']);
-            $this->getInsights();
-            Flux::toast('Instructor summoned! Reload the page if you do not see the Mastery Insight!');
+            $this->insights[$id] = $insight;
+            $this->dispatch('refresh-the-component');
+            Flux::toast('Instructor summoned!');
         } else {
             Flux::toast(variant: 'danger', text: 'There was an error communicating with the Instructor. Please try again later.');
         }

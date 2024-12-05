@@ -30,7 +30,9 @@
                     <flux:card class="space-y-6">
                         @if ($insights[$personality['id']])
                             {!! nl2br($insights[$personality['id']]->insight_text) !!}
-                        @else
+                        @endif
+
+                        @if (!$insights[$personality['id']])
                             {{ $personality['name'] }} has not given a lesson on this question yet.
 
                             @if ($personality['id'] > 0)
