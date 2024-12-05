@@ -1,6 +1,6 @@
 <div>
     <flux:modal.trigger name="view-insights">
-        <flux:button >Mastery Insights</flux:button>
+        <flux:button >Instructor Insights</flux:button>
     </flux:modal.trigger>
 
     <flux:modal name="view-insights" variant="flyout" class="w-1/3 space-y-6">
@@ -10,6 +10,14 @@
         </div>
 
         <flux:tab.group>
+            <x-help.box>
+                <x-help.text><x-help.highlight color="info">Acolyte Academy</x-help.highlight> has several instructors that are able to help you learn the material required to master your exams.</x-help.text>
+                <x-help.text><x-help.highlight color="accent">Research Wizard Oddity</x-help.highlight> is a playful instructor that likes to use analogies and metaphors to help teach the concepts required in the question you are struggling with.</x-help.text>
+                <x-help.text><x-help.highlight color="accent">Professor Bamboo</x-help.highlight> is more straight forward in his instructions. He doesn't use as many anologies in favor of just explaining things plainly.</x-help.text>
+                <x-help.text>The Exam Author may have also provided their own insights for this question that may be of help for you.</x-help.text>
+                <x-help.text>Choose whichever instructor helps you understand the content better! If you have any suggestions to improve the communication with the instructors make sure to <x-page.communitylink>share that with us on the Forums</x-page.communitylink>!</x-help.text>
+            </x-help.box>
+
             <flux:tabs>
                 @foreach ($personalities as $personality)
                     @if ($personality['id'] > 0 || $insights[$personality['id']])
@@ -17,6 +25,7 @@
                     @endif
                 @endforeach
             </flux:tabs>
+
 
             @foreach ($personalities as $personality)
                 <flux:tab.panel name="{{ $personality['name'] }}">
