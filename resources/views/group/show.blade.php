@@ -37,6 +37,11 @@
                         <x-table.cell>
                             <a href="{{ route('group-edit-question', ['group' => $group, 'question' => $question]) }}" class="mx-2 text-xl text-secondary hover:underline hover:text-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                             <a href="{{ route('group-delete-question', ['group' => $group, 'question' => $question]) }}" class="mx-2 text-xl text-secondary hover:underline hover:text-primary"><i class="fa-solid fa-trash-can"></i></a>
+                            @if ($question->insights->count())
+                                <span class="mx-4 tooltip tooltip-info" data-tip="Question has Mastery Insight"><i class="{{ config('icon.mastery_insight') }} {{ config('color.mastery_insight_on') }} text-xl"></i></span>
+                            @else
+                                <span class="mx-4 tooltip tooltip-info" data-tip="Question missing Mastery Insight"><i class="{{ config('icon.mastery_insight') }} {{ config('color.mastery_insight_off') }} text-xl"></i></span>
+                            @endif
                         </x-table.cell>
                     </x-table.row>
                 @endforeach
