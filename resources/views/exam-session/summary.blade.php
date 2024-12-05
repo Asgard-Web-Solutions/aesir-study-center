@@ -60,7 +60,7 @@
             @elseif ($session->mastery_apprentice_change < 0)
               <div class="stat-value text-error">{{ $session->mastery_apprentice_change }}</div>
             @else
-              <div class="stat-value text-neutral">0</div>  
+              <div class="stat-value text-neutral">0</div>
             @endif
             <div class="stat-desc">@if ($remaining['apprentice']) {{ $remaining['apprentice'] }} Remaining @else Completed @endif</div>
           </div>
@@ -72,7 +72,7 @@
             @elseif ($session->mastery_familiar_change < 0)
               <div class="stat-value text-error">{{ $session->mastery_familiar_change }}</div>
             @else
-              <div class="stat-value text-neutral">0</div>  
+              <div class="stat-value text-neutral">0</div>
             @endif
             <div class="stat-desc">@if ($remaining['familiar']) {{ $remaining['familiar'] }} Remaining @else Completed @endif</div>
           </div>
@@ -84,7 +84,7 @@
             @elseif ($session->mastery_proficient_change < 0)
               <div class="stat-value text-error">{{ $session->mastery_proficient_change }}</div>
             @else
-              <div class="stat-value text-neutral">0</div> 
+              <div class="stat-value text-neutral">0</div>
             @endif
             <div class="stat-desc">@if ($remaining['proficient']) {{ $remaining['proficient'] }} Remaining @else Completed @endif</div>
           </div>
@@ -96,7 +96,7 @@
             @elseif ($session->mastery_mastered_change < 0)
               <div class="stat-value text-error">{{ $session->mastery_mastered_change }}</div>
             @else
-              <div class="stat-value text-neutral">0</div>  
+              <div class="stat-value text-neutral">0</div>
             @endif
             <div class="stat-desc">@if ($remaining['mastered']) {{ $remaining['mastered'] }} Remaining @else Completed @endif</div>
           </div>
@@ -123,11 +123,11 @@
         <div class="dropdown">
           <div class="m-1 btn btn-secondary btn-outline" tabindex="0" role="button">More Actions...</div>
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+              @can('update', $examSet)
+                <li><a href="{{ route('exam.edit', $examSet) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a></li>
+              @endcan
             <li><a href="{{ route('practice.start', $examSet) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
             <li><a href="{{ route('exam-session.start', $examSet) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
-            @can('update', $examSet)
-              <li><a href="{{ route('exam.edit', $examSet) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a></li>
-            @endcan
           </ul>
         </div>
       </div>
@@ -193,7 +193,7 @@
         @else
           <x-text.main>You have not taken this exam, yet.</x-text.main>
         @endif
-        
+
         <x-help.box>
           <x-help.text><x-help.highlight>Mastery Progress</x-help.highlight> shows how many questions in this exam you have leveled up to each mastery level.</x-help.text>
           <x-help.text>To gain levels <x-help.highlight color="secondary">keep taking the exam and getting every question correct</x-help.highlight>!</x-help.text>
@@ -205,6 +205,6 @@
   @endif
 
 
-     
+
 
 @endsection

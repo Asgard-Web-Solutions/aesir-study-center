@@ -54,12 +54,15 @@
 
         </form>
     </x-card.mini>
+
+    @livewire('question-insights-editor', ['question' => $question])
+
 </x-card.main>
 
 
     <x-card.main>
         <div class="justify-end w-10/12 mx-auto my-5 text-right card-action">
-            <a href="{{ route('exam.edit', $exam) }}" class="btn btn-secondary">{{ __('Back to Exam Editor') }}</a>
+            <a href="{{ route('exam.edit', $exam) }}" class="btn btn-secondary">{{ __('Back to Exam Questions') }}</a>
         </div>
     </x-card.main>
 @endsection

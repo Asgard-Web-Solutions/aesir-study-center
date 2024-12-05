@@ -17,7 +17,7 @@
                             <h2 class="my-2 text-xl"><a href="{{ route('exam.view', $exam) }}" class="font-bold no-underline link link-primary">{{ $exam->name }}</a></h2>
                         </div>
                     </div>
-                    
+
                     <div class="flex w-full py-2 my-2 rounded-lg bg-base-100">
                         @if ($exam->user) <a href="{{ route('profile.view', $exam->user) }}"><x-user.avatar size="tiny">{{ $exam->user->gravatarUrl(64) }}</x-user.avatar></a> <a href="{{ route('profile.view', $exam->user) }}" class="mr-2 link link-{{ config('color.author') }} tooltip" data-tip="Architect">{{ $exam->user->name }}</a> @endif
                         <span class="mx-2 tooltip text-{{ config('color.question_count') }}" data-tip="Question Count"><i class="mr-1 text-lg {{ config('icon.question_count') }}"></i> {{ $exam->questions->count() }}</span>
@@ -30,16 +30,16 @@
                         <div class="dropdown">
                             <div class="m-1 btn btn-secondary btn-sm btn-outline" tabindex="0" role="button">More Actions...</div>
                             <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                                <li><a href="{{ route('exam-session.summary', $exam) }}"><i class="{{ config('icon.latest_summary') }} text-lg"></i> Last Test Summary</a></li>
-                                <li><a href="{{ route('practice.start', $exam) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
-                                <li><a href="{{ route('exam-session.start', $exam) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
                                 @can('update', $exam)
                                     <li><a href="{{ route('exam.edit', $exam) }}"><i class="{{ config('icon.edit_exam') }} text-lg"></i> Edit Exam</a></li>
                                 @endcan
+                                <li><a href="{{ route('exam-session.summary', $exam) }}"><i class="{{ config('icon.latest_summary') }} text-lg"></i> Last Test Summary</a></li>
+                                <li><a href="{{ route('practice.start', $exam) }}"><i class="{{ config('icon.take_exam') }} text-lg"></i> Practice Flash Cards</a></li>
+                                <li><a href="{{ route('exam-session.start', $exam) }}"><i class="{{ config('icon.practice_exam') }} text-lg"></i> Take Exam</a></li>
                             </ul>
                         </div>
                     </div>
-        
+
                 </x-card.mini>
             @endcan
         @empty

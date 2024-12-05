@@ -163,6 +163,11 @@
                                     <li><a href="{{ route('exam.questionDelete', ['exam' => $exam, 'question' => $question]) }}" ><i class="{{ config('icon.delete') }} text-{{ config('color.delete') }} text-lg"></i> Delete Question</a></li>
                                 </ul>
                             </div>
+                            @if ($question->insight)
+                                <span class="mx-4 tooltip tooltip-info" data-tip="Question has Mastery Insight"><i class="{{ config('icon.mastery_insight') }} {{ config('color.mastery_insight_on') }} text-xl"></i></span>
+                            @else
+                                <span class="mx-4 tooltip tooltip-info" data-tip="Question missing Mastery Insight"><i class="{{ config('icon.mastery_insight') }} {{ config('color.mastery_insight_off') }} text-xl"></i></span>
+                            @endif
                         </x-table.cell>
                     </x-table.row>
                 @endforeach
