@@ -6,6 +6,7 @@ use App\Actions\MasteryInsights\RecordInsightResponse;
 use App\Actions\MasteryInsights\RequestNewInsightFromAI;
 use App\Models\Insight;
 use App\Models\Question;
+use Flux\Flux;
 use Livewire\Component;
 
 class QuestionInsightsDisplay extends Component
@@ -18,8 +19,13 @@ class QuestionInsightsDisplay extends Component
 
     public function summon(Question $question, $id) {
         $this->question = $question;
-        $text = RequestNewInsightFromAI::execute($question, $id);
-        $insight = RecordInsightResponse::execute($question, $id, $text);
+        $response = RequestNewInsightFromAI::execute($question, $id);
+
+        if ($response['success']) {
+            $insight = RecordInsightResponse::execute($question, $id, $response['data']);
+        } else {
+            Flux::toast(variant: 'danger', text: 'There was an error communicating with the Instructor. Please try again later.');
+        }
     }
 
     public function render()

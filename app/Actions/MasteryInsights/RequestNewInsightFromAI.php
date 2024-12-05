@@ -8,7 +8,7 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class RequestNewInsightFromAI
 {
-    public static function execute(Question $question, $personality_id): ?String
+    public static function execute(Question $question, $personality_id): Array
     {
         if (!$question) {
             return "ERROR, no Question supplied!";
@@ -43,14 +43,25 @@ class RequestNewInsightFromAI
                     ['role' => 'user', 'content' => 'I need help with this test question. Exam: ' . $question->set->name . '\nExam Description: ' . $question->set->description . '\nQuestion Text: ' . $question->text . '\n' . $listAnswers ],
                 ],
             ]);
+
+            return [
+                'success' => true,
+                'data' => $result->choices[0]->message->content, // Extract the content
+            ];
         } catch (\OpenAI\Exceptions\ErrorException $e) {
             logger()->error('OpenAI API Error: ' . $e->getMessage());
-            return response()->json(['error' => 'There was an issue with the OpenAI API. Please try again later.'], 500);
+            return [
+                'success' => false,
+                'error' => 'There was an issue with the OpenAI API. Please try again later.',
+                'details' => $e->getMessage(), // Optional: include detailed error message
+            ];
         } catch (\Exception $e) {
             logger()->error('General Error: ' . $e->getMessage());
-            return response()->json(['error' => 'An unexpected error occurred.'], 500);
+            return [
+                'success' => false,
+                'error' => 'An unexpected error occurred.',
+                'details' => $e->getMessage(), // Optional: include detailed error message
+            ];
         }
-
-        return $result->choices[0]->message->content; // Hello! How can I assist you today?
     }
 }
