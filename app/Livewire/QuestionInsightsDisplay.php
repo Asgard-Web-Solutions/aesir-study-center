@@ -64,7 +64,7 @@ class QuestionInsightsDisplay extends Component
 
         return view('livewire.question-insights-display', [
             'insights' => $this->insights,
-            'personalities' => $personalities,
+            'personalities' => $this->personalities,
             'question' => $this->question,
         ]);
     }
