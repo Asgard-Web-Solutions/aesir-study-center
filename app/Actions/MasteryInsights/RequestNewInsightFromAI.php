@@ -35,6 +35,12 @@ class RequestNewInsightFromAI
         }
 
         try {
+            if (config('personalities.model') == 'none') {
+                return [
+                    'success' => true,
+                    'data' => 'This is a fake response that would be delivered from AI.',
+                ];
+            }
 
             $result = OpenAI::chat()->create([
                 'model' => config('personalities.model'),
