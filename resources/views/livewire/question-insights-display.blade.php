@@ -3,12 +3,11 @@
         <flux:button class="btn btn-secondary" >Instructor Insights</flux:button>
     </flux:modal.trigger>
 
-    <flux:modal name="view-insights" variant="flyout" class="w-1/3 space-y-6">
+    <flux:modal name="view-insights" variant="flyout" class="w-full space-y-6 md:w-1/3">
         <div>
             <flux:heading size="lg">Question Mastery Insights</flux:heading>
             <flux:subheading>Explore this question and answer more in-depth.</flux:subheading>
         </div>
-
         <flux:tab.group>
             <flux:tabs>
                 @foreach ($personalities as $personality)
@@ -19,7 +18,16 @@
                             $disabled = true;
                         }
                     @endphp
-                    <flux:tab name="{{ $personality['name'] }}" :disabled="$disabled"><x-user.avatar size="tiny">{{ $personality['avatarUrl'] }}</x-user.avatar> {{ $personality['name'] }}</flux:tab>
+
+                    @if ($disabled)
+                        <flux:tooltip content="Exam Author has not recorded Insights for this question."><span>
+                            <flux:tab name="{{ $personality['name'] }}" disabled>
+                                <x-user.avatar size="tiny">{{ $personality['avatarUrl'] }}</x-user.avatar> {{ $personality['name'] }}
+                            </flux:tab>
+                        </span></flux:tooltip>
+                    @else
+                        <flux:tab name="{{ $personality['name'] }}"><x-user.avatar size="tiny">{{ $personality['avatarUrl'] }}</x-user.avatar> {{ $personality['name'] }}</flux:tab>
+                    @endif
                 @endforeach
             </flux:tabs>
 
