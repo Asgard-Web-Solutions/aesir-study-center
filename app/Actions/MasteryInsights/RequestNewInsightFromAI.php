@@ -46,8 +46,25 @@ class RequestNewInsightFromAI
                 'model' => config('personalities.model'),
                 'messages' => [
                     // ['role' => 'system', 'content' => $personality['attitude'] . '\n' . config('personalities.job_instruction') . '\n' . config('personalities.coworkers') . '\n' . config('personalities.task')],
-                    ['role' => 'system', 'content' => $personality['attitude'] . '\n' . config('personalities.job_instruction') . '\n' . config('personalities.task')],
-                    ['role' => 'user', 'content' => 'I need help with this test question. Exam: ' . $question->set->name . '\nExam Description: ' . $question->set->description . '\nQuestion Text: ' . $question->text . '\n' . $listAnswers ],
+                    // ['role' => 'system', 'content' => $personality['attitude'] . '\n' . config('personalities.job_instruction') . '\n' . config('personalities.task')],
+                    [
+                        'role' => 'system',
+                        'content' =>
+                            config('personalities.task') . '\n' .
+                            config('personalities.context') . '\n' .
+                            config('personalities.exemplar') . '\n' .
+                            config('personalities.format') . '\n' .
+                            $personality['persona'] . '\n' .
+                            $personality['tone'] . '\n'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' =>
+                            'I need help with this test question. Exam: ' . $question->set->name .
+                            '\nExam Description: ' . $question->set->description .
+                            '\nQuestion Text: ' . $question->text .
+                            '\n' . $listAnswers
+                    ],
                 ],
             ]);
 
