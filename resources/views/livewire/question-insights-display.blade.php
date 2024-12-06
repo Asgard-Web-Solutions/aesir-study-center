@@ -46,10 +46,10 @@
                         @endif
 
                         @if (!$insights[$personality['id']])
-                            {{ $personality['name'] }} has not given a lesson on this question yet.
+                            <div class="mx-auto text-center">{{ $personality['name'] }} has not given a lesson on this question yet.</div>
 
                             @if ($personality['id'] > 0)
-                                <div><flux:button variant="primary" wire:click="summon({{ $question }}, {{ $personality['id'] }})">Summon {{ $personality['name'] }}</flux:button></div>
+                                <div class="mx-auto my-6 text-center"><flux:button variant="primary" wire:click="summon({{ $question }}, {{ $personality['id'] }})">Summon {{ $personality['name'] }} for help</flux:button></div>
                             @endif
                         @endif
                     </flux:card>
