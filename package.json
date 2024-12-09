@@ -18,6 +18,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "autoprefixer": "^10.4.19"
+        "autoprefixer": "^10.4.19",
+        "shiki": "^1.24.1"
     }
 }

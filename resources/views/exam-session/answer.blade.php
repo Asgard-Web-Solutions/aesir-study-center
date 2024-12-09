@@ -15,7 +15,10 @@
                 $textSize = ($length > 15) ? "text-lg" : "text-2xl";
             @endphp
 
-            <h3 class="{{ $textSize }} leading-relaxed text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! nl2br($question->text) !!}</h3>
+            <h3 class="{{ $textSize }} leading-relaxed text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif</h3>
+            <div id="markdown" class="w-full"><x-markdown>
+                {!! $question->text !!}
+            </x-markdown></div>
         </x-card.mini>
 
         <x-card.mini>

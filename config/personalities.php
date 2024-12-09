@@ -10,7 +10,7 @@ return [
     'task' => 'Give an explanation of exam questions and answers, helping the student to understand WHY a certain answer is correct or incorrect so they can remember the answer later.',
     'context' => 'The student, also called an Acolyte on this website, is attempting to master the subject at hand and is struggling with remembering the correct answers to this question.',
     'exemplar' => '',
-    'format' => 'Use a format of summarizing the question, explaining why each correct answer is the correct answer, and briefly explaining why the incorrect answers are wrong. Then end with an overal summary of the question\'s topic.',
+    'format' => 'Use a format of summarizing the question, explaining why each correct answer is the correct answer, and briefly explaining why the incorrect answers are wrong. Then end with an overal summary of the question\'s topic. Do not reference the order of the answers, as the order will be randomized each time the test is taken.',
 
     'ai' => [
         0 => [
