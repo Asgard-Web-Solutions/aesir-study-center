@@ -11,6 +11,10 @@ class Insight extends Model
     /** @use HasFactory<\Database\Factories\InsightFactory> */
     use HasFactory;
 
+    protected $casts = [
+        'ai_personality' => 'integer',
+    ];
+
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);

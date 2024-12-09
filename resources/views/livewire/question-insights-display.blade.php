@@ -42,7 +42,9 @@
 
                     <flux:card class="space-y-6">
                         @if ($insights[$personality['id']])
-                            {!! nl2br($insights[$personality['id']]->insight_text) !!}
+                            <div id="markdown"><x-markdown>
+                                {!! nl2br($insights[$personality['id']]->insight_text) !!}
+                            </x-markdown></div>
                         @endif
 
                         @if (!$insights[$personality['id']])

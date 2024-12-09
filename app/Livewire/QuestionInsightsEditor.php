@@ -19,7 +19,7 @@ class QuestionInsightsEditor extends Component
 
     public function mount(Question $question) {
         $this->question = $question;
-        $this->insight = $question->insights->where('ai_generated', '=', 0)->first();
+        $this->insight = $question->insights->whereStrict('ai_generated', 0)->first();
         $this->insight_text = $this->insight?->insight_text ?? '';
     }
 

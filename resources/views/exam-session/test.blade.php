@@ -1,7 +1,6 @@
 @extends('layouts.app2', ['heading' => 'Exam - ' . $examSet->name ])
 
 @section('content')
-
     <x-card.main title="{!! $examSet->name !!}">
         <x-text.dim>Question # {{ $session->current_question + 1 }} <span class="text-xs opacity-50" id="scroll-to">of {{ $session->question_count }}</span></x-text.dim>
         <x-card.mini>
@@ -15,7 +14,14 @@
                 $textSize = ($length > 15) ? "text-lg" : "text-2xl";
             @endphp
 
-            <h3 class="{{ $textSize }} leading-relaxed text-neutral-content">@if ($question->group) {!! $question->group->question !!} @endif {!! nl2br($question->text) !!}</h3>
+            <h3 class="{{ $textSize }} leading-relaxed text-neutral-content"></h3>
+                @if ($question->group) {!! $question->group->question !!} @endif
+                <div id="markdown" class="w-full">
+                    <x-markdown>
+                        {!! $question->text !!}
+                    </x-markdown>
+                </div>
+
         </x-card.mini>
         <form action="{{ route('exam-session.answer', $examSet) }}" method="post">
             <x-text.dim>
