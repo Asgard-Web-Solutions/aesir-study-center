@@ -107,5 +107,16 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });
 
+        Feature::define('insight_conversations', function () {
+            if (app()->environment(['local', 'testing'])) {
+                return true;
+            }
+
+            if (env('FEATURE_FLAG_INSIGHT_CONVERSATIONS')) {
+                return true;
+            }
+
+            return false;
+        });
     }
 }
