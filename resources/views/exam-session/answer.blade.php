@@ -133,6 +133,9 @@
         </x-card.mini>
 
         <div class="w-full text-right">
+            @can('update', $question)
+                <a href="{{ route('exam.question', ['exam' => $examSet, 'question' => $question]) }}" target="_blank" class="mx-4 btn btn-secondary btn-outline">Edit Question</a>
+            @endcan
             <a href="{{ route('exam-session.test', $examSet) }}" class="btn btn-primary btn-outline">Next Question</a>
         </div>
     </x-card.main>
