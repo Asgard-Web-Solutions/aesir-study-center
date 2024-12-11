@@ -65,7 +65,6 @@
 #markdown {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    color: #cecece;
     margin: 0 auto;
     padding: 1rem;
     border-radius: 8px;
@@ -79,28 +78,24 @@
     margin-bottom: 0.5rem;
     border-bottom: 2px solid #ddd;
     padding-bottom: 0.3rem;
-    color: #EEE;
 }
 
 #markdown h2 {
     font-size: 1.75em;
     margin-top: 1.2rem;
     margin-bottom: 0.5rem;
-    color: #888;
 }
 
 #markdown h3 {
     font-size: 1.5em;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
-    color: #888;
 }
 
 #markdown h4 {
     font-size: 1.2em;
     margin-top: 0.8rem;
     margin-bottom: 0.5rem;
-    color: #888;
 }
 
 /* Paragraphs */

@@ -3,11 +3,20 @@
         <flux:button class="btn btn-secondary" >Instructor Insights</flux:button>
     </flux:modal.trigger>
 
-    <flux:modal name="view-insights" variant="flyout" class="w-full space-y-6 md:w-1/3">
+    <flux:modal name="view-insights" variant="flyout" class="w-full space-y-6 md:w-1/2">
         <div>
             <flux:heading size="lg">Question Mastery Insights</flux:heading>
             <flux:subheading>Explore this question and answer more in-depth.</flux:subheading>
         </div>
+
+        <x-help.box>
+            <x-help.text><x-help.highlight color="info">Acolyte Academy</x-help.highlight> has several instructors that are able to help you learn the material required to master your exams.</x-help.text>
+            <x-help.text><x-help.highlight color="accent">Research Wizard Oddity</x-help.highlight> is a playful instructor that likes to use analogies and metaphors to help teach the concepts required in the question you are struggling with.</x-help.text>
+            <x-help.text><x-help.highlight color="accent">Professor Bamboo</x-help.highlight> is more straight forward in his instructions. He doesn't use as many anologies in favor of just explaining things plainly.</x-help.text>
+            <x-help.text>The Exam Author may have also provided their own insights for this question that may be of help for you.</x-help.text>
+            <x-help.text>Choose whichever instructor helps you understand the content better! If you have any suggestions to improve the communication with the instructors make sure to <x-page.communitylink>share that with us on the Forums</x-page.communitylink>!</x-help.text>
+        </x-help.box>
+
         <flux:tab.group>
             <flux:tabs>
                 @foreach ($personalities as $personality)
@@ -55,18 +64,33 @@
                             @endif
                         @endif
                     </flux:card>
+
+                    @feature('insight_conversations')
+                        @if($personality['id'] > 0 && $insights[$personality['id']])
+
+                            <flux:card class="w-3/4 mx-auto my-4">
+                                <flux:header>Ask {{ $personality['name']}} for Clarification</flux:header>
+
+                                <div class="flex my-4">
+                                    <x-user.avatar size="md">{{ $personality['avatarUrl'] }}</x-user.avatar> <div id="markdown" class="w-11/12 text-gray-700 bg-teal-300"><x-markdown>
+                                        Hello there!
+                                    </x-markdown></div>
+                                </div>
+
+                                <div class="flex my-4">
+                                    <x-user.avatar size="md">{{ auth()->user()->gravatarUrl() }}</x-user.avatar> <div id="markdown" class="w-11/12 text-gray-700 bg-teal-300"><x-markdown>
+                                        Hello there!
+                                    </x-markdown></div>
+                                </div>
+
+                                <flux:textarea />
+                            </flux:card>
+                        @endif
+                    @endfeature
+
                 </flux:tab.panel>
             @endforeach
         </flux:tab.group>
-
-        <x-help.box>
-            <x-help.text><x-help.highlight color="info">Acolyte Academy</x-help.highlight> has several instructors that are able to help you learn the material required to master your exams.</x-help.text>
-            <x-help.text><x-help.highlight color="accent">Research Wizard Oddity</x-help.highlight> is a playful instructor that likes to use analogies and metaphors to help teach the concepts required in the question you are struggling with.</x-help.text>
-            <x-help.text><x-help.highlight color="accent">Professor Bamboo</x-help.highlight> is more straight forward in his instructions. He doesn't use as many anologies in favor of just explaining things plainly.</x-help.text>
-            <x-help.text>The Exam Author may have also provided their own insights for this question that may be of help for you.</x-help.text>
-            <x-help.text>Choose whichever instructor helps you understand the content better! If you have any suggestions to improve the communication with the instructors make sure to <x-page.communitylink>share that with us on the Forums</x-page.communitylink>!</x-help.text>
-        </x-help.box>
-
     </flux:modal>
 
 </div>
