@@ -63,12 +63,9 @@
 
 /* Container for Markdown */
 #markdown {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
+    /* line-height: 1.6; */
     margin: 0 auto;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* padding: 1rem; */
 }
 
 /* Headings */
