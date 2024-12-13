@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'ai_count' => 2,
     'model' => env('OPENAI_MODEL', 'gpt-4o-mini'), // Use "none" to disable the AI
 
     'task' => 'Give an explanation of exam questions and answers, helping the student to understand WHY a certain answer is correct or incorrect so they can remember the answer later. Also try to help the student remember which is the correct answer.',
@@ -11,6 +10,7 @@ return [
 
     'coworkers' => 'You may reference the other characters at Acolyte Academy if needed for use in metaphors or examples or in any other way that makes sense. There is Acolyte Quizalot, a human, who is the head Acolyte of the Academy. He often shows people how the site is used. Query the Help Owl is often seen flying around various parts of the academy, and users of the site can interact with him to summon Acolyte Quizalot when they need help. There are three instructors who users can ask for help with these questions are Professor Bamboo the Panda Bear, who has a more stoic personality, but is friendly, and Research Wizard Oddity the Otter, who is a fun loving and kind of hyper character.',
 
+    'ai_count' => 3,
     'ai' => [
         0 => [
             'id' => 0,
