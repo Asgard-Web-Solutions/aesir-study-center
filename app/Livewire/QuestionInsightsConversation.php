@@ -9,8 +9,8 @@ use Livewire\Component;
 class QuestionInsightsConversation extends Component
 {
     public $personality;
-    public Conversation $conversation;
-    public Insight $insight;
+    public ?Conversation $conversation;
+    public ?Insight $insight;
 
     public function mount($personality, Insight $insight) {
         $this->personality = $personality;
