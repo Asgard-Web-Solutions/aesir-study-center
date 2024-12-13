@@ -67,22 +67,7 @@
 
                     @feature('insight_conversations')
                         @if($personality['id'] > 0 && $insights[$personality['id']])
-
-                            <flux:card class="w-3/4 mx-auto my-4">
-                                <flux:header>Ask {{ $personality['name']}} for Clarification</flux:header>
-
-                                <div class="chat chat-start">
-                                    <div class="chat-image avatar"><div class="w-16 rounded-full"><img src="{{ $personality['avatarUrl'] }}" /></div></div>
-                                    <div class="chat-bubble chat-bubble-success"><div id="markdown">Hello there!</div></div>
-                                </div>
-
-                                <div class="chat chat-end">
-                                    <div class="chat-image avatar"><div class="w-16 rounded-full"><img src="{{ auth()->user()->gravatarUrl() }}" /></div></div>
-                                    <div class="chat-bubble chat-bubble-primary"><div id="markdown">How are you today?</div></div>
-                                </div>
-
-                                <flux:input class="my-6" />
-                            </flux:card>
+                            @livewire('question-insights-conversation', ['personality' => $personality, 'insight' => $insights[$personality['id']]])
                         @endif
                     @endfeature
 
