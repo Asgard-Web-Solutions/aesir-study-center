@@ -45,8 +45,6 @@ class RequestNewInsightFromAI
             $result = OpenAI::chat()->create([
                 'model' => config('personalities.model'),
                 'messages' => [
-                    // ['role' => 'system', 'content' => $personality['attitude'] . '\n' . config('personalities.job_instruction') . '\n' . config('personalities.coworkers') . '\n' . config('personalities.task')],
-                    // ['role' => 'system', 'content' => $personality['attitude'] . '\n' . config('personalities.job_instruction') . '\n' . config('personalities.task')],
                     [
                         'role' => 'system',
                         'content' =>
