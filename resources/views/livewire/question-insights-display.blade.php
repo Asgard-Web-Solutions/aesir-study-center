@@ -67,7 +67,7 @@
 
                     @feature('insight_conversations')
                         @if($personality['id'] > 0 && $insights[$personality['id']])
-                            @livewire('question-insights-conversation', ['personality' => $personality, 'insight' => $insights[$personality['id']]])
+                            @livewire('question-insights-conversation', ['personality' => $personality, 'insight' => $insights[$personality['id']], key($question->id . $personality['id'])])
                         @endif
                     @endfeature
 

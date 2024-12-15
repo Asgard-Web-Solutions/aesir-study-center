@@ -18,6 +18,16 @@ class QuestionInsightsConversation extends Component
         $this->conversation = Conversation::where('insight_id', $insight->id)->first();
     }
 
+    public function createConversation(Insight $insight) {
+        $conversation = Conversation::create([
+            'insight_id' => $insight->id,
+            'user_id' => auth()->id(),
+            'title' => 'New Conversation'
+        ]);
+
+        $this->conversation = $conversation;
+    }
+
     public function render()
     {
         return view('livewire.question-insights-conversation');
