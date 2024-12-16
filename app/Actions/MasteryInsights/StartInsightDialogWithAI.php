@@ -2,19 +2,19 @@
 
 namespace App\Actions\MasteryInsights;
 
+use App\Models\Conversation;
 use App\Models\Insight;
 use App\Models\Question;
 use OpenAI\Laravel\Facades\OpenAI;
 
-class RequestNewInsightFromAI
+class StartInsightDialogWithAI
 {
-    public static function execute(Question $question, $personality_id): Array
+    public static function execute(Conversation $conversation): Array
     {
-        if (!$question) {
-            return "ERROR, no Question supplied!";
-        }
 
-        $personality = GetAIPersonality::execute($personality_id);
+        $personality = GetAIPersonality::execute($conversation->insight->ai_generated);
+
+        $question = $conversation->insight->question;
 
         $answers = FormatAnswersForAI::execute($question);
 
@@ -29,19 +29,15 @@ class RequestNewInsightFromAI
                     [
                         'role' => 'system',
                         'content' =>
-                            config('personalities.task_give_insight') . '\n' .
+                            config('personalities.task_start_dialog') . '\n' .
                             config('personalities.context') . '\n' .
-                            config('personalities.format_give_insight') . '\n' .
+                            config('personalities.format_start_dialog') . '\n' .
                             $personality['persona'] . '\n' .
                             $personality['tone'] . '\n'
                     ],
                     [
                         'role' => 'user',
-                        'content' =>
-                            'I need help with this test question. Exam: ' . $question->set->name .
-                            '\nExam Description: ' . $question->set->description .
-                            '\nQuestion Text: ' . $question->text .
-                            '\n' . $answers
+                        'content' => 'The user asking for help is Acolyte ' . auth()->user()->name,
                     ],
                 ],
             ]);
