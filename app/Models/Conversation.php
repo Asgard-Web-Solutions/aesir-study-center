@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Conversation extends Model
 {
@@ -16,4 +18,13 @@ class Conversation extends Model
         'title'
     ];
 
+    public function insight(): BelongsTo
+    {
+        return $this->belongsTo(Insight::class);
+    }
+
+    public function dialogs(): HasMany
+    {
+        return $this->hasMany(Dialog::class);
+    }
 }

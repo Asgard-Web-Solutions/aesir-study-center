@@ -6,18 +6,41 @@
             {{-- Create a button to Start a conversation --}}
 
             @if ($conversation)
-                <div class="chat chat-start">
-                    <div class="chat-image avatar"><div class="w-16 rounded-full"><img src="{{ $personality['avatarUrl'] }}" /></div></div>
-                    <div class="chat-bubble chat-bubble-success"><div id="markdown">Hello there!</div></div>
-                </div>
+                @foreach ($conversation->dialogs as $dialog)
+                    @php
+                        $side = "";
+                        $color = "";
+                        $avatar = "";
 
-                <div class="chat chat-end">
-                    <div class="chat-image avatar"><div class="w-16 rounded-full"><img src="{{ auth()->user()->gravatarUrl() }}" /></div></div>
-                    <div class="chat-bubble chat-bubble-primary"><div id="markdown">How are you today?</div></div>
-                </div>
+                        if ($dialog->personality_id) {
+                            $side = "chat-start";
+                            $color="chat-bubble->success";
+                            $avatar = $personality['avatarUrl'];
+                        } else {
+                            if ($dialog->user_id == auth()->id()) {
+                                $side = "chat-end";
+                                $color = "chat-bubble-primary";
+                                $avatar = auth()->user()->gravatarUrl();
+                            } else {
+                                $side = "chat-start";
+                                $color = "chat-bubble-warning";
+                                $avatar = "";
+                            }
+                        }
+                    @endphp
+
+                    <div class="chat {{ $side }} mb-6">
+                        <div class="chat-image avatar"><div class="w-16 rounded-full"><img src="{{ $avatar }}" /></div></div>
+                        <div class="chat-bubble {{ $color }}"><div id="markdown"><x-markdown>{{ $dialog->message }}</x-markdown></div></div>
+                    </div>
+                @endforeach
             @endif
 
-            <flux:input class="my-6" />
+            <flux:input.group>
+                <flux:input wire:model="textMessage" wire:keydown.enter="SendMessage({{ $conversation }})" />
+                <flux:button wire:click="SendMessage({{ $conversation }})" variant="primary">Send Message</flux:button>
+            </flux:input.group>
+
         </flux:card>
     @else
         <div class="flex w-full my-6 text-center">
