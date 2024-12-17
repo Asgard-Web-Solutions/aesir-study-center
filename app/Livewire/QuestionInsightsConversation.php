@@ -9,6 +9,7 @@ use App\Actions\MasteryInsights\StartInsightDialogWithAI;
 use App\Models\Conversation;
 use App\Models\Dialog;
 use App\Models\Insight;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Flux\Flux;
@@ -65,8 +66,13 @@ class QuestionInsightsConversation extends Component
                 'personality_id' => $conversation->insight->ai_generated,
                 'message' => $response['data'],
             ]);
+
+            $conversation->last_message_date = Carbon::now();
+            $conversation->save();
+
             $this->dispatch('refresh-the-component');
-            Flux::toast('Conversation Started!');
+            $this->dispatch('ScrollTo');
+            Flux::toast('Message Received!');
         } else {
             Flux::toast(variant: 'danger', text: 'There was an error communicating with the Instructor. Please try again later.');
         }

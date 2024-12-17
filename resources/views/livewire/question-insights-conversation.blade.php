@@ -1,7 +1,7 @@
 <div>
     @if ($conversation)
-        <flux:card class="w-3/4 mx-auto my-4">
-            <flux:header class="text-xl">Ask {{ $personality['name']}} for Clarification</flux:header>
+        <flux:card class="w-full mx-auto my-4">
+            <flux:header class="text-xl">Ask {{ $personality['name']}} for Clarification on this Question &amp; Insight</flux:header>
 
             {{-- Create a button to Start a conversation --}}
 
@@ -37,7 +37,7 @@
             @endif
 
             <flux:input.group>
-                <flux:input wire:model="textMessage" wire:keydown.enter="SendMessage({{ $conversation }})" />
+                <flux:input wire:model="textMessage" wire:keydown.enter="SendMessage({{ $conversation }})" id="scroll-to" />
                 <flux:button wire:click="SendMessage({{ $conversation }})" variant="primary">Send Message</flux:button>
             </flux:input.group>
 
@@ -47,6 +47,17 @@
             <flux:button wire:click="createConversation({{ $insight }})" class="mx-auto">Start Conversation with {{ $personality['name'] }}</flux:button>
         </div>
     @endif
+
+    <script>
+        document.addEventListener('livewire:load', function () {
+            // Listen for the 'messageSent' event triggered from Livewire
+            Livewire.on('ScrollTo', () => {
+                document.getElementById('scroll-to').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 
     {{-- List older conversations --}}
 </div>
