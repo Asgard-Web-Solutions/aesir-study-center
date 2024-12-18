@@ -1,3 +1,5 @@
+import colors from 'tailwindcss/colors';
+
 module.exports = {
   content: [
     './storage/framework/views/*.php',
@@ -11,15 +13,28 @@ module.exports = {
   daisyui: {
     themes: ["night", "cupcake"],
   },
-  darkMode: 'media', // or 'media' if you prefer automatic dark mode based on user preferences
-  // theme: {
-  //   extend: {},
-  // },
-  // ...
+  darkMode: 'media',
   theme: {
     fontFamily: {
         sans: ['Inter', 'sans-serif'],
     },
   },
-
 }
+
+export default {
+    theme: {
+        extend: {
+            colors: {
+                // Re-assign Flux's gray of choice...
+                zinc: colors.slate,
+
+                // Accent variables are defined in resources/css/app.css...
+                accent: {
+                    DEFAULT: 'var(--color-accent)',
+                    content: 'var(--color-accent-content)',
+                    foreground: 'var(--color-accent-foreground)',
+                },
+            },
+        },
+    },
+};

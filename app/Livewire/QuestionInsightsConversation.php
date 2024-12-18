@@ -21,6 +21,7 @@ class QuestionInsightsConversation extends Component
     public ?Conversation $conversation;
     public ?Insight $insight;
     public $textMessage = '';
+    public $isProcessing = false;
 
     public function mount($personality, Insight $insight) {
         $this->personality = $personality;
@@ -47,6 +48,7 @@ class QuestionInsightsConversation extends Component
     }
 
     public function SendMessage(Conversation $conversation) {
+        $this->isProcessing = true;
         $text = $this->textMessage;
         $this->textMessage = '';
 
@@ -58,8 +60,12 @@ class QuestionInsightsConversation extends Component
         ]);
 
         $this->dispatch('refresh-the-component');
-        $response = HaveInsightDialogWithAI::execute($conversation);
+        $this->callInstructor($conversation);
+        $this->isProcessing = false;
+    }
 
+    public function callInstructor(Conversation $conversation) {
+        $response = HaveInsightDialogWithAI::execute($conversation);
         if ($response['success']) {
             $dialog = Dialog::create([
                 'conversation_id' => $this->conversation->id,
@@ -76,7 +82,6 @@ class QuestionInsightsConversation extends Component
         } else {
             Flux::toast(variant: 'danger', text: 'There was an error communicating with the Instructor. Please try again later.');
         }
-
     }
 
     public function render()
