@@ -1,4 +1,4 @@
-@extends('layouts.app2', ['heading' => 'Exam - ' . $examSet->name ])
+@extends('layouts.app2', ['heading' => 'Take Exam - ' . $examSet->name ])
 
 @section('content')
     <x-card.main title="{!! $examSet->name !!}">

@@ -1,6 +1,6 @@
 <div>
     @if ($conversation)
-        <flux:card class="w-full mx-auto my-4">
+        <flux:card class="w-full mx-auto my-4 lg:w-3/4">
             <flux:header class="text-xl">Ask {{ $personality['name']}} for Clarification on this Question &amp; Insight</flux:header>
 
             {{-- Create a button to Start a conversation --}}
@@ -31,15 +31,16 @@
 
                     <div class="chat {{ $side }} mb-6">
                         <div class="chat-image avatar"><div class="w-16 rounded-full"><img src="{{ $avatar }}" /></div></div>
-                        <div class="chat-bubble {{ $color }}"><div id="markdown"><x-markdown>{{ $dialog->message }}</x-markdown></div></div>
+                        <div class="chat-bubble {{ $color }}"><div id="markdown" class="text-left"><x-markdown>{{ $dialog->message }}</x-markdown></div></div>
                     </div>
                 @endforeach
             @endif
 
             <flux:input.group>
-                <flux:input wire:model="textMessage" wire:keydown.enter="SendMessage({{ $conversation }})" id="scroll-to" />
+                <flux:input wire:model="textMessage" wire:keydown.enter="SendMessage({{ $conversation }})" />
                 <flux:button wire:click="SendMessage({{ $conversation }})" variant="primary">Send Message</flux:button>
             </flux:input.group>
+            <div class="my-6 text-sm font-bold">Only press Enter once... it may not look like its working but it is. This will be improved soon...</div>
 
         </flux:card>
     @else

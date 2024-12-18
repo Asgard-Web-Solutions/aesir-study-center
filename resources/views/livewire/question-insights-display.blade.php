@@ -1,14 +1,6 @@
 <div>
-    <flux:modal.trigger name="view-insights">
-        <flux:button class="btn btn-secondary" >Instructor Insights</flux:button>
-    </flux:modal.trigger>
 
-    <flux:modal name="view-insights" variant="flyout" class="w-full space-y-6 md:w-1/2">
-        <div>
-            <flux:heading size="lg">Question Mastery Insights</flux:heading>
-            <flux:subheading>Explore this question and answer more in-depth.</flux:subheading>
-        </div>
-
+    <x-card.main>
         <x-help.box>
             <x-help.text><x-help.highlight color="info">Acolyte Academy</x-help.highlight> has several instructors that are able to help you learn the material required to master your exams.</x-help.text>
             <x-help.text><x-help.highlight color="accent">Research Wizard Oddity</x-help.highlight> is a playful instructor that likes to use analogies and metaphors to help teach the concepts required in the question you are struggling with.</x-help.text>
@@ -49,7 +41,7 @@
                         {{ $personality['title'] }} {{ $personality['name'] }} @if ($personality['species'] != 'human') the {{ $personality['species'] }} @endif
                     </div>
 
-                    <flux:card class="space-y-6">
+                    <flux:card class="space-y-6 text-left">
                         @if ($insights[$personality['id']])
                             <div id="markdown"><x-markdown>
                                 {!! nl2br($insights[$personality['id']]->insight_text) !!}
@@ -65,15 +57,21 @@
                         @endif
                     </flux:card>
 
+                    <div class="w-full my-6 text-right">
+                        <a href="{{ route('exam-session.test', $question->set) }}" class="btn btn-primary btn-outline">Next Question</a>
+                    </div>
+
                     @feature('insight_conversations')
                         @if($personality['id'] > 0 && $insights[$personality['id']])
                             @livewire('question-insights-conversation', ['personality' => $personality, 'insight' => $insights[$personality['id']], key($question->id . $personality['id'])])
                         @endif
                     @endfeature
 
+                    <div class="w-full my-6 text-right">
+                        <a href="{{ route('exam-session.test', $question->set) }}" class="btn btn-primary btn-outline">Next Question</a>
+                    </div>
                 </flux:tab.panel>
             @endforeach
         </flux:tab.group>
-    </flux:modal>
-
+    </x-card.main>
 </div>

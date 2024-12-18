@@ -21,6 +21,7 @@ class RequestNewInsightFromAI
         try {
             if (config('personalities.model') == 'none') {
                 return GenerateFakeAIResponse::execute();
+                sleep(3);
             }
 
             $result = OpenAI::chat()->create([
