@@ -51,14 +51,14 @@
                     <x-card.mini title="Your Answer">
                         @foreach ($answers as $answer)
                             <div class="flex items-center p-2 rounded-lg hover:bg-base-200">
-                                <div class="flex items-center w-1/4">
+                                <div class="flex items-center w-1/4 lg:w-1/6">
                                     @if ($normalizedAnswer[$answer['id']])
                                         <input type="checkbox" checked="checked" disabled class="mr-2 checkbox checkbox-primary">
                                     @else
                                         <input type="checkbox" disabled class="mr-2 checkbox checkbox-primary">
                                     @endif
                                 </div>
-                                <div class="flex items-center w-3/4">
+                                <div class="flex w-3/4 text-left lg:w-5/6">
                                     @if ($answer['correct'])
                                         <i class="mr-2 fa-regular fa-square-check text-success"></i>
                                         <span class="font-bold text-success">{{ $answer['text'] }}</span>

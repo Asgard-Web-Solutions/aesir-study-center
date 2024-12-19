@@ -18,6 +18,9 @@ return [
     'min_public_questions' => env('MIN_PUBLIC_QUESTIONS', 50),
     'max_exam_questions' => env('MAX_EXAM_QUESTIONS', 250),
 
+    'add_familiar_architect_credits' => 0.1,
+    'add_familiar_study_credits' => 0.2,
+
     'add_proficient_architect_credits' => 0.2,
     'add_proficient_study_credits' => 0.5,
 
