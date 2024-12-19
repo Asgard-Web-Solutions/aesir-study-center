@@ -15,11 +15,28 @@ class AwardCreditsForMastery
     {
         $credits = $user->credit->first();
 
+        // Award familiar mastery credits!
+        if ($highestMastery == Mastery::Familiar->value && $originalMastery < Mastery::Familiar->value) {
+            $creditRewards['architect'] = config('test.add_familiar_architect_credits');
+            $creditRewards['study'] = config('test.add_familiar_study_credits');
+
+            $credits->architect += $creditRewards['architect'];
+            $credits->study += $creditRewards['study'];
+
+            $credits->save();
+
+            $title = 'Familiar Bonus';
+            $desc = 'Bonus credits for achieving familiar in an exam set.';
+            $history = RecordCreditHistory::execute($user, $title, $desc, $creditRewards);
+            $history->set_id = $examSet->id;
+            $history->save();
+        }
+
         // Award proficient mastery credits!
         if ($highestMastery == Mastery::Proficient->value && $originalMastery < Mastery::Proficient->value) {
             $creditRewards['architect'] = config('test.add_proficient_architect_credits');
             $creditRewards['study'] = config('test.add_proficient_study_credits');
-            
+
             $credits->architect += $creditRewards['architect'];
             $credits->study += $creditRewards['study'];
 
@@ -64,7 +81,7 @@ class AwardCreditsForMastery
                 case Mastery::Proficient->value:
                     $levelMultiplier = 0.3;
                     break;
-                
+
                 case Mastery::Familiar->value:
                     $levelMultiplier = 0.2;
                     break;
@@ -74,9 +91,9 @@ class AwardCreditsForMastery
                 $architectCredits = User::find($examSet->user_id)->credit()->first();
                 $architectCredits->architect += ($creditRewards['architect'] * $levelMultiplier);
                 $architectCredits->study += ($creditRewards['study'] * $levelMultiplier);
-    
+
                 $architectCredits->save();
-    
+
                 $title = 'Author Mastery Bonus';
                 $desc = 'Bonus credits for someone leveling up their mastery on an exam you authored!';
                 $history = RecordCreditHistory::execute($examSet->user, $title, $desc, $creditRewards);
