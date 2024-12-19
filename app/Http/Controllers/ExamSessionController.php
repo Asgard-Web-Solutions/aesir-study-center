@@ -322,6 +322,9 @@ class ExamSessionController extends Controller
             ->where('question_id', $question->id)
             ->first();
         $previousScore = null;
+        $incorrectCount = ($userQuestion->incorrect_count) ?? 0;
+        $correctCount = ($userQuestion->correct_count) ?? 0;
+        $lastIncorrect = $userQuestion->last_incorrect_at;
 
         if ($recordAnswer) {
             $updatedScore = 0;
@@ -332,8 +335,22 @@ class ExamSessionController extends Controller
                 } else {
                     $updatedScore = $userQuestion->score + config('test.add_score');
                 }
+
+                $correctCount = $correctCount + 1;
+                $incorrectCount = 0;
+
+                // If the user has gotten this question correct 2 times in a row,
+                // then reset the last incorrect flag so it stops showing up in the
+                // practice for recent incorrect answers
+                if ($correctCount >= 2) {
+                    $lastIncorrect = null;
+                }
             } else {
                 $updatedScore = $userQuestion->score - config('test.sub_score');
+
+                $incorrectCount = $incorrectCount + 1;
+                $correctCount = 0;
+                $lastIncorrect = Carbon::now();
             }
 
             if ($updatedScore < config('test.min_score')) {
@@ -348,6 +365,9 @@ class ExamSessionController extends Controller
                 ->update([
                     'score' => $updatedScore,
                     'next_at' => $nextAt,
+                    'incorrect_count' => $incorrectCount,
+                    'correct_count' => $correctCount,
+                    'last_incorrect_at' => $lastIncorrect,
                 ]);
 
             // Update mastery for leveled up questions
