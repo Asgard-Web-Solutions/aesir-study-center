@@ -49,6 +49,12 @@ class HaveInsightDialogWithAI
                     $personality['tone'] . '\n'
             ],
             [
+                'role' => 'user',
+                'content' =>
+                    'Exam: ' . $question->set->name .
+                    '\nExam Description: ' . $question->set->description
+            ],
+            [
                 'role' => 'assistant',
                 'content' => 'This is the Insight that you gave for the question at hand which should include the question and some of the answers:\n\n' . $conversation->insight->insight_text,
             ],
