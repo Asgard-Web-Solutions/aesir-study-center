@@ -63,7 +63,7 @@ class PracticeController extends Controller
                     ->pluck('question_id')
                     ->shuffle();
                 break;
-            
+
             case 'weak':
                 $questionsArray = DB::table('user_question')
                     ->where('set_id', $exam->id)
@@ -81,6 +81,16 @@ class PracticeController extends Controller
                     ->pluck('question_id')
                     ->shuffle();
                 break;
+
+            case 'recentIncorrect':
+                $questionsArray = DB::table('user_question')
+                    ->where('set_id', $exam->id)
+                    ->where('user_id', auth()->id())
+                    ->where('last_incorrect_at', '>', 0)
+                    ->orderBy('last_incorrect_at', 'DESC')
+                    ->limit(15)
+                    ->pluck('question_id')
+                    ->shuffle();
         }
 
         if ($questionsArray->count() == 0) {
@@ -151,12 +161,12 @@ class PracticeController extends Controller
         $this->authorize('view', $exam);
 
         $session = $this->getPracticeSession($exam);
-        
+
         if (! $session) {
             return redirect()->route('practice.start', $exam);
         }
         $this->authorize('delete', $session);
-        
+
         $session->delete();
 
         return view('practice.done')->with([
