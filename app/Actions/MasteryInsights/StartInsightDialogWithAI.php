@@ -37,6 +37,12 @@ class StartInsightDialogWithAI
                     ],
                     [
                         'role' => 'user',
+                        'content' =>
+                            'Exam: ' . $question->set->name .
+                            '\nExam Description: ' . $question->set->description
+                    ],
+                    [
+                        'role' => 'user',
                         'content' => 'The user asking for help is Acolyte ' . auth()->user()->name,
                     ],
                 ],

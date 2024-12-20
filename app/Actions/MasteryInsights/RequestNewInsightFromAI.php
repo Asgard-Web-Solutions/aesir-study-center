@@ -18,6 +18,9 @@ class RequestNewInsightFromAI
 
         $answers = FormatAnswersForAI::execute($question);
 
+        $authorInsight = Insight::where('question_id', $question->id)->where('ai_generated', 0)->first();
+        $authorText = ($authorInsight == null) ? '' : '\nThe author gave this additional insight for this question: ' . $authorInsight->insight_text;
+
         try {
             if (config('personalities.model') == 'none') {
                 return GenerateFakeAIResponse::execute();
@@ -42,7 +45,8 @@ class RequestNewInsightFromAI
                             'I need help with this test question. Exam: ' . $question->set->name .
                             '\nExam Description: ' . $question->set->description .
                             '\nQuestion Text: ' . $question->text .
-                            '\n' . $answers
+                            '\n' . $answers .
+                            $authorText
                     ],
                 ],
             ]);

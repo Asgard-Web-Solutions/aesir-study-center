@@ -14,9 +14,9 @@
                 <x-card.buttons submitLabel="Update Question" />
             </form>
         </x-card.mini>
-
-        @livewire('question-insights-editor', ['question' => $question])
     </x-card.main>
+
+    @livewire('question-insights-editor', ['question' => $question])
 
     <x-card.buttons secondaryLabel='Back' secondaryAction="{{ route('group-view', $group) }}" />
 @endsection

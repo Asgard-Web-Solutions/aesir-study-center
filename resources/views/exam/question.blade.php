@@ -54,10 +54,9 @@
 
         </form>
     </x-card.mini>
-
-    @livewire('question-insights-editor', ['question' => $question])
-
 </x-card.main>
+
+@livewire('question-insights-editor', ['question' => $question])
 
 
     <x-card.main>
