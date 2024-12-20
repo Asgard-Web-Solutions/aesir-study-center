@@ -58,9 +58,9 @@ class QuestionInsightsEditor extends Component
     }
 
     public function reloadComponent(Question $question) {
-        $this->question = $question;
+        $this->mount($question);
 
-        $this->dispatch('refresh-the-component');
+        // $this->dispatch('refresh-the-component');
     }
 
     public function render()
