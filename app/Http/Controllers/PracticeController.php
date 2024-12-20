@@ -86,7 +86,7 @@ class PracticeController extends Controller
                 $questionsArray = DB::table('user_question')
                     ->where('set_id', $exam->id)
                     ->where('user_id', auth()->id())
-                    ->where('last_incorrect_at', '>', 0)
+                    ->where('last_incorrect_at', '!=', null)
                     ->orderBy('last_incorrect_at', 'DESC')
                     ->limit(15)
                     ->pluck('question_id')
