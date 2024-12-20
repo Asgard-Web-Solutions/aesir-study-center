@@ -5,7 +5,23 @@
     <x-card.main title="Review: {!! $exam->name !!}">
         <x-text.dim>Flash Card # {{ $session->question_index + 1 }} <span class="text-xs opacity-50">of {{ $session->question_count }}</span></x-text.dim>
         <x-card.mini>
-            <h3 class="text-3xl text-primary">@if ($question->group) {!! $question->group->question !!} @endif {!! $question->text !!}</h3>
+            @php
+                $length = 0;
+                if ($question->group) {
+                    $length += strlen($question->group->question);
+                }
+
+                $length += strlen($question->text);
+                $textSize = ($length > 15) ? "text-lg" : "text-2xl";
+            @endphp
+
+            <h3 class="{{ $textSize }} leading-relaxed text-neutral-content"></h3>
+                @if ($question->group) {!! $question->group->question !!} @endif
+                <div id="markdown" class="w-full">
+                    <x-markdown>
+                        {!! $question->text !!}
+                    </x-markdown>
+                </div>
         </x-card.mini>
 
         <div class="collapse bg-base-200">
@@ -18,7 +34,7 @@
                     @endforeach
                 </x-card.mini>
             </div>
-        </div>          
+        </div>
     </x-card.main>
 
     <x-card.main>
