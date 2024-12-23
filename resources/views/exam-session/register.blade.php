@@ -7,7 +7,7 @@
     <x-card.main title='Enroll in Exam'>
             @feature('mage-upgarde')
                 <x-card.mini>
-                    <div class="badge"><span class="tooltip" data-tip="Study Credits"><i class="{{ config('icon.credit') }} text-{{ config('color.credit') }} text-lg"></i> <i class="{{ config('icon.study_credit') }} text-{{ config('color.study_credit') }} text-lg"></i> {{ $exam->user->credit->study }}</span></div>            
+                    <div class="badge"><span class="tooltip" data-tip="Study Credits"><i class="{{ config('icon.credit') }} text-{{ config('color.credit') }} text-lg"></i> <i class="{{ config('icon.study_credit') }} text-{{ config('color.study_credit') }} text-lg"></i> {{ $exam->user->credit->study }}</span></div>
                 </x-card.mini>
             @endfeature
 
@@ -17,8 +17,8 @@
             @else
                 <x-text.main>This exam is not registered to your Transcripts, yet. Do you want to add it?</x-text.main>
             @endfeature
-    
-            <x-text.main>Enrolling will make the exam show up in your Transcripts and in your Exams page so you can easily reference it.</x-text.main>
+
+            <x-text.main>Enrolling will give you permanant access to this exam so you can take it as many times as you wish!</x-text.main>
 
             <a href="{{ route('exam-session.enroll', $exam) }}" class="mx-auto btn btn-primary">Enroll in Exam</a>
         </x-card.mini>
