@@ -1,7 +1,7 @@
 <div>
 
     <x-card.main>
-        <div class="flex w-full">
+        <div class="block w-full lg:flex">
             <div class="w-full lg:w-3/4">
                 <x-help.box>
                     <x-help.text><x-help.highlight color="info">Acolyte Academy</x-help.highlight> has several instructors that are able to help you learn the material required to master your exams.</x-help.text>
@@ -12,13 +12,13 @@
                     <x-help.text>Choose whichever instructor helps you understand the content better! If you have any suggestions to improve the communication with the instructors make sure to <x-page.communitylink>share that with us on the Forums</x-page.communitylink>!</x-help.text>
                 </x-help.box>
             </div>
-            <div class="w-full text-right lg:w-1/4">
+            <div class="w-full my-4 text-center lg:text-right lg:w-1/4">
                 <a href="{{ route('exam-session.test', $question->set) }}" class="btn btn-primary btn-outline">Next Question</a>
             </div>
         </div>
 
         <flux:tab.group>
-            <flux:tabs>
+            <flux:tabs variant="segmented">
                 @foreach ($personalities as $personality)
                     @php
                         $disabled = false;
