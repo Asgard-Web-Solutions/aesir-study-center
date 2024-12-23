@@ -6,6 +6,7 @@ use App\Actions\MasteryInsights\CreateInsightConversation;
 use App\Actions\MasteryInsights\HaveInsightDialogWithAI;
 use App\Actions\MasteryInsights\SendInsightDialogToAI;
 use App\Actions\MasteryInsights\StartInsightDialogWithAI;
+use App\Jobs\SendConversationToInstructor;
 use App\Models\Conversation;
 use App\Models\Dialog;
 use App\Models\Insight;
@@ -59,29 +60,30 @@ class QuestionInsightsConversation extends Component
             'message' => $text,
         ]);
 
+        SendConversationToInstructor::dispatch($conversation, auth()->id());
+        // SendConversationToInstructor::dispatchAfterResponse($conversation);
+        // $this->callInstructor($conversation);
         $this->dispatch('refresh-the-component');
-        $this->callInstructor($conversation);
-        $this->isProcessing = false;
     }
 
     public function callInstructor(Conversation $conversation) {
-        $response = HaveInsightDialogWithAI::execute($conversation);
-        if ($response['success']) {
-            $dialog = Dialog::create([
-                'conversation_id' => $this->conversation->id,
-                'personality_id' => $conversation->insight->ai_generated,
-                'message' => $response['data'],
-            ]);
+        // $response = HaveInsightDialogWithAI::execute($conversation);
+        // if ($response['success']) {
+        //     $dialog = Dialog::create([
+        //         'conversation_id' => $this->conversation->id,
+        //         'personality_id' => $conversation->insight->ai_generated,
+        //         'message' => $response['data'],
+        //     ]);
 
-            $conversation->last_message_date = Carbon::now();
-            $conversation->save();
+        //     $conversation->last_message_date = Carbon::now();
+        //     $conversation->save();
 
-            $this->dispatch('refresh-the-component');
-            $this->dispatch('ScrollTo');
-            Flux::toast('Message Received!');
-        } else {
-            Flux::toast(variant: 'danger', text: 'There was an error communicating with the Instructor. Please try again later.');
-        }
+        //     $this->dispatch('refresh-the-component');
+        //     $this->dispatch('ScrollTo');
+        //     Flux::toast('Message Received!');
+        // } else {
+        //     Flux::toast(variant: 'danger', text: 'There was an error communicating with the Instructor. Please try again later.');
+        // }
     }
 
     public function render()
