@@ -49,6 +49,11 @@ class QuestionInsightsConversation extends Component
     }
 
     public function SendMessage(Conversation $conversation) {
+        if (trim($this->textMessage) == "") {
+            $this->textMessage = "";
+            return 0;
+        }
+
         $this->isProcessing = true;
         $text = $this->textMessage;
         $this->textMessage = '';
