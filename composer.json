@@ -11,7 +11,7 @@
         "php": "^8.2",
         "honeybadger-io/honeybadger-laravel": "^4.3",
         "laravel/cashier": "^15.5",
-        "laravel/framework": "^11.37",
+        "laravel/framework": "^11.39",
         "laravel/pennant": "^1.13",
         "laravel/pulse": "^1.2",
         "laravel/tinker": "^2.9",
