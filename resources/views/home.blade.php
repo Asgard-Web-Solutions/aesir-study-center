@@ -67,7 +67,7 @@
             <div class="w-full px-3 md:w-3/4">
                 <x-text.main>Join our growing community of learners who are transforming their study habits with <span class="text-secondary">{{ config('app.name') }}.</span></x-text.main>
                 <x-text.main>Whether you're a student, professional, or lifelong learner, our platform provides the tools you need to succeed.</x-text.main>
-                <x-text.main>Start your journey to better learning today! <a href="https://community.jonzenor.com" class="link link-accent hover:no-underline">Join the Forum Community</a></x-text.main>
+                <x-text.main>Start your journey to better learning today! <a href="{{ config('academy.discord_url') }}" class="link link-accent hover:no-underline">Join our Discord Community</a></x-text.main>
             </div>
         </div>
     </x-card.mini>
