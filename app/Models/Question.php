@@ -21,7 +21,13 @@ class Question extends Model
         'text',
         'set_id',
         'group_id',
+        'lesson_id',
     ];
+
+    public function lesson(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Lesson::class);
+    }
 
     public function set(): BelongsTo
     {

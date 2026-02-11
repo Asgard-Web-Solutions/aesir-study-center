@@ -37,7 +37,7 @@ class UpdateUsersHighestMastery
             }
         }
 
-        $highestMastery = Mastery::Unskilled;
+        $highestMastery = Mastery::Unskilled->value;
 
         if ($masteryLevelMastered == $questions->count()) {
             $highestMastery = Mastery::Mastered->value;

@@ -9,6 +9,16 @@
 
         <x-card.mini title="Quesiton">
             <x-form.textarea name="question" rows="6" value="{!! old('question', $question->text) !!}" />
+
+            @if ($exam->multi_lesson_exam)
+                @php
+                    $lessonOptions = ['' => 'No Lesson'];
+                    foreach ($exam->lessons as $lesson) {
+                        $lessonOptions[$lesson->id] = $lesson->name;
+                    }
+                @endphp
+                <x-form.dropdown name="lesson_id" label="Lesson (Optional)" :values="$lessonOptions" selected="{{ old('lesson_id', $question->lesson_id) }}" />
+            @endif
         </x-card.mini>
 
         <x-card.mini title="Answers">
