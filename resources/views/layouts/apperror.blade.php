@@ -37,7 +37,7 @@
                     @endauth
 
                     <x-button.mobile href="{{ route('exam.public') }}">Public Exams</x-button.mobile>
-                    <x-button.mobile href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.mobile>
+                    <x-button.mobile href="{{ config('academy.discord_url') }}">Discord & Help</x-button.mobile>
                     <div class="divider"></div>
 
                     @guest
@@ -79,7 +79,7 @@
                     @endauth
         
                     <x-button.nav href="{{ route('exam.public') }}">Public Exams</x-button.nav>
-                    <x-button.nav href="https://community.jonzenor.com/viewforum.php?f=31">Forums & Help</x-button.nav>
+                    <x-button.nav href="{{ config('academy.discord_url') }}">Discord & Help</x-button.nav>
 
                     @guest
                         <x-button.nav href="{{ route('login') }}">Login</x-button.nav>
@@ -173,11 +173,10 @@
         <nav>
             <h6 class="footer-title">Fun Stuff</h6>
             <a class="link link-hover" href="{{ route('home') }}">Welcome</a>
-            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=31">Community Forum</a>
+            <a class="link link-hover" href="{{ config('academy.discord_url') }}">Discord & Help</a>
         </nav>
         <nav>
             <h6 class="footer-title">Legal & Boring Stuff</h6>
-            <a class="link link-hover" href="https://community.jonzenor.com/viewforum.php?f=35">Release Notes</a>
             <a class="link link-hover" href="{{ route('privacy-policy') }}">Privacy Policy</a>
             <a class="link link-hover" href="{{ route('terms-of-service') }}">Terms of Service</a>
         </nav>
