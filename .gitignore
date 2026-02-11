@@ -3,6 +3,7 @@
 /public/build
 /public/storage
 /storage/*.key
+/storage/pail
 /vendor
 .env
 .env.backup
@@ -15,3 +16,4 @@ yarn-error.log
 
 auth.json
 composer.lock
+/.nova
