@@ -243,7 +243,7 @@ class ExamSessionController extends Controller
 
     public function answer(Request $request, Set $examSet)
     {
-        $this->validate($request, [
+        $request->validate([
             'question' => 'required|integer',
             'order' => 'required|string',
         ]);
