@@ -1,14 +1,17 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'Exam - ' . $question->set->name ])
 
 @section('content')
+    <x-page.header :text="$question->set->name" />
 
-<x-page.header :text="$question->set->name" />
-
-    <x-card.main :title="$question->text">
-        <p>Question {{ $test->questions->count() + 1 }} of {{ $test->num_questions }}</p>
-        
-        <x-card.mini title="Select Answer">
-            <form action="{{ route('answer', $test->id) }}" method="post">
+    <x-card.main title="">
+        <x-text.dim>Question # {{ $test->questions->count() + 1 }} <span class="text-xs opacity-50">of {{ $test->num_questions }}</span></x-text.dim>
+        <x-card.mini>
+            <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
+        </x-card.mini>
+        <form action="{{ route('answer', $test->id) }}" method="post">
+            <x-text.dim>Select your Answer</x-text.dim>
+            <x-card.mini>
+                
                 @csrf
                 <input type="hidden" name="question" value="{{ $question->id }}">
                 <input type="hidden" name="order" value="{{ $order }}">
@@ -28,9 +31,10 @@
                     @endforeach
                 </div>
             
-                <x-card.buttons submitLabel="Submit Answer" />
-            </form>
-        </x-card.mini>
+            </x-card.mini>
+            <x-card.buttons submitLabel="Submit Answer" />
+        </form>
+
     </x-card.main>
 
 @endsection

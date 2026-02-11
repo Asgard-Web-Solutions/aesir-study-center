@@ -2,17 +2,25 @@
 
 namespace App\Models;
 
+use App\Observers\QuestionObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+#[ObservedBy([QuestionObserver::class])]
 
 class Question extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'text',
         'set_id',
-        'group_id'
+        'group_id',
     ];
 
     public function set(): BelongsTo
@@ -32,6 +40,16 @@ class Question extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\User::class, 'user_question');
+        return $this->belongsToMany(\App\Models\User::class, 'user_question')->withPivot('reviewFlagged');
+    }
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Group::class);
+    }
+
+    public function insights(): HasMany
+    {
+        return $this->HasMany(Insight::class);
     }
 }

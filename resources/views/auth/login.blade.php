@@ -11,13 +11,7 @@
 
                 <x-form.text type="password" name="password" label="Password" />
 
-                <div class="flex mb-6">
-                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                    <label class="ml-3 text-sm text-gray-700" for="remember">
-                        {{ __('Remember Me') }}
-                    </label>
-                </div>
+                <x-form.checkbox name="remember" label="Remember Me" style="toggle" />
 
                 <div class="flex flex-wrap items-center">
                     <button type="submit" class="px-4 py-2 font-bold text-gray-100 bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline">
@@ -31,12 +25,14 @@
                     @endif
 
                     @if (Route::has('register'))
-                        <p class="w-full mt-8 -mb-4 text-xs text-center text-gray-700">
-                            {{ __("Don't have an account?") }}
-                            <a class="text-blue-500 no-underline hover:text-blue-700" href="{{ route('register') }}">
-                                {{ __('Register') }}
-                            </a>
-                        </p>
+                        <div class="w-full mt-8 text-center">
+                            <x-text.dim>
+                                Don't have an account?
+                                <a class="text-blue-500 no-underline hover:text-blue-700" href="{{ route('register') }}">
+                                    {{ __('Register') }}
+                                </a>
+                            </x-text.dim>
+                        </div>
                     @endif
                 </div>
 

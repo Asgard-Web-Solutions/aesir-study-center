@@ -12,7 +12,9 @@ class Group extends Model
     use HasFactory;
 
     protected $fillable = [
-        'set_id'
+        'set_id',
+        'name',
+        'question',
     ];
 
     public function set(): BelongsTo

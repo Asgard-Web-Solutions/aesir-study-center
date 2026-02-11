@@ -15,7 +15,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/';
+    public const HOME = '/profile/exams';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -33,6 +33,8 @@ class RouteServiceProvider extends ServiceProvider
 
             //
         });
+
+        Route::model('set', \App\Models\Set::class);
     }
 
     /**

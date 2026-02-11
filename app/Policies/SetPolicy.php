@@ -2,12 +2,21 @@
 
 namespace App\Policies;
 
+use App\Enums\Visibility;
 use App\Models\Set;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class SetPolicy
 {
+    public function before(User $user, string $ability): ?bool
+    {
+        if ($user->isAdmin) {
+            return true;
+        }
+
+        return null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
@@ -19,17 +28,35 @@ class SetPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Set $set): bool
+    public function view(?User $user, Set $set): bool
     {
-        //
+        if ($set->visibility == Visibility::isPublic->value) {
+            return true;
+        }
+
+        if (!$user) {
+            return false;
+        }
+
+        return $set->user_id === $user->id;
     }
+
+    public function take(User $user, Set $set): bool
+    {
+        if ($set->visibility == Visibility::isPublic->value) {
+            return true;
+        }
+
+        return $set->user_id === $user->id;
+    }
+
 
     /**
      * Determine whether the user can create models.
      */
     public function create(User $user): bool
     {
-        //
+        return $user !== null;
     }
 
     /**

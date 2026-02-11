@@ -32,10 +32,6 @@
                             <li><a href="{{ route('register') }}">{{ __('Register') }}</a></li>
                         @endif
                     @else
-                        @if ( auth()->user()->hasRole('admin') )
-                            <li><a href="{{ route('manage-exams') }}">Manage Exams</a></li>
-                        @endif
-
                         <li><a href="{{ route('tests') }}" >Take Test</a></li>
 
                         <li tabindex="0">

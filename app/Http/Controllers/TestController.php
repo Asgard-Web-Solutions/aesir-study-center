@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Alert;
+use App\Enums\Visibility;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Set;
@@ -13,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use App\Enums\Visibility;
 
 class TestController extends Controller
 {
@@ -37,6 +37,8 @@ class TestController extends Controller
     {
         $set = Set::find($id);
 
+        $this->authorize('view', $set);
+
         return view('test.start', [
             'set' => $set,
         ]);
@@ -47,11 +49,13 @@ class TestController extends Controller
         $set = Set::find($id);
         $user = Auth::user();
 
+        $this->authorize('view', $set);
+
         $this->validate($request, [
             'number_questions' => 'required|integer|max:'.$set->questions->count(),
         ]);
 
-        $now = new Carbon();
+        $now = new Carbon;
         $start = $now->subMinutes(2);
 
         // Load all questions to the user questions
@@ -70,7 +74,7 @@ class TestController extends Controller
             return redirect()->route('home');
         }
 
-        $test = new Test();
+        $test = new Test;
         $test->user_id = $user->id;
         $test->set_id = $set->id;
         $test->num_questions = $request->number_questions;
@@ -85,6 +89,10 @@ class TestController extends Controller
     {
         $test = Test::find($id);
         $user = Auth::user();
+        $set = Set::find($test->set_id);
+
+        $this->authorize('view', $test);
+        // $this->authorize('view', $set);
 
         if ($user->id != $test->user_id) {
             Alert::toast('Invalid Test! Don\'t be a hacker.', 'warning');
@@ -146,6 +154,8 @@ class TestController extends Controller
 
         $question = Question::find($question[0]->question_id);
 
+        $answers = null;
+
         if ($question->answers->count() > 1) {
             $answers = $question->answers->shuffle();
         } else {
@@ -170,6 +180,8 @@ class TestController extends Controller
                 }
 
                 $answers = $answers->shuffle();
+            } else {
+                $answers = $question->answers;
             }
         }
 
@@ -203,6 +215,8 @@ class TestController extends Controller
     {
         $test = Test::find($id);
         $user = Auth::user();
+
+        $this->authorize('view', $test);
 
         if ($user->id != $test->user_id) {
             Alert::toast('Invalid Test! Don\'t be a hacker.', 'warning');

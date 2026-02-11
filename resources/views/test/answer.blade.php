@@ -1,14 +1,16 @@
-@extends('layouts.app2')
+@extends('layouts.app2', ['heading' => 'Exam - ' . $question->set->name ])
 
 @section('content')
 <x-page.header :text="$question->set->name" />
 
-    <x-card.main :title="$question->text">
-
-        <x-text.dim>Question {{ $test->questions->count() }} of {{ $test->num_questions }}</x-text.dim>
+    <x-card.main>
+        <x-text.dim>Question # {{ $test->questions->count() }} <span class="text-xs opacity-50">of {{ $test->num_questions }}</span></x-text.dim>
+        <x-card.mini>
+            <h3 class="text-3xl text-neutral-content">{{ $question->text }}</h3>
+        </x-card.mini>
     
-        <p class="my-4 text-lg text-center @if ($correct) text-success @else text-error @endif">
-            @if ($correct) CORRECT @else INCORRECT @endif
+        <p class="my-4 text-lg text-center @if ($correct) text-success @else text-error @endif" id="scroll-to">
+            @if ($correct) Correct @else Incorrect @endif
         </p>
     
         <x-card.mini title="Your Answer">
@@ -32,9 +34,17 @@
                     </div>
                 </div>
             @endforeach
-        </x-card.mini>    
+        </x-card.mini>
+        <x-page.actions primary="Next Question" :primaryLink="route('take-test', $test->id)" />
     </x-card.main>
-            
-    <x-page.actions primary="Next Question" :primaryLink="route('take-test', $test->id)" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Scroll to the target section
+            document.getElementById('scroll-to').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>    
 
 @endsection

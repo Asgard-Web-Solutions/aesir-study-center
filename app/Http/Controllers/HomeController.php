@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Question;
+use App\Actions\User\ApplyProductToUser;
+use App\Enums\OrderStatus;
+use App\Models\Order;
+use Carbon\Carbon;
 use App\Models\Set;
 use App\Models\Test;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Models\Product;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Pennant\Feature;
 
 class HomeController extends Controller
 {
@@ -20,7 +24,6 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
     }
 
     /**
@@ -28,78 +31,8 @@ class HomeController extends Controller
      */
     public function index(): View
     {
-        $user_id = Auth::id();
 
-        $user = User::find($user_id);
-
-        $allSets = Set::all();
-        $sets = [];
-
-        foreach ($allSets as $set) {
-            $tests = Test::where('user_id', '=', $user->id)->where('set_id', '=', $set->id)->orderBy('end_at', 'desc')->limit(config('test.count_tests_for_average_score'))->get();
-
-            if (! $tests->count()) {
-                continue;
-            }
-
-            $average = 0;
-            $last_taken = null;
-
-            foreach ($tests as $test) {
-                $average = $average + $test->result;
-
-                // Get the timestamp of the last time this was taken. Since we're ordering in desc order,
-                // the first time this loop runs should be the latest time
-                if (! $last_taken) {
-                    $last_taken = $test->end_at;
-                }
-            }
-
-            $total_questions = Question::where('set_id', '=', $set->id)->count();
-            $total_mastery = DB::table('user_question')
-                ->where('user_id', '=', $user->id)
-                ->where('set_id', '=', $set->id)
-                ->where('score', '>=', config('test.grade_mastery'))
-                ->count();
-
-            $total_proficient = DB::table('user_question')
-                ->where('user_id', '=', $user->id)
-                ->where('set_id', '=', $set->id)
-                ->where('score', '>=', config('test.grade_proficient'))
-                ->count();
-
-            $total_familiar = DB::table('user_question')
-                ->where('user_id', '=', $user->id)
-                ->where('set_id', '=', $set->id)
-                ->where('score', '>=', config('test.grade_familiar'))
-                ->count();
-
-            $total_apprentice = DB::table('user_question')
-                ->where('user_id', '=', $user->id)
-                ->where('score', '>=', config('test.grade_apprentice'))
-                ->where('set_id', '=', $set->id)
-                ->count();
-
-            $average = round(($average / $tests->count()), 1);
-            $sets[] = [
-                'name' => $set->name,
-                'id' => $set->id,
-                'average' => $average,
-                'taken' => Test::where('user_id', '=', $user->id)->where('set_id', '=', $set->id)->count(),
-                'last_time' => $last_taken,
-                'mastery' => round((($total_mastery / $total_questions) * 100), 1),
-                'proficient' => round((($total_proficient / $total_questions) * 100), 1),
-                'familiar' => round((($total_familiar / $total_questions) * 100), 1),
-                'apprentice' => round((($total_apprentice / $total_questions) * 100), 1),
-            ];
-        }
-
-        $incomplete = Test::where('user_id', '=', $user->id)->whereNull('end_at')->get();
-
-        return view('home', [
-            'tests' => $sets,
-            'incomplete' => $incomplete,
-        ]);
+        return view('home');
     }
 
     public function history($id): View
@@ -129,5 +62,106 @@ class HomeController extends Controller
     public function colors(): View
     {
         return view('colors');
+    }
+
+    public function privacy(): View
+    {
+        return view('home.privacy-policy');
+    }
+
+    public function tos(): View
+    {
+        return view('home.terms-of-service');
+    }
+
+    public function pricing(): View
+    {
+        if (! Feature::active('mage-upgrade')) {
+            abort(404, 'Not found');
+        }
+
+        $products = Product::where('isActive', 1)->orderBy('isSubscription', 'asc')->orderBy('price', 'asc')->get();
+
+        return view('home.pricing')->with([
+            'products' => $products,
+        ]);
+    }
+
+    public function checkout(Request $request, Product $product, String $plan = 'one-time')
+    {
+        if (! Feature::active('mage-upgrade')) {
+            abort(404, 'Not found');
+        }
+
+        $user = $this->getAuthedUser();
+        $priceId = ($plan == 'annual') ? $product->stripe_annual_price_id : $product->stripe_price_id;
+
+        $order = new Order();
+        $order->user_id = $user->id;
+        $order->product_id = $product->id;
+        $order->status = OrderStatus::Incomplete->value;
+        $order->price_id = $priceId;
+        $order->save();
+
+
+        if ($product->isSubscription) {
+            return $request->user()
+            ->newSubscription($product->stripe_product_id, $priceId)
+            ->checkout([
+                'success_url' => route('purchase-success').'?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('pricing'),
+                'metadata' => ['order_id' => $order->id],
+            ]);
+        }
+        
+        $quantity = 1;
+        return $request->user()->checkout([$priceId => $quantity], [
+            'success_url' => route('purchase-success').'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('pricing'),
+            'metadata' => ['order_id' => $order->id],
+        ]);
+    }
+
+    public function success(Request $request)
+    {
+        if (! Feature::active('mage-upgrade')) {
+            abort(404, 'Not found');
+        }
+
+        $sessionId = $request->get('session_id');
+        $user = $this->getAuthedUser();
+ 
+        if ($sessionId === null) {
+            return redirect()->route('pricing')->with('error', 'Invalid Stripe ID');
+        }
+
+        $checkoutSession = $request->user()->stripe()->checkout->sessions->retrieve($request->get('session_id'));
+
+        if ($checkoutSession->payment_status !== 'paid') {
+            return;
+        }
+
+        $orderId = $checkoutSession->metadata->order_id ?? null;
+ 
+        $order = Order::find($orderId);
+
+        if (!$order) {
+            return redirect()->route('pricing')->with('error', 'Could not find order');
+        }
+
+        if ($order->status != OrderStatus::Incomplete) {
+            return redirect()->route('profile.credits', $order->user)->with('warning', 'Order already processed');
+        }
+     
+        $order->update(['status' => OrderStatus::Paid->value, 'stripe_session' => $sessionId]);
+
+        if ($order->product->isSubscription) {
+            dd($user->subscribed($order->product->id));
+        }
+        
+        $history = ApplyProductToUser::execute($order->user, $order->product, 'Purchase', 'You purchased a credit package');
+        $history->update(['order_id' => $order->id]);
+
+        // return redirect()->route('profile.credits', $order->user)->with('success', 'Purchase Complete!');
     }
 }

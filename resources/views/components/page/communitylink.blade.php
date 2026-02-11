@@ -1,0 +1,1 @@
+<a href="{{ config('academy.discord_url') }}" class="link link-accent" target="_blank">{{ $slot }}</a>
