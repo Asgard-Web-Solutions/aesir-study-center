@@ -34,7 +34,7 @@ try {
         $middleware[] = 'verified';
         $verify = true;
     }
-} catch (\Illuminate\Database\QueryException | \PDOException $e) {
+} catch (\Illuminate\Database\QueryException $e) {
     // Features table may not exist during initial deployment
     // Default to not requiring email verification
 }
