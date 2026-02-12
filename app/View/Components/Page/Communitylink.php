@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\card;
+namespace App\View\Components\Page;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class main extends Component
+class Communitylink extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class main extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.card.main');
+        return view('components.page.communitylink');
     }
 }
