@@ -12,7 +12,7 @@
     <!-- Styles -->
     @vite('resources/css/app.css')
 
-    <script src="https://kit.fontawesome.com/ac81ff684d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body >
     <div id="app">

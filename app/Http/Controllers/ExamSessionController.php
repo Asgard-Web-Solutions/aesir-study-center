@@ -89,7 +89,9 @@ class ExamSessionController extends Controller
 
         $user = $this->getAuthedUser();
         AddExamQuestionsToUserRecord::execute($user, $examSet);
-        $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet);
+        
+        $lessonId = request('lesson_id');
+        $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet, $lessonId);
         $message = '';
 
         if ($maxQuestions == 0) {
@@ -119,23 +121,36 @@ class ExamSessionController extends Controller
         }
 
         $user = $this->getAuthedUser();
-        $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet);
+        $lessonId = $request->input('lesson_id');
+        $maxQuestions = CalculateUsersMaxAvailableQuestions::execute($user, $examSet, $lessonId);
 
         $request->validate([
             'question_count' => 'max:'.$maxQuestions,
+            'lesson_id' => 'nullable|integer|exists:lessons,id',
         ]);
 
         if ($request->question_count > $maxQuestions) {
             return back()->with('error', 'Requested question count exceeds maximum available of '.$maxQuestions.' Questions.');
         }
 
-        $questions = SelectQuestionsForExam::execute($user, $examSet, $request->question_count);
+        $questions = SelectQuestionsForExam::execute($user, $examSet, $request->question_count, $lessonId);
 
         $questionArray = [];
         $questionArray = $questions->pluck('question_id');
 
+        // Store lesson_id if provided
+        $sessionData = [
+            'question_count' => $request->question_count,
+            'questions_array' => json_encode($questionArray),
+            'current_question' => 0,
+        ];
+        
+        if ($lessonId) {
+            $sessionData['lesson_id'] = $lessonId;
+        }
+
         // Create a new instance of this test
-        $examSet->sessions()->attach($user->id, ['question_count' => $request->question_count, 'questions_array' => json_encode($questionArray), 'current_question' => 0]);
+        $examSet->sessions()->attach($user->id, $sessionData);
 
         return redirect()->route('exam-session.test', $examSet->id);
     }

@@ -22,9 +22,12 @@ class ExamSetDataRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
+            'name' => 'sometimes|required|string',
             'description' => 'nullable|string',
             'visibility' => 'sometimes|required|integer',
+            'multi_lesson_exam' => 'sometimes|boolean',
+            'new_lesson' => 'nullable|string|max:255',
+            'remove_lesson' => 'nullable|integer|exists:lessons,id',
         ];
     }
 }

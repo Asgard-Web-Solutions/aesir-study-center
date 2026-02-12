@@ -16,7 +16,7 @@ class CalculateQuestionTimeout
         if (!$correct) {
             $hours = $hours / 2;
         }
-        
+
         return Carbon::now()->addHours($hours);
     }
 }
