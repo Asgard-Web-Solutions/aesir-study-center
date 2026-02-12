@@ -193,7 +193,23 @@
         </form>
     </x-card.mini>
 
+    <div id="questions-section"></div>
     <x-card.mini title="Normal Questions">
+        @if ($exam->multi_lesson_exam)
+            <div class="mb-4">
+                <form method="GET" action="{{ route('exam.edit', $exam) }}">
+                    <label class="block mb-2 text-sm font-bold">Filter by Lesson</label>
+                    <select name="lesson_filter" class="w-full select select-bordered" onchange="this.form.submit()">
+                        <option value="" {{ !isset($lessonFilter) || $lessonFilter === null ? 'selected' : '' }}>All Lessons</option>
+                        <option value="no_lesson" {{ isset($lessonFilter) && $lessonFilter === 'no_lesson' ? 'selected' : '' }}>No Lesson</option>
+                        @foreach ($exam->lessons as $lesson)
+                            <option value="{{ $lesson->id }}" {{ isset($lessonFilter) && $lessonFilter == $lesson->id ? 'selected' : '' }}>{{ $lesson->name }}</option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+        @endif
+        
         <x-table.main>
             <x-table.head>
                 <x-table.hcell>{{ __('Question') }}</x-table.hcell>
@@ -232,4 +248,16 @@
         <a href="{{ route('exam.index') }}" class="btn btn-secondary">{{ __('Back to Exam Manager') }}</a>
     </div>
 </x-card.main>
+
+@if(request()->has('lesson_filter'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const element = document.getElementById('questions-section');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+</script>
+@endif
+
 @endsection

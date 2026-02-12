@@ -149,17 +149,28 @@ class ExamSetController extends Controller
         ]);
     }
 
-    public function edit(ExamSet $exam)
+    public function edit(Request $request, ExamSet $exam)
     {
         $this->authorize('update', $exam);
 
         $visibility = Visibility::cases();
-        $questions = Question::where('set_id', $exam->id)->where('group_id', 0)->get();
+        $lessonFilter = $request->query('lesson_filter');
+        
+        $questionsQuery = Question::where('set_id', $exam->id)->where('group_id', 0);
+        
+        if ($lessonFilter === 'no_lesson') {
+            $questionsQuery->whereNull('lesson_id');
+        } elseif ($lessonFilter) {
+            $questionsQuery->where('lesson_id', $lessonFilter);
+        }
+        
+        $questions = $questionsQuery->get();
 
         return view('exam.edit', [
             'exam' => $exam,
             'visibilityOptions' => $visibility,
             'questions' => $questions,
+            'lessonFilter' => $lessonFilter,
         ]);
     }
 
