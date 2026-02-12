@@ -35,8 +35,12 @@ try {
         $verify = true;
     }
 } catch (\Illuminate\Database\QueryException $e) {
-    // Features table may not exist during initial deployment
+    // Features table may not exist during initial deployment (PostgreSQL error 42P01 or MySQL error 1146)
     // Default to not requiring email verification
+    // Re-throw if it's not a "table not found" error
+    if (!str_contains($e->getMessage(), 'does not exist') && !str_contains($e->getMessage(), "doesn't exist")) {
+        throw $e;
+    }
 }
 
 Auth::routes(['verify' => true]);
