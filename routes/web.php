@@ -29,9 +29,26 @@ use Laravel\Pennant\Feature;
 $middleware = ['auth'];
 $verify = false;
 
-if (Feature::active('email_verification')) {
-    $middleware[] = 'verified';
-    $verify = true;
+try {
+    if (Feature::active('email_verification')) {
+        $middleware[] = 'verified';
+        $verify = true;
+    }
+} catch (\Illuminate\Database\QueryException $e) {
+    // Features table may not exist during initial deployment
+    // PostgreSQL: SQLSTATE 42P01, MySQL: SQLSTATE 42S02 or error code 1146
+    $code = $e->getCode();
+    $message = $e->getMessage();
+    
+    // Only suppress "table not found" errors, re-throw everything else
+    $isTableNotFound = in_array($code, ['42P01', '42S02', 1146]) 
+        || str_contains($message, 'does not exist') 
+        || str_contains($message, "doesn't exist");
+    
+    if (!$isTableNotFound) {
+        throw $e;
+    }
+    // Default to not requiring email verification when table doesn't exist
 }
 
 Auth::routes(['verify' => true]);
