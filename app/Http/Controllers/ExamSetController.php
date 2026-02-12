@@ -76,6 +76,24 @@ class ExamSetController extends Controller
         $validatedData = $request->validated();
         $user = $this->getAuthedUser();
 
+        // Handle lesson removal
+        if ($request->has('remove_lesson')) {
+            $lesson = $exam->lessons()->find($request->remove_lesson);
+            if ($lesson) {
+                $lesson->delete();
+            }
+            return redirect()->route('exam.edit', $exam)->with('success', 'Lesson removed');
+        }
+
+        // Handle adding a new lesson
+        if ($request->has('new_lesson') && !empty($request->new_lesson)) {
+            $exam->lessons()->create(['name' => $request->new_lesson]);
+            return redirect()->route('exam.edit', $exam)->with('success', 'Lesson added');
+        }
+
+        // Handle multi_lesson_exam checkbox
+        $validatedData['multi_lesson_exam'] = $request->has('multi_lesson_exam');
+
         // Make sure the exam has the authority to be made public if requested
         if (array_key_exists('visibility', $validatedData) && $validatedData['visibility'] == 1) {
             if ($exam->questions->count() < config('test.min_public_questions')) {
@@ -153,6 +171,7 @@ class ExamSetController extends Controller
             'question' => 'required|string',
             'answers*' => 'required|string|nullable',
             'correct*' => 'sometimes',
+            'lesson_id' => 'nullable|integer|exists:lessons,id',
         ]);
 
         if ($exam->questions->count() >= config('test.max_exam_questions')) {
@@ -163,6 +182,7 @@ class ExamSetController extends Controller
         $question->text = $request->question;
         $question->set_id = $exam->id;
         $question->group_id = 0;
+        $question->lesson_id = $request->lesson_id;
         $question->save();
 
         foreach ($request->answers as $index => $newAnswer) {
@@ -197,9 +217,11 @@ class ExamSetController extends Controller
             'question' => 'required|string',
             'answers*' => 'required|string|nullable',
             'correct*' => 'sometimes',
+            'lesson_id' => 'nullable|integer|exists:lessons,id',
         ]);
 
         $question->text = $request->question;
+        $question->lesson_id = $request->lesson_id;
         $question->save();
 
         if ($request->answers) {

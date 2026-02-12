@@ -34,6 +34,8 @@
                         <x-text.dim>Progress: {{ $exam->questions->count() }} / {{ config('test.min_public_questions') }}</x-text.dim>
                     @endif
 
+                    <x-form.checkbox name="multi_lesson_exam" label="Multi-Lesson Exam" checked="{{ $exam->multi_lesson_exam ? 'yes' : '' }}" />
+
                     <x-help.box>
                         <x-help.text>The exams <x-help.highlight>Visibility</x-help.highlight> determines who can see or take an exam.</x-help.text>
                         <x-help.text>If you set the exam to <x-help.highlight>Private</x-help.highlight> then only you, the exam's <x-help.highlight color="info">Architect</x-help.highlight>, can see the exam or take.</x-help.text>
@@ -54,6 +56,44 @@
         <a href="{{ route('exam.index') }}" class="my-2 btn btn-secondary">Back to Exam Manager</a>
     </x-card.mini>
 </x-card.main>
+
+@if ($exam->multi_lesson_exam)
+<x-card.main title="Lessons">
+    <x-card.mini>
+        <x-help.box>
+            <x-help.text>Lessons allow you to organize your exam questions into smaller, focused topics.</x-help.text>
+            <x-help.text>When an acolyte takes your exam, they can choose to study <x-help.highlight>All Lessons</x-help.highlight> or focus on a specific lesson.</x-help.text>
+            <x-help.text>Add lessons below, then assign them to your questions and question groups.</x-help.text>
+        </x-help.box>
+
+        @if (!empty($exam->lessons) && count($exam->lessons) > 0)
+            <div class="my-4">
+                <h3 class="mb-2 text-lg font-bold text-secondary">Current Lessons</h3>
+                <div class="flex flex-wrap gap-2">
+                    @foreach ($exam->lessons as $lesson)
+                        <div class="badge badge-lg badge-primary">
+                            {{ $lesson->name }}
+                            <form action="{{ route('exam.update', $exam) }}" method="POST" class="inline ml-2">
+                                @csrf
+                                <input type="hidden" name="remove_lesson" value="{{ $lesson->id }}">
+                                <button type="submit" class="ml-1 text-white hover:text-error"><i class="fa-solid fa-xmark"></i></button>
+                            </form>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        <div class="divider"></div>
+
+        <form action="{{ route('exam.update', $exam) }}" method="POST">
+            @csrf
+            <x-form.text name="new_lesson" label="Add New Lesson" placeholder="e.g., Introduction, Chapter 1, Advanced Topics" />
+            <x-card.buttons submitLabel="Add Lesson" />
+        </form>
+    </x-card.mini>
+</x-card.main>
+@endif
 
 <x-card.main title="Question Groups">
     <x-card.mini>
@@ -118,6 +158,16 @@
             @csrf
             <h3 class="text-lg font-bold text-secondary">Question</h3>
             <x-form.textarea name="question" rows="4" value="{{ old('question') }}" />
+
+            @if ($exam->multi_lesson_exam)
+                @php
+                    $lessonOptions = ['' => 'No Lesson'];
+                    foreach ($exam->lessons as $lesson) {
+                        $lessonOptions[$lesson->id] = $lesson->name;
+                    }
+                @endphp
+                <x-form.dropdown name="lesson_id" label="Lesson (Optional)" :values="$lessonOptions" selected="{{ old('lesson_id') }}" />
+            @endif
 
             <h3 class="text-lg font-bold text-secondary">Answers</h3>
             @for ($i = 1; $i <= config('test.number_answers_to_add'); $i ++)

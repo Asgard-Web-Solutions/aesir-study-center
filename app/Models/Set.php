@@ -17,7 +17,13 @@ class Set extends Model
         'description',
         'user_id',
         'visibility',
+        'multi_lesson_exam',
     ];
+
+    public function lessons(): HasMany
+    {
+        return $this->hasMany(\App\Models\Lesson::class);
+    }
 
     public function questions(): HasMany
     {

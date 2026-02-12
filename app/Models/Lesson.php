@@ -2,26 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Group extends Model
+class Lesson extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'set_id',
         'name',
-        'question',
-        'lesson_id',
     ];
-
-    public function lesson(): BelongsTo
-    {
-        return $this->belongsTo(\App\Models\Lesson::class);
-    }
 
     public function set(): BelongsTo
     {
@@ -31,5 +21,10 @@ class Group extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(\App\Models\Question::class);
+    }
+
+    public function groups(): HasMany
+    {
+        return $this->hasMany(\App\Models\Group::class);
     }
 }

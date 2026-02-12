@@ -99,6 +99,7 @@ class GroupController extends Controller
                     'text' => $questionData['question'],
                     'set_id' => $group->set->id,
                     'group_id' => $group->id,
+                    'lesson_id' => $group->lesson_id,
                 ]);
 
                 Answer::create([
@@ -162,7 +163,11 @@ class GroupController extends Controller
     {
         $this->authorize('update', $group);
 
-        $group->update($request->validated());
+        $validated = $request->validated();
+        $group->update($validated);
+
+        // Update all questions in this group to have the same lesson
+        $group->questions()->update(['lesson_id' => $validated['lesson_id'] ?? null]);
 
         Alert::toast('Group Settings Updated', 'success');
 

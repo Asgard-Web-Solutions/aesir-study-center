@@ -9,6 +9,16 @@
             <x-form.text name="name" label="Name" value="{!! $group->name !!}" />
             <x-form.text name="question" label="Group Question Prefix" value="{!! $group->question !!}" helpText="Optionally show this question text just before every question in this group." />
 
+            @if ($group->set->multi_lesson_exam)
+                @php
+                    $lessonOptions = ['' => 'No Lesson'];
+                    foreach ($group->set->lessons as $lesson) {
+                        $lessonOptions[$lesson->id] = $lesson->name;
+                    }
+                @endphp
+                <x-form.dropdown name="lesson_id" label="Lesson (Optional)" :values="$lessonOptions" selected="{{ old('lesson_id', $group->lesson_id ?? '') }}" />
+            @endif
+
             <x-card.buttons submitLabel="Update Group Settings" />
         </form>
     </x-card.mini>
