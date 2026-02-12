@@ -164,11 +164,10 @@ class GroupController extends Controller
         $this->authorize('update', $group);
 
         $validated = $request->validated();
-        $validated['lesson_id'] = $request->lesson_id;
         $group->update($validated);
 
         // Update all questions in this group to have the same lesson
-        $group->questions()->update(['lesson_id' => $request->lesson_id]);
+        $group->questions()->update(['lesson_id' => $validated['lesson_id'] ?? null]);
 
         Alert::toast('Group Settings Updated', 'success');
 
