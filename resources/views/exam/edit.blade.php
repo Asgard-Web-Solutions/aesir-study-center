@@ -197,7 +197,7 @@
     <x-card.mini title="Normal Questions">
         @if ($exam->multi_lesson_exam)
             <div class="mb-4">
-                <form method="GET" action="{{ route('exam.edit', $exam) }}#questions-section">
+                <form method="GET" action="{{ route('exam.edit', $exam) }}">
                     <label class="block mb-2 text-sm font-bold">Filter by Lesson</label>
                     <select name="lesson_filter" class="w-full select select-bordered" onchange="this.form.submit()">
                         <option value="" {{ !isset($lessonFilter) || $lessonFilter === null ? 'selected' : '' }}>All Lessons</option>
@@ -249,7 +249,7 @@
     </div>
 </x-card.main>
 
-@if(isset($lessonFilter))
+@if(request()->has('lesson_filter'))
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const element = document.getElementById('questions-section');
