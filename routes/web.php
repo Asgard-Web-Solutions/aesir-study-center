@@ -41,7 +41,7 @@ try {
     $message = $e->getMessage();
     
     // Only suppress "table not found" errors, re-throw everything else
-    $isTableNotFound = in_array($code, ['42P01', '42S02', 1146, '1146']) 
+    $isTableNotFound = in_array($code, ['42P01', '42S02', 1146]) 
         || str_contains($message, 'does not exist') 
         || str_contains($message, "doesn't exist");
     
