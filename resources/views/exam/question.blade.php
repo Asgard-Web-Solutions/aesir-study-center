@@ -7,7 +7,7 @@
     <form action="{{ route('exam.questionUpdate', ['exam' => $exam, 'question' => $question]) }}" method="post">
         @csrf
 
-        <x-card.mini title="Quesiton">
+        <x-card.mini title="Question">
             <x-form.textarea name="question" rows="6" value="{!! old('question', $question->text) !!}" />
 
             @if ($exam->multi_lesson_exam)
