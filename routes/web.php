@@ -29,9 +29,14 @@ use Laravel\Pennant\Feature;
 $middleware = ['auth'];
 $verify = false;
 
-if (Feature::active('email_verification')) {
-    $middleware[] = 'verified';
-    $verify = true;
+try {
+    if (Feature::active('email_verification')) {
+        $middleware[] = 'verified';
+        $verify = true;
+    }
+} catch (\Exception $e) {
+    // Features table may not exist during initial deployment
+    // Default to not requiring email verification
 }
 
 Auth::routes(['verify' => true]);

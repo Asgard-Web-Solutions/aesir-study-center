@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\page;
+namespace App\View\Components\Card;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class title extends Component
+class Main extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class title extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.page.title');
+        return view('components.card.main');
     }
 }
