@@ -167,9 +167,7 @@ class GroupController extends Controller
         $group->update($validated);
 
         // Update all questions in this group to have the same lesson
-        if (array_key_exists('lesson_id', $validated)) {
-            $group->questions()->update(['lesson_id' => $validated['lesson_id']]);
-        }
+        $group->questions()->update(['lesson_id' => $validated['lesson_id'] ?? null]);
 
         Alert::toast('Group Settings Updated', 'success');
 

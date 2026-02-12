@@ -76,7 +76,7 @@
                             <form action="{{ route('exam.update', $exam) }}" method="POST" class="inline ml-2">
                                 @csrf
                                 <input type="hidden" name="remove_lesson" value="{{ $lesson->id }}">
-                                <button type="submit" class="ml-1 text-error hover:text-error-content"><i class="fa-solid fa-square-xmark"></i></button>
+                                <button type="submit" class="ml-1 text-white hover:text-error"><i class="fa-solid fa-xmark"></i></button>
                             </form>
                         </div>
                     @endforeach
