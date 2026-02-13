@@ -12,7 +12,9 @@
     <!-- Styles -->
     @vite('resources/css/app.css')
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <script src="https://kit.fontawesome.com/01c3a427b5.js" crossorigin="anonymous"></script>
+    <script src="https://example.com/fontawesome/v7.0.1/js/conflict-detection.js"></script>
 </head>
 <body >
     <div id="app">
@@ -20,6 +22,7 @@
             <div class="flex-1">
                 <a href="{{ url('/') }}" class="text-xl normal-case btn btn-ghost"">
                     {{ config('app.name', 'Laravel') }}
+                    HELPHELPHELPHELPHELPHELPHELPHELPHELP
                 </a>
             </div>
 
